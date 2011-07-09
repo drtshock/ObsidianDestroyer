@@ -1,0 +1,154 @@
+package com.pandemoneus.obsidianDestroyer.commands;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import com.nijiko.permissions.PermissionHandler;
+import com.pandemoneus.obsidianDestroyer.ObsidianDestroyer;
+import com.pandemoneus.obsidianDestroyer.config.ODConfig;
+import com.pandemoneus.obsidianDestroyer.logger.Log;
+
+/**
+ * Command class. Available commands are:
+ * od
+ * od reload
+ * od info
+ * 
+ * @author Pandemoneus
+ * 
+ */
+public final class ODCommands implements CommandExecutor {
+
+	private ObsidianDestroyer plugin;
+
+	/**
+	 * Associates this object with a plugin
+	 * 
+	 * @param plugin
+	 *            the plugin
+	 */
+	public ODCommands(ObsidianDestroyer plugin) {
+		this.plugin = plugin;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean onCommand(CommandSender sender, Command cmd,
+			String commandLabel, String[] args) {
+		if (args != null) {
+			if (sender instanceof Player) {
+				if (plugin.getPermissionsFound()) {
+					usePermissionsStructure((Player) sender, cmd, commandLabel,
+							args);
+				} else {
+					useNormalStructure((Player) sender, cmd, commandLabel, args);
+				}
+			} else {
+				sender.sendMessage(ChatColor.RED
+						+ "Sorry, you are not a player!");
+			}
+		}
+
+		return true;
+	}
+
+	private void usePermissionsStructure(Player sender, Command cmd,
+			String commandLabel, String[] args) {
+		PermissionHandler ph = plugin.getPermissionsHandler();
+
+		if (args.length == 0) {
+			// show help
+			if (ph.has(sender, "obsidiandestroyer.help")) {
+				showHelp(sender);
+			} else {
+				sender.sendMessage(ChatColor.RED
+						+ "You are not authorized to use this command.");
+			}
+		} else if (args.length == 1) {
+			// commands with 0 arguments
+			String command = args[0];
+
+			if (command.equalsIgnoreCase("reload")) {
+				// reload
+				if (ph.has(sender, "obsidiandestroyer.config.reload")) {
+					reloadPlugin(sender);
+				} else {
+					sender.sendMessage(ChatColor.RED
+							+ "You are not authorized to use this command.");
+				}
+			} else if (command.equalsIgnoreCase("info")) {
+				// info
+				if (ph.has(sender, "obsidiandestroyer.config.info")) {
+					getConfigInfo(sender);
+				} else {
+					sender.sendMessage(ChatColor.RED
+							+ "You are not authorized to use this command.");
+				}
+			}
+		}
+	}
+
+	private void useNormalStructure(Player sender, Command cmd,
+			String commandLabel, String[] args) {
+		if (sender.isOp()) {
+			if (args.length == 0) {
+				// show help
+				showHelp(sender);
+			} else if (args.length == 1) {
+				// commands with 0 arguments
+				String command = args[0];
+
+				if (command.equalsIgnoreCase("reload")) {
+					// reload
+					reloadPlugin(sender);
+				} else if (command.equalsIgnoreCase("info")) {
+					// info
+					getConfigInfo(sender);
+				}
+			}
+		} else {
+			sender.sendMessage(ChatColor.RED
+					+ "You are not authorized to use this command.");
+		}
+	}
+
+	private void showHelp(Player sender) {
+		sender.sendMessage(ChatColor.YELLOW + "Available commands:");
+		sender.sendMessage(ChatColor.GOLD
+				+ "/od reload - reloads the plugin's config file");
+		sender.sendMessage(ChatColor.GOLD
+				+ "/od info - shows the currently loaded config");
+	}
+
+	private void reloadPlugin(Player sender) {
+		Log.info("'" + sender.getName()
+				+ "' requested reload of ObsidianDestroyer");
+		sender.sendMessage(ChatColor.GREEN + "Reloading ObsidianDestroyer!");
+
+		if (plugin.reload()) {
+			sender.sendMessage(ChatColor.GREEN + "Success!");
+		}
+	}
+
+	private void getConfigInfo(Player sender) {
+		ODConfig config = plugin.getConfig();
+		sender.sendMessage(ChatColor.YELLOW
+				+ "Currently loaded config of ObsidianDestroyer:");
+		sender.sendMessage(ChatColor.YELLOW
+				+ "---------------------------------------------");
+
+		if (config.getConfigFile().exists()) {
+			for (String s : config.printLoadedConfig()) {
+				sender.sendMessage(ChatColor.YELLOW + s);
+			}
+		} else {
+			sender.sendMessage(ChatColor.RED
+					+ "None - Config file deleted - please reload");
+		}
+	}
+}

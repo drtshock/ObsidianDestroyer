@@ -1,0 +1,14 @@
+name: ObsidianDestroyer
+main: com.pandemoneus.obsidianDestroyer.ObsidianDestroyer
+version: 1.02
+author: 'Pandemoneus'
+
+commands:
+    obsidiandestroyer:
+        description: ObisidanDestroyer
+        usage: |
+               /<command>
+    od:
+        description: ObisidanDestroyer
+        usage: |
+               /<command>
