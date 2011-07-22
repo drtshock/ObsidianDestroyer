@@ -15,11 +15,11 @@ How to uninstall:
 
 Options:
 -----------------
-Radius - determines how far around the origin of the explosion Obsidian can be destroyed (default: 3) WARNING: High values probably cause lag
-EnabledFor.TNT - set true if TNT is allowed to destroy Obsidian (default: true)
-EnabledFor.Creepers - set true if Creepers are allowed to destroy Obsidian (default: false)
-EnabledFor.Ghasts - set true if Ghasts are allowed to destroy Obsidian (default: false)
-Durability.Enabled - set true if you want to use the durability feature (default: false)
+Radius - determines how far around the origin of the explosion Obsidian can be destroyed (default: 3) WARNING: High values probably cause lag<br>
+EnabledFor.TNT - set true if TNT is allowed to destroy Obsidian (default: true)<br>
+EnabledFor.Creepers - set true if Creepers are allowed to destroy Obsidian (default: false)<br>
+EnabledFor.Ghasts - set true if Ghasts are allowed to destroy Obsidian (default: false)<br>
+Durability.Enabled - set true if you want to use the durability feature (default: false)<br>
 Durability.Amount - determines after how many TNT explosions in the radius the Obsidian block gets destroyed (default: 1)
 
 
