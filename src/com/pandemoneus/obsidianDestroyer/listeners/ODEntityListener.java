@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityListener;
 import org.bukkit.inventory.ItemStack;
 
+import com.pandemoneus.obsidianDestroyer.ObsidianDestroyer;
 import com.pandemoneus.obsidianDestroyer.config.ODConfig;
 import com.pandemoneus.obsidianDestroyer.logger.Log;
 
@@ -21,8 +22,15 @@ import com.pandemoneus.obsidianDestroyer.logger.Log;
  */
 public final class ODEntityListener extends EntityListener {
 	
-	private static HashMap<Location, Integer> obsidianDurability = new HashMap<Location, Integer>();
+	@SuppressWarnings("unused")
+	private ObsidianDestroyer plugin;
+	private ODConfig config;
+	private HashMap<Integer, Integer> obsidianDurability = new HashMap<Integer, Integer>();
 	
+	public ODEntityListener(ObsidianDestroyer plugin) {
+		this.plugin = plugin;
+		config = plugin.getConfig();
+	}
 	/**
 	 * Destroys obsidian blocks in a radius around TNT, Creepers and/or Ghast Fireballs.
 	 * 
@@ -35,7 +43,7 @@ public final class ODEntityListener extends EntityListener {
 			return;
 		}
 		
-		int radius = ODConfig.getRadius();
+		int radius = config.getRadius();
 
 		// cancel if radius is < 0
 		if (radius < 0) {
@@ -57,18 +65,18 @@ public final class ODEntityListener extends EntityListener {
 		}
 
 		// cancel if detonator was TNT, but TNT not allowed to destroy obsidian
-		if (eventTypeRep.equals("CraftTNTPrimed") && !ODConfig.getTntEnabled()) {
+		if (eventTypeRep.equals("CraftTNTPrimed") && !config.getTntEnabled()) {
 			return;
 		}
 
 		// cancel if detonator was a creeper, but creepers not allowed to destroy obsidian
-		if (eventTypeRep.equals("CraftCreeper") && !ODConfig.getCreepersEnabled()) {
+		if (eventTypeRep.equals("CraftCreeper") && !config.getCreepersEnabled()) {
 			return;
 		}
 
 		// cancel if detonator was a ghast, but ghasts not allowed to destroy obsidian
 		if ((eventTypeRep.equals("CraftFireball")
-				|| eventTypeRep.equals("CraftGhast")) && !ODConfig.getGhastsEnabled()) {
+				|| eventTypeRep.equals("CraftGhast")) && !config.getGhastsEnabled()) {
 			return;
 		}
 
@@ -88,28 +96,30 @@ public final class ODEntityListener extends EntityListener {
 		}
 	}
 
-	private static void blowObsidianUp(Location at) {
+	private void blowObsidianUp(Location at) {
 		Block b = at.getBlock();
 
 		if (b.getTypeId() == 49) {
-			Location atClone = new Location(at.getWorld(), (int) at.getX(), (int) at.getY(), (int) at.getZ());
+			// random formula to create unique integers
+			Integer representation = at.getWorld().hashCode() + (int) at.getX() + (int) at.getY() + (int) at.getZ();
 			
-			if (ODConfig.getDurabilityEnabled() && ODConfig.getDurability() > 1) {
-				if (obsidianDurability.containsKey(atClone)) {
-					int currentDurability = (int) obsidianDurability.get(atClone);
+			if (config.getDurabilityEnabled() && config.getDurability() > 1) {
+				if (obsidianDurability.containsKey(representation)) {
+					
+					int currentDurability = (int) obsidianDurability.get(representation);
 					currentDurability++;
 					
 					if (checkIfMax(currentDurability)) {
-						obsidianDurability.remove(atClone);
+						obsidianDurability.remove(representation);
 						dropItem(at);
 					} else {
-						obsidianDurability.put(atClone, currentDurability);
+						obsidianDurability.put(representation, currentDurability);
 					}
 				} else {
-					obsidianDurability.put(atClone, 1);
+					obsidianDurability.put(representation, 1);
 					
 					if (checkIfMax(1)) {
-						obsidianDurability.remove(atClone);
+						obsidianDurability.remove(representation);
 						dropItem(at);
 					}
 				}
@@ -119,7 +129,7 @@ public final class ODEntityListener extends EntityListener {
 		}
 	}
 	
-	private static void dropItem(Location at) {
+	private void dropItem(Location at) {
 		Block b = at.getBlock();
 		
 		Material mat = Material.getMaterial(49);
@@ -131,7 +141,29 @@ public final class ODEntityListener extends EntityListener {
 		at.getWorld().dropItemNaturally(at, is);
 	}
 	
-	private static boolean checkIfMax(int value) {
-		return value == ODConfig.getDurability();
+	private boolean checkIfMax(int value) {
+		return value == config.getDurability();
+	}
+	
+	/**
+	 * Returns the HashMap containing all saved durabilities.
+	 * 
+	 * @return the HashMap containing all saved durabilities
+	 */
+	public HashMap<Integer, Integer> getObisidanDurability() {
+		return obsidianDurability;
+	}
+	
+	/**
+	 * Sets the HashMap containing all saved durabilities.
+	 * 
+	 * @param map the HashMap containing all saved durabilities
+	 */
+	public void setObsidianDurability(HashMap<Integer, Integer> map) {
+		if (map == null) {
+			return;
+		}
+		
+		obsidianDurability = map;
 	}
 }

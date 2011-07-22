@@ -1,4 +1,4 @@
-ObsidianDestroyer plugin v1.03<br>
+ObsidianDestroyer plugin v1.04<br>
 by Pandemoneus<br>
 https://github.com/Pandemoneus
 
@@ -27,10 +27,12 @@ Permission nodes:
 -----------------
 obsidiandestroyer.help //makes help command available<br>
 obsidiandestroyer.config.reload //makes reload command available<br>
-obsidiandestroyer.config.info //makes info command available
+obsidiandestroyer.config.info //makes info command available<br>
+obsidiandestroyer.durability.reset //makes reset command available
 
 Commands:
 -----------------
 obsidiandestroyer (alias: od) - shows the help<br>
 obsidiandestroyer reload (alias: od reload) - reloads the plugin<br>
-obsidiandestroyer info (alias: od info) - shows the currently loaded config
+obsidiandestroyer info (alias: od info) - shows the currently loaded config<br>
+obsidiandestroyer reset (alias: od reset) - resets all currently saved obsidian durabilities

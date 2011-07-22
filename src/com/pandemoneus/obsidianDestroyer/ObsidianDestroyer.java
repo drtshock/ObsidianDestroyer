@@ -27,8 +27,8 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	 * Plugin related stuff
 	 */
 	private final ODCommands cmdExecutor = new ODCommands(this);
-	private final ODEntityListener entityListener = new ODEntityListener();
 	private ODConfig config = new ODConfig(this);
+	private final ODEntityListener entityListener = new ODEntityListener(this);
 	private PermissionHandler permissionsHandler;
 	private boolean permissionsFound = false;
 
@@ -40,6 +40,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	 */
 	@Override
 	public void onDisable() {
+		config.saveDurabilityToFile();
 		Log.info(PLUGIN_NAME + " disabled");
 	}
 
@@ -58,6 +59,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 		setupPermissions();
 
 		config.loadConfig();
+		entityListener.setObsidianDurability(config.loadDurabilityFromFile());
 
 		PluginManager pm = getServer().getPluginManager();
 
@@ -98,6 +100,15 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	 */
 	public ODConfig getConfig() {
 		return config;
+	}
+	
+	/**
+	 * Returns the entity listener of this plugin.
+	 * 
+	 * @return the entity listener of this plugin
+	 */
+	public ODEntityListener getListener() {
+		return entityListener;
 	}
 
 	/**

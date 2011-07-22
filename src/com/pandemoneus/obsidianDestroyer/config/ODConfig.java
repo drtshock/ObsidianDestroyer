@@ -1,7 +1,12 @@
 package com.pandemoneus.obsidianDestroyer.config;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.HashMap;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.config.Configuration;
@@ -24,19 +29,19 @@ public final class ODConfig {
 	 */
 	private static String directory = "plugins" + File.separator + ObsidianDestroyer.getPluginName()
 			+ File.separator;
-	private File configFile = new File(directory + File.separator
-			+ "config.yml");
+	private File configFile = new File(directory + "config.yml");
+	private File durabilityFile = new File(directory + "durability.dat");
 	private Configuration bukkitConfig = new Configuration(configFile);
 
 	/**
 	 * Default settings
 	 */
-	private static int explosionRadius = 3;
-	private static boolean tntEnabled = true;
-	private static boolean creepersEnabled = false;
-	private static boolean ghastsEnabled = false;
-	private static boolean durabilityEnabled = false;
-	private static int durability = 1;
+	private int explosionRadius = 3;
+	private boolean tntEnabled = true;
+	private boolean creepersEnabled = false;
+	private boolean ghastsEnabled = false;
+	private boolean durabilityEnabled = false;
+	private int durability = 1;
 
 	/**
 	 * Associates this object with a plugin
@@ -124,7 +129,7 @@ public final class ODConfig {
 	 * 
 	 * @return the explosion radius
 	 */
-	public static int getRadius() {
+	public int getRadius() {
 		return explosionRadius;
 	}
 
@@ -133,7 +138,7 @@ public final class ODConfig {
 	 * 
 	 * @return whether TNT is allowed to destroy Obsidian
 	 */
-	public static boolean getTntEnabled() {
+	public boolean getTntEnabled() {
 		return tntEnabled;
 	}
 
@@ -142,7 +147,7 @@ public final class ODConfig {
 	 * 
 	 * @return whether Creepers are allowed to destroy Obsidian
 	 */
-	public static boolean getCreepersEnabled() {
+	public boolean getCreepersEnabled() {
 		return creepersEnabled;
 	}
 
@@ -151,7 +156,7 @@ public final class ODConfig {
 	 * 
 	 * @return whether Ghasts are allowed to destroy Obsidian
 	 */
-	public static boolean getGhastsEnabled() {
+	public boolean getGhastsEnabled() {
 		return ghastsEnabled;
 	}
 	
@@ -160,7 +165,7 @@ public final class ODConfig {
 	 * 
 	 * @return whether durability for Obsidian is enabled
 	 */
-	public static boolean getDurabilityEnabled() {
+	public boolean getDurabilityEnabled() {
 		return durabilityEnabled;
 	}
 	
@@ -169,7 +174,7 @@ public final class ODConfig {
 	 * 
 	 * @return the max durability
 	 */
-	public static int getDurability() {
+	public int getDurability() {
 		return durability;
 	}
 
@@ -210,5 +215,61 @@ public final class ODConfig {
 	 */
 	public Plugin getPlugin() {
 		return plugin;
+	}
+	
+	/**
+	 * Saves the durability hash map to a file.
+	 */
+	public void saveDurabilityToFile() {
+		if (plugin.getListener() == null || plugin.getListener().getObisidanDurability() == null) {
+			return;
+		}
+		
+		HashMap<Integer, Integer> map = plugin.getListener().getObisidanDurability();
+		
+		new File(directory).mkdir();
+		
+		try {
+			 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(durabilityFile));
+		     oos.writeObject(map);
+		     oos.flush();
+		     oos.close();
+		} catch (IOException e) {
+			Log.severe("Failed writing obsidian durability for "
+					+ ObsidianDestroyer.getPluginName());
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Loads the durability hash map from a file.
+	 * 
+	 * @return the durability hash map from a file
+	 */
+	@SuppressWarnings("unchecked")
+	public HashMap<Integer, Integer> loadDurabilityFromFile() {
+		if (!durabilityFile.exists() || plugin.getListener() == null || plugin.getListener().getObisidanDurability() == null) {
+			return null;
+		}
+		
+		new File(directory).mkdir();
+		
+		HashMap<Integer, Integer> map = null;
+		Object result = null;
+		
+		try {
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(durabilityFile));
+	        result = ois.readObject();
+	        map = (HashMap<Integer, Integer>) result;
+	        ois.close();
+		} catch (IOException ioe) {
+			Log.severe("Failed reading obsidian durability for " + ObsidianDestroyer.getPluginName());
+			ioe.printStackTrace();
+		} catch (ClassNotFoundException cnfe) {
+			Log.severe("Obsidian durability file contains an unknown class, was it modified?");
+			cnfe.printStackTrace();
+		}
+		
+		return map;
 	}
 }

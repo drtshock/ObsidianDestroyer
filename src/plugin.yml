@@ -1,6 +1,6 @@
 name: ObsidianDestroyer
 main: com.pandemoneus.obsidianDestroyer.ObsidianDestroyer
-version: 1.03
+version: 1.04
 author: 'Pandemoneus'
 
 commands:

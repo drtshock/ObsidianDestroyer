@@ -1,5 +1,7 @@
 package com.pandemoneus.obsidianDestroyer.commands;
 
+import java.util.HashMap;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,6 +11,7 @@ import org.bukkit.entity.Player;
 import com.nijiko.permissions.PermissionHandler;
 import com.pandemoneus.obsidianDestroyer.ObsidianDestroyer;
 import com.pandemoneus.obsidianDestroyer.config.ODConfig;
+import com.pandemoneus.obsidianDestroyer.listeners.ODEntityListener;
 import com.pandemoneus.obsidianDestroyer.logger.Log;
 
 /**
@@ -89,6 +92,14 @@ public final class ODCommands implements CommandExecutor {
 					sender.sendMessage(ChatColor.RED
 							+ "You are not authorized to use this command.");
 				}
+			} else if (command.equalsIgnoreCase("reset")) {
+				// reset durabilities
+				if (ph.has(sender, "obsidiandestroyer.durability.reset")) {
+					resetDurability(sender);
+				} else {
+					sender.sendMessage(ChatColor.RED
+							+ "You are not authorized to use this command.");
+				}
 			}
 		}
 	}
@@ -109,6 +120,9 @@ public final class ODCommands implements CommandExecutor {
 				} else if (command.equalsIgnoreCase("info")) {
 					// info
 					getConfigInfo(sender);
+				} else if (command.equalsIgnoreCase("reset")) {
+					// reset durabilities
+					resetDurability(sender);
 				}
 			}
 		} else {
@@ -150,5 +164,14 @@ public final class ODCommands implements CommandExecutor {
 			sender.sendMessage(ChatColor.RED
 					+ "None - Config file deleted - please reload");
 		}
+	}
+	
+	private void resetDurability(Player sender) {
+		ODEntityListener listener = plugin.getListener();
+		
+		listener.setObsidianDurability(new HashMap<Integer, Integer>());
+		
+		Log.info("'" + sender.getName() + "' requested reset of Obsidian durabilities");
+		sender.sendMessage(ChatColor.GREEN + "Reset all Obsidian durabilities!");
 	}
 }
