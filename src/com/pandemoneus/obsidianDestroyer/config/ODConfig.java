@@ -35,6 +35,8 @@ public final class ODConfig {
 	private static boolean tntEnabled = true;
 	private static boolean creepersEnabled = false;
 	private static boolean ghastsEnabled = false;
+	private static boolean durabilityEnabled = false;
+	private static int durability = 1;
 
 	/**
 	 * Associates this object with a plugin
@@ -57,7 +59,8 @@ public final class ODConfig {
 		new File(directory).mkdir();
 
 		if (configFile.exists()) {
-			if (readString("Version").equals(ObsidianDestroyer.getVersion())) {
+			bukkitConfig.load();
+			if (bukkitConfig.getString("Version").equals(ObsidianDestroyer.getVersion())) {
 				// config file exists and is up to date
 				Log.info("ObsidianDestroyer config file found, loading config...");
 				loadData();
@@ -85,11 +88,15 @@ public final class ODConfig {
 	}
 
 	private void loadData() {
-		explosionRadius = readInteger("Radius");
+		bukkitConfig.load();
+		explosionRadius = bukkitConfig.getInt("Radius", 3);
 
-		tntEnabled = readBoolean("EnabledFor.TNT");
-		creepersEnabled = readBoolean("EnabledFor.Creepers");
-		ghastsEnabled = readBoolean("EnabledFor.Ghasts");
+		tntEnabled = bukkitConfig.getBoolean("EnabledFor.TNT", true);
+		creepersEnabled = bukkitConfig.getBoolean("EnabledFor.Creepers", false);
+		ghastsEnabled = bukkitConfig.getBoolean("EnabledFor.Ghasts", false);
+		
+		durabilityEnabled = bukkitConfig.getBoolean("Durability.Enabled", false);
+		durability = bukkitConfig.getInt("Durability.Amount", 1);
 	}
 
 	private void writeDefault() {
@@ -99,23 +106,11 @@ public final class ODConfig {
 		write("EnabledFor.TNT", tntEnabled);
 		write("EnabledFor.Creepers", creepersEnabled);
 		write("EnabledFor.Ghasts", ghastsEnabled);
+		
+		write("Durability.Enabled", durabilityEnabled);
+		write("Durability.Amount", durability);
 
 		loadData();
-	}
-
-	private int readInteger(String key) {
-		bukkitConfig.load();
-		return bukkitConfig.getInt(key, 0);
-	}
-
-	private boolean readBoolean(String key) {
-		bukkitConfig.load();
-		return bukkitConfig.getBoolean(key, false);
-	}
-
-	private String readString(String key) {
-		bukkitConfig.load();
-		return bukkitConfig.getString(key, "");
 	}
 
 	private void write(String key, Object o) {
@@ -158,6 +153,24 @@ public final class ODConfig {
 	 */
 	public static boolean getGhastsEnabled() {
 		return ghastsEnabled;
+	}
+	
+	/**
+	 * Returns whether durability for Obsidian is enabled.
+	 * 
+	 * @return whether durability for Obsidian is enabled
+	 */
+	public static boolean getDurabilityEnabled() {
+		return durabilityEnabled;
+	}
+	
+	/**
+	 * Returns the max durability.
+	 * 
+	 * @return the max durability
+	 */
+	public static int getDurability() {
+		return durability;
 	}
 
 	/**

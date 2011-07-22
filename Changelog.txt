@@ -1,0 +1,15 @@
+Version 1.03
+- Added durability
+
+Version 1.02
+- Added Permissions
+- Added aliases
+- Increased maintainability
+
+Version 1.01
+- Added command to reload config ingame
+- Added command to show loaded config ingame
+- Added check to not mess with plugins that prevent explosions
+
+Version 1.0
+- Initial release
