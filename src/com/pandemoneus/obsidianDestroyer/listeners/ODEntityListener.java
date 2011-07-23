@@ -39,7 +39,7 @@ public final class ODEntityListener extends EntityListener {
 	@Override
 	public void onEntityExplode(EntityExplodeEvent event) {
 		// do not do anything in case explosions get canceled
-		if (event.isCancelled()) {
+		if (event == null || event.isCancelled()) {
 			return;
 		}
 		
@@ -47,12 +47,17 @@ public final class ODEntityListener extends EntityListener {
 
 		// cancel if radius is < 0
 		if (radius < 0) {
-			Log.warning("Explosion radius is less than zero. Current value: "
-							+ radius);
+			Log.warning("Explosion radius is less than zero. Current value: " + radius);
 			return;
 		}
 
 		Entity detonator = event.getEntity();
+		
+		if (detonator == null) {
+			// some other plugins create new explosions passing 'null' as Entity, so we need this here to fix it
+			return;
+		}
+		
 		Location detonatorLoc = detonator.getLocation();
 		String eventTypeRep = event.getEntity().toString();
 
