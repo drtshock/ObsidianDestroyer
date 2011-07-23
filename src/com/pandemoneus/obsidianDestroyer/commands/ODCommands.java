@@ -1,6 +1,8 @@
 package com.pandemoneus.obsidianDestroyer.commands;
 
 import java.util.HashMap;
+import java.util.Set;
+import java.util.Timer;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -170,6 +172,18 @@ public final class ODCommands implements CommandExecutor {
 		ODEntityListener listener = plugin.getListener();
 		
 		listener.setObsidianDurability(new HashMap<Integer, Integer>());
+		
+		Set<Integer> set = listener.getObsidianTimer().keySet();
+		
+		for (Integer i : set) {
+			Timer t = listener.getObsidianTimer().get(i);
+			
+			if (t != null) {
+				t.cancel();
+			}
+		}
+		
+		listener.setObsidianTimer(new HashMap<Integer, Timer>());
 		
 		Log.info("'" + sender.getName() + "' requested reset of Obsidian durabilities");
 		sender.sendMessage(ChatColor.GREEN + "Reset all Obsidian durabilities!");

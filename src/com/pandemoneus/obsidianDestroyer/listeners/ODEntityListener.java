@@ -1,6 +1,7 @@
 package com.pandemoneus.obsidianDestroyer.listeners;
 
 import java.util.HashMap;
+import java.util.Timer;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -10,6 +11,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityListener;
 import org.bukkit.inventory.ItemStack;
 
+import com.pandemoneus.obsidianDestroyer.ODTimerTask;
 import com.pandemoneus.obsidianDestroyer.ObsidianDestroyer;
 import com.pandemoneus.obsidianDestroyer.config.ODConfig;
 import com.pandemoneus.obsidianDestroyer.logger.Log;
@@ -22,10 +24,10 @@ import com.pandemoneus.obsidianDestroyer.logger.Log;
  */
 public final class ODEntityListener extends EntityListener {
 	
-	@SuppressWarnings("unused")
 	private ObsidianDestroyer plugin;
 	private ODConfig config;
 	private HashMap<Integer, Integer> obsidianDurability = new HashMap<Integer, Integer>();
+	private HashMap<Integer, Timer> obsidianTimer = new HashMap<Integer, Timer>();
 	
 	public ODEntityListener(ObsidianDestroyer plugin) {
 		this.plugin = plugin;
@@ -115,17 +117,25 @@ public final class ODEntityListener extends EntityListener {
 					currentDurability++;
 					
 					if (checkIfMax(currentDurability)) {
-						obsidianDurability.remove(representation);
-						dropItem(at);
+						// counter has reached max durability, so remove the block and drop an item
+						dropBlockAndResetTime(representation, at);
 					} else {
+						// counter has not reached max durability yet
 						obsidianDurability.put(representation, currentDurability);
+						
+						if (config.getDurabilityResetTimerEnabled()) {
+							startNewTimer(representation);
+						}
 					}
 				} else {
 					obsidianDurability.put(representation, 1);
 					
+					if (config.getDurabilityResetTimerEnabled()) {
+						startNewTimer(representation);
+					}
+					
 					if (checkIfMax(1)) {
-						obsidianDurability.remove(representation);
-						dropItem(at);
+						dropBlockAndResetTime(representation, at);
 					}
 				}
 			} else {
@@ -150,12 +160,36 @@ public final class ODEntityListener extends EntityListener {
 		return value == config.getDurability();
 	}
 	
+	private void startNewTimer(Integer representation) {
+		if (obsidianTimer.get(representation) != null) {
+			obsidianTimer.get(representation).cancel();
+		}
+		
+		Timer timer = new Timer();
+		timer.schedule(new ODTimerTask(plugin, representation), config.getDurabilityResetTime());
+		
+		obsidianTimer.put(representation, timer);
+	}
+	
+	private void dropBlockAndResetTime(Integer representation, Location at) {
+		obsidianDurability.remove(representation);
+		dropItem(at);
+		
+		if (config.getDurabilityResetTimerEnabled()) {
+			if (obsidianTimer.get(representation) != null) {
+				obsidianTimer.get(representation).cancel();
+			}
+		
+			obsidianTimer.remove(representation);
+		}
+	}
+	
 	/**
 	 * Returns the HashMap containing all saved durabilities.
 	 * 
 	 * @return the HashMap containing all saved durabilities
 	 */
-	public HashMap<Integer, Integer> getObisidanDurability() {
+	public HashMap<Integer, Integer> getObsidianDurability() {
 		return obsidianDurability;
 	}
 	
@@ -170,5 +204,27 @@ public final class ODEntityListener extends EntityListener {
 		}
 		
 		obsidianDurability = map;
+	}
+	
+	/**
+	 * Returns the HashMap containing all saved durability timers.
+	 * 
+	 * @return the HashMap containing all saved durability timers
+	 */
+	public HashMap<Integer, Timer> getObsidianTimer() {
+		return obsidianTimer;
+	}
+	
+	/**
+	 * Sets the HashMap containing all saved durability timers.
+	 * 
+	 * @param map the HashMap containing all saved durability timers
+	 */
+	public void setObsidianTimer(HashMap<Integer, Timer> map) {
+		if (map == null) {
+			return;
+		}
+		
+		obsidianTimer = map;
 	}
 }

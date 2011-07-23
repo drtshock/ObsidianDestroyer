@@ -1,4 +1,4 @@
-ObsidianDestroyer plugin v1.04<br>
+ObsidianDestroyer plugin v1.05<br>
 by Pandemoneus<br>
 https://github.com/Pandemoneus
 
@@ -20,7 +20,9 @@ EnabledFor.TNT - set true if TNT is allowed to destroy Obsidian (default: true)<
 EnabledFor.Creepers - set true if Creepers are allowed to destroy Obsidian (default: false)<br>
 EnabledFor.Ghasts - set true if Ghasts are allowed to destroy Obsidian (default: false)<br>
 Durability.Enabled - set true if you want to use the durability feature (default: false)<br>
-Durability.Amount - determines after how many TNT explosions in the radius the Obsidian block gets destroyed (default: 1)
+Durability.Amount - determines after how many TNT explosions in the radius the Obsidian block gets destroyed (default: 1)<br>
+Durability.ResetEnabled - set true if you want to reset the durability back to max after a certain time has passed (default: true)<br>
+Durability.ResetTime - time in milliseconds that has to pass before the durability is reset (default: '600000' (10 minutes))
 
 
 Permission nodes:

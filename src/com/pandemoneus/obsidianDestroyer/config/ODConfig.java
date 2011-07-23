@@ -42,6 +42,8 @@ public final class ODConfig {
 	private boolean ghastsEnabled = false;
 	private boolean durabilityEnabled = false;
 	private int durability = 1;
+	private boolean durabilityTimerEnabled = true;
+	private long durabilityTime = 600000L; // 10 minutes
 
 	/**
 	 * Associates this object with a plugin
@@ -102,6 +104,8 @@ public final class ODConfig {
 		
 		durabilityEnabled = bukkitConfig.getBoolean("Durability.Enabled", false);
 		durability = bukkitConfig.getInt("Durability.Amount", 1);
+		durabilityTimerEnabled = bukkitConfig.getBoolean("Durability.ResetEnabled", true);
+		durabilityTime = readLong("Durability.ResetAfter", "600000");
 	}
 
 	private void writeDefault() {
@@ -114,6 +118,8 @@ public final class ODConfig {
 		
 		write("Durability.Enabled", durabilityEnabled);
 		write("Durability.Amount", durability);
+		write("Durability.ResetEnabled", durabilityTimerEnabled);
+		write("Durability.ResetAfter", "" + durabilityTime);
 
 		loadData();
 	}
@@ -122,6 +128,35 @@ public final class ODConfig {
 		bukkitConfig.load();
 		bukkitConfig.setProperty(key, o);
 		bukkitConfig.save();
+	}
+	
+	/**
+	 * Reads a string representing a long from the config file.
+	 * 
+	 * Returns '0' when an exception occurs.
+	 * 
+	 * @param key
+	 *            the key
+	 * @param def
+	 *            default value
+	 * @return the long specified in 'key' from the config file, '0' on errors
+	 */
+	private long readLong(String key, String def) {
+		bukkitConfig.load();
+
+		// Bukkit Config has no getLong(..)-method, so we are using Strings
+		String value = bukkitConfig.getString(key, def);
+
+		long tmp = 0;
+
+		try {
+			tmp = Long.parseLong(value);
+		} catch (NumberFormatException nfe) {
+			Log.warning("Error parsing a long from the config file. Key=" + key);
+			nfe.printStackTrace();
+		}
+
+		return tmp;
 	}
 
 	/**
@@ -177,6 +212,24 @@ public final class ODConfig {
 	public int getDurability() {
 		return durability;
 	}
+	
+	/**
+	 * Returns whether durability timer for Obsidian is enabled.
+	 * 
+	 * @return whether durability timer for Obsidian is enabled
+	 */
+	public boolean getDurabilityResetTimerEnabled() {
+		return durabilityTimerEnabled;
+	}
+	
+	/**
+	 * Returns the time in milliseconds after which the durability gets reset.
+	 * 
+	 * @return the time in milliseconds after which the durability gets reset
+	 */
+	public long getDurabilityResetTime() {
+		return durabilityTime;
+	}
 
 	/**
 	 * Returns a list containing all loaded keys.
@@ -221,11 +274,11 @@ public final class ODConfig {
 	 * Saves the durability hash map to a file.
 	 */
 	public void saveDurabilityToFile() {
-		if (plugin.getListener() == null || plugin.getListener().getObisidanDurability() == null) {
+		if (plugin.getListener() == null || plugin.getListener().getObsidianDurability() == null) {
 			return;
 		}
 		
-		HashMap<Integer, Integer> map = plugin.getListener().getObisidanDurability();
+		HashMap<Integer, Integer> map = plugin.getListener().getObsidianDurability();
 		
 		new File(directory).mkdir();
 		
@@ -248,7 +301,7 @@ public final class ODConfig {
 	 */
 	@SuppressWarnings("unchecked")
 	public HashMap<Integer, Integer> loadDurabilityFromFile() {
-		if (!durabilityFile.exists() || plugin.getListener() == null || plugin.getListener().getObisidanDurability() == null) {
+		if (!durabilityFile.exists() || plugin.getListener() == null || plugin.getListener().getObsidianDurability() == null) {
 			return null;
 		}
 		
