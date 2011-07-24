@@ -23,6 +23,8 @@ import com.pandemoneus.obsidianDestroyer.logger.Log;
 public final class ODConfig {
 
 	private ObsidianDestroyer plugin;
+	private static String pluginName;
+	private static String pluginVersion;
 
 	/**
 	 * File handling
@@ -53,6 +55,7 @@ public final class ODConfig {
 	 */
 	public ODConfig(ObsidianDestroyer plugin) {
 		this.plugin = plugin;
+		pluginName = ObsidianDestroyer.getPluginName();
 	}
 
 	/**
@@ -62,18 +65,20 @@ public final class ODConfig {
 	 */
 	public boolean loadConfig() {
 		boolean isErrorFree = true;
+		pluginVersion = ObsidianDestroyer.getVersion();
 
 		new File(directory).mkdir();
 
 		if (configFile.exists()) {
 			bukkitConfig.load();
-			if (bukkitConfig.getString("Version").equals(ObsidianDestroyer.getVersion())) {
+			if (bukkitConfig.getString("Version", "").equals(pluginVersion)) {
 				// config file exists and is up to date
-				Log.info("ObsidianDestroyer config file found, loading config...");
+				Log.info(pluginName + " config file found, loading config...");
 				loadData();
 			} else {
 				// config file exists but is outdated
-				Log.info("ObsidianDestroyer config file outdated, adding old data and creating new values. "
+				Log.info(pluginName
+						+ " config file outdated, adding old data and creating new values. "
 						+ "Make sure you change those!");
 				loadData();
 				writeDefault();
@@ -81,11 +86,12 @@ public final class ODConfig {
 		} else {
 			// config file does not exist
 			try {
-				Log.info("ObsidianDestroyer config file not found, creating new config file...");
+				Log.info(pluginName
+						+ " config file not found, creating new config file...");
 				configFile.createNewFile();
 				writeDefault();
 			} catch (IOException ioe) {
-				Log.severe("Could not create the config file for ObsidianDestroyer!");
+				Log.severe("Could not create the config file for " + pluginName + "!");
 				ioe.printStackTrace();
 				isErrorFree = false;
 			}

@@ -1,3 +1,6 @@
+Version 1.051
+- Fixed NullPointerException in config
+
 Version 1.05
 - Durability can now restore back to max after a certain time passed
 

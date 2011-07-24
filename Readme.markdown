@@ -1,4 +1,4 @@
-ObsidianDestroyer plugin v1.05<br>
+ObsidianDestroyer plugin v1.051<br>
 by Pandemoneus<br>
 https://github.com/Pandemoneus
 
