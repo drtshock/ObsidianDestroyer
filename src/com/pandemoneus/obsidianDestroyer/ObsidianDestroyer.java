@@ -9,10 +9,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
-import com.pandemoneus.obsidianDestroyer.logger.Log;
-import com.pandemoneus.obsidianDestroyer.commands.ODCommands;
-import com.pandemoneus.obsidianDestroyer.config.ODConfig;
-import com.pandemoneus.obsidianDestroyer.listeners.ODEntityListener;
 
 /**
  * The ObsidianDestroyer plugin.

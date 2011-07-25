@@ -1,4 +1,4 @@
-package com.pandemoneus.obsidianDestroyer.listeners;
+package com.pandemoneus.obsidianDestroyer;
 
 import java.util.HashMap;
 import java.util.Timer;
@@ -11,10 +11,6 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityListener;
 import org.bukkit.inventory.ItemStack;
 
-import com.pandemoneus.obsidianDestroyer.ODTimerTask;
-import com.pandemoneus.obsidianDestroyer.ObsidianDestroyer;
-import com.pandemoneus.obsidianDestroyer.config.ODConfig;
-import com.pandemoneus.obsidianDestroyer.logger.Log;
 
 /**
  * Custom Entity Listener for the ObsidianDestroyer plugin.
@@ -39,13 +35,13 @@ public final class ODEntityListener extends EntityListener {
 	 * @param event event data
 	 */
 	@Override
-	public void onEntityExplode(EntityExplodeEvent event) {
+	public void onEntityExplode(final EntityExplodeEvent event) {
 		// do not do anything in case explosions get canceled
 		if (event == null || event.isCancelled()) {
 			return;
 		}
 		
-		int radius = config.getRadius();
+		final int radius = config.getRadius();
 
 		// cancel if radius is < 0
 		if (radius < 0) {
@@ -53,15 +49,15 @@ public final class ODEntityListener extends EntityListener {
 			return;
 		}
 
-		Entity detonator = event.getEntity();
+		final Entity detonator = event.getEntity();
 		
 		if (detonator == null) {
 			// some other plugins create new explosions passing 'null' as Entity, so we need this here to fix it
 			return;
 		}
 		
-		Location detonatorLoc = detonator.getLocation();
-		String eventTypeRep = event.getEntity().toString();
+		final Location detonatorLoc = detonator.getLocation();
+		final String eventTypeRep = event.getEntity().toString();
 
 		// cancel if detonator was neither TNT, a creeper nor a ghast
 		if (!(eventTypeRep.equals("CraftTNTPrimed")
@@ -96,19 +92,23 @@ public final class ODEntityListener extends EntityListener {
 							detonatorLoc.getZ() + z);
 
 					if (detonatorLoc.distance(targetLoc) <= radius) {
-						blowObsidianUp(targetLoc);
+						blowBlockUp(targetLoc);
 					}
 				}
 			}
 		}
 	}
-
-	private void blowObsidianUp(Location at) {
-		Block b = at.getBlock();
+	
+	private void blowBlockUp(final Location at) {
+		if (at == null) {
+			return;
+		}
+		
+		final Block b = at.getBlock();
 
 		if (b.getTypeId() == 49) {
 			// random formula to create unique integers
-			Integer representation = at.getWorld().hashCode() + (int) at.getX() + (int) at.getY() + (int) at.getZ();
+			Integer representation = at.getWorld().hashCode() + at.getBlockX() * 2389 + at.getBlockY() * 4027 + at.getBlockZ() * 2053;
 			
 			if (config.getDurabilityEnabled() && config.getDurability() > 1) {
 				if (obsidianDurability.containsKey(representation)) {
@@ -139,21 +139,38 @@ public final class ODEntityListener extends EntityListener {
 					}
 				}
 			} else {
-				dropItem(at);
+				destroyBlockAndDropItem(at);
 			}
 		}
 	}
 	
-	private void dropItem(Location at) {
-		Block b = at.getBlock();
+	private void destroyBlockAndDropItem(final Location at) {
+		if (at == null) {
+			return;
+		}
 		
-		Material mat = Material.getMaterial(49);
-		ItemStack is = new ItemStack(mat, 1, (byte) 0, (byte) 0);
-
-		// changes Obsidian block to Air block
+		final Block b = at.getBlock();
+		
+		if (!b.getType().equals(Material.OBSIDIAN)) {
+			return;
+		}
+		
+		double chance = config.getChanceToDropBlock();
+		
+		if (chance > 1.0) chance = 1.0;
+		if (chance < 0.0) chance = 0.0;
+		
+		final double random = Math.random();
+		
+		if (chance == 1.0 || chance <= random) {		
+			ItemStack is = new ItemStack(b.getType(), 1, (byte) 0, b.getData());
+	
+			// drop item
+			at.getWorld().dropItemNaturally(at, is);
+		}
+		
+		// changes original block to Air block
 		b.setTypeId(Material.AIR.getId());
-
-		at.getWorld().dropItemNaturally(at, is);
 	}
 	
 	private boolean checkIfMax(int value) {
@@ -173,7 +190,7 @@ public final class ODEntityListener extends EntityListener {
 	
 	private void dropBlockAndResetTime(Integer representation, Location at) {
 		obsidianDurability.remove(representation);
-		dropItem(at);
+		destroyBlockAndDropItem(at);
 		
 		if (config.getDurabilityResetTimerEnabled()) {
 			if (obsidianTimer.get(representation) != null) {

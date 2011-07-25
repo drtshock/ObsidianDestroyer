@@ -1,4 +1,4 @@
-package com.pandemoneus.obsidianDestroyer.config;
+package com.pandemoneus.obsidianDestroyer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,8 +11,6 @@ import java.util.HashMap;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.config.Configuration;
 
-import com.pandemoneus.obsidianDestroyer.ObsidianDestroyer;
-import com.pandemoneus.obsidianDestroyer.logger.Log;
 
 /**
  * The configuration file for the ObsidianDestroyer plugin, uses YML.
@@ -46,6 +44,7 @@ public final class ODConfig {
 	private int durability = 1;
 	private boolean durabilityTimerEnabled = true;
 	private long durabilityTime = 600000L; // 10 minutes
+	private double chanceToDropBlock = 0.7;
 
 	/**
 	 * Associates this object with a plugin
@@ -112,6 +111,8 @@ public final class ODConfig {
 		durability = bukkitConfig.getInt("Durability.Amount", 1);
 		durabilityTimerEnabled = bukkitConfig.getBoolean("Durability.ResetEnabled", true);
 		durabilityTime = readLong("Durability.ResetAfter", "600000");
+		
+		chanceToDropBlock = bukkitConfig.getDouble("Blocks.ChanceToDrop", 0.7);
 	}
 
 	private void writeDefault() {
@@ -126,6 +127,8 @@ public final class ODConfig {
 		write("Durability.Amount", durability);
 		write("Durability.ResetEnabled", durabilityTimerEnabled);
 		write("Durability.ResetAfter", "" + durabilityTime);
+		
+		write("Blocks.ChanceToDrop", chanceToDropBlock);
 
 		loadData();
 	}
@@ -235,6 +238,15 @@ public final class ODConfig {
 	 */
 	public long getDurabilityResetTime() {
 		return durabilityTime;
+	}
+	
+	/**
+	 * Returns the chance to drop an item from a blown up block.
+	 * 
+	 * @return the chance to drop an item from a blown up block
+	 */
+	public double getChanceToDropBlock() {
+		return chanceToDropBlock;
 	}
 
 	/**

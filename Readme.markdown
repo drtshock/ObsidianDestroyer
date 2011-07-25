@@ -1,4 +1,4 @@
-ObsidianDestroyer plugin v1.051<br>
+ObsidianDestroyer plugin v1.052<br>
 by Pandemoneus<br>
 https://github.com/Pandemoneus
 
@@ -22,7 +22,8 @@ EnabledFor.Ghasts - set true if Ghasts are allowed to destroy Obsidian (default:
 Durability.Enabled - set true if you want to use the durability feature (default: false)<br>
 Durability.Amount - determines after how many TNT explosions in the radius the Obsidian block gets destroyed (default: 1)<br>
 Durability.ResetEnabled - set true if you want to reset the durability back to max after a certain time has passed (default: true)<br>
-Durability.ResetTime - time in milliseconds that has to pass before the durability is reset (default: '600000' (10 minutes))
+Durability.ResetTime - time in milliseconds that has to pass before the durability is reset (default: '600000' (10 minutes))<br>
+Blocks.ChanceToDrop - set the chance to drop an obsidian block when it was blown up, set to 1.0 to always drop a block (default: 0.7 (70%))
 
 
 Permission nodes:

@@ -1,4 +1,4 @@
-package com.pandemoneus.obsidianDestroyer.commands;
+package com.pandemoneus.obsidianDestroyer;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -11,10 +11,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.nijiko.permissions.PermissionHandler;
-import com.pandemoneus.obsidianDestroyer.ObsidianDestroyer;
-import com.pandemoneus.obsidianDestroyer.config.ODConfig;
-import com.pandemoneus.obsidianDestroyer.listeners.ODEntityListener;
-import com.pandemoneus.obsidianDestroyer.logger.Log;
 
 /**
  * Command class. Available commands are:

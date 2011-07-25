@@ -1,9 +1,8 @@
-package com.pandemoneus.obsidianDestroyer.logger;
+package com.pandemoneus.obsidianDestroyer;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.pandemoneus.obsidianDestroyer.ObsidianDestroyer;
 
 /**
  * Server logger class
@@ -47,5 +46,23 @@ public final class Log {
 	 */
 	public static void severe(String message) {
 		LOG.log(Level.SEVERE, pre + message);
+	}
+	
+	/**
+	 * Returns the logger.
+	 * 
+	 * @return the logger
+	 */
+	public static Logger getLogger() {
+		return LOG;
+	}
+	
+	/**
+	 * Returns the prefix used by the logger.
+	 * 
+	 * @return the prefix used by the logger
+	 */
+	public static String getPrefix() {
+		return pre;
 	}
 }
