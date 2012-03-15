@@ -4,19 +4,16 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Timer;
 
+import net.milkbowl.vault.permission.Permission;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.nijiko.permissions.PermissionHandler;
-
 /**
- * Command class. Available commands are:
- * od
- * od reload
- * od info
+ * Command class. Available commands are: od od reload od info
  * 
  * @author Pandemoneus
  * 
@@ -39,36 +36,31 @@ public final class ODCommands implements CommandExecutor {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd,
-			String commandLabel, String[] args) {
+	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		if (args != null) {
 			if (sender instanceof Player) {
 				if (plugin.getPermissionsFound()) {
-					usePermissionsStructure((Player) sender, cmd, commandLabel,
-							args);
+					usePermissionsStructure((Player) sender, cmd, commandLabel, args);
 				} else {
 					useNormalStructure((Player) sender, cmd, commandLabel, args);
 				}
 			} else {
-				sender.sendMessage(ChatColor.RED
-						+ "Sorry, you are not a player!");
+				sender.sendMessage(ChatColor.RED + "Sorry, you are not a player!");
 			}
 		}
 
 		return true;
 	}
 
-	private void usePermissionsStructure(Player sender, Command cmd,
-			String commandLabel, String[] args) {
-		PermissionHandler ph = plugin.getPermissionsHandler();
+	private void usePermissionsStructure(Player sender, Command cmd, String commandLabel, String[] args) {
+		Permission ph = plugin.getPermissionsHandler();
 
 		if (args.length == 0) {
 			// show help
 			if (ph.has(sender, "obsidiandestroyer.help")) {
 				showHelp(sender);
 			} else {
-				sender.sendMessage(ChatColor.RED
-						+ "You are not authorized to use this command.");
+				sender.sendMessage(ChatColor.RED + "You are not authorized to use this command.");
 			}
 		} else if (args.length == 1) {
 			// commands with 0 arguments
@@ -79,31 +71,27 @@ public final class ODCommands implements CommandExecutor {
 				if (ph.has(sender, "obsidiandestroyer.config.reload")) {
 					reloadPlugin(sender);
 				} else {
-					sender.sendMessage(ChatColor.RED
-							+ "You are not authorized to use this command.");
+					sender.sendMessage(ChatColor.RED + "You are not authorized to use this command.");
 				}
 			} else if (command.equalsIgnoreCase("info")) {
 				// info
 				if (ph.has(sender, "obsidiandestroyer.config.info")) {
 					getConfigInfo(sender);
 				} else {
-					sender.sendMessage(ChatColor.RED
-							+ "You are not authorized to use this command.");
+					sender.sendMessage(ChatColor.RED + "You are not authorized to use this command.");
 				}
 			} else if (command.equalsIgnoreCase("reset")) {
 				// reset durabilities
 				if (ph.has(sender, "obsidiandestroyer.durability.reset")) {
 					resetDurability(sender);
 				} else {
-					sender.sendMessage(ChatColor.RED
-							+ "You are not authorized to use this command.");
+					sender.sendMessage(ChatColor.RED + "You are not authorized to use this command.");
 				}
 			}
 		}
 	}
 
-	private void useNormalStructure(Player sender, Command cmd,
-			String commandLabel, String[] args) {
+	private void useNormalStructure(Player sender, Command cmd, String commandLabel, String[] args) {
 		if (sender.isOp()) {
 			if (args.length == 0) {
 				// show help
@@ -124,22 +112,18 @@ public final class ODCommands implements CommandExecutor {
 				}
 			}
 		} else {
-			sender.sendMessage(ChatColor.RED
-					+ "You are not authorized to use this command.");
+			sender.sendMessage(ChatColor.RED + "You are not authorized to use this command.");
 		}
 	}
 
 	private void showHelp(Player sender) {
 		sender.sendMessage(ChatColor.YELLOW + "Available commands:");
-		sender.sendMessage(ChatColor.GOLD
-				+ "/od reload - reloads the plugin's config file");
-		sender.sendMessage(ChatColor.GOLD
-				+ "/od info - shows the currently loaded config");
+		sender.sendMessage(ChatColor.GOLD + "/od reload - reloads the plugin's config file");
+		sender.sendMessage(ChatColor.GOLD + "/od info - shows the currently loaded config");
 	}
 
 	private void reloadPlugin(Player sender) {
-		Log.info("'" + sender.getName()
-				+ "' requested reload of ObsidianDestroyer");
+		Log.info("'" + sender.getName() + "' requested reload of ObsidianDestroyer");
 		sender.sendMessage(ChatColor.GREEN + "Reloading ObsidianDestroyer!");
 
 		if (plugin.reload()) {
@@ -148,39 +132,36 @@ public final class ODCommands implements CommandExecutor {
 	}
 
 	private void getConfigInfo(Player sender) {
-		ODConfig config = plugin.getConfig();
-		sender.sendMessage(ChatColor.YELLOW
-				+ "Currently loaded config of ObsidianDestroyer:");
-		sender.sendMessage(ChatColor.YELLOW
-				+ "---------------------------------------------");
+		ODConfig config = plugin.getODConfig();
+		sender.sendMessage(ChatColor.YELLOW + "Currently loaded config of ObsidianDestroyer:");
+		sender.sendMessage(ChatColor.YELLOW + "---------------------------------------------");
 
 		if (config.getConfigFile().exists()) {
 			for (String s : config.printLoadedConfig()) {
 				sender.sendMessage(ChatColor.YELLOW + s);
 			}
 		} else {
-			sender.sendMessage(ChatColor.RED
-					+ "None - Config file deleted - please reload");
+			sender.sendMessage(ChatColor.RED + "None - Config file deleted - please reload");
 		}
 	}
-	
+
 	private void resetDurability(Player sender) {
 		ODEntityListener listener = plugin.getListener();
-		
+
 		listener.setObsidianDurability(new HashMap<Integer, Integer>());
-		
+
 		Set<Integer> set = listener.getObsidianTimer().keySet();
-		
+
 		for (Integer i : set) {
 			Timer t = listener.getObsidianTimer().get(i);
-			
+
 			if (t != null) {
 				t.cancel();
 			}
 		}
-		
+
 		listener.setObsidianTimer(new HashMap<Integer, Timer>());
-		
+
 		Log.info("'" + sender.getName() + "' requested reset of Obsidian durabilities");
 		sender.sendMessage(ChatColor.GREEN + "Reset all Obsidian durabilities!");
 	}

@@ -1,14 +1,10 @@
 package com.pandemoneus.obsidianDestroyer;
 
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
+import net.milkbowl.vault.permission.Permission;
 
-import com.nijiko.permissions.PermissionHandler;
-import com.nijikokun.bukkit.Permissions.Permissions;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * The ObsidianDestroyer plugin.
@@ -25,8 +21,8 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	private final ODCommands cmdExecutor = new ODCommands(this);
 	private ODConfig config = new ODConfig(this);
 	private final ODEntityListener entityListener = new ODEntityListener(this);
-	private PermissionHandler permissionsHandler;
-	private boolean permissionsFound = false;
+	private Permission permissionsHandler;
+	private boolean permissionsFound = true;
 
 	private static String version;
 	private static final String PLUGIN_NAME = "ObsidianDestroyer";
@@ -47,7 +43,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	public void onEnable() {
 		PluginDescriptionFile pdfFile = getDescription();
 		version = pdfFile.getVersion();
-		
+
 		Log.info(PLUGIN_NAME + " v" + version + " enabled");
 
 		getCommand("obsidiandestroyer").setExecutor(cmdExecutor);
@@ -57,10 +53,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 		config.loadConfig();
 		entityListener.setObsidianDurability(config.loadDurabilityFromFile());
 
-		PluginManager pm = getServer().getPluginManager();
-
-		pm.registerEvent(Event.Type.ENTITY_EXPLODE, entityListener,
-				Priority.Highest, this);
+		getServer().getPluginManager().registerEvents(entityListener, this);
 	}
 
 	/**
@@ -94,10 +87,10 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	 * 
 	 * @return the config of this plugin
 	 */
-	public ODConfig getConfig() {
+	public ODConfig getODConfig() {
 		return config;
 	}
-	
+
 	/**
 	 * Returns the entity listener of this plugin.
 	 * 
@@ -122,8 +115,8 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	 * @return the permissionsHandler of this plugin if it exists, otherwise
 	 *         null
 	 */
-	public PermissionHandler getPermissionsHandler() {
-		PermissionHandler ph = null;
+	public Permission getPermissionsHandler() {
+		Permission ph = null;
 
 		if (getPermissionsFound()) {
 			ph = permissionsHandler;
@@ -132,21 +125,14 @@ public final class ObsidianDestroyer extends JavaPlugin {
 		return ph;
 	}
 
-	private void setupPermissions() {
-		if (permissionsHandler != null) {
-			return;
+	private boolean setupPermissions() {
+		if (getServer().getPluginManager().getPlugin("Vault") == null) {
+			permissionsFound = false;
+			return false;
 		}
-
-		Plugin permissionsPlugin = getServer().getPluginManager().getPlugin(
-				"Permissions");
-
-		if (permissionsPlugin == null) {
-			Log.warning("Permissions not detected, using normal command structure.");
-			return;
-		}
-
-		permissionsFound = true;
-		permissionsHandler = ((Permissions) permissionsPlugin).getHandler();
+		RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+		permissionsHandler = rsp.getProvider();
+		return permissionsHandler != null;
 	}
 
 	/**

@@ -8,9 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.util.config.Configuration;
-
 
 /**
  * The configuration file for the ObsidianDestroyer plugin, uses YML.
@@ -27,11 +26,10 @@ public final class ODConfig {
 	/**
 	 * File handling
 	 */
-	private static String directory = "plugins" + File.separator + ObsidianDestroyer.getPluginName()
-			+ File.separator;
+	private static String directory = "plugins" + File.separator + ObsidianDestroyer.getPluginName() + File.separator;
 	private File configFile = new File(directory + "config.yml");
 	private File durabilityFile = new File(directory + "durability.dat");
-	private Configuration bukkitConfig = new Configuration(configFile);
+	private YamlConfiguration bukkitConfig = new YamlConfiguration();
 
 	/**
 	 * Default settings
@@ -69,24 +67,27 @@ public final class ODConfig {
 		new File(directory).mkdir();
 
 		if (configFile.exists()) {
-			bukkitConfig.load();
-			if (bukkitConfig.getString("Version", "").equals(pluginVersion)) {
-				// config file exists and is up to date
-				Log.info(pluginName + " config file found, loading config...");
-				loadData();
-			} else {
-				// config file exists but is outdated
-				Log.info(pluginName
-						+ " config file outdated, adding old data and creating new values. "
-						+ "Make sure you change those!");
-				loadData();
-				writeDefault();
+			try {
+				bukkitConfig.load(configFile);
+
+				if (bukkitConfig.getString("Version", "").equals(pluginVersion)) {
+					// config file exists and is up to date
+					Log.info(pluginName + " config file found, loading config...");
+					loadData();
+				} else {
+					// config file exists but is outdated
+					Log.info(pluginName + " config file outdated, adding old data and creating new values. " + "Make sure you change those!");
+					loadData();
+					writeDefault();
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		} else {
 			// config file does not exist
 			try {
-				Log.info(pluginName
-						+ " config file not found, creating new config file...");
+				Log.info(pluginName + " config file not found, creating new config file...");
 				configFile.createNewFile();
 				writeDefault();
 			} catch (IOException ioe) {
@@ -100,19 +101,24 @@ public final class ODConfig {
 	}
 
 	private void loadData() {
-		bukkitConfig.load();
-		explosionRadius = bukkitConfig.getInt("Radius", 3);
+		try {
+			bukkitConfig.load(configFile);
 
-		tntEnabled = bukkitConfig.getBoolean("EnabledFor.TNT", true);
-		creepersEnabled = bukkitConfig.getBoolean("EnabledFor.Creepers", false);
-		ghastsEnabled = bukkitConfig.getBoolean("EnabledFor.Ghasts", false);
-		
-		durabilityEnabled = bukkitConfig.getBoolean("Durability.Enabled", false);
-		durability = bukkitConfig.getInt("Durability.Amount", 1);
-		durabilityTimerEnabled = bukkitConfig.getBoolean("Durability.ResetEnabled", true);
-		durabilityTime = readLong("Durability.ResetAfter", "600000");
-		
-		chanceToDropBlock = bukkitConfig.getDouble("Blocks.ChanceToDrop", 0.7);
+			explosionRadius = bukkitConfig.getInt("Radius", 3);
+
+			tntEnabled = bukkitConfig.getBoolean("EnabledFor.TNT", true);
+			creepersEnabled = bukkitConfig.getBoolean("EnabledFor.Creepers", false);
+			ghastsEnabled = bukkitConfig.getBoolean("EnabledFor.Ghasts", false);
+
+			durabilityEnabled = bukkitConfig.getBoolean("Durability.Enabled", false);
+			durability = bukkitConfig.getInt("Durability.Amount", 1);
+			durabilityTimerEnabled = bukkitConfig.getBoolean("Durability.ResetEnabled", true);
+			durabilityTime = readLong("Durability.ResetAfter", "600000");
+
+			chanceToDropBlock = bukkitConfig.getDouble("Blocks.ChanceToDrop", 0.7);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void writeDefault() {
@@ -122,23 +128,28 @@ public final class ODConfig {
 		write("EnabledFor.TNT", tntEnabled);
 		write("EnabledFor.Creepers", creepersEnabled);
 		write("EnabledFor.Ghasts", ghastsEnabled);
-		
+
 		write("Durability.Enabled", durabilityEnabled);
 		write("Durability.Amount", durability);
 		write("Durability.ResetEnabled", durabilityTimerEnabled);
 		write("Durability.ResetAfter", "" + durabilityTime);
-		
+
 		write("Blocks.ChanceToDrop", chanceToDropBlock);
 
 		loadData();
 	}
 
 	private void write(String key, Object o) {
-		bukkitConfig.load();
-		bukkitConfig.setProperty(key, o);
-		bukkitConfig.save();
+		try {
+			bukkitConfig.load(configFile);
+			bukkitConfig.set(key, o);
+			bukkitConfig.save(configFile);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
+
 	/**
 	 * Reads a string representing a long from the config file.
 	 * 
@@ -151,7 +162,12 @@ public final class ODConfig {
 	 * @return the long specified in 'key' from the config file, '0' on errors
 	 */
 	private long readLong(String key, String def) {
-		bukkitConfig.load();
+		try {
+			bukkitConfig.load(configFile);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Bukkit Config has no getLong(..)-method, so we are using Strings
 		String value = bukkitConfig.getString(key, def);
@@ -203,7 +219,7 @@ public final class ODConfig {
 	public boolean getGhastsEnabled() {
 		return ghastsEnabled;
 	}
-	
+
 	/**
 	 * Returns whether durability for Obsidian is enabled.
 	 * 
@@ -212,7 +228,7 @@ public final class ODConfig {
 	public boolean getDurabilityEnabled() {
 		return durabilityEnabled;
 	}
-	
+
 	/**
 	 * Returns the max durability.
 	 * 
@@ -221,7 +237,7 @@ public final class ODConfig {
 	public int getDurability() {
 		return durability;
 	}
-	
+
 	/**
 	 * Returns whether durability timer for Obsidian is enabled.
 	 * 
@@ -230,7 +246,7 @@ public final class ODConfig {
 	public boolean getDurabilityResetTimerEnabled() {
 		return durabilityTimerEnabled;
 	}
-	
+
 	/**
 	 * Returns the time in milliseconds after which the durability gets reset.
 	 * 
@@ -239,7 +255,7 @@ public final class ODConfig {
 	public long getDurabilityResetTime() {
 		return durabilityTime;
 	}
-	
+
 	/**
 	 * Returns the chance to drop an item from a blown up block.
 	 * 
@@ -255,19 +271,7 @@ public final class ODConfig {
 	 * @return a list containing all loaded keys
 	 */
 	public String[] printLoadedConfig() {
-		bukkitConfig.load();
-
-		String[] tmp = bukkitConfig.getAll().toString().split(",");
-		int n = tmp.length;
-
-		tmp[0] = tmp[0].substring(1);
-		tmp[n - 1] = tmp[n - 1].substring(0, tmp[n - 1].length() - 1);
-
-		for (String s : tmp) {
-			s = s.trim();
-		}
-
-		return tmp;
+		return new String[] { "this doesn't work." };
 	}
 
 	/**
@@ -278,7 +282,7 @@ public final class ODConfig {
 	public File getConfigFile() {
 		return configFile;
 	}
-	
+
 	/**
 	 * Returns the associated plugin.
 	 * 
@@ -287,7 +291,7 @@ public final class ODConfig {
 	public Plugin getPlugin() {
 		return plugin;
 	}
-	
+
 	/**
 	 * Saves the durability hash map to a file.
 	 */
@@ -295,23 +299,22 @@ public final class ODConfig {
 		if (plugin.getListener() == null || plugin.getListener().getObsidianDurability() == null) {
 			return;
 		}
-		
+
 		HashMap<Integer, Integer> map = plugin.getListener().getObsidianDurability();
-		
+
 		new File(directory).mkdir();
-		
+
 		try {
-			 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(durabilityFile));
-		     oos.writeObject(map);
-		     oos.flush();
-		     oos.close();
+			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(durabilityFile));
+			oos.writeObject(map);
+			oos.flush();
+			oos.close();
 		} catch (IOException e) {
-			Log.severe("Failed writing obsidian durability for "
-					+ ObsidianDestroyer.getPluginName());
+			Log.severe("Failed writing obsidian durability for " + ObsidianDestroyer.getPluginName());
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Loads the durability hash map from a file.
 	 * 
@@ -322,17 +325,17 @@ public final class ODConfig {
 		if (!durabilityFile.exists() || plugin.getListener() == null || plugin.getListener().getObsidianDurability() == null) {
 			return null;
 		}
-		
+
 		new File(directory).mkdir();
-		
+
 		HashMap<Integer, Integer> map = null;
 		Object result = null;
-		
+
 		try {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(durabilityFile));
-	        result = ois.readObject();
-	        map = (HashMap<Integer, Integer>) result;
-	        ois.close();
+			result = ois.readObject();
+			map = (HashMap<Integer, Integer>) result;
+			ois.close();
 		} catch (IOException ioe) {
 			Log.severe("Failed reading obsidian durability for " + ObsidianDestroyer.getPluginName());
 			ioe.printStackTrace();
@@ -340,7 +343,7 @@ public final class ODConfig {
 			Log.severe("Obsidian durability file contains an unknown class, was it modified?");
 			cnfe.printStackTrace();
 		}
-		
+
 		return map;
 	}
 }
