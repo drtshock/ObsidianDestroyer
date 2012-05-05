@@ -64,7 +64,7 @@ public final class ODEntityListener implements Listener {
 		final String eventTypeRep = event.getEntity().toString();
 
 		// cancel if detonator was neither TNT, a creeper nor a ghast
-		if (!(eventTypeRep.equals("CraftTNTPrimed") || eventTypeRep.equals("CraftCreeper") || eventTypeRep.equals("CraftFireball") || eventTypeRep.equals("CraftGhast"))) {
+		if (!(eventTypeRep.equals("CraftTNTPrimed") || eventTypeRep.equals("CraftCreeper") || eventTypeRep.equals("CraftFireball") || eventTypeRep.equals("CraftGhast") || eventTypeRep.equals("CraftSnowball"))) {
 			return;
 		}
 
