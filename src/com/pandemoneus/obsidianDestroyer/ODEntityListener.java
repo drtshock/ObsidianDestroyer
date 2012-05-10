@@ -1,6 +1,7 @@
 package com.pandemoneus.obsidianDestroyer;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Timer;
 
 import org.bukkit.Location;
@@ -72,6 +73,11 @@ public final class ODEntityListener implements Listener {
 		if (eventTypeRep.equals("CraftTNTPrimed") && !config.getTntEnabled()) {
 			return;
 		}
+		
+		// cancel if detonator was Snowball, but Cannons not allowed to destroy obsidian
+		if (eventTypeRep.equals("CraftSnowball") && !config.getCannonsEnabled()) {
+			return;
+		}
 
 		// cancel if detonator was a creeper, but creepers not allowed to
 		// destroy obsidian
@@ -82,6 +88,15 @@ public final class ODEntityListener implements Listener {
 		// cancel if detonator was a ghast, but ghasts not allowed to destroy
 		// obsidian
 		if ((eventTypeRep.equals("CraftFireball") || eventTypeRep.equals("CraftGhast")) && !config.getGhastsEnabled()) {
+			return;
+		}
+		
+		if (eventTypeRep.equals("CraftSnowball")) {
+			Iterator<Block> iter = event.blockList().iterator();
+			while (iter.hasNext()){
+				Block block = iter.next();
+				blowBlockUp(block.getLocation());
+			}
 			return;
 		}
 

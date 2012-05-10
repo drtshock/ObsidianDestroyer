@@ -36,6 +36,7 @@ public final class ODConfig {
 	 */
 	private int explosionRadius = 3;
 	private boolean tntEnabled = true;
+	private boolean cannonsEnabled = false;
 	private boolean creepersEnabled = false;
 	private boolean ghastsEnabled = false;
 	private boolean durabilityEnabled = false;
@@ -107,6 +108,7 @@ public final class ODConfig {
 			explosionRadius = bukkitConfig.getInt("Radius", 3);
 
 			tntEnabled = bukkitConfig.getBoolean("EnabledFor.TNT", true);
+			cannonsEnabled = bukkitConfig.getBoolean("EnabledFor.Cannons", false);
 			creepersEnabled = bukkitConfig.getBoolean("EnabledFor.Creepers", false);
 			ghastsEnabled = bukkitConfig.getBoolean("EnabledFor.Ghasts", false);
 
@@ -126,6 +128,7 @@ public final class ODConfig {
 		write("Radius", explosionRadius);
 
 		write("EnabledFor.TNT", tntEnabled);
+		write("EnabledFor.Cannons", cannonsEnabled);
 		write("EnabledFor.Creepers", creepersEnabled);
 		write("EnabledFor.Ghasts", ghastsEnabled);
 
@@ -201,6 +204,16 @@ public final class ODConfig {
 	public boolean getTntEnabled() {
 		return tntEnabled;
 	}
+	
+	/**
+	 * Returns whether Cannons are allowed to destroy Obsidian.
+	 * 
+	 * @return whether Cannons are allowed to destroy Obsidian
+	 */
+	public boolean getCannonsEnabled() {
+		return cannonsEnabled;
+	}
+
 
 	/**
 	 * Returns whether Creepers are allowed to destroy Obsidian.
