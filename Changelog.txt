@@ -1,3 +1,12 @@
+Version 1.25
+- Added Cannons plugin support
+
+Version 1.21
+- Added echantment Tables
+
+Version 1.1
+- Updated for minecraft 1.2
+
 Version 1.052
 - Added chance to drop Obsidian blocks
 
