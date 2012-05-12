@@ -1,7 +1,7 @@
 name: ObsidianDestroyer
 main: com.pandemoneus.obsidianDestroyer.ObsidianDestroyer
-version: 1.2.5
-author: ['alecgorge', 'Pandemoneus']
+version: 1.2.50
+author: ['squidicuzz', 'alecgorge', 'Pandemoneus']
 depend: [Vault]
 
 commands:
