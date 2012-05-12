@@ -17,6 +17,7 @@ Options:
 -----------------
 Radius - determines how far around the origin of the explosion Obsidian can be destroyed (default: 3) WARNING: High values probably cause lag<br>
 EnabledFor.TNT - set true if TNT is allowed to destroy Obsidian (default: true)<br>
+EnabledFor.Cannons - set true if you would like the cannons plugin to break obsidian (default: false) https://github.com/DerPavlov/Cannons/<br>
 EnabledFor.Creepers - set true if Creepers are allowed to destroy Obsidian (default: false)<br>
 EnabledFor.Ghasts - set true if Ghasts are allowed to destroy Obsidian (default: false)<br>
 Durability.Enabled - set true if you want to use the durability feature (default: false)<br>
