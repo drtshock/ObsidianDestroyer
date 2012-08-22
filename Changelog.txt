@@ -1,0 +1,36 @@
+Version 1.25
+- Added Cannons plugin support
+
+Version 1.21
+- Added echantment Tables
+
+Version 1.1
+- Updated for minecraft 1.2
+
+Version 1.052
+- Added chance to drop Obsidian blocks
+
+Version 1.051
+- Fixed NullPointerException in config
+
+Version 1.05
+- Durability can now restore back to max after a certain time passed
+
+Version 1.04
+- Durability now saves when the server reloads/restarts
+
+Version 1.03
+- Added durability
+
+Version 1.02
+- Added Permissions
+- Added aliases
+- Increased maintainability
+
+Version 1.01
+- Added command to reload config ingame
+- Added command to show loaded config ingame
+- Added check to not mess with plugins that prevent explosions
+
+Version 1.0
+- Initial release

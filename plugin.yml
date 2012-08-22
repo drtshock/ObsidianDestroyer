@@ -1,0 +1,15 @@
+name: ObsidianDestroyer
+main: com.pandemoneus.obsidianDestroyer.ObsidianDestroyer
+version: 1.2.50
+author: ['squidicuzz', 'alecgorge', 'Pandemoneus']
+depend: [Vault]
+
+commands:
+    obsidiandestroyer:
+        description: ObisidanDestroyer
+        usage: |
+               /<command>
+    od:
+        description: ObisidanDestroyer
+        usage: |
+               /<command>
