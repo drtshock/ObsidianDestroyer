@@ -1,2 +1,0 @@
-craftbukkit.jar : 1.2.3-R0.2
-Vault.jar : 1.2.13
