@@ -3,7 +3,7 @@ package com.pandemoneus.obsidianDestroyer;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import net.kaoslabs.obsidiandestroyer.Metrics;
+import com.pandemoneus.obsidianDestroyer.Metrics;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.plugin.PluginDescriptionFile;

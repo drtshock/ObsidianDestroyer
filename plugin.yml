@@ -1,5 +1,5 @@
 name: ObsidianDestroyer
-main: net.kaoslabs.obsidiandestroyer.ObsidianDestroyer
+main: com.pandemoneus.obsidianDestroyer.ObsidianDestroyer
 version: 1.3
 author: ['Pandemoneus', 'squidicuzz', 'alecgorge', 'Kaos']
 depend: [Vault]
