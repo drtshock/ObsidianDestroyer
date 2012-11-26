@@ -1,4 +1,0 @@
-ObsidianDestroyer
-=================
-
-ObsidianDestroyer
