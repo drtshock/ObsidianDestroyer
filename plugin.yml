@@ -1,0 +1,15 @@
+name: ObsidianDestroyer
+main: net.kaoslabs.obsidiandestroyer.ObsidianDestroyer
+version: 1.3
+author: ['Pandemoneus', 'squidicuzz', 'alecgorge', 'Kaos']
+depend: [Vault]
+
+commands:
+    obsidiandestroyer:
+        description: ObisidanDestroyer
+        usage: |
+               /<command>
+    od:
+        description: ObisidanDestroyer
+        usage: |
+               /<command>
