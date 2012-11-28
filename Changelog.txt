@@ -1,3 +1,10 @@
+Version 2.1
+- Removed Vault dependency.
+
+Version 2.0
+- Added 1.4.5 support
+- New author / maintainers: drtshock, squidicc
+
 Version 1.3.1
 - Corrected issue with Cannons plugin support drop
 
