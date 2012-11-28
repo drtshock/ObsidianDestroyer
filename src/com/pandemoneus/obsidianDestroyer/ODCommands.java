@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Timer;
 
-import net.milkbowl.vault.permission.Permission;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -38,13 +36,11 @@ public final class ODCommands implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		if (args != null) {
-			if (sender instanceof Player) {
-				if (plugin.getPermissionsFound()) {
+			if (sender instanceof Player) 
+			{
 					usePermissionsStructure((Player) sender, cmd, commandLabel, args);
-				} else {
-					useNormalStructure((Player) sender, cmd, commandLabel, args);
-				}
-			} else {
+			}
+			 else {
 				sender.sendMessage(ChatColor.RED + "Sorry, you are not a player!");
 			}
 		}
@@ -53,11 +49,10 @@ public final class ODCommands implements CommandExecutor {
 	}
 
 	private void usePermissionsStructure(Player sender, Command cmd, String commandLabel, String[] args) {
-		Permission ph = plugin.getPermissionsHandler();
 
 		if (args.length == 0) {
 			// show help
-			if (ph.has(sender, "obsidiandestroyer.help")) {
+			if (sender.hasPermission("obsidiandestroyer.help")) {
 				showHelp(sender);
 			} else {
 				sender.sendMessage(ChatColor.RED + "You are not authorized to use this command.");
@@ -68,21 +63,21 @@ public final class ODCommands implements CommandExecutor {
 
 			if (command.equalsIgnoreCase("reload")) {
 				// reload
-				if (ph.has(sender, "obsidiandestroyer.config.reload")) {
+				if (sender.hasPermission("obsidiandestroyer.config.reload")) {
 					reloadPlugin(sender);
 				} else {
 					sender.sendMessage(ChatColor.RED + "You are not authorized to use this command.");
 				}
 			} else if (command.equalsIgnoreCase("info")) {
 				// info
-				if (ph.has(sender, "obsidiandestroyer.config.info")) {
+				if (sender.hasPermission("obsidiandestroyer.config.info")) {
 					getConfigInfo(sender);
 				} else {
 					sender.sendMessage(ChatColor.RED + "You are not authorized to use this command.");
 				}
 			} else if (command.equalsIgnoreCase("reset")) {
 				// reset durabilities
-				if (ph.has(sender, "obsidiandestroyer.durability.reset")) {
+				if (sender.hasPermission("obsidiandestroyer.durability.reset")) {
 					resetDurability(sender);
 				} else {
 					sender.sendMessage(ChatColor.RED + "You are not authorized to use this command.");
@@ -91,30 +86,7 @@ public final class ODCommands implements CommandExecutor {
 		}
 	}
 
-	private void useNormalStructure(Player sender, Command cmd, String commandLabel, String[] args) {
-		if (sender.isOp()) {
-			if (args.length == 0) {
-				// show help
-				showHelp(sender);
-			} else if (args.length == 1) {
-				// commands with 0 arguments
-				String command = args[0];
-
-				if (command.equalsIgnoreCase("reload")) {
-					// reload
-					reloadPlugin(sender);
-				} else if (command.equalsIgnoreCase("info")) {
-					// info
-					getConfigInfo(sender);
-				} else if (command.equalsIgnoreCase("reset")) {
-					// reset durabilities
-					resetDurability(sender);
-				}
-			}
-		} else {
-			sender.sendMessage(ChatColor.RED + "You are not authorized to use this command.");
-		}
-	}
+	// Removed all isOp checks as permissions default to op now.
 
 	private void showHelp(Player sender) {
 		sender.sendMessage(ChatColor.YELLOW + "Available commands:");
