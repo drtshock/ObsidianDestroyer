@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.omg.CORBA.ORB;
 
 /**
  * Custom Entity Listener for the ObsidianDestroyer plugin.
@@ -106,12 +107,10 @@ public final class ODEntityListener implements Listener {
 				for (int z = -radius; z <= radius; z++) {
 					Location targetLoc = new Location(detonator.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
 					
-					if ((detonatorLoc.getBlock().getType() == Material.WATER || targetLoc.getBlock().getType() == Material.WATER)
-							|| (detonatorLoc.getBlock().getType() == Material.LAVA || targetLoc.getBlock().getType() == Material.LAVA)) {
-						return;
-					}
-					
 					if (detonatorLoc.distance(targetLoc) <= radius) {
+						if (detonatorLoc.getBlock().isLiquid())
+							return;
+
 						blowBlockUp(targetLoc);
 					}
 				}
