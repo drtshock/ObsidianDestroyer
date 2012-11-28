@@ -1,0 +1,14 @@
+Version: '2.0'
+Radius: 3
+EnabledFor:
+  TNT: true
+  Cannons: false
+  Creepers: false
+  Ghasts: false
+Durability:
+  Enabled: false
+  Amount: 1
+  ResetEnabled: true
+  ResetAfter: '600000'
+Blocks:
+  ChanceToDrop: 0.7
