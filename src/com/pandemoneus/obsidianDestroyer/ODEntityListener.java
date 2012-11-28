@@ -105,7 +105,12 @@ public final class ODEntityListener implements Listener {
 			for (int y = -radius; y <= radius; y++) {
 				for (int z = -radius; z <= radius; z++) {
 					Location targetLoc = new Location(detonator.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
-
+					
+					if ((detonatorLoc.getBlock().getType() == Material.WATER || targetLoc.getBlock().getType() == Material.WATER)
+							|| (detonatorLoc.getBlock().getType() == Material.LAVA || targetLoc.getBlock().getType() == Material.LAVA)) {
+						return;
+					}
+					
 					if (detonatorLoc.distance(targetLoc) <= radius) {
 						blowBlockUp(targetLoc);
 					}
