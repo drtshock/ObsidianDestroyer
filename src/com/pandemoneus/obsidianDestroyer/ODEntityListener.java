@@ -12,7 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
-import org.omg.CORBA.ORB;
 
 /**
  * Custom Entity Listener for the ObsidianDestroyer plugin.
