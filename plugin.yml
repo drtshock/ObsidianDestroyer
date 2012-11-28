@@ -1,8 +1,7 @@
 name: ObsidianDestroyer
 main: com.pandemoneus.obsidianDestroyer.ObsidianDestroyer
-version: 1.3.1
-author: ['Pandemoneus', 'squidicuzz', 'alecgorge', 'Kaos']
-depend: [Vault]
+version: 2.1
+author: ['Pandemoneus', 'squidicuzz', 'drtshock', 'alecgorge', 'Kaos']
 
 commands:
     obsidiandestroyer:

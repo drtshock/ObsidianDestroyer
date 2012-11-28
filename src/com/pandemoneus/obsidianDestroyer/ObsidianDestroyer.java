@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import com.pandemoneus.obsidianDestroyer.Metrics;
-import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -25,8 +23,6 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	private final ODCommands cmdExecutor = new ODCommands(this);
 	private ODConfig config = new ODConfig(this);
 	private final ODEntityListener entityListener = new ODEntityListener(this);
-	private Permission permissionsHandler;
-	private boolean permissionsFound = true;
 	public static ObsidianDestroyer plugin;
 	public static final Logger log = Logger.getLogger("Minecraft");
 
@@ -39,7 +35,6 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		config.saveDurabilityToFile();
-		Log.info(PLUGIN_NAME + " disabled");
 	}
 
 	/**
@@ -47,14 +42,8 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	 */
 	@Override
 	public void onEnable() {
-		PluginDescriptionFile pdfFile = getDescription();
-		version = pdfFile.getVersion();
-
-		Log.info(PLUGIN_NAME + " v" + version + " enabled");
-
 		getCommand("obsidiandestroyer").setExecutor(cmdExecutor);
 		getCommand("od").setExecutor(cmdExecutor);
-		setupPermissions();
 
 		config.loadConfig();
 		entityListener.setObsidianDurability(config.loadDurabilityFromFile());
@@ -115,41 +104,6 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	 */
 	public ODEntityListener getListener() {
 		return entityListener;
-	}
-
-	/**
-	 * Returns whether the permissions plugin could be found.
-	 * 
-	 * @return true if permissions plugin could be found, otherwise false
-	 */
-	public boolean getPermissionsFound() {
-		return permissionsFound;
-	}
-
-	/**
-	 * Returns the permissionsHandler of this plugin if it exists.
-	 * 
-	 * @return the permissionsHandler of this plugin if it exists, otherwise
-	 *         null
-	 */
-	public Permission getPermissionsHandler() {
-		Permission ph = null;
-
-		if (getPermissionsFound()) {
-			ph = permissionsHandler;
-		}
-
-		return ph;
-	}
-
-	private boolean setupPermissions() {
-		if (getServer().getPluginManager().getPlugin("Vault") == null) {
-			permissionsFound = false;
-			return false;
-		}
-		RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-		permissionsHandler = rsp.getProvider();
-		return permissionsHandler != null;
 	}
 
 	/**
