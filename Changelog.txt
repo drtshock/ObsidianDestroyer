@@ -1,3 +1,6 @@
+Version 2.2
+- Corrected Metrics not starting.
+
 Version 2.1
 - Removed Vault dependency.
 
