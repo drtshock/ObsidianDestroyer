@@ -47,6 +47,9 @@ public final class ObsidianDestroyer extends JavaPlugin {
 
 		config.loadConfig();
 		entityListener.setObsidianDurability(config.loadDurabilityFromFile());
+		
+		// start Metrics
+		startMetrics();
 
 		getServer().getPluginManager().registerEvents(entityListener, this);
 	}
