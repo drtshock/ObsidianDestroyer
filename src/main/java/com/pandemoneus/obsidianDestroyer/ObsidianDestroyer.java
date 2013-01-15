@@ -13,7 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * 
  * Allows certain explosions to destroy Obsidian.
  * 
- * @author Pandemoneus
+ * @author drtshock
  * 
  */
 public final class ObsidianDestroyer extends JavaPlugin {
