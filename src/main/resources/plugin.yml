@@ -1,6 +1,6 @@
 name: ObsidianDestroyer
 main: com.pandemoneus.obsidianDestroyer.ObsidianDestroyer
-version: 2.7
+version: ${project.version}
 author: ['drtshock', 'squidicuzz']
 
 commands:
