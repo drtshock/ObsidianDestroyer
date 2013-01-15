@@ -1,0 +1,14 @@
+name: ObsidianDestroyer
+main: com.pandemoneus.obsidianDestroyer.ObsidianDestroyer
+version: 2.7
+author: ['drtshock', 'squidicuzz']
+
+commands:
+    obsidiandestroyer:
+        description: ObisidanDestroyer
+        usage: |
+               /<command>
+    od:
+        description: ObisidanDestroyer
+        usage: |
+               /<command>
