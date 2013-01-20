@@ -65,3 +65,4 @@ Version 1.01
 - Added check to not mess with plugins that prevent explosions
 
 Version 1.0
+Initial Release
