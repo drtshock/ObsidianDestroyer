@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -37,8 +38,9 @@ public final class ODEntityListener implements Listener {
 	 * 
 	 * @param event
 	 *            event data
+	 * Monitor to give factions priority.
 	 */
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onEntityExplode(final EntityExplodeEvent event) {
 		// do not do anything in case explosions get canceled
 		if (event == null || event.isCancelled()) {

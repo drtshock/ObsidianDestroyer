@@ -2,6 +2,7 @@ name: ObsidianDestroyer
 main: com.pandemoneus.obsidianDestroyer.ObsidianDestroyer
 version: ${project.version}
 author: ['drtshock', 'squidicuzz']
+softdepend: [Factions]
 
 commands:
     obsidiandestroyer:

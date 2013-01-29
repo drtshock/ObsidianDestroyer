@@ -39,6 +39,7 @@ public final class ODConfig {
 	private boolean cannonsEnabled = false;
 	private boolean creepersEnabled = false;
 	private boolean ghastsEnabled = false;
+	private boolean withersEnabled = false;
 	private boolean durabilityEnabled = false;
 	private int durability = 1;
 	private boolean durabilityTimerEnabled = true;
@@ -115,6 +116,7 @@ public final class ODConfig {
 			cannonsEnabled = bukkitConfig.getBoolean("EnabledFor.Cannons", false);
 			creepersEnabled = bukkitConfig.getBoolean("EnabledFor.Creepers", false);
 			ghastsEnabled = bukkitConfig.getBoolean("EnabledFor.Ghasts", false);
+			withersEnabled = bukkitConfig.getBoolean("EnabledFor.Withers", false);
 
 			durabilityEnabled = bukkitConfig.getBoolean("Durability.Enabled", false);
 			durability = bukkitConfig.getInt("Durability.Amount", 1);
@@ -137,6 +139,7 @@ public final class ODConfig {
 		write("EnabledFor.Cannons", cannonsEnabled);
 		write("EnabledFor.Creepers", creepersEnabled);
 		write("EnabledFor.Ghasts", ghastsEnabled);
+		write("EnabledFor.Withers", withersEnabled);
 
 		write("Durability.Enabled", durabilityEnabled);
 		write("Durability.Amount", durability);
@@ -246,6 +249,14 @@ public final class ODConfig {
 	 */
 	public boolean getGhastsEnabled() {
 		return ghastsEnabled;
+	}
+	
+	/**
+	 * Returns whether Withers are allowed to destroy Obsidian.
+	 * @return whether Withers are allowed to destroy Obsidian.
+	 */
+	public boolean getWithersEnabled() {
+		return withersEnabled;
 	}
 
 	/**

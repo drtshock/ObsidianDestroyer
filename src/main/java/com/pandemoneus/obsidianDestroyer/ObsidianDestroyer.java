@@ -3,8 +3,6 @@ package com.pandemoneus.obsidianDestroyer;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import com.pandemoneus.obsidianDestroyer.Metrics;
-
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,7 +22,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	private ODConfig config = new ODConfig(this);
 	private final ODEntityListener entityListener = new ODEntityListener(this);
 	public static ObsidianDestroyer plugin;
-	public static final Logger log = Logger.getLogger("Minecraft");
+	public static Logger log;
 	
 
 	private static String version;
@@ -43,6 +41,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	 */
 	@Override
 	public void onEnable() {
+		log = getServer().getLogger();
         PluginDescriptionFile pdfFile = getDescription();
         version = pdfFile.getVersion();
         
@@ -54,7 +53,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 		
 		// start Metrics
 		startMetrics();
-
+		
 		getServer().getPluginManager().registerEvents(entityListener, this);
 		
 		// Auto updater :D
