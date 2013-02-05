@@ -95,7 +95,7 @@ public final class ODEntityListener
       return;
     }
 
-    if ((!event.isCancelled()) && (event.getEntityType() != EntityType.ENDER_DRAGON) && (this._entityPowerMap.containsKey(Integer.valueOf(event.getEntity().getEntityId()))))
+    if ((!event.isCancelled()) && (event.getEntityType() != EntityType.ENDER_DRAGON) && (this._entityPowerMap.containsKey(Integer.valueOf(event.getEntity().getEntityId()))) && !this.config.getWaterProtection())
     {
       CorrectExplosion(event, ((Float)this._entityPowerMap.get(Integer.valueOf(event.getEntity().getEntityId()))).floatValue());
       this._entityPowerMap.remove(Integer.valueOf(event.getEntity().getEntityId()));
