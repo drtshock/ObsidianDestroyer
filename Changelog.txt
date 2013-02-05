@@ -1,3 +1,14 @@
+Version 2.8
+- Bypass water protection for any block.
+- Add invidivual durability.
+
+Version 2.7
+- Add auto updater.
+- Work better with factions.
+
+Version 2.6
+- Add enchantment tables
+
 Version 2.5
 - Added ender chests.
 - Add console as CommandSender.

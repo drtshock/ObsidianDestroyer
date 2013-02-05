@@ -7,391 +7,309 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
-
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
-/**
- * The configuration file for the ObsidianDestroyer plugin, uses YML.
- * 
- * @author Pandemoneus
- * 
- */
-public final class ODConfig {
+public final class ODConfig
+{
+  private ObsidianDestroyer plugin;
+  private static String pluginName;
+  private static String pluginVersion;
+  private static String directory = "plugins" + File.separator + ObsidianDestroyer.getPluginName() + File.separator;
+  private File configFile = new File(directory + "config.yml");
+  private File durabilityFile = new File(directory + "durability.dat");
+  private YamlConfiguration bukkitConfig = new YamlConfiguration();
 
-	private ObsidianDestroyer plugin;
-	private static String pluginName;
-	private static String pluginVersion;
+  private int explosionRadius = 3;
+  private boolean tntEnabled = true;
+  private boolean cannonsEnabled = false;
+  private boolean creepersEnabled = false;
+  private boolean ghastsEnabled = false;
+  private boolean withersEnabled = false;
+  private boolean durabilityEnabled = false;
+  private int odurability = 1;
+  private int edurability = 1;
+  private int ecdurability = 1;
+  private int adurability = 1;
+  private boolean durabilityTimerEnabled = true;
+  private long durabilityTime = 600000L;
+  private double chanceToDropBlock = 0.7D;
+  private boolean waterProtection = true;
+  private boolean autoUpdate = true;
 
-	/**
-	 * File handling
-	 */
-	private static String directory = "plugins" + File.separator + ObsidianDestroyer.getPluginName() + File.separator;
-	private File configFile = new File(directory + "config.yml");
-	private File durabilityFile = new File(directory + "durability.dat");
-	private YamlConfiguration bukkitConfig = new YamlConfiguration();
+  public ODConfig(ObsidianDestroyer plugin)
+  {
+    this.plugin = plugin;
+    pluginName = ObsidianDestroyer.getPluginName();
+  }
 
-	/**
-	 * Default settings
-	 */
-	private int explosionRadius = 3;
-	private boolean tntEnabled = true;
-	private boolean cannonsEnabled = false;
-	private boolean creepersEnabled = false;
-	private boolean ghastsEnabled = false;
-	private boolean withersEnabled = false;
-	private boolean durabilityEnabled = false;
-	private int durability = 1;
-	private boolean durabilityTimerEnabled = true;
-	private long durabilityTime = 600000L; // 10 minutes
-	private double chanceToDropBlock = 0.7;
-	private boolean waterProtection = true;
-	private boolean autoUpdate = true;
+  public boolean loadConfig()
+  {
+    boolean isErrorFree = true;
+    pluginVersion = ObsidianDestroyer.getVersion();
 
-	/**
-	 * Associates this object with a plugin
-	 * 
-	 * @param plugin
-	 *            the plugin
-	 */
-	public ODConfig(ObsidianDestroyer plugin) {
-		this.plugin = plugin;
-		pluginName = ObsidianDestroyer.getPluginName();
-	}
+    new File(directory).mkdir();
 
-	/**
-	 * Loads the configuration used by this plugin.
-	 * 
-	 * @return true if config loaded without errors
-	 */
-	public boolean loadConfig() {
-		boolean isErrorFree = true;
-		pluginVersion = ObsidianDestroyer.getVersion();
+    if (this.configFile.exists())
+      try {
+        this.bukkitConfig.load(this.configFile);
 
-		new File(directory).mkdir();
+        if (this.bukkitConfig.getString("Version", "").equals(pluginVersion))
+        {
+          loadData();
+        }
+        else {
+          Log.info(pluginName + " config file outdated, adding old data and creating new values. " + "Make sure you change those!");
+          loadData();
+          writeDefault();
+        }
+      }
+      catch (Exception e) {
+        e.printStackTrace();
+      }
+    else {
+      try
+      {
+        Log.info(pluginName + " config file not found, creating new config file...");
+        this.configFile.createNewFile();
+        writeDefault();
+      } catch (IOException ioe) {
+        Log.severe("Could not create the config file for " + pluginName + "!");
+        ioe.printStackTrace();
+        isErrorFree = false;
+      }
+    }
 
-		if (configFile.exists()) {
-			try {
-				bukkitConfig.load(configFile);
+    return isErrorFree;
+  }
 
-				if (bukkitConfig.getString("Version", "").equals(pluginVersion)) {
-					// config file exists and is up to date
-					loadData();
-				} else {
-					// config file exists but is outdated
-					Log.info(pluginName + " config file outdated, adding old data and creating new values. " + "Make sure you change those!");
-					loadData();
-					writeDefault();
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else {
-			// config file does not exist
-			try {
-				Log.info(pluginName + " config file not found, creating new config file...");
-				configFile.createNewFile();
-				writeDefault();
-			} catch (IOException ioe) {
-				Log.severe("Could not create the config file for " + pluginName + "!");
-				ioe.printStackTrace();
-				isErrorFree = false;
-			}
-		}
+  private void loadData() {
+    try {
+      this.bukkitConfig.load(this.configFile);
 
-		return isErrorFree;
-	}
+      this.autoUpdate = this.bukkitConfig.getBoolean("autoupdate", true);
 
-	private void loadData() {
-		try {
-			bukkitConfig.load(configFile);
-			
-			autoUpdate = bukkitConfig.getBoolean("autoupdate", true);
+      this.explosionRadius = this.bukkitConfig.getInt("Radius", 3);
+      this.waterProtection = this.bukkitConfig.getBoolean("FluidsProtect", true);
 
-			explosionRadius = bukkitConfig.getInt("Radius", 3);
-			waterProtection = bukkitConfig.getBoolean("FluidsProtect", true);
+      this.tntEnabled = this.bukkitConfig.getBoolean("EnabledFor.TNT", true);
+      this.cannonsEnabled = this.bukkitConfig.getBoolean("EnabledFor.Cannons", false);
+      this.creepersEnabled = this.bukkitConfig.getBoolean("EnabledFor.Creepers", false);
+      this.ghastsEnabled = this.bukkitConfig.getBoolean("EnabledFor.Ghasts", false);
+      this.withersEnabled = this.bukkitConfig.getBoolean("EnabledFor.Withers", false);
 
-			tntEnabled = bukkitConfig.getBoolean("EnabledFor.TNT", true);
-			cannonsEnabled = bukkitConfig.getBoolean("EnabledFor.Cannons", false);
-			creepersEnabled = bukkitConfig.getBoolean("EnabledFor.Creepers", false);
-			ghastsEnabled = bukkitConfig.getBoolean("EnabledFor.Ghasts", false);
-			withersEnabled = bukkitConfig.getBoolean("EnabledFor.Withers", false);
+      this.durabilityEnabled = this.bukkitConfig.getBoolean("Durability.Enabled", false);
+      this.odurability = this.bukkitConfig.getInt("Durability.Obsidian", 1);
+      this.edurability = this.bukkitConfig.getInt("Durability.EnchantmentTable", 1);
+      this.ecdurability = this.bukkitConfig.getInt("Durability.EnderChest", 1);
+      this.adurability = this.bukkitConfig.getInt("Durability.Anvil", 1);
+      this.durabilityTimerEnabled = this.bukkitConfig.getBoolean("Durability.ResetEnabled", true);
+      this.durabilityTime = readLong("Durability.ResetAfter", "600000");
 
-			durabilityEnabled = bukkitConfig.getBoolean("Durability.Enabled", false);
-			durability = bukkitConfig.getInt("Durability.Amount", 1);
-			durabilityTimerEnabled = bukkitConfig.getBoolean("Durability.ResetEnabled", true);
-			durabilityTime = readLong("Durability.ResetAfter", "600000");
+      this.chanceToDropBlock = this.bukkitConfig.getDouble("Blocks.ChanceToDrop", 0.7D);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
-			chanceToDropBlock = bukkitConfig.getDouble("Blocks.ChanceToDrop", 0.7);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+  private void writeDefault() {
+    write("Version", ObsidianDestroyer.getVersion());
+    write("autoupdate", Boolean.valueOf(this.autoUpdate));
+    write("Radius", Integer.valueOf(this.explosionRadius));
+    write("FluidsProtect", Boolean.valueOf(this.waterProtection));
 
-	private void writeDefault() {
-		write("Version", ObsidianDestroyer.getVersion());
-		write("autoupdate", autoUpdate);
-		write("Radius", explosionRadius);
-		write("FluidsProtect", waterProtection);
+    write("EnabledFor.TNT", Boolean.valueOf(this.tntEnabled));
+    write("EnabledFor.Cannons", Boolean.valueOf(this.cannonsEnabled));
+    write("EnabledFor.Creepers", Boolean.valueOf(this.creepersEnabled));
+    write("EnabledFor.Ghasts", Boolean.valueOf(this.ghastsEnabled));
+    write("EnabledFor.Withers", Boolean.valueOf(this.withersEnabled));
 
-		write("EnabledFor.TNT", tntEnabled);
-		write("EnabledFor.Cannons", cannonsEnabled);
-		write("EnabledFor.Creepers", creepersEnabled);
-		write("EnabledFor.Ghasts", ghastsEnabled);
-		write("EnabledFor.Withers", withersEnabled);
+    write("Durability.Enabled", Boolean.valueOf(this.durabilityEnabled));
+    write("Durability.Obsidian", Integer.valueOf(this.odurability));
+    write("Durability.EnchantmentTable", Integer.valueOf(this.edurability));
+    write("Durability.EnderChest", Integer.valueOf(this.ecdurability));
+    write("Durability.Anvil", Integer.valueOf(this.adurability));
+    write("Durability.ResetEnabled", Boolean.valueOf(this.durabilityTimerEnabled));
+    write("Durability.ResetAfter", this.durabilityTime);
 
-		write("Durability.Enabled", durabilityEnabled);
-		write("Durability.Amount", durability);
-		write("Durability.ResetEnabled", durabilityTimerEnabled);
-		write("Durability.ResetAfter", "" + durabilityTime);
+    write("Blocks.ChanceToDrop", Double.valueOf(this.chanceToDropBlock));
 
-		write("Blocks.ChanceToDrop", chanceToDropBlock);
+    loadData();
+  }
 
-		loadData();
-	}
+  private void write(String key, Object o) {
+    try {
+      this.bukkitConfig.load(this.configFile);
+      this.bukkitConfig.set(key, o);
+      this.bukkitConfig.save(this.configFile);
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
-	private void write(String key, Object o) {
-		try {
-			bukkitConfig.load(configFile);
-			bukkitConfig.set(key, o);
-			bukkitConfig.save(configFile);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+  private long readLong(String key, String def)
+  {
+    try
+    {
+      this.bukkitConfig.load(this.configFile);
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
 
-	/**
-	 * Reads a string representing a long from the config file.
-	 * 
-	 * Returns '0' when an exception occurs.
-	 * 
-	 * @param key
-	 *            the key
-	 * @param def
-	 *            default value
-	 * @return the long specified in 'key' from the config file, '0' on errors
-	 */
-	private long readLong(String key, String def) {
-		try {
-			bukkitConfig.load(configFile);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    String value = this.bukkitConfig.getString(key, def);
 
-		// Bukkit Config has no getLong(..)-method, so we are using Strings
-		String value = bukkitConfig.getString(key, def);
+    long tmp = 0L;
+    try
+    {
+      tmp = Long.parseLong(value);
+    } catch (NumberFormatException nfe) {
+      Log.warning("Error parsing a long from the config file. Key=" + key);
+      nfe.printStackTrace();
+    }
 
-		long tmp = 0;
+    return tmp;
+  }
 
-		try {
-			tmp = Long.parseLong(value);
-		} catch (NumberFormatException nfe) {
-			Log.warning("Error parsing a long from the config file. Key=" + key);
-			nfe.printStackTrace();
-		}
+  public int getRadius()
+  {
+    return this.explosionRadius;
+  }
 
-		return tmp;
-	}
+  public boolean getAutoUpdate()
+  {
+    return this.autoUpdate;
+  }
 
-	/**
-	 * Returns the explosion radius.
-	 * 
-	 * @return the explosion radius
-	 */
-	public int getRadius() {
-		return explosionRadius;
-	}
-	
-	/**
-	 * Returns if we should auto update.
-	 * 
-	 * @return if autoupdate is enabled.
-	 */
-	public boolean getAutoUpdate() {
-		return autoUpdate;
-	}
+  public boolean getTntEnabled()
+  {
+    return this.tntEnabled;
+  }
 
-	/**
-	 * Returns whether TNT is allowed to destroy Obsidian.
-	 * 
-	 * @return whether TNT is allowed to destroy Obsidian
-	 */
-	public boolean getTntEnabled() {
-		return tntEnabled;
-	}
-	
-	/**
-	 * Returns whether Cannons are allowed to destroy Obsidian.
-	 * 
-	 * @return whether Cannons are allowed to destroy Obsidian
-	 */
-	public boolean getCannonsEnabled() {
-		return cannonsEnabled;
-	}
+  public boolean getCannonsEnabled()
+  {
+    return this.cannonsEnabled;
+  }
 
+  public boolean getCreepersEnabled()
+  {
+    return this.creepersEnabled;
+  }
 
-	/**
-	 * Returns whether Creepers are allowed to destroy Obsidian.
-	 * 
-	 * @return whether Creepers are allowed to destroy Obsidian
-	 */
-	public boolean getCreepersEnabled() {
-		return creepersEnabled;
-	}
+  public boolean getGhastsEnabled()
+  {
+    return this.ghastsEnabled;
+  }
 
-	/**
-	 * Returns whether Ghasts are allowed to destroy Obsidian.
-	 * 
-	 * @return whether Ghasts are allowed to destroy Obsidian
-	 */
-	public boolean getGhastsEnabled() {
-		return ghastsEnabled;
-	}
-	
-	/**
-	 * Returns whether Withers are allowed to destroy Obsidian.
-	 * @return whether Withers are allowed to destroy Obsidian.
-	 */
-	public boolean getWithersEnabled() {
-		return withersEnabled;
-	}
+  public boolean getWithersEnabled()
+  {
+    return this.withersEnabled;
+  }
 
-	/**
-	 * Returns whether durability for Obsidian is enabled.
-	 * 
-	 * @return whether durability for Obsidian is enabled
-	 */
-	public boolean getDurabilityEnabled() {
-		return durabilityEnabled;
-	}
+  public boolean getDurabilityEnabled()
+  {
+    return this.durabilityEnabled;
+  }
 
-	/**
-	 * Returns the max durability.
-	 * 
-	 * @return the max durability
-	 */
-	public int getDurability() {
-		return durability;
-	}
+  public int getoDurability()
+  {
+    return this.odurability;
+  }
 
-	/**
-	 * Returns whether durability timer for Obsidian is enabled.
-	 * 
-	 * @return whether durability timer for Obsidian is enabled
-	 */
-	public boolean getDurabilityResetTimerEnabled() {
-		return durabilityTimerEnabled;
-	}
+  public int geteDurability() {
+    return this.edurability;
+  }
 
-	/**
-	 * Returns the time in milliseconds after which the durability gets reset.
-	 * 
-	 * @return the time in milliseconds after which the durability gets reset
-	 */
-	public long getDurabilityResetTime() {
-		return durabilityTime;
-	}
+  public int getecDurability() {
+    return this.ecdurability;
+  }
 
-	/**
-	 * Returns the chance to drop an item from a blown up block.
-	 * 
-	 * @return the chance to drop an item from a blown up block
-	 */
-	public double getChanceToDropBlock() {
-		return chanceToDropBlock;
-	}
-	
-	/**
-	 * Returns whether water stops damage to obsidian
-	 * 
-	 * @return whether water stops damage to obsidian
-	 */
-	public boolean getWaterProtection() {
-		return waterProtection;
-	}
+  public int getaDurability() {
+    return this.adurability;
+  }
 
-	/**
-	 * Returns a list containing all loaded keys.
-	 * 
-	 * @return a list containing all loaded keys
-	 */
-	public String[] printLoadedConfig() {
-		return new String[] { "this doesn't work." };
-	}
+  public boolean getDurabilityResetTimerEnabled()
+  {
+    return this.durabilityTimerEnabled;
+  }
 
-	/**
-	 * Returns the config file.
-	 * 
-	 * @return the config file
-	 */
-	public File getConfigFile() {
-		return configFile;
-	}
+  public long getDurabilityResetTime()
+  {
+    return this.durabilityTime;
+  }
 
-	/**
-	 * Returns the associated plugin.
-	 * 
-	 * @return the associated plugin
-	 */
-	public Plugin getPlugin() {
-		return plugin;
-	}
+  public double getChanceToDropBlock()
+  {
+    return this.chanceToDropBlock;
+  }
 
-	/**
-	 * Saves the durability hash map to a file.
-	 */
-	public void saveDurabilityToFile() {
-		if (plugin.getListener() == null || plugin.getListener().getObsidianDurability() == null) {
-			return;
-		}
+  public boolean getWaterProtection()
+  {
+    return this.waterProtection;
+  }
 
-		HashMap<Integer, Integer> map = plugin.getListener().getObsidianDurability();
+  public String[] printLoadedConfig()
+  {
+    return new String[] { "this doesn't work." };
+  }
 
-		new File(directory).mkdir();
+  public File getConfigFile()
+  {
+    return this.configFile;
+  }
 
-		try {
-			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(durabilityFile));
-			oos.writeObject(map);
-			oos.flush();
-			oos.close();
-		} catch (IOException e) {
-			Log.severe("Failed writing obsidian durability for " + ObsidianDestroyer.getPluginName());
-			e.printStackTrace();
-		}
-	}
+  public Plugin getPlugin()
+  {
+    return this.plugin;
+  }
 
-	/**
-	 * Loads the durability hash map from a file.
-	 * 
-	 * @return the durability hash map from a file
-	 */
-	@SuppressWarnings("unchecked")
-	public HashMap<Integer, Integer> loadDurabilityFromFile() {
-		if (!durabilityFile.exists() || plugin.getListener() == null || plugin.getListener().getObsidianDurability() == null) {
-			return null;
-		}
+  public void saveDurabilityToFile()
+  {
+    if ((this.plugin.getListener() == null) || (this.plugin.getListener().getObsidianDurability() == null)) {
+      return;
+    }
 
-		new File(directory).mkdir();
+    HashMap<Integer, Integer> map = this.plugin.getListener().getObsidianDurability();
 
-		HashMap<Integer, Integer> map = null;
-		Object result = null;
+    new File(directory).mkdir();
+    try
+    {
+      ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(this.durabilityFile));
+      oos.writeObject(map);
+      oos.flush();
+      oos.close();
+    } catch (IOException e) {
+      Log.severe("Failed writing obsidian durability for " + ObsidianDestroyer.getPluginName());
+      e.printStackTrace();
+    }
+  }
 
-		try {
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(durabilityFile));
-			result = ois.readObject();
-			map = (HashMap<Integer, Integer>) result;
-			ois.close();
-		} catch (IOException ioe) {
-			Log.severe("Failed reading obsidian durability for " + ObsidianDestroyer.getPluginName());
-			ioe.printStackTrace();
-		} catch (ClassNotFoundException cnfe) {
-			Log.severe("Obsidian durability file contains an unknown class, was it modified?");
-			cnfe.printStackTrace();
-		}
+@SuppressWarnings("unchecked")
+public HashMap<Integer, Integer> loadDurabilityFromFile()
+  {
+    if ((!this.durabilityFile.exists()) || (this.plugin.getListener() == null) || (this.plugin.getListener().getObsidianDurability() == null)) {
+      return null;
+    }
 
-		return map;
-	}
+    new File(directory).mkdir();
+
+    HashMap<Integer, Integer> map = null;
+    Object result = null;
+    try
+    {
+      ObjectInputStream ois = new ObjectInputStream(new FileInputStream(this.durabilityFile));
+      result = ois.readObject();
+      map = (HashMap<Integer, Integer>)result;
+      ois.close();
+    } catch (IOException ioe) {
+      Log.severe("Failed reading obsidian durability for " + ObsidianDestroyer.getPluginName());
+      ioe.printStackTrace();
+    } catch (ClassNotFoundException cnfe) {
+      Log.severe("Obsidian durability file contains an unknown class, was it modified?");
+      cnfe.printStackTrace();
+    }
+
+    return map;
+  }
 }

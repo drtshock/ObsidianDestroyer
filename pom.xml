@@ -61,12 +61,29 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>LATEST</version>
             <type>jar</type>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.bukkit</groupId>
+        	<artifactId>craftbukkit</artifactId>
         </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <dependencyManagement>
+    	<dependencies>
+    		<dependency>
+    			<groupId>org.bukkit</groupId>
+    			<artifactId>craftbukkit</artifactId>
+    			<version>LATEST</version>
+    		</dependency>
+    		<dependency>
+    			<groupId>org.bukkit</groupId>
+    			<artifactId>bukkit</artifactId>
+    			<version>LATEST</version>
+    		</dependency>
+    	</dependencies>
+    </dependencyManagement>
 </project>
