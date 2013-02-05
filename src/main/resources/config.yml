@@ -10,12 +10,11 @@ EnabledFor:
   Withers: false
 Durability:
   Enabled: false
-  Amount: 1
+  Obsidian: 1
+  EnchantmentTable: 1
+  EnderChest: 1
+  Anvil: 1
   ResetEnabled: true
   ResetAfter: '600000'
-EnchantmentTableDurability:
-  Enabled: false
-  Amount: 1
 Blocks:
   ChanceToDrop: 0.7
-UseFactions: false
