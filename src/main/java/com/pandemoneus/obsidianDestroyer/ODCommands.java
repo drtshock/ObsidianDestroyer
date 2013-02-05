@@ -8,7 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 /**
  * Command class. Available commands are: od od reload od info
@@ -37,7 +36,7 @@ public final class ODCommands implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		if (args != null) 
 		{
-				usePermissionsStructure((Player) sender, cmd, commandLabel, args);
+				usePermissionsStructure(sender, cmd, commandLabel, args);
 		}
 
 		return true;
