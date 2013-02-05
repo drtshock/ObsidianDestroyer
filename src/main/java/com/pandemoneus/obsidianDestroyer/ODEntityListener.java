@@ -125,120 +125,33 @@ public final class ODEntityListener
 
     if (b.getTypeId() == 49)
     {
-      Integer representation = Integer.valueOf(at.getWorld().hashCode() + at.getBlockX() * 2389 + at.getBlockY() * 4027 + at.getBlockZ() * 2053);
-
-      if ((this.config.getDurabilityEnabled()) && (this.config.getoDurability() > 1)) {
-        if (this.obsidianDurability.containsKey(representation))
-        {
-          int currentDurability = ((Integer)this.obsidianDurability.get(representation)).intValue();
-          currentDurability++;
-
-          if (ocheckIfMax(currentDurability))
-          {
-            dropBlockAndResetTime(representation, at);
-          }
-          else {
-            this.obsidianDurability.put(representation, Integer.valueOf(currentDurability));
-
-            if (this.config.getDurabilityResetTimerEnabled())
-              startNewTimer(representation);
-          }
-        }
-        else {
-          this.obsidianDurability.put(representation, Integer.valueOf(1));
-
-          if (this.config.getDurabilityResetTimerEnabled()) {
-            startNewTimer(representation);
-          }
-
-          if (ocheckIfMax(1))
-            dropBlockAndResetTime(representation, at);
-        }
-      }
-      else
-        destroyBlockAndDropItem(at);
+    	ApplyDurability(at, this.config.getoDurability());
     }
     if (b.getTypeId() == 116)
     {
-      Integer representation = Integer.valueOf(at.getWorld().hashCode() + at.getBlockX() * 2389 + at.getBlockY() * 4027 + at.getBlockZ() * 2053);
-
-      if ((this.config.getDurabilityEnabled()) && (this.config.geteDurability() > 1)) {
-        if (this.obsidianDurability.containsKey(representation))
-        {
-          int currentDurability = ((Integer)this.obsidianDurability.get(representation)).intValue();
-          currentDurability++;
-
-          if (echeckIfMax(currentDurability))
-          {
-            dropBlockAndResetTime(representation, at);
-          }
-          else {
-            this.obsidianDurability.put(representation, Integer.valueOf(currentDurability));
-
-            if (this.config.getDurabilityResetTimerEnabled())
-              startNewTimer(representation);
-          }
-        }
-        else {
-          this.obsidianDurability.put(representation, Integer.valueOf(1));
-
-          if (this.config.getDurabilityResetTimerEnabled()) {
-            startNewTimer(representation);
-          }
-
-          if (echeckIfMax(1))
-            dropBlockAndResetTime(representation, at);
-        }
-      }
-      else
-        destroyBlockAndDropItem(at);
+    	ApplyDurability(at, this.config.geteDurability());
     }
     if (b.getTypeId() == 130)
     {
-      Integer representation = Integer.valueOf(at.getWorld().hashCode() + at.getBlockX() * 2389 + at.getBlockY() * 4027 + at.getBlockZ() * 2053);
-
-      if ((this.config.getDurabilityEnabled()) && (this.config.getecDurability() > 1)) {
-        if (this.obsidianDurability.containsKey(representation))
-        {
-          int currentDurability = ((Integer)this.obsidianDurability.get(representation)).intValue();
-          currentDurability++;
-
-          if (eccheckIfMax(currentDurability))
-          {
-            dropBlockAndResetTime(representation, at);
-          }
-          else {
-            this.obsidianDurability.put(representation, Integer.valueOf(currentDurability));
-
-            if (this.config.getDurabilityResetTimerEnabled())
-              startNewTimer(representation);
-          }
-        }
-        else {
-          this.obsidianDurability.put(representation, Integer.valueOf(1));
-
-          if (this.config.getDurabilityResetTimerEnabled()) {
-            startNewTimer(representation);
-          }
-
-          if (eccheckIfMax(1))
-            dropBlockAndResetTime(representation, at);
-        }
-      }
-      else
-        destroyBlockAndDropItem(at);
+    	ApplyDurability(at, this.config.getecDurability());
     }
     if (b.getTypeId() == 145)
     {
+    	ApplyDurability(at, this.config.getaDurability());
+    }
+  }
+  
+  private void ApplyDurability(Location at, int dura)
+  {
       Integer representation = Integer.valueOf(at.getWorld().hashCode() + at.getBlockX() * 2389 + at.getBlockY() * 4027 + at.getBlockZ() * 2053);
 
-      if ((this.config.getDurabilityEnabled()) && (this.config.getaDurability() > 1)) {
+      if ((this.config.getDurabilityEnabled()) && (dura > 1)) {
         if (this.obsidianDurability.containsKey(representation))
         {
           int currentDurability = ((Integer)this.obsidianDurability.get(representation)).intValue();
           currentDurability++;
 
-          if (acheckIfMax(currentDurability))
+          if (checkIfMax(currentDurability, dura))
           {
             dropBlockAndResetTime(representation, at);
           }
@@ -256,13 +169,12 @@ public final class ODEntityListener
             startNewTimer(representation);
           }
 
-          if (acheckIfMax(1))
+          if (checkIfMax(1, dura))
             dropBlockAndResetTime(representation, at);
         }
       }
       else
         destroyBlockAndDropItem(at);
-    }
   }
 
   protected void CorrectExplosion(EntityExplodeEvent event, float power)
@@ -354,20 +266,8 @@ public final class ODEntityListener
     b.setTypeId(Material.AIR.getId());
   }
 
-  private boolean ocheckIfMax(int value) {
-    return value == this.config.getoDurability();
-  }
-
-  private boolean echeckIfMax(int value) {
-    return value == this.config.geteDurability();
-  }
-
-  private boolean eccheckIfMax(int value) {
-    return value == this.config.getecDurability();
-  }
-
-  private boolean acheckIfMax(int value) {
-    return value == this.config.getaDurability();
+  private boolean checkIfMax(int value, int Dura) {
+    return value == Dura;
   }
 
   private void startNewTimer(Integer representation)
