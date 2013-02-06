@@ -57,6 +57,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 		startMetrics();
 		
 		getServer().getPluginManager().registerEvents(entityListener, this);
+		getServer().getPluginManager().registerEvents(JoinListener, this);
 		
 		// Check for updates.
 		if(config.getCheckUpdate())
