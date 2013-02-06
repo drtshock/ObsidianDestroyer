@@ -27,6 +27,8 @@ public final class ObsidianDestroyer extends JavaPlugin {
 
 	private static String version;
 	private static final String PLUGIN_NAME = "ObsidianDestroyer";
+	public static boolean update = false;
+	public static String name = "";
 
 	/**
 	 * {@inheritDoc}
@@ -56,11 +58,12 @@ public final class ObsidianDestroyer extends JavaPlugin {
 		
 		getServer().getPluginManager().registerEvents(entityListener, this);
 		
-		// Auto updater :D
-		if(config.getAutoUpdate())
+		// Check for updates.
+		if(config.getCheckUpdate())
 		{
-			Updater updater = new Updater(this, "obsidiandestroyer", this.getFile(), Updater.UpdateType.DEFAULT, true);
-			updater.getLatestVersionString(); // Just so it doesn't give an error :o
+			Updater updater = new Updater(this, "obsidiandestroyer", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
+			update = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE; 
+			name = updater.getLatestVersionString();
 		}
 	}
 	

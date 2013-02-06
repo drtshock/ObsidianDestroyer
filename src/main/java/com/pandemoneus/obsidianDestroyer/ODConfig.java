@@ -35,7 +35,7 @@ public final class ODConfig
   private long durabilityTime = 600000L;
   private double chanceToDropBlock = 0.7D;
   private boolean waterProtection = true;
-  private boolean autoUpdate = true;
+  private boolean checkUpdate = true;
 
   public ODConfig(ObsidianDestroyer plugin)
   {
@@ -87,7 +87,7 @@ public final class ODConfig
     try {
       this.bukkitConfig.load(this.configFile);
 
-      this.autoUpdate = this.bukkitConfig.getBoolean("autoupdate", true);
+      this.checkUpdate = this.bukkitConfig.getBoolean("checkupdate", true);
 
       this.explosionRadius = this.bukkitConfig.getInt("Radius", 3);
       this.waterProtection = this.bukkitConfig.getBoolean("FluidsProtect", true);
@@ -114,7 +114,7 @@ public final class ODConfig
 
   private void writeDefault() {
     write("Version", ObsidianDestroyer.getVersion());
-    write("autoupdate", Boolean.valueOf(this.autoUpdate));
+    write("autoupdate", Boolean.valueOf(this.checkUpdate));
     write("Radius", Integer.valueOf(this.explosionRadius));
     write("FluidsProtect", Boolean.valueOf(this.waterProtection));
 
@@ -177,9 +177,9 @@ public final class ODConfig
     return this.explosionRadius;
   }
 
-  public boolean getAutoUpdate()
+  public boolean getCheckUpdate()
   {
-    return this.autoUpdate;
+    return this.checkUpdate;
   }
 
   public boolean getTntEnabled()
