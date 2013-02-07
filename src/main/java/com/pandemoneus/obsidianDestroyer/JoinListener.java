@@ -10,12 +10,12 @@ public class JoinListener implements Listener
 {
 
 	ObsidianDestroyer plugin;
-	
+
 	public JoinListener(ObsidianDestroyer plugin)
 	{
-	    this.plugin = plugin;
+		this.plugin = plugin;
 	}
-	
+
 	/**
 	 * Send a message to OP if there is an update available.
 	 * Removes the automatic download because that gets annoying

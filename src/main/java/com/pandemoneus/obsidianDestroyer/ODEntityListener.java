@@ -20,306 +20,306 @@ import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.inventory.ItemStack;
 
 public final class ODEntityListener
-  implements Listener
+implements Listener
 {
-  private ObsidianDestroyer plugin;
-  private ODConfig config;
-  private HashMap<Integer, Integer> obsidianDurability = new HashMap<Integer, Integer>();
-  private HashMap<Integer, Timer> obsidianTimer = new HashMap<Integer, Timer>();
-  private Random _random = new Random();
-  private HashMap<Integer, Float> _entityPowerMap;
+	private ObsidianDestroyer plugin;
+	private ODConfig config;
+	private HashMap<Integer, Integer> obsidianDurability = new HashMap<Integer, Integer>();
+	private HashMap<Integer, Timer> obsidianTimer = new HashMap<Integer, Timer>();
+	private Random _random = new Random();
+	private HashMap<Integer, Float> _entityPowerMap;
 
-  public ODEntityListener(ObsidianDestroyer plugin)
-  {
-    this.plugin = plugin;
-    this.config = plugin.getODConfig();
-    this._entityPowerMap = new HashMap<Integer, Float>();
-  }
+	public ODEntityListener(ObsidianDestroyer plugin)
+	{
+		this.plugin = plugin;
+		this.config = plugin.getODConfig();
+		this._entityPowerMap = new HashMap<Integer, Float>();
+	}
 
-  @EventHandler(priority=EventPriority.HIGHEST)
-  public void OnExplosionPrime(ExplosionPrimeEvent event) {
-    if (!event.isCancelled())
-      this._entityPowerMap.put(Integer.valueOf(event.getEntity().getEntityId()), Float.valueOf(event.getRadius()));
-  }
+	@EventHandler(priority=EventPriority.HIGHEST)
+	public void OnExplosionPrime(ExplosionPrimeEvent event) {
+		if (!event.isCancelled())
+			this._entityPowerMap.put(Integer.valueOf(event.getEntity().getEntityId()), Float.valueOf(event.getRadius()));
+	}
 
-  @EventHandler(priority = EventPriority.MONITOR)
-  public void onEntityExplode(EntityExplodeEvent event)
-  {
-    if ((event == null) || (event.isCancelled())) {
-      return;
-    }
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onEntityExplode(EntityExplodeEvent event)
+	{
+		if ((event == null) || (event.isCancelled())) {
+			return;
+		}
 
-    int radius = this.config.getRadius();
+		int radius = this.config.getRadius();
 
-    if (radius < 0) {
-      Log.warning("Explosion radius is less than zero. Current value: " + radius);
-      return;
-    }
+		if (radius < 0) {
+			Log.warning("Explosion radius is less than zero. Current value: " + radius);
+			return;
+		}
 
-    Entity detonator = event.getEntity();
+		Entity detonator = event.getEntity();
 
-    if (detonator == null)
-    {
-      return;
-    }
+		if (detonator == null)
+		{
+			return;
+		}
 
-    Location detonatorLoc = detonator.getLocation();
-    String eventTypeRep = event.getEntity().toString();
+		Location detonatorLoc = detonator.getLocation();
+		String eventTypeRep = event.getEntity().toString();
 
-    if ((!eventTypeRep.equals("CraftTNTPrimed")) && (!eventTypeRep.equals("CraftCreeper")) && (!eventTypeRep.equals("CraftFireball")) && (!eventTypeRep.equals("CraftGhast")) && (!eventTypeRep.equals("CraftSnowball"))) {
-      return;
-    }
+		if ((!eventTypeRep.equals("CraftTNTPrimed")) && (!eventTypeRep.equals("CraftCreeper")) && (!eventTypeRep.equals("CraftFireball")) && (!eventTypeRep.equals("CraftGhast")) && (!eventTypeRep.equals("CraftSnowball"))) {
+			return;
+		}
 
-    if ((eventTypeRep.equals("CraftTNTPrimed")) && (!this.config.getTntEnabled())) {
-      return;
-    }
+		if ((eventTypeRep.equals("CraftTNTPrimed")) && (!this.config.getTntEnabled())) {
+			return;
+		}
 
-    if ((eventTypeRep.equals("CraftSnowball")) && (!this.config.getCannonsEnabled())) {
-      return;
-    }
+		if ((eventTypeRep.equals("CraftSnowball")) && (!this.config.getCannonsEnabled())) {
+			return;
+		}
 
-    if ((eventTypeRep.equals("CraftCreeper")) && (!this.config.getCreepersEnabled())) {
-      return;
-    }
+		if ((eventTypeRep.equals("CraftCreeper")) && (!this.config.getCreepersEnabled())) {
+			return;
+		}
 
-    if (((eventTypeRep.equals("CraftFireball")) || (eventTypeRep.equals("CraftGhast"))) && (!this.config.getGhastsEnabled())) {
-      return;
-    }
+		if (((eventTypeRep.equals("CraftFireball")) || (eventTypeRep.equals("CraftGhast"))) && (!this.config.getGhastsEnabled())) {
+			return;
+		}
 
-    if (eventTypeRep.equals("CraftSnowball")) {
-      Iterator<Block> iter = event.blockList().iterator();
-      while (iter.hasNext()) {
-        org.bukkit.block.Block block = (org.bukkit.block.Block)iter.next();
-        blowBlockUp(block.getLocation());
-      }
-      return;
-    }
+		if (eventTypeRep.equals("CraftSnowball")) {
+			Iterator<Block> iter = event.blockList().iterator();
+			while (iter.hasNext()) {
+				org.bukkit.block.Block block = (org.bukkit.block.Block)iter.next();
+				blowBlockUp(block.getLocation());
+			}
+			return;
+		}
 
-    if ((!event.isCancelled()) && (event.getEntityType() != EntityType.ENDER_DRAGON) && (this._entityPowerMap.containsKey(Integer.valueOf(event.getEntity().getEntityId()))) && !this.config.getWaterProtection())
-    {
-      CorrectExplosion(event, ((Float)this._entityPowerMap.get(Integer.valueOf(event.getEntity().getEntityId()))).floatValue());
-      this._entityPowerMap.remove(Integer.valueOf(event.getEntity().getEntityId()));
-    }
+		if ((!event.isCancelled()) && (event.getEntityType() != EntityType.ENDER_DRAGON) && (this._entityPowerMap.containsKey(Integer.valueOf(event.getEntity().getEntityId()))) && !this.config.getWaterProtection())
+		{
+			CorrectExplosion(event, ((Float)this._entityPowerMap.get(Integer.valueOf(event.getEntity().getEntityId()))).floatValue());
+			this._entityPowerMap.remove(Integer.valueOf(event.getEntity().getEntityId()));
+		}
 
-    for (int x = -radius; x <= radius; x++)
-      for (int y = -radius; y <= radius; y++)
-        for (int z = -radius; z <= radius; z++) {
-          Location targetLoc = new Location(detonator.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
+		for (int x = -radius; x <= radius; x++)
+			for (int y = -radius; y <= radius; y++)
+				for (int z = -radius; z <= radius; z++) {
+					Location targetLoc = new Location(detonator.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
 
-          if (detonatorLoc.distance(targetLoc) <= radius) {
-            if ((detonatorLoc.getBlock().isLiquid()) && (this.config.getWaterProtection())) {
-              return;
-            }
-            blowBlockUp(targetLoc);
-          }
-        }
-  }
+					if (detonatorLoc.distance(targetLoc) <= radius) {
+						if ((detonatorLoc.getBlock().isLiquid()) && (this.config.getWaterProtection())) {
+							return;
+						}
+						blowBlockUp(targetLoc);
+					}
+				}
+	}
 
-  private void blowBlockUp(Location at)
-  {
-    if (at == null) {
-      return;
-    }
+	private void blowBlockUp(Location at)
+	{
+		if (at == null) {
+			return;
+		}
 
-    org.bukkit.block.Block b = at.getBlock();
+		org.bukkit.block.Block b = at.getBlock();
 
-    if (b.getTypeId() == 49)
-    {
-    	ApplyDurability(at, this.config.getoDurability());
-    }
-    if (b.getTypeId() == 116)
-    {
-    	ApplyDurability(at, this.config.geteDurability());
-    }
-    if (b.getTypeId() == 130)
-    {
-    	ApplyDurability(at, this.config.getecDurability());
-    }
-    if (b.getTypeId() == 145)
-    {
-    	ApplyDurability(at, this.config.getaDurability());
-    }
-  }
-  
-  private void ApplyDurability(Location at, int dura)
-  {
-      Integer representation = Integer.valueOf(at.getWorld().hashCode() + at.getBlockX() * 2389 + at.getBlockY() * 4027 + at.getBlockZ() * 2053);
+		if (b.getTypeId() == 49)
+		{
+			ApplyDurability(at, this.config.getoDurability());
+		}
+		if (b.getTypeId() == 116)
+		{
+			ApplyDurability(at, this.config.geteDurability());
+		}
+		if (b.getTypeId() == 130)
+		{
+			ApplyDurability(at, this.config.getecDurability());
+		}
+		if (b.getTypeId() == 145)
+		{
+			ApplyDurability(at, this.config.getaDurability());
+		}
+	}
 
-      if ((this.config.getDurabilityEnabled()) && (dura > 1)) {
-        if (this.obsidianDurability.containsKey(representation))
-        {
-          int currentDurability = ((Integer)this.obsidianDurability.get(representation)).intValue();
-          currentDurability++;
+	private void ApplyDurability(Location at, int dura)
+	{
+		Integer representation = Integer.valueOf(at.getWorld().hashCode() + at.getBlockX() * 2389 + at.getBlockY() * 4027 + at.getBlockZ() * 2053);
 
-          if (checkIfMax(currentDurability, dura))
-          {
-            dropBlockAndResetTime(representation, at);
-          }
-          else {
-            this.obsidianDurability.put(representation, Integer.valueOf(currentDurability));
+		if ((this.config.getDurabilityEnabled()) && (dura > 1)) {
+			if (this.obsidianDurability.containsKey(representation))
+			{
+				int currentDurability = ((Integer)this.obsidianDurability.get(representation)).intValue();
+				currentDurability++;
 
-            if (this.config.getDurabilityResetTimerEnabled())
-              startNewTimer(representation);
-          }
-        }
-        else {
-          this.obsidianDurability.put(representation, Integer.valueOf(1));
+				if (checkIfMax(currentDurability, dura))
+				{
+					dropBlockAndResetTime(representation, at);
+				}
+				else {
+					this.obsidianDurability.put(representation, Integer.valueOf(currentDurability));
 
-          if (this.config.getDurabilityResetTimerEnabled()) {
-            startNewTimer(representation);
-          }
+					if (this.config.getDurabilityResetTimerEnabled())
+						startNewTimer(representation);
+				}
+			}
+			else {
+				this.obsidianDurability.put(representation, Integer.valueOf(1));
 
-          if (checkIfMax(1, dura))
-            dropBlockAndResetTime(representation, at);
-        }
-      }
-      else
-        destroyBlockAndDropItem(at);
-  }
+				if (this.config.getDurabilityResetTimerEnabled()) {
+					startNewTimer(representation);
+				}
 
-  protected void CorrectExplosion(EntityExplodeEvent event, float power)
-  {
-    World world = event.getEntity().getWorld();
-    event.blockList().clear();
+				if (checkIfMax(1, dura))
+					dropBlockAndResetTime(representation, at);
+			}
+		}
+		else
+			destroyBlockAndDropItem(at);
+	}
 
-    for (int i = 0; i < 16; i++)
-    {
-      for (int j = 0; j < 16; j++)
-      {
-        for (int k = 0; k < 16; k++)
-        {
-          if ((i == 0) || (i == 15) || (j == 0) || (j == 15) || (k == 0) || (k == 15))
-          {
-            double d3 = i / 15.0F * 2.0F - 1.0F;
-            double d4 = j / 15.0F * 2.0F - 1.0F;
-            double d5 = k / 15.0F * 2.0F - 1.0F;
-            double d6 = Math.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
+	protected void CorrectExplosion(EntityExplodeEvent event, float power)
+	{
+		World world = event.getEntity().getWorld();
+		event.blockList().clear();
 
-            d3 /= d6;
-            d4 /= d6;
-            d5 /= d6;
-            float f1 = power * (0.7F + this._random.nextFloat() * 0.6F);
+		for (int i = 0; i < 16; i++)
+		{
+			for (int j = 0; j < 16; j++)
+			{
+				for (int k = 0; k < 16; k++)
+				{
+					if ((i == 0) || (i == 15) || (j == 0) || (j == 15) || (k == 0) || (k == 15))
+					{
+						double d3 = i / 15.0F * 2.0F - 1.0F;
+						double d4 = j / 15.0F * 2.0F - 1.0F;
+						double d5 = k / 15.0F * 2.0F - 1.0F;
+						double d6 = Math.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
 
-            double d0 = event.getLocation().getX();
-            double d1 = event.getLocation().getY();
-            double d2 = event.getLocation().getZ();
+						d3 /= d6;
+						d4 /= d6;
+						d5 /= d6;
+						float f1 = power * (0.7F + this._random.nextFloat() * 0.6F);
 
-            for (float f2 = 0.3F; f1 > 0.0F; f1 -= f2 * 0.75F)
-            {
-              int l = MathHelper.floor(d0);
-              int i1 = MathHelper.floor(d1);
-              int j1 = MathHelper.floor(d2);
-              int k1 = world.getBlockTypeIdAt(l, i1, j1);
+						double d0 = event.getLocation().getX();
+						double d1 = event.getLocation().getY();
+						double d2 = event.getLocation().getZ();
 
-              if ((k1 > 0) && (k1 != 8) && (k1 != 9) && (k1 != 10) && (k1 != 11))
-              {
-                f1 -= (net.minecraft.server.v1_4_R1.Block.byId[k1].a(((CraftEntity)event.getEntity()).getHandle()) + 0.3F) * f2;
-              }
+						for (float f2 = 0.3F; f1 > 0.0F; f1 -= f2 * 0.75F)
+						{
+							int l = MathHelper.floor(d0);
+							int i1 = MathHelper.floor(d1);
+							int j1 = MathHelper.floor(d2);
+							int k1 = world.getBlockTypeIdAt(l, i1, j1);
 
-              if ((f1 > 0.0F) && (i1 < 256) && (i1 >= 0) && (k1 != 8) && (k1 != 9) && (k1 != 10) && (k1 != 11))
-              {
-                org.bukkit.block.Block block = world.getBlockAt(l, i1, j1);
+							if ((k1 > 0) && (k1 != 8) && (k1 != 9) && (k1 != 10) && (k1 != 11))
+							{
+								f1 -= (net.minecraft.server.v1_4_R1.Block.byId[k1].a(((CraftEntity)event.getEntity()).getHandle()) + 0.3F) * f2;
+							}
 
-                if ((block.getType() != Material.AIR) && (!event.blockList().contains(block)))
-                {
-                  event.blockList().add(block);
-                }
-              }
+							if ((f1 > 0.0F) && (i1 < 256) && (i1 >= 0) && (k1 != 8) && (k1 != 9) && (k1 != 10) && (k1 != 11))
+							{
+								org.bukkit.block.Block block = world.getBlockAt(l, i1, j1);
 
-              d0 += d3 * f2;
-              d1 += d4 * f2;
-              d2 += d5 * f2;
-            }
-          }
-        }
-      }
-    }
-  }
+								if ((block.getType() != Material.AIR) && (!event.blockList().contains(block)))
+								{
+									event.blockList().add(block);
+								}
+							}
 
-  private void destroyBlockAndDropItem(Location at) {
-    if (at == null) {
-      return;
-    }
+							d0 += d3 * f2;
+							d1 += d4 * f2;
+							d2 += d5 * f2;
+						}
+					}
+				}
+			}
+		}
+	}
 
-    org.bukkit.block.Block b = at.getBlock();
+	private void destroyBlockAndDropItem(Location at) {
+		if (at == null) {
+			return;
+		}
 
-    if ((!b.getType().equals(Material.OBSIDIAN)) && (!b.getType().equals(Material.ENCHANTMENT_TABLE)) && (!b.getType().equals(Material.ENDER_CHEST)) && 
-      (!b.getType().equals(Material.ANVIL))) {
-      return;
-    }
+		org.bukkit.block.Block b = at.getBlock();
 
-    double chance = this.config.getChanceToDropBlock();
+		if ((!b.getType().equals(Material.OBSIDIAN)) && (!b.getType().equals(Material.ENCHANTMENT_TABLE)) && (!b.getType().equals(Material.ENDER_CHEST)) && 
+				(!b.getType().equals(Material.ANVIL))) {
+			return;
+		}
 
-    if (chance > 1.0D)
-      chance = 1.0D;
-    if (chance < 0.0D) {
-      chance = 0.0D;
-    }
-    double random = Math.random();
+		double chance = this.config.getChanceToDropBlock();
 
-    if ((chance == 1.0D) || (chance <= random)) {
-      ItemStack is = new ItemStack(b.getType(), 1, Short.valueOf(b.getData()).shortValue());
+		if (chance > 1.0D)
+			chance = 1.0D;
+		if (chance < 0.0D) {
+			chance = 0.0D;
+		}
+		double random = Math.random();
 
-      at.getWorld().dropItemNaturally(at, is);
-    }
+		if ((chance == 1.0D) || (chance <= random)) {
+			ItemStack is = new ItemStack(b.getType(), 1, Short.valueOf(b.getData()).shortValue());
 
-    b.setTypeId(Material.AIR.getId());
-  }
+			at.getWorld().dropItemNaturally(at, is);
+		}
 
-  private boolean checkIfMax(int value, int Dura) {
-    return value == Dura;
-  }
+		b.setTypeId(Material.AIR.getId());
+	}
 
-  private void startNewTimer(Integer representation)
-  {
-    if (this.obsidianTimer.get(representation) != null) {
-      ((Timer)this.obsidianTimer.get(representation)).cancel();
-    }
+	private boolean checkIfMax(int value, int Dura) {
+		return value == Dura;
+	}
 
-    Timer timer = new Timer();
-    timer.schedule(new ODTimerTask(this.plugin, representation), this.config.getDurabilityResetTime());
+	private void startNewTimer(Integer representation)
+	{
+		if (this.obsidianTimer.get(representation) != null) {
+			((Timer)this.obsidianTimer.get(representation)).cancel();
+		}
 
-    this.obsidianTimer.put(representation, timer);
-  }
+		Timer timer = new Timer();
+		timer.schedule(new ODTimerTask(this.plugin, representation), this.config.getDurabilityResetTime());
 
-  private void dropBlockAndResetTime(Integer representation, Location at) {
-    this.obsidianDurability.remove(representation);
-    destroyBlockAndDropItem(at);
+		this.obsidianTimer.put(representation, timer);
+	}
 
-    if (this.config.getDurabilityResetTimerEnabled()) {
-      if (this.obsidianTimer.get(representation) != null) {
-        ((Timer)this.obsidianTimer.get(representation)).cancel();
-      }
+	private void dropBlockAndResetTime(Integer representation, Location at) {
+		this.obsidianDurability.remove(representation);
+		destroyBlockAndDropItem(at);
 
-      this.obsidianTimer.remove(representation);
-    }
-  }
+		if (this.config.getDurabilityResetTimerEnabled()) {
+			if (this.obsidianTimer.get(representation) != null) {
+				((Timer)this.obsidianTimer.get(representation)).cancel();
+			}
 
-  public HashMap<Integer, Integer> getObsidianDurability()
-  {
-    return this.obsidianDurability;
-  }
+			this.obsidianTimer.remove(representation);
+		}
+	}
 
-  public void setObsidianDurability(HashMap<Integer, Integer> map)
-  {
-    if (map == null) {
-      return;
-    }
+	public HashMap<Integer, Integer> getObsidianDurability()
+	{
+		return this.obsidianDurability;
+	}
 
-    this.obsidianDurability = map;
-  }
+	public void setObsidianDurability(HashMap<Integer, Integer> map)
+	{
+		if (map == null) {
+			return;
+		}
 
-  public HashMap<Integer, Timer> getObsidianTimer()
-  {
-    return this.obsidianTimer;
-  }
+		this.obsidianDurability = map;
+	}
 
-  public void setObsidianTimer(HashMap<Integer, Timer> map)
-  {
-    if (map == null) {
-      return;
-    }
+	public HashMap<Integer, Timer> getObsidianTimer()
+	{
+		return this.obsidianTimer;
+	}
 
-    this.obsidianTimer = map;
-  }
+	public void setObsidianTimer(HashMap<Integer, Timer> map)
+	{
+		if (map == null) {
+			return;
+		}
+
+		this.obsidianTimer = map;
+	}
 }

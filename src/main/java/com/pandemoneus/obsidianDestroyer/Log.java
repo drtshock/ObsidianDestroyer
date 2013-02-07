@@ -47,7 +47,7 @@ public final class Log {
 	public static void severe(String message) {
 		LOG.log(Level.SEVERE, pre + message);
 	}
-	
+
 	/**
 	 * Returns the logger.
 	 * 
@@ -56,7 +56,7 @@ public final class Log {
 	public static Logger getLogger() {
 		return LOG;
 	}
-	
+
 	/**
 	 * Returns the prefix used by the logger.
 	 * 

@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.TimerTask;
 
 public final class ODTimerTask extends TimerTask {
-	
+
 	private ObsidianDestroyer plugin;
 	private final Integer duraID;
-	
+
 	public ODTimerTask(ObsidianDestroyer plugin, Integer duraID) {
 		this.plugin = plugin;
 		this.duraID = duraID;
@@ -25,13 +25,13 @@ public final class ODTimerTask extends TimerTask {
 		if (id == null) {
 			return;
 		}
-		
+
 		HashMap<Integer, Integer> map = plugin.getListener().getObsidianDurability();
-		
+
 		if (map == null) {
 			return;
 		}
-		
+
 		map.remove(id);
 	}
 }

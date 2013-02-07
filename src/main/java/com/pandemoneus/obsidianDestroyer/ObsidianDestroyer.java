@@ -23,7 +23,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	private final ODEntityListener entityListener = new ODEntityListener(this);
 	public static ObsidianDestroyer plugin;
 	public static Logger log;
-	
+
 
 	private static String version;
 	private static final String PLUGIN_NAME = "ObsidianDestroyer";
@@ -44,21 +44,21 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		log = getServer().getLogger();
-        PluginDescriptionFile pdfFile = getDescription();
-        version = pdfFile.getVersion();
-        
+		PluginDescriptionFile pdfFile = getDescription();
+		version = pdfFile.getVersion();
+
 		getCommand("obsidiandestroyer").setExecutor(cmdExecutor);
 		getCommand("od").setExecutor(cmdExecutor);
 
 		config.loadConfig();
 		entityListener.setObsidianDurability(config.loadDurabilityFromFile());
-		
+
 		// start Metrics
 		startMetrics();
-		
+
 		getServer().getPluginManager().registerEvents(entityListener, this);
 		getServer().getPluginManager().registerEvents(new JoinListener(this), this);
-		
+
 		// Check for updates.
 		if(config.getCheckUpdate())
 		{
@@ -67,7 +67,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 			name = updater.getLatestVersionString();
 		}
 	}
-	
+
 	public void startMetrics() { 	
 		PluginDescriptionFile pdfFile = this.getDescription();
 		try {	
