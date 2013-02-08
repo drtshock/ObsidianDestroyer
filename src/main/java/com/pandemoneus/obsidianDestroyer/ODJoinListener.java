@@ -52,9 +52,9 @@ public class ODJoinListener implements Listener
 				&& event.getAction() == Action.LEFT_CLICK_BLOCK
 				&& config.getDurabilityEnabled())
 		{
-			if((player.getItemInHand().getAmount() > 0))
+			if(player.getItemInHand().getAmount() > 0)
 			{
-				if(!(player.getItemInHand().getTypeId() == config.getCheckItemId()))
+				if(player.getItemInHand().getTypeId() == config.getCheckItemId())
 				{
 					Block block = event.getClickedBlock();
 					Location loc = block.getLocation();
