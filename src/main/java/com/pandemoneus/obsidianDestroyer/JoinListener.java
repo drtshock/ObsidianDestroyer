@@ -51,7 +51,7 @@ public class JoinListener implements Listener
 		Player player = event.getPlayer();
 		if(player.hasPermission("obsidiandestroyer.info") 
 				&& event.getAction() == Action.LEFT_CLICK_BLOCK
-			&& config.getDurabilityEnabled())
+				&& config.getDurabilityEnabled())
 		{
 			Block block = event.getClickedBlock();
 			Location loc = block.getLocation();
