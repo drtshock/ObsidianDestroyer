@@ -15,14 +15,12 @@ public class JoinListener implements Listener
 {
 
 	private ObsidianDestroyer plugin;
-	private ODConfig config;
 	ODEntityListener odlistener = new ODEntityListener(plugin);
 
 
 	public JoinListener(ObsidianDestroyer plugin)
 	{
 		this.plugin = plugin;
-		this.config = plugin.getODConfig();
 	}
 
 	/**
@@ -51,7 +49,7 @@ public class JoinListener implements Listener
 		Player player = event.getPlayer();
 		if(player.hasPermission("obsidiandestroyer.info") 
 				&& event.getAction() == Action.LEFT_CLICK_BLOCK
-				&& config.getDurabilityEnabled())
+				&& odlistener.config.getDurabilityEnabled())
 		{
 			Block block = event.getClickedBlock();
 			Location loc = block.getLocation();
