@@ -2,6 +2,7 @@ package com.pandemoneus.obsidianDestroyer;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -58,17 +59,23 @@ public class ODJoinListener implements Listener
 				{
 					Block block = event.getClickedBlock();
 					Location loc = block.getLocation();
-					Integer representation = Integer.valueOf(loc.getWorld().hashCode() + loc.getBlockX() * 2389 + loc.getBlockY() * 4027 + loc.getBlockZ() * 2053);
-					if(odlistener.obsidianDurability.containsKey(representation))
+					if(block.getType() == Material.OBSIDIAN 
+							|| block.getType() == Material.ENDER_CHEST 
+							|| block.getType() == Material.ANVIL
+							|| block.getType() == Material.ENCHANTMENT_TABLE)
 					{
-						int currentDurability = ((Integer)odlistener.obsidianDurability.get(representation)).intValue();
-						player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this block is: " + ChatColor.WHITE + currentDurability);
-						return;
-					}
-					else
-					{
-						player.sendMessage(ChatColor.DARK_PURPLE + "This block has no durability defined.");
-						return;
+						Integer representation = Integer.valueOf(loc.getWorld().hashCode() + loc.getBlockX() * 2389 + loc.getBlockY() * 4027 + loc.getBlockZ() * 2053);
+						if(odlistener.obsidianDurability.containsKey(representation))
+						{
+							int currentDurability = ((Integer)odlistener.obsidianDurability.get(representation)).intValue();
+							player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this block is: " + ChatColor.WHITE + currentDurability);
+							return;
+						}
+						else
+						{
+							player.sendMessage(ChatColor.DARK_PURPLE + "This block has no durability defined.");
+							return;
+						}
 					}
 				}
 			}
