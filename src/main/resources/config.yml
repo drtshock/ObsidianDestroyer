@@ -2,6 +2,7 @@ Version: '2.9'
 checkupdate: true
 Radius: 3
 FluidsProtect: true
+CheckItemId: 38
 EnabledFor:
   TNT: true
   Cannons: false

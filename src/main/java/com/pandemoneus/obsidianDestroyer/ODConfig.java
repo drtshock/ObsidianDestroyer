@@ -36,6 +36,7 @@ public final class ODConfig
 	private double chanceToDropBlock = 0.7D;
 	private boolean waterProtection = true;
 	private boolean checkUpdate = true;
+	private int checkitemid = 38;
 
 	public ODConfig(ObsidianDestroyer plugin)
 	{
@@ -91,6 +92,7 @@ public final class ODConfig
 
 			this.explosionRadius = this.bukkitConfig.getInt("Radius", 3);
 			this.waterProtection = this.bukkitConfig.getBoolean("FluidsProtect", true);
+			this.checkitemid = this.bukkitConfig.getInt("CheckItemId", 38);
 
 			this.tntEnabled = this.bukkitConfig.getBoolean("EnabledFor.TNT", true);
 			this.cannonsEnabled = this.bukkitConfig.getBoolean("EnabledFor.Cannons", false);
@@ -117,6 +119,7 @@ public final class ODConfig
 		write("autoupdate", Boolean.valueOf(this.checkUpdate));
 		write("Radius", Integer.valueOf(this.explosionRadius));
 		write("FluidsProtect", Boolean.valueOf(this.waterProtection));
+		write("CheckItemId", Integer.valueOf(this.checkitemid));
 
 		write("EnabledFor.TNT", Boolean.valueOf(this.tntEnabled));
 		write("EnabledFor.Cannons", Boolean.valueOf(this.cannonsEnabled));
@@ -247,6 +250,11 @@ public final class ODConfig
 	public boolean getWaterProtection()
 	{
 		return this.waterProtection;
+	}
+	
+	public int getCheckItemId()
+	{
+		return this.checkitemid;
 	}
 
 	public String[] printLoadedConfig()
