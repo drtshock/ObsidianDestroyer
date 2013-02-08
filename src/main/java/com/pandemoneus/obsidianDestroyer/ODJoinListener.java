@@ -68,12 +68,42 @@ public class ODJoinListener implements Listener
 						if(odlistener.obsidianDurability.containsKey(representation))
 						{
 							int currentDurability = ((Integer)odlistener.obsidianDurability.get(representation)).intValue();
-							player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this block is: " + ChatColor.WHITE + currentDurability);
+							if (block.getType() == Material.OBSIDIAN) 
+							{
+							player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this obsidian block is: " + ChatColor.WHITE + (config.getoDurability() - currentDurability) + "/" + config.getoDurability());
+							}
+							if (block.getType() == Material.ENDER_CHEST) 
+							{
+								player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this ender chest is: " + ChatColor.WHITE + (config.getecDurability() - currentDurability) + "/" + config.getecDurability());
+							}
+							if (block.getType() == Material.ANVIL) 
+							{
+								player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this anvil is: " + ChatColor.WHITE + (config.getaDurability() - currentDurability) + "/" + config.getaDurability());
+							}
+							if (block.getType() == Material.ENCHANTMENT_TABLE) 
+							{
+								player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this enchantment table is: " + ChatColor.WHITE + (config.geteDurability() - currentDurability) + "/" + config.geteDurability());
+							}
 							return;
 						}
 						else
 						{
-							player.sendMessage(ChatColor.DARK_PURPLE + "This block has no durability defined.");
+							if (block.getType() == Material.OBSIDIAN) 
+							{
+							player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this obsidian block is: " + ChatColor.WHITE + config.getoDurability() + "/" + config.getoDurability());
+							}
+							if (block.getType() == Material.ENDER_CHEST) 
+							{
+								player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this ender chest is: " + ChatColor.WHITE + config.getecDurability() + "/" + config.getecDurability());
+							}
+							if (block.getType() == Material.ANVIL) 
+							{
+								player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this anvil is: " + ChatColor.WHITE + config.getaDurability() + "/" + config.getaDurability());
+							}
+							if (block.getType() == Material.ENCHANTMENT_TABLE) 
+							{
+								player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this enchantment table is: " + ChatColor.WHITE + config.geteDurability() + "/" + config.geteDurability());
+							}
 							return;
 						}
 					}
