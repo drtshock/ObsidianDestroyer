@@ -21,6 +21,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	private final ODCommands cmdExecutor = new ODCommands(this);
 	private ODConfig config = new ODConfig(this);
 	private final ODEntityListener entityListener = new ODEntityListener(this);
+	private final ODJoinListener joinListener = new ODJoinListener(this);
 	public static ObsidianDestroyer plugin;
 	public static Logger log;
 
@@ -57,7 +58,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 		startMetrics();
 
 		getServer().getPluginManager().registerEvents(entityListener, this);
-		getServer().getPluginManager().registerEvents(new JoinListener(this), this);
+		getServer().getPluginManager().registerEvents(joinListener, this);
 
 		// Check for updates.
 		if(config.getCheckUpdate())

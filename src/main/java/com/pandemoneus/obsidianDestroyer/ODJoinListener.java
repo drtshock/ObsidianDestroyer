@@ -11,16 +11,17 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class JoinListener implements Listener
+public class ODJoinListener implements Listener
 {
 
-	private ObsidianDestroyer plugin;
-	ODEntityListener odlistener = new ODEntityListener(plugin);
+	private ODEntityListener odlistener;
+	public ODConfig config;
 
 
-	public JoinListener(ObsidianDestroyer plugin)
+	public ODJoinListener(ObsidianDestroyer plugin)
 	{
-		this.plugin = plugin;
+		this.config = plugin.getODConfig();
+		this.odlistener = plugin.getListener();
 	}
 
 	/**
@@ -49,7 +50,7 @@ public class JoinListener implements Listener
 		Player player = event.getPlayer();
 		if(player.hasPermission("obsidiandestroyer.info") 
 				&& event.getAction() == Action.LEFT_CLICK_BLOCK
-				&& odlistener.config.getDurabilityEnabled())
+				&& config.getDurabilityEnabled())
 		{
 			Block block = event.getClickedBlock();
 			Location loc = block.getLocation();
