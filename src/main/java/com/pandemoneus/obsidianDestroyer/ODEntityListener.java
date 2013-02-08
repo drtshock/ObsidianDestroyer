@@ -24,7 +24,7 @@ implements Listener
 {
 	private ObsidianDestroyer plugin;
 	private ODConfig config;
-	private HashMap<Integer, Integer> obsidianDurability = new HashMap<Integer, Integer>();
+	public HashMap<Integer, Integer> obsidianDurability = new HashMap<Integer, Integer>();
 	private HashMap<Integer, Timer> obsidianTimer = new HashMap<Integer, Timer>();
 	private Random _random = new Random();
 	private HashMap<Integer, Float> _entityPowerMap;
