@@ -194,8 +194,7 @@ public class Updater
 		catch (MalformedURLException ex) 
 		{
 			// The slug doesn't exist
-			plugin.getLogger().warning("The author of this plugin has misconfigured their Auto Update system");
-			plugin.getLogger().warning("The project slug added ('" + slug + "') is invalid, and does not exist on dev.bukkit.org");
+			plugin.getLogger().warning("Update check failed. Bad slug.");
 			result = Updater.UpdateResult.FAIL_BADSLUG; // Bad slug! Bad!
 		}
 		if(url != null)
@@ -514,9 +513,7 @@ public class Updater
 			else
 			{
 				// The file's name did not contain the string 'vVersion'
-				plugin.getLogger().warning("The author of this plugin has misconfigured their Auto Update system");
-				plugin.getLogger().warning("Files uploaded to BukkitDev should contain the version number, seperated from the name by a 'v', such as PluginName v1.0");
-				plugin.getLogger().warning("Please notify the author (" + plugin.getDescription().getAuthors().get(0) + ") of this error.");
+				plugin.getLogger().warning("Failed to parse version on update check :(");
 				result = Updater.UpdateResult.FAIL_NOVERSION;
 				return false;
 			}
