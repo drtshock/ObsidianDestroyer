@@ -40,7 +40,7 @@ public final class ODEntityListener implements Listener {
 			this._entityPowerMap.put(Integer.valueOf(event.getEntity().getEntityId()), Float.valueOf(event.getRadius()));
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onEntityExplode(EntityExplodeEvent event) {
 		if (((event == null) || (event.isCancelled())) && (!this.config.getIgnoreCancel()))
 			return;
