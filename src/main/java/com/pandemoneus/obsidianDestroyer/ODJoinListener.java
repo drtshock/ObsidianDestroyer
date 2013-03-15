@@ -56,8 +56,7 @@ public class ODJoinListener implements Listener {
 					if(block == Material.OBSIDIAN 
 							|| block == Material.ENDER_CHEST 
 							|| block == Material.ANVIL
-							|| block == Material.ENCHANTMENT_TABLE
-							|| block == Material.MOB_SPAWNER) {
+							|| block == Material.ENCHANTMENT_TABLE) {
 
 						Integer representation = Integer.valueOf(loc.getWorld().hashCode() + loc.getBlockX() * 2389 + loc.getBlockY() * 4027 + loc.getBlockZ() * 2053);
 
@@ -80,12 +79,8 @@ public class ODJoinListener implements Listener {
 							player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this enchantment table is: " + 
 									ChatColor.WHITE + (config.geteDurability() - this.currentDurability) + "/" + config.geteDurability());
 
-						if (block == Material.MOB_SPAWNER)
-							player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this spawner is: " + 
-									ChatColor.WHITE + (config.getmDurability() - this.currentDurability) + "/" + config.getmDurability());
-						
 						this.currentDurability = 0;
-						
+
 						return;
 					}
 				}

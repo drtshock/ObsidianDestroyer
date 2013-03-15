@@ -38,12 +38,15 @@ Durability:
   EnchantmentTable: 1
   EnderChest: 1
   Anvil: 1
-  Spawners: 1
   ResetEnabled: true
   ResetAfter: '600000'
   
+# CheckSpawners: true - will allow us to drop monster spawners. Do not enable this if you have
+#   another plugin that handles it.
+
 # Chance to drop. Setting to anything at or above 1 will make them always drop.
 Blocks:
+  CheckSpawners: false
   ChanceToDrop: 0.7
   
 # Thats it :3

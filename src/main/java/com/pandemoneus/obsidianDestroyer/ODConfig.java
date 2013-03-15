@@ -31,7 +31,6 @@ public final class ODConfig
 	private int edurability = 1;
 	private int ecdurability = 1;
 	private int adurability = 1;
-	private int mdurability = 1;
 	private boolean durabilityTimerEnabled = true;
 	private long durabilityTime = 600000L;
 	private double chanceToDropBlock = 0.7D;
@@ -39,6 +38,7 @@ public final class ODConfig
 	private boolean checkUpdate = true;
 	private int checkitemid = 38;
 	private boolean ignorecancel = false;
+	private boolean checkspawners = false;
 
 	public ODConfig(ObsidianDestroyer plugin) {
 		this.plugin = plugin;
@@ -59,7 +59,7 @@ public final class ODConfig
 					loadData();
 
 				else {
-					Log.info(pluginName + " config file outdated, adding old data and creating new values. " + "Make sure you change those!");
+					Log.info(pluginName + " config file outdated, adding old data and creating new values. Make sure you change those!");
 					loadData();
 					writeDefault();
 				}
@@ -69,7 +69,7 @@ public final class ODConfig
 			}
 		}
 		else {
-			Log.info(pluginName + " config file not found, creating new config file...");
+			Log.info(pluginName + " config file not found, creating new config file :D");
 			this.plugin.saveDefaultConfig();
 		}
 
@@ -98,9 +98,9 @@ public final class ODConfig
 			this.edurability = this.bukkitConfig.getInt("Durability.EnchantmentTable", 1);
 			this.ecdurability = this.bukkitConfig.getInt("Durability.EnderChest", 1);
 			this.adurability = this.bukkitConfig.getInt("Durability.Anvil", 1);
-			this.mdurability = this.bukkitConfig.getInt("Durability.Spawner", 1);
 			this.durabilityTimerEnabled = this.bukkitConfig.getBoolean("Durability.ResetEnabled", true);
 			this.durabilityTime = readLong("Durability.ResetAfter", "600000");
+			this.checkspawners = this.bukkitConfig.getBoolean("Blocks.CheckSpawners", false);
 
 			this.chanceToDropBlock = this.bukkitConfig.getDouble("Blocks.ChanceToDrop", 0.7D);
 		} catch (Exception e) {
@@ -128,10 +128,10 @@ public final class ODConfig
 		write("Durability.EnchantmentTable", Integer.valueOf(this.edurability));
 		write("Durability.EnderChest", Integer.valueOf(this.ecdurability));
 		write("Durability.Anvil", Integer.valueOf(this.adurability));
-		write("Durability.Spawners", Integer.valueOf(this.mdurability));
 		write("Durability.ResetEnabled", Boolean.valueOf(this.durabilityTimerEnabled));
 		write("Durability.ResetAfter", this.durabilityTime);
 
+		write("Blocks.CheckSpawners", Boolean.valueOf(this.checkspawners));
 		write("Blocks.ChanceToDrop", Double.valueOf(this.chanceToDropBlock));
 
 		loadData();
@@ -215,10 +215,6 @@ public final class ODConfig
 		return this.adurability;
 	}
 
-	public int getmDurability() {
-		return this.mdurability;
-	}
-
 	public boolean getDurabilityResetTimerEnabled() {
 		return this.durabilityTimerEnabled;
 	}
@@ -229,6 +225,10 @@ public final class ODConfig
 
 	public double getChanceToDropBlock() {
 		return this.chanceToDropBlock;
+	}
+
+	public boolean getCheckSpawners() {
+		return this.checkspawners;
 	}
 
 	public boolean getWaterProtection() {

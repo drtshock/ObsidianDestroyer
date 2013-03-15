@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * 
  */
 public final class ObsidianDestroyer extends JavaPlugin {
+	
 	/**
 	 * Plugin related stuff
 	 */
@@ -61,8 +62,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(joinListener, this);
 
 		// Check for updates.
-		if(config.getCheckUpdate())
-		{
+		if(config.getCheckUpdate()) {
 			Updater updater = new Updater(this, "obsidiandestroyer", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
 			update = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE; 
 			name = updater.getLatestVersionString();
