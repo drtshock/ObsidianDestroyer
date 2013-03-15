@@ -27,6 +27,7 @@ public final class ODConfig
 	private boolean ghastsEnabled = false;
 	private boolean withersEnabled = false;
 	private boolean durabilityEnabled = false;
+	private boolean spawnersEnabled = false;
 	private int odurability = 1;
 	private int edurability = 1;
 	private int ecdurability = 1;
@@ -38,15 +39,14 @@ public final class ODConfig
 	private boolean waterProtection = true;
 	private boolean checkUpdate = true;
 	private int checkitemid = 38;
+	private boolean ignorecancel = false;
 
-	public ODConfig(ObsidianDestroyer plugin)
-	{
+	public ODConfig(ObsidianDestroyer plugin) {
 		this.plugin = plugin;
 		pluginName = ObsidianDestroyer.getPluginName();
 	}
 
-	public boolean loadConfig()
-	{
+	public boolean loadConfig() {
 		boolean isErrorFree = true;
 		pluginVersion = ObsidianDestroyer.getVersion();
 
@@ -94,12 +94,14 @@ public final class ODConfig
 			this.explosionRadius = this.bukkitConfig.getInt("Radius", 3);
 			this.waterProtection = this.bukkitConfig.getBoolean("FluidsProtect", true);
 			this.checkitemid = this.bukkitConfig.getInt("CheckItemId", 38);
+			this.ignorecancel = this.bukkitConfig.getBoolean("IgnoreCancel", false);
 
 			this.tntEnabled = this.bukkitConfig.getBoolean("EnabledFor.TNT", true);
 			this.cannonsEnabled = this.bukkitConfig.getBoolean("EnabledFor.Cannons", false);
 			this.creepersEnabled = this.bukkitConfig.getBoolean("EnabledFor.Creepers", false);
 			this.ghastsEnabled = this.bukkitConfig.getBoolean("EnabledFor.Ghasts", false);
 			this.withersEnabled = this.bukkitConfig.getBoolean("EnabledFor.Withers", false);
+			this.spawnersEnabled = this.bukkitConfig.getBoolean("EnabledFor.Spawners", false);
 
 			this.durabilityEnabled = this.bukkitConfig.getBoolean("Durability.Enabled", false);
 			this.odurability = this.bukkitConfig.getInt("Durability.Obsidian", 1);
@@ -122,12 +124,15 @@ public final class ODConfig
 		write("Radius", Integer.valueOf(this.explosionRadius));
 		write("FluidsProtect", Boolean.valueOf(this.waterProtection));
 		write("CheckItemId", Integer.valueOf(this.checkitemid));
+		write("IgnoreCancel", Boolean.valueOf(this.ignorecancel));
 
 		write("EnabledFor.TNT", Boolean.valueOf(this.tntEnabled));
 		write("EnabledFor.Cannons", Boolean.valueOf(this.cannonsEnabled));
 		write("EnabledFor.Creepers", Boolean.valueOf(this.creepersEnabled));
 		write("EnabledFor.Ghasts", Boolean.valueOf(this.ghastsEnabled));
 		write("EnabledFor.Withers", Boolean.valueOf(this.withersEnabled));
+		write("EnabledFor.Spawners", Boolean.valueOf(this.spawnersEnabled));
+
 
 		write("Durability.Enabled", Boolean.valueOf(this.durabilityEnabled));
 		write("Durability.Obsidian", Integer.valueOf(this.odurability));
@@ -154,21 +159,17 @@ public final class ODConfig
 		}
 	}
 
-	private long readLong(String key, String def)
-	{
-		try
-		{
+	private long readLong(String key, String def) {
+		try {
 			this.bukkitConfig.load(this.configFile);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		String value = this.bukkitConfig.getString(key, def);
 
 		long tmp = 0L;
-		try
-		{
+		try {
 			tmp = Long.parseLong(value);
 		} catch (NumberFormatException nfe) {
 			Log.warning("Error parsing a long from the config file. Key=" + key);
@@ -178,48 +179,39 @@ public final class ODConfig
 		return tmp;
 	}
 
-	public int getRadius()
-	{
+	public int getRadius() {
 		return this.explosionRadius;
 	}
 
-	public boolean getCheckUpdate()
-	{
+	public boolean getCheckUpdate() {
 		return this.checkUpdate;
 	}
 
-	public boolean getTntEnabled()
-	{
+	public boolean getTntEnabled() {
 		return this.tntEnabled;
 	}
 
-	public boolean getCannonsEnabled()
-	{
+	public boolean getCannonsEnabled() {
 		return this.cannonsEnabled;
 	}
 
-	public boolean getCreepersEnabled()
-	{
+	public boolean getCreepersEnabled() {
 		return this.creepersEnabled;
 	}
 
-	public boolean getGhastsEnabled()
-	{
+	public boolean getGhastsEnabled() {
 		return this.ghastsEnabled;
 	}
 
-	public boolean getWithersEnabled()
-	{
+	public boolean getWithersEnabled() {
 		return this.withersEnabled;
 	}
 
-	public boolean getDurabilityEnabled()
-	{
+	public boolean getDurabilityEnabled() {
 		return this.durabilityEnabled;
 	}
 
-	public int getoDurability()
-	{
+	public int getoDurability() {
 		return this.odurability;
 	}
 
@@ -257,6 +249,10 @@ public final class ODConfig
 	
 	public int getCheckItemId() {
 		return this.checkitemid;
+	}
+	
+	public boolean getIgnoreCancel() {
+		return this.ignorecancel;
 	}
 
 	public String[] printLoadedConfig() {
@@ -299,8 +295,7 @@ public final class ODConfig
 
 		HashMap<Integer, Integer> map = null;
 		Object result = null;
-		try
-		{
+		try {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(this.durabilityFile));
 			result = ois.readObject();
 			map = (HashMap<Integer, Integer>)result;

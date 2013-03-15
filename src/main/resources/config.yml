@@ -3,6 +3,7 @@ checkupdate: true
 Radius: 3
 FluidsProtect: true
 CheckItemId: 38
+IgnoreCancel: false
 EnabledFor:
   TNT: true
   Cannons: false

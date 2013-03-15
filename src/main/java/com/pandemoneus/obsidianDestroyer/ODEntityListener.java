@@ -42,7 +42,7 @@ public final class ODEntityListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onEntityExplode(EntityExplodeEvent event) {
-		if ((event == null) || (event.isCancelled()))
+		if (((event == null) || (event.isCancelled())) && (!this.config.getIgnoreCancel()))
 			return;
 
 		int radius = this.config.getRadius();
