@@ -1,16 +1,37 @@
+# ObsidianDestroyer by Pandamoneous
+# Now authored by drtshock and squidicuzz
+# For information and updates visit http://dev.bukkit.org/server-mods/ObsidianDestroyer
+# Made with love <3
+
+# Do not touch this line. It will rewrite your config.
 Version: '2.10'
+
+# This will only check for updates. We will never download them for you.
 checkupdate: true
+
+# The explosion radius that will affect blocks 
 Radius: 3
+
+# False means that water won't protect blocks from explosions.
 FluidsProtect: true
+
+# The id of the item you use to check durability.
 CheckItemId: 38
+
+# Setting this to true may cause errors with other plugins. But it will make us handle all explosions
+# no matter what other plugins try to do.
 IgnoreCancel: false
+
+# Explosion types you want us to handle.
 EnabledFor:
   TNT: true
   Cannons: false
   Creepers: false
   Ghasts: false
   Withers: false
-  Spawners: false
+
+# Durability = amount of explosions within the radius defined above
+# within the time limit that will make a block blow up.
 Durability:
   Enabled: false
   Obsidian: 1
@@ -20,5 +41,9 @@ Durability:
   Spawners: 1
   ResetEnabled: true
   ResetAfter: '600000'
+  
+# Chance to drop. Setting to anything at or above 1 will make them always drop.
 Blocks:
   ChanceToDrop: 0.7
+  
+# Thats it :3

@@ -36,12 +36,14 @@ public final class ODEntityListener implements Listener {
 
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void OnExplosionPrime(ExplosionPrimeEvent event) {
+		
 		if (!event.isCancelled())
 			this._entityPowerMap.put(Integer.valueOf(event.getEntity().getEntityId()), Float.valueOf(event.getRadius()));
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onEntityExplode(EntityExplodeEvent event) {
+		
 		if (((event == null) || (event.isCancelled())) && (!this.config.getIgnoreCancel()))
 			return;
 
@@ -84,7 +86,10 @@ public final class ODEntityListener implements Listener {
 			return;
 		}
 
-		if ((!event.isCancelled()) && (event.getEntityType() != EntityType.ENDER_DRAGON) && (this._entityPowerMap.containsKey(Integer.valueOf(event.getEntity().getEntityId()))) && !this.config.getWaterProtection()) {
+		if ((!event.isCancelled()) && (event.getEntityType() != EntityType.ENDER_DRAGON) 
+				&& (this._entityPowerMap.containsKey(Integer.valueOf(event.getEntity().getEntityId()))) 
+				&& !this.config.getWaterProtection()) {
+			
 			CorrectExplosion(event, ((Float)this._entityPowerMap.get(Integer.valueOf(event.getEntity().getEntityId()))).floatValue());
 			this._entityPowerMap.remove(Integer.valueOf(event.getEntity().getEntityId()));
 		}
@@ -104,6 +109,7 @@ public final class ODEntityListener implements Listener {
 	}
 
 	private void blowBlockUp(Location at) {
+		
 		if (at == null)
 			return;
 
@@ -126,6 +132,7 @@ public final class ODEntityListener implements Listener {
 	}
 
 	private void ApplyDurability(Location at, int dura) {
+		
 		Integer representation = Integer.valueOf(at.getWorld().hashCode() + at.getBlockX() * 2389 + at.getBlockY() * 4027 + at.getBlockZ() * 2053);
 
 		if ((this.config.getDurabilityEnabled()) && (dura > 1)) {
@@ -143,6 +150,7 @@ public final class ODEntityListener implements Listener {
 						startNewTimer(representation);
 				}
 			}
+			
 			else {
 				this.obsidianDurability.put(representation, Integer.valueOf(1));
 
@@ -153,11 +161,13 @@ public final class ODEntityListener implements Listener {
 					dropBlockAndResetTime(representation, at);
 			}
 		}
+		
 		else
 			destroyBlockAndDropItem(at);
 	}
 
 	protected void CorrectExplosion(EntityExplodeEvent event, float power) {
+		
 		World world = event.getEntity().getWorld();
 		event.blockList().clear();
 

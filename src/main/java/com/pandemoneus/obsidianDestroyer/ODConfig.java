@@ -27,7 +27,6 @@ public final class ODConfig
 	private boolean ghastsEnabled = false;
 	private boolean withersEnabled = false;
 	private boolean durabilityEnabled = false;
-	private boolean spawnersEnabled = false;
 	private int odurability = 1;
 	private int edurability = 1;
 	private int ecdurability = 1;
@@ -52,34 +51,26 @@ public final class ODConfig
 
 		new File(directory).mkdir();
 
-		if (this.configFile.exists())
+		if (this.configFile.exists()) {
 			try {
 				this.bukkitConfig.load(this.configFile);
 
 				if (this.bukkitConfig.getString("Version", "").equals(pluginVersion))
-				{
 					loadData();
-				}
+
 				else {
 					Log.info(pluginName + " config file outdated, adding old data and creating new values. " + "Make sure you change those!");
 					loadData();
 					writeDefault();
 				}
 			}
-		catch (Exception e) {
-			e.printStackTrace();
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		else {
-			try
-			{
-				Log.info(pluginName + " config file not found, creating new config file...");
-				this.configFile.createNewFile();
-				writeDefault();
-			} catch (IOException ioe) {
-				Log.severe("Could not create the config file for " + pluginName + "!");
-				ioe.printStackTrace();
-				isErrorFree = false;
-			}
+			Log.info(pluginName + " config file not found, creating new config file...");
+			this.plugin.saveDefaultConfig();
 		}
 
 		return isErrorFree;
@@ -101,7 +92,6 @@ public final class ODConfig
 			this.creepersEnabled = this.bukkitConfig.getBoolean("EnabledFor.Creepers", false);
 			this.ghastsEnabled = this.bukkitConfig.getBoolean("EnabledFor.Ghasts", false);
 			this.withersEnabled = this.bukkitConfig.getBoolean("EnabledFor.Withers", false);
-			this.spawnersEnabled = this.bukkitConfig.getBoolean("EnabledFor.Spawners", false);
 
 			this.durabilityEnabled = this.bukkitConfig.getBoolean("Durability.Enabled", false);
 			this.odurability = this.bukkitConfig.getInt("Durability.Obsidian", 1);
@@ -131,7 +121,6 @@ public final class ODConfig
 		write("EnabledFor.Creepers", Boolean.valueOf(this.creepersEnabled));
 		write("EnabledFor.Ghasts", Boolean.valueOf(this.ghastsEnabled));
 		write("EnabledFor.Withers", Boolean.valueOf(this.withersEnabled));
-		write("EnabledFor.Spawners", Boolean.valueOf(this.spawnersEnabled));
 
 
 		write("Durability.Enabled", Boolean.valueOf(this.durabilityEnabled));
@@ -153,8 +142,7 @@ public final class ODConfig
 			this.bukkitConfig.load(this.configFile);
 			this.bukkitConfig.set(key, o);
 			this.bukkitConfig.save(this.configFile);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -226,7 +214,7 @@ public final class ODConfig
 	public int getaDurability() {
 		return this.adurability;
 	}
-	
+
 	public int getmDurability() {
 		return this.mdurability;
 	}
@@ -246,11 +234,11 @@ public final class ODConfig
 	public boolean getWaterProtection() {
 		return this.waterProtection;
 	}
-	
+
 	public int getCheckItemId() {
 		return this.checkitemid;
 	}
-	
+
 	public boolean getIgnoreCancel() {
 		return this.ignorecancel;
 	}
@@ -274,7 +262,7 @@ public final class ODConfig
 		HashMap<Integer, Integer> map = this.plugin.getListener().getObsidianDurability();
 
 		new File(directory).mkdir();
-		
+
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(this.durabilityFile));
 			oos.writeObject(map);
