@@ -120,6 +120,9 @@ public final class ODEntityListener implements Listener {
 
 		if (b.getTypeId() == 145)
 			ApplyDurability(at, this.config.getaDurability());
+		
+		if(b.getTypeId() == 52)
+			ApplyDurability(at, this.config.getmDurability());
 	}
 
 	private void ApplyDurability(Location at, int dura) {
@@ -210,7 +213,7 @@ public final class ODEntityListener implements Listener {
 		org.bukkit.block.Block b = at.getBlock();
 
 		if ((!b.getType().equals(Material.OBSIDIAN)) && (!b.getType().equals(Material.ENCHANTMENT_TABLE)) && (!b.getType().equals(Material.ENDER_CHEST)) && 
-				(!b.getType().equals(Material.ANVIL)))
+				(!b.getType().equals(Material.ANVIL)) && (!b.getType().equals(Material.MOB_SPAWNER)))
 			return;
 
 		double chance = this.config.getChanceToDropBlock();

@@ -31,6 +31,7 @@ public final class ODConfig
 	private int edurability = 1;
 	private int ecdurability = 1;
 	private int adurability = 1;
+	private int mdurability = 1;
 	private boolean durabilityTimerEnabled = true;
 	private long durabilityTime = 600000L;
 	private double chanceToDropBlock = 0.7D;
@@ -105,6 +106,7 @@ public final class ODConfig
 			this.edurability = this.bukkitConfig.getInt("Durability.EnchantmentTable", 1);
 			this.ecdurability = this.bukkitConfig.getInt("Durability.EnderChest", 1);
 			this.adurability = this.bukkitConfig.getInt("Durability.Anvil", 1);
+			this.mdurability = this.bukkitConfig.getInt("Durability.Spawner", 1);
 			this.durabilityTimerEnabled = this.bukkitConfig.getBoolean("Durability.ResetEnabled", true);
 			this.durabilityTime = readLong("Durability.ResetAfter", "600000");
 
@@ -132,6 +134,7 @@ public final class ODConfig
 		write("Durability.EnchantmentTable", Integer.valueOf(this.edurability));
 		write("Durability.EnderChest", Integer.valueOf(this.ecdurability));
 		write("Durability.Anvil", Integer.valueOf(this.adurability));
+		write("Durability.Spawners", Integer.valueOf(this.mdurability));
 		write("Durability.ResetEnabled", Boolean.valueOf(this.durabilityTimerEnabled));
 		write("Durability.ResetAfter", this.durabilityTime);
 
@@ -231,58 +234,52 @@ public final class ODConfig
 	public int getaDurability() {
 		return this.adurability;
 	}
+	
+	public int getmDurability() {
+		return this.mdurability;
+	}
 
-	public boolean getDurabilityResetTimerEnabled()
-	{
+	public boolean getDurabilityResetTimerEnabled() {
 		return this.durabilityTimerEnabled;
 	}
 
-	public long getDurabilityResetTime()
-	{
+	public long getDurabilityResetTime() {
 		return this.durabilityTime;
 	}
 
-	public double getChanceToDropBlock()
-	{
+	public double getChanceToDropBlock() {
 		return this.chanceToDropBlock;
 	}
 
-	public boolean getWaterProtection()
-	{
+	public boolean getWaterProtection() {
 		return this.waterProtection;
 	}
 	
-	public int getCheckItemId()
-	{
+	public int getCheckItemId() {
 		return this.checkitemid;
 	}
 
-	public String[] printLoadedConfig()
-	{
+	public String[] printLoadedConfig() {
 		return new String[] { "this doesn't work." };
 	}
 
-	public File getConfigFile()
-	{
+	public File getConfigFile() {
 		return this.configFile;
 	}
 
-	public Plugin getPlugin()
-	{
+	public Plugin getPlugin() {
 		return this.plugin;
 	}
 
-	public void saveDurabilityToFile()
-	{
-		if ((this.plugin.getListener() == null) || (this.plugin.getListener().getObsidianDurability() == null)) {
+	public void saveDurabilityToFile() {
+		if ((this.plugin.getListener() == null) || (this.plugin.getListener().getObsidianDurability() == null))
 			return;
-		}
 
 		HashMap<Integer, Integer> map = this.plugin.getListener().getObsidianDurability();
 
 		new File(directory).mkdir();
-		try
-		{
+		
+		try {
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(this.durabilityFile));
 			oos.writeObject(map);
 			oos.flush();
@@ -294,11 +291,9 @@ public final class ODConfig
 	}
 
 	@SuppressWarnings("unchecked")
-	public HashMap<Integer, Integer> loadDurabilityFromFile()
-	{
-		if ((!this.durabilityFile.exists()) || (this.plugin.getListener() == null) || (this.plugin.getListener().getObsidianDurability() == null)) {
+	public HashMap<Integer, Integer> loadDurabilityFromFile() {
+		if ((!this.durabilityFile.exists()) || (this.plugin.getListener() == null) || (this.plugin.getListener().getObsidianDurability() == null))
 			return null;
-		}
 
 		new File(directory).mkdir();
 

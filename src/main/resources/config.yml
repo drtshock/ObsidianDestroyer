@@ -9,12 +9,14 @@ EnabledFor:
   Creepers: false
   Ghasts: false
   Withers: false
+  Spawners: false
 Durability:
   Enabled: false
   Obsidian: 1
   EnchantmentTable: 1
   EnderChest: 1
   Anvil: 1
+  Spawners: 1
   ResetEnabled: true
   ResetAfter: '600000'
 Blocks:
