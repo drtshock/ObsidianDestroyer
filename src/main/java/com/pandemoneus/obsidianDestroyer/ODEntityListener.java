@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Timer;
-import net.minecraft.server.v1_4_R1.MathHelper;
+import net.minecraft.server.v1_5_R1.MathHelper;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_4_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_5_R1.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -197,7 +197,7 @@ public final class ODEntityListener implements Listener {
 							int k1 = world.getBlockTypeIdAt(l, i1, j1);
 
 							if ((k1 > 0) && (k1 != 8) && (k1 != 9) && (k1 != 10) && (k1 != 11))
-								f1 -= (net.minecraft.server.v1_4_R1.Block.byId[k1].a(((CraftEntity)event.getEntity()).getHandle()) + 0.3F) * f2;
+								f1 -= (net.minecraft.server.v1_5_R1.Block.byId[k1].a(((CraftEntity)event.getEntity()).getHandle()) + 0.3F) * f2;
 
 							if ((f1 > 0.0F) && (i1 < 256) && (i1 >= 0) && (k1 != 8) && (k1 != 9) && (k1 != 10) && (k1 != 11)) {
 								org.bukkit.block.Block block = world.getBlockAt(l, i1, j1);
