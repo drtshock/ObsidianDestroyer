@@ -46,7 +46,6 @@ Durability:
 
 # Chance to drop. Setting to anything at or above 1 will make them always drop.
 Blocks:
-  CheckSpawners: false
   ChanceToDrop: 0.7
   
 # Thats it :3

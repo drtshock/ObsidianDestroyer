@@ -127,8 +127,8 @@ public final class ODEntityListener implements Listener {
 		if (b.getTypeId() == 145)
 			ApplyDurability(at, this.config.getaDurability());
 		
-		if(b.getTypeId() == 52 && this.config.getCheckSpawners())
-			ApplyDurability(at, (int) 1);
+		//if(b.getTypeId() == 52 && this.config.getCheckSpawners())
+		//	ApplyDurability(at, (int) 1);
 	}
 
 	private void ApplyDurability(Location at, int dura) {

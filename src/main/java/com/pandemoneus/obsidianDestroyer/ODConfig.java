@@ -38,7 +38,7 @@ public final class ODConfig
 	private boolean checkUpdate = true;
 	private int checkitemid = 38;
 	private boolean ignorecancel = false;
-	private boolean checkspawners = false;
+	//private boolean checkspawners = false;
 
 	public ODConfig(ObsidianDestroyer plugin) {
 		this.plugin = plugin;
@@ -100,7 +100,7 @@ public final class ODConfig
 			this.adurability = this.bukkitConfig.getInt("Durability.Anvil", 1);
 			this.durabilityTimerEnabled = this.bukkitConfig.getBoolean("Durability.ResetEnabled", true);
 			this.durabilityTime = readLong("Durability.ResetAfter", "600000");
-			this.checkspawners = this.bukkitConfig.getBoolean("Blocks.CheckSpawners", false);
+			//this.checkspawners = this.bukkitConfig.getBoolean("Blocks.CheckSpawners", false);
 
 			this.chanceToDropBlock = this.bukkitConfig.getDouble("Blocks.ChanceToDrop", 0.7D);
 		} catch (Exception e) {
@@ -131,7 +131,7 @@ public final class ODConfig
 		write("Durability.ResetEnabled", Boolean.valueOf(this.durabilityTimerEnabled));
 		write("Durability.ResetAfter", this.durabilityTime);
 
-		write("Blocks.CheckSpawners", Boolean.valueOf(this.checkspawners));
+		//write("Blocks.CheckSpawners", Boolean.valueOf(this.checkspawners));
 		write("Blocks.ChanceToDrop", Double.valueOf(this.chanceToDropBlock));
 
 		loadData();
@@ -227,9 +227,9 @@ public final class ODConfig
 		return this.chanceToDropBlock;
 	}
 
-	public boolean getCheckSpawners() {
-		return this.checkspawners;
-	}
+	//public boolean getCheckSpawners() {
+	//	return this.checkspawners;
+	//}
 
 	public boolean getWaterProtection() {
 		return this.waterProtection;
