@@ -31,6 +31,7 @@ public final class ODConfig
 	private int edurability = 1;
 	private int ecdurability = 1;
 	private int adurability = 1;
+	private int bdurability = 1;
 	private boolean durabilityTimerEnabled = true;
 	private long durabilityTime = 600000L;
 	private double chanceToDropBlock = 0.7D;
@@ -98,6 +99,7 @@ public final class ODConfig
 			this.edurability = this.bukkitConfig.getInt("Durability.EnchantmentTable", 1);
 			this.ecdurability = this.bukkitConfig.getInt("Durability.EnderChest", 1);
 			this.adurability = this.bukkitConfig.getInt("Durability.Anvil", 1);
+			this.bdurability = this.bukkitConfig.getInt("Durability.Bedrock", 1);
 			this.durabilityTimerEnabled = this.bukkitConfig.getBoolean("Durability.ResetEnabled", true);
 			this.durabilityTime = readLong("Durability.ResetAfter", "600000");
 			//this.checkspawners = this.bukkitConfig.getBoolean("Blocks.CheckSpawners", false);
@@ -128,6 +130,7 @@ public final class ODConfig
 		write("Durability.EnchantmentTable", Integer.valueOf(this.edurability));
 		write("Durability.EnderChest", Integer.valueOf(this.ecdurability));
 		write("Durability.Anvil", Integer.valueOf(this.adurability));
+		write("Durability.Bedrock", Integer.valueOf(this.bdurability));
 		write("Durability.ResetEnabled", Boolean.valueOf(this.durabilityTimerEnabled));
 		write("Durability.ResetAfter", this.durabilityTime);
 
@@ -213,6 +216,10 @@ public final class ODConfig
 
 	public int getaDurability() {
 		return this.adurability;
+	}
+	
+	public int getbDurability() {
+		return this.bdurability;
 	}
 
 	public boolean getDurabilityResetTimerEnabled() {
