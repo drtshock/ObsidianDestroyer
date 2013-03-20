@@ -129,6 +129,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	 * @return true if everything loaded properly, otherwise false
 	 */
 	public boolean reload() {
-		return config.loadConfig();
+		reloadConfig();
+		return true;
 	}
 }
