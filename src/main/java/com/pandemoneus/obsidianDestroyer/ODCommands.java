@@ -34,18 +34,9 @@ public final class ODCommands implements CommandExecutor {
 	 */
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-		if (args != null) 
-		{
-				usePermissionsStructure(sender, cmd, commandLabel, args);
-		}
-
-		return true;
-	}
-
-	private void usePermissionsStructure(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
 		if (args.length == 0) {
-			// show help
+
 			if (sender.hasPermission("obsidiandestroyer.help")) {
 				showHelp(sender);
 			} else {
@@ -56,21 +47,21 @@ public final class ODCommands implements CommandExecutor {
 			String command = args[0];
 
 			if (command.equalsIgnoreCase("reload")) {
-				// reload
+
 				if (sender.hasPermission("obsidiandestroyer.config.reload")) {
 					reloadPlugin(sender);
 				} else {
 					sender.sendMessage(ChatColor.RED + "You are not authorized to use this command.");
 				}
 			} else if (command.equalsIgnoreCase("info")) {
-				// info
+
 				if (sender.hasPermission("obsidiandestroyer.config.info")) {
 					getConfigInfo(sender);
 				} else {
 					sender.sendMessage(ChatColor.RED + "You are not authorized to use this command.");
 				}
 			} else if (command.equalsIgnoreCase("reset")) {
-				// reset durabilities
+
 				if (sender.hasPermission("obsidiandestroyer.durability.reset")) {
 					resetDurability(sender);
 				} else {
@@ -78,14 +69,19 @@ public final class ODCommands implements CommandExecutor {
 				}
 			}
 		}
+
+		return true;
 	}
+
 
 	// Removed all isOp checks as permissions default to op now.
 
 	private void showHelp(CommandSender sender) {
-		sender.sendMessage(ChatColor.YELLOW + "Available commands:");
-		sender.sendMessage(ChatColor.GOLD + "/od reload - reloads the plugin's config file");
-		sender.sendMessage(ChatColor.GOLD + "/od info - shows the currently loaded config");
+		sender.sendMessage(ChatColor.DARK_PURPLE + "ObsidianDestroyer " + ChatColor.LIGHT_PURPLE + "v" + ObsidianDestroyer.getVersion());
+		sender.sendMessage(ChatColor.DARK_PURPLE + "Available commands:");
+		sender.sendMessage(ChatColor.DARK_PURPLE + "/od - gives version and shows commands.");
+		sender.sendMessage(ChatColor.DARK_PURPLE + "/od reload - " + ChatColor.LIGHT_PURPLE + "reloads the plugin's config file");
+		sender.sendMessage(ChatColor.DARK_PURPLE + "/od info - " + ChatColor.LIGHT_PURPLE + " shows the currently loaded config");
 	}
 
 	private void reloadPlugin(CommandSender sender) {
