@@ -27,6 +27,7 @@ public final class ODConfig
 	private boolean ghastsEnabled = false;
 	private boolean withersEnabled = false;
 	private boolean durabilityEnabled = false;
+	private boolean bedrockEnabled = false;
 	private int odurability = 1;
 	private int edurability = 1;
 	private int ecdurability = 1;
@@ -87,6 +88,7 @@ public final class ODConfig
 			this.waterProtection = this.bukkitConfig.getBoolean("FluidsProtect", true);
 			this.checkitemid = this.bukkitConfig.getInt("CheckItemId", 38);
 			this.ignorecancel = this.bukkitConfig.getBoolean("IgnoreCancel", false);
+			this.bedrockEnabled = this.bukkitConfig.getBoolean("Durability.Bedrock.Enabled", false);
 
 			this.tntEnabled = this.bukkitConfig.getBoolean("EnabledFor.TNT", true);
 			this.cannonsEnabled = this.bukkitConfig.getBoolean("EnabledFor.Cannons", false);
@@ -99,10 +101,9 @@ public final class ODConfig
 			this.edurability = this.bukkitConfig.getInt("Durability.EnchantmentTable", 1);
 			this.ecdurability = this.bukkitConfig.getInt("Durability.EnderChest", 1);
 			this.adurability = this.bukkitConfig.getInt("Durability.Anvil", 1);
-			this.bdurability = this.bukkitConfig.getInt("Durability.Bedrock", 1);
+			this.bdurability = this.bukkitConfig.getInt("Durability.Bedrock.Durability", 1);
 			this.durabilityTimerEnabled = this.bukkitConfig.getBoolean("Durability.ResetEnabled", true);
 			this.durabilityTime = readLong("Durability.ResetAfter", "600000");
-			//this.checkspawners = this.bukkitConfig.getBoolean("Blocks.CheckSpawners", false);
 
 			this.chanceToDropBlock = this.bukkitConfig.getDouble("Blocks.ChanceToDrop", 0.7D);
 		} catch (Exception e) {
@@ -130,11 +131,11 @@ public final class ODConfig
 		write("Durability.EnchantmentTable", Integer.valueOf(this.edurability));
 		write("Durability.EnderChest", Integer.valueOf(this.ecdurability));
 		write("Durability.Anvil", Integer.valueOf(this.adurability));
-		write("Durability.Bedrock", Integer.valueOf(this.bdurability));
+		write("Durability.Bedrock.Enabled", Boolean.valueOf(this.bedrockEnabled));
+		write("Durability.Bedrock.Durability", Integer.valueOf(this.bdurability));
 		write("Durability.ResetEnabled", Boolean.valueOf(this.durabilityTimerEnabled));
 		write("Durability.ResetAfter", this.durabilityTime);
 
-		//write("Blocks.CheckSpawners", Boolean.valueOf(this.checkspawners));
 		write("Blocks.ChanceToDrop", Double.valueOf(this.chanceToDropBlock));
 
 		loadData();
@@ -217,9 +218,13 @@ public final class ODConfig
 	public int getaDurability() {
 		return this.adurability;
 	}
-	
+
 	public int getbDurability() {
 		return this.bdurability;
+	}
+
+	public boolean getBedrockEnabled() {
+		return this.bedrockEnabled;
 	}
 
 	public boolean getDurabilityResetTimerEnabled() {
@@ -233,10 +238,6 @@ public final class ODConfig
 	public double getChanceToDropBlock() {
 		return this.chanceToDropBlock;
 	}
-
-	//public boolean getCheckSpawners() {
-	//	return this.checkspawners;
-	//}
 
 	public boolean getWaterProtection() {
 		return this.waterProtection;

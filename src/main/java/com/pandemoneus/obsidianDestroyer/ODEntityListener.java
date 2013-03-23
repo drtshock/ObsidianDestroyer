@@ -127,7 +127,7 @@ public final class ODEntityListener implements Listener {
 		if (b.getTypeId() == 145)
 			ApplyDurability(at, this.config.getaDurability());
 		
-		if(b.getTypeId() == 7)
+		if(b.getTypeId() == 7 && this.config.getBedrockEnabled())
 			ApplyDurability(at, this.config.getbDurability());
 	}
 

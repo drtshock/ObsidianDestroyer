@@ -38,7 +38,14 @@ Durability:
   EnchantmentTable: 1
   EnderChest: 1
   Anvil: 1
-  Bedrock: 1
+  
+ # Settings for bedrock. Recommended to be disabled or at a very high rate.
+ # If enabled, people can blow holes in the bottom of your world.
+  Bedrock:
+    Enabled: false
+    Durability: 100
+	
+# Reset will run a timer to clear the durability of blocks after a certain time.
   ResetEnabled: true
   ResetAfter: '600000'
 
