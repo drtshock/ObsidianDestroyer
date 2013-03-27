@@ -34,17 +34,17 @@ EnabledFor:
 # within the time limit that will make a block blow up.
 Durability:
   Enabled: false
-  Obsidian: 1
-  EnchantmentTable: 1
-  EnderChest: 1
-  Anvil: 1
+  Obsidian: 8
+  EnchantmentTable: 2
+  EnderChest: 2
+  Anvil: 2
   
  # Settings for bedrock. Recommended to be disabled or at a very high rate.
  # If enabled, people can blow holes in the bottom of your world.
   Bedrock:
     Enabled: false
     Durability: 100
-	
+
 # Reset will run a timer to clear the durability of blocks after a certain time.
   ResetEnabled: true
   ResetAfter: '600000'

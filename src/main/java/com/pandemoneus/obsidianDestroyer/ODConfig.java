@@ -10,8 +10,8 @@ import java.util.HashMap;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
-public final class ODConfig
-{
+public final class ODConfig {
+
 	private ObsidianDestroyer plugin;
 	private static String pluginName;
 	private static String pluginVersion;
