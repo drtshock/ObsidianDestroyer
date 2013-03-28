@@ -11,6 +11,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import com.pandemoneus.obsidianDestroyer.vlisteners.ODEntityListener;
+
 public class ODJoinListener implements Listener {
 
 	private ODEntityListener odlistener;

@@ -1,10 +1,9 @@
-package com.pandemoneus.obsidianDestroyer;
+package com.pandemoneus.obsidianDestroyer.vlisteners;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Timer;
-import net.minecraft.server.v1_5_R2.MathHelper;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -19,7 +18,12 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.inventory.ItemStack;
 
-public final class ODEntityListener implements Listener {
+import com.pandemoneus.obsidianDestroyer.Log;
+import com.pandemoneus.obsidianDestroyer.ODConfig;
+import com.pandemoneus.obsidianDestroyer.ODTimerTask;
+import com.pandemoneus.obsidianDestroyer.ObsidianDestroyer;
+
+public final class OD1_5 implements Listener {
 
 	private ObsidianDestroyer plugin;
 	public ODConfig config;
@@ -28,7 +32,7 @@ public final class ODEntityListener implements Listener {
 	private Random _random = new Random();
 	private HashMap<Integer, Float> _entityPowerMap;
 
-	public ODEntityListener(ObsidianDestroyer plugin) {
+	public OD1_5(ObsidianDestroyer plugin) {
 		this.plugin = plugin;
 		this.config = plugin.getODConfig();
 		this._entityPowerMap = new HashMap<Integer, Float>();
@@ -36,14 +40,14 @@ public final class ODEntityListener implements Listener {
 
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void OnExplosionPrime(ExplosionPrimeEvent event) {
-		
+
 		if (!event.isCancelled())
 			this._entityPowerMap.put(Integer.valueOf(event.getEntity().getEntityId()), Float.valueOf(event.getRadius()));
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onEntityExplode(EntityExplodeEvent event) {
-		
+
 		if (((event == null) || (event.isCancelled())) && (!this.config.getIgnoreCancel()))
 			return;
 
@@ -89,7 +93,7 @@ public final class ODEntityListener implements Listener {
 		if ((!event.isCancelled()) && (event.getEntityType() != EntityType.ENDER_DRAGON) 
 				&& (this._entityPowerMap.containsKey(Integer.valueOf(event.getEntity().getEntityId()))) 
 				&& !this.config.getWaterProtection()) {
-			
+
 			CorrectExplosion(event, ((Float)this._entityPowerMap.get(Integer.valueOf(event.getEntity().getEntityId()))).floatValue());
 			this._entityPowerMap.remove(Integer.valueOf(event.getEntity().getEntityId()));
 		}
@@ -109,7 +113,7 @@ public final class ODEntityListener implements Listener {
 	}
 
 	private void blowBlockUp(Location at) {
-		
+
 		if (at == null)
 			return;
 
@@ -126,13 +130,13 @@ public final class ODEntityListener implements Listener {
 
 		if (b.getTypeId() == 145)
 			ApplyDurability(at, this.config.getaDurability());
-		
+
 		if(b.getTypeId() == 7 && this.config.getBedrockEnabled())
 			ApplyDurability(at, this.config.getbDurability());
 	}
 
 	private void ApplyDurability(Location at, int dura) {
-		
+
 		Integer representation = Integer.valueOf(at.getWorld().hashCode() + at.getBlockX() * 2389 + at.getBlockY() * 4027 + at.getBlockZ() * 2053);
 
 		if ((this.config.getDurabilityEnabled()) && (dura > 1)) {
@@ -150,7 +154,7 @@ public final class ODEntityListener implements Listener {
 						startNewTimer(representation);
 				}
 			}
-			
+
 			else {
 				this.obsidianDurability.put(representation, Integer.valueOf(1));
 
@@ -161,13 +165,13 @@ public final class ODEntityListener implements Listener {
 					dropBlockAndResetTime(representation, at);
 			}
 		}
-		
+
 		else
 			destroyBlockAndDropItem(at);
 	}
 
 	protected void CorrectExplosion(EntityExplodeEvent event, float power) {
-		
+
 		World world = event.getEntity().getWorld();
 		event.blockList().clear();
 
@@ -191,9 +195,9 @@ public final class ODEntityListener implements Listener {
 						double d2 = event.getLocation().getZ();
 
 						for (float f2 = 0.3F; f1 > 0.0F; f1 -= f2 * 0.75F) {
-							int l = MathHelper.floor(d0);
-							int i1 = MathHelper.floor(d1);
-							int j1 = MathHelper.floor(d2);
+							int l = (int) Math.floor(d0);
+							int i1 = (int) Math.floor(d1);
+							int j1 = (int) Math.floor(d2);
 							int k1 = world.getBlockTypeIdAt(l, i1, j1);
 
 							if ((k1 > 0) && (k1 != 8) && (k1 != 9) && (k1 != 10) && (k1 != 11))

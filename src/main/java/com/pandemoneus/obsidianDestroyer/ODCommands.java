@@ -9,6 +9,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import com.pandemoneus.obsidianDestroyer.vlisteners.ODEntityListener;
+
 /**
  * Command class. Available commands are: od od reload od info
  * 
