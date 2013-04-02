@@ -6,14 +6,6 @@ import java.util.logging.Logger;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.pandemoneus.obsidianDestroyer.vlisteners.OD1_4_4;
-import com.pandemoneus.obsidianDestroyer.vlisteners.OD1_4_5;
-import com.pandemoneus.obsidianDestroyer.vlisteners.OD1_4_6;
-import com.pandemoneus.obsidianDestroyer.vlisteners.OD1_4_7;
-import com.pandemoneus.obsidianDestroyer.vlisteners.OD1_5;
-import com.pandemoneus.obsidianDestroyer.vlisteners.OD1_5_1;
-import com.pandemoneus.obsidianDestroyer.vlisteners.ODEntityListener;
-
 /**
  * The ObsidianDestroyer plugin.
  * 
@@ -23,7 +15,7 @@ import com.pandemoneus.obsidianDestroyer.vlisteners.ODEntityListener;
  * 
  */
 public final class ObsidianDestroyer extends JavaPlugin {
-
+	
 	/**
 	 * Plugin related stuff
 	 */
@@ -53,7 +45,6 @@ public final class ObsidianDestroyer extends JavaPlugin {
 	 */
 	@Override
 	public void onEnable() {
-		loadNMS();
 		log = getServer().getLogger();
 		PluginDescriptionFile pdfFile = getDescription();
 		version = pdfFile.getVersion();
@@ -67,6 +58,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 		// start Metrics
 		startMetrics();
 
+		getServer().getPluginManager().registerEvents(entityListener, this);
 		getServer().getPluginManager().registerEvents(joinListener, this);
 
 		// Check for updates.
@@ -83,36 +75,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 			Metrics metrics = new Metrics(this);	
 			metrics.start();
 		} catch (IOException e) {
-			ObsidianDestroyer.log.warning("[" + pdfFile.getName() + "] Failed to submit the stats :-(");
-		}
-	}
-
-	public void loadNMS() {
-		String version = getServer().getBukkitVersion();
-		String versionNumber = version.substring(0, 5);
-
-		if (versionNumber.equals("1.4.4"))
-			getServer().getPluginManager().registerEvents(new OD1_4_4(this), this);
-
-		else if (versionNumber.equals("1.4.5"))
-			getServer().getPluginManager().registerEvents(new OD1_4_5(this), this);
-
-		else if (versionNumber.equalsIgnoreCase("1.4.6")) 
-			getServer().getPluginManager().registerEvents(new OD1_4_6(this), this);
-
-		else if (versionNumber.equals("1.4.7"))
-			getServer().getPluginManager().registerEvents(new OD1_4_7(this), this);
-
-		else if (versionNumber.equals("1.5-R"))
-			getServer().getPluginManager().registerEvents(new OD1_5(this), this);
-
-		else if (versionNumber.equals("1.5.1"))
-			getServer().getPluginManager().registerEvents(new OD1_5_1(this), this);
-
-		else {
-			ObsidianDestroyer.log.warning("[" + this.getDescription().getName() + "] Couldn't find support for this craftbukkit version.");
-			ObsidianDestroyer.log.warning("[" + this.getDescription().getName() + "] Will run without all features.");
-			getServer().getPluginManager().registerEvents(new ODEntityListener(this), this);
+			ObsidianDestroyer.log.warning("[" + pdfFile.getName() + "] Failed to submit the stats :-("); // Failed to submit the stats :-(
 		}
 	}
 
