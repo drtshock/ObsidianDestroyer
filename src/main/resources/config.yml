@@ -22,6 +22,11 @@ CheckItemId: 38
 # no matter what other plugins try to do.
 IgnoreCancel: false
 
+# This will check if you are close to exceeding your max memory.
+# It will not handle explosions if you are have 100mb or less of free memory
+# so it will prevent crashes on servers with limited resources.
+check-memory: false
+
 # Explosion types you want us to handle.
 EnabledFor:
   TNT: true

@@ -42,7 +42,8 @@ public final class ODConfig {
 	private boolean checkUpdate = true;
 	private int checkitemid = 38;
 	private boolean ignorecancel = false;
-	public static String[] values;
+	private boolean checkmemory = false;
+	private static String[] values = new String[21];
 
 	public ODConfig(ObsidianDestroyer plugin) {
 		this.plugin = plugin;
@@ -83,74 +84,57 @@ public final class ODConfig {
 	private void loadData() {
 		try {
 
-			values = new String [20];
 			ChatColor y = ChatColor.YELLOW;
 			ChatColor g = ChatColor.GRAY;
 
 			this.bukkitConfig.load(this.configFile);
 
 			this.checkUpdate = this.bukkitConfig.getBoolean("checkupdate", true);
-			values[0] = y + "checkupdate: " + g + this.checkUpdate;
-
 			this.explosionRadius = this.bukkitConfig.getInt("Radius", 3);
-			values[1] = y + "ExplosionRadius: " + g + this.getRadius();
-
 			this.waterProtection = this.bukkitConfig.getBoolean("FluidsProtect", true);
-			values[2] = y + "FluidsProtect: " + g + this.getWaterProtection();
-
 			this.checkitemid = this.bukkitConfig.getInt("CheckItemId", 38);
-			values[3] = y + "CheckItemId: " + g + this.getCheckItemId();
-
 			this.ignorecancel = this.bukkitConfig.getBoolean("IgnoreCancel", false);
-			values[4] = y + "IgnoreCancel: " + g + this.getIgnoreCancel();
-
+			this.checkmemory = this.bukkitConfig.getBoolean("check-memory", false);
 			this.bedrockEnabled = this.bukkitConfig.getBoolean("Durability.Bedrock.Enabled", false);
-			values[5] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
-
 
 			this.tntEnabled = this.bukkitConfig.getBoolean("EnabledFor.TNT", true);
-			values[6] = y + "TNTEnabled: " + g + this.getTntEnabled();
-
 			this.cannonsEnabled = this.bukkitConfig.getBoolean("EnabledFor.Cannons", false);
-			values[7] = y + "CannonsEnabled: " + g + this.getCannonsEnabled();
-
 			this.creepersEnabled = this.bukkitConfig.getBoolean("EnabledFor.Creepers", false);
-			values[8] = y + "CreepersEnabled: " + g + this.getCreepersEnabled();
-
 			this.ghastsEnabled = this.bukkitConfig.getBoolean("EnabledFor.Ghasts", false);
-			values[9] = y + "GhastsEnabled: " + g + this.getGhastsEnabled();
-
 			this.withersEnabled = this.bukkitConfig.getBoolean("EnabledFor.Withers", false);
-			values[10] = y + "WithersEnabled: " + g + this.getWithersEnabled();
-
 
 			this.durabilityEnabled = this.bukkitConfig.getBoolean("Durability.Enabled", false);
-			values[11] = y + "DurabilityEnabled: " + g + this.getDurabilityEnabled();
-
 			this.odurability = this.bukkitConfig.getInt("Durability.Obsidian", 1);
-			values[12] = y + "ObsidianDurability: " + g + this.getoDurability();
-
 			this.edurability = this.bukkitConfig.getInt("Durability.EnchantmentTable", 1);
-			values[13] = y + "EnchantmentTableDurability: " + g + this.geteDurability();
-
 			this.ecdurability = this.bukkitConfig.getInt("Durability.EnderChest", 1);
-			values[14] = y + "EnderchestDurability: " + g + this.getecDurability();
-
 			this.adurability = this.bukkitConfig.getInt("Durability.Anvil", 1);
-			values[15] = y + "AnvilDurability: " + g + this.getaDurability();
-
 			this.bdurability = this.bukkitConfig.getInt("Durability.Bedrock.Durability", 1);
-			values[16] = y + "BedrockDurability: " + g + this.getbDurability();
-
 			this.durabilityTimerEnabled = this.bukkitConfig.getBoolean("Durability.ResetEnabled", true);
-			values[17] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
 
 			this.durabilityTime = readLong("Durability.ResetAfter", "600000");
-			values[18] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
-
-
 			this.chanceToDropBlock = this.bukkitConfig.getDouble("Blocks.ChanceToDrop", 0.7D);
-			values[19] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
+
+			values[0] = y + "checkupdate: " + g + this.checkUpdate;
+			values[1] = y + "ExplosionRadius: " + g + this.getRadius();
+			values[2] = y + "FluidsProtect: " + g + this.getWaterProtection();
+			values[3] = y + "CheckItemId: " + g + this.getCheckItemId();
+			values[4] = y + "IgnoreCancel: " + g + this.getIgnoreCancel();
+			values[5] = y + "CheckMemory: " + g + this.getCheckMemory();
+			values[6] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
+			values[7] = y + "TNTEnabled: " + g + this.getTntEnabled();
+			values[8] = y + "CannonsEnabled: " + g + this.getCannonsEnabled();
+			values[9] = y + "CreepersEnabled: " + g + this.getCreepersEnabled();
+			values[10] = y + "GhastsEnabled: " + g + this.getGhastsEnabled();
+			values[11] = y + "WithersEnabled: " + g + this.getWithersEnabled();
+			values[12] = y + "DurabilityEnabled: " + g + this.getDurabilityEnabled();
+			values[13] = y + "ObsidianDurability: " + g + this.getoDurability();
+			values[14] = y + "EnchantmentTableDurability: " + g + this.geteDurability();
+			values[15] = y + "EnderchestDurability: " + g + this.getecDurability();
+			values[16] = y + "AnvilDurability: " + g + this.getaDurability();
+			values[17] = y + "BedrockDurability: " + g + this.getbDurability();
+			values[18] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
+			values[19] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
+			values[20] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -164,6 +148,7 @@ public final class ODConfig {
 		write("FluidsProtect", Boolean.valueOf(this.waterProtection));
 		write("CheckItemId", Integer.valueOf(this.checkitemid));
 		write("IgnoreCancel", Boolean.valueOf(this.ignorecancel));
+		write("check-memory", Boolean.valueOf(this.checkmemory));
 
 		write("EnabledFor.TNT", Boolean.valueOf(this.tntEnabled));
 		write("EnabledFor.Cannons", Boolean.valueOf(this.cannonsEnabled));
@@ -303,6 +288,10 @@ public final class ODConfig {
 
 	public String[] getConfigList() {
 		return values;
+	}
+
+	public boolean getCheckMemory() {
+		return this.checkmemory;
 	}
 
 	public Plugin getPlugin() {

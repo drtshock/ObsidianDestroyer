@@ -94,12 +94,11 @@ public final class ODCommands implements CommandExecutor {
 	}
 
 	private void getConfigInfo(CommandSender sender) {
-		ODConfig config = plugin.getODConfig();
-		sender.sendMessage(ChatColor.YELLOW + "Currently loaded config of ObsidianDestroyer:");
-		sender.sendMessage(ChatColor.YELLOW + "---------------------------------------------");
+		sender.sendMessage(ChatColor.DARK_PURPLE + "Currently loaded config of ObsidianDestroyer:");
+		sender.sendMessage(ChatColor.DARK_PURPLE + "---------------------------------------------");
 
-		if (config.getConfigFile().exists()) {
-			for (String s : config.getConfigList()) {
+		if (plugin.getODConfig().getConfigFile().exists()) {
+			for (String s : plugin.getODConfig().getConfigList()) {
 				sender.sendMessage(s);
 			}
 		} else {
