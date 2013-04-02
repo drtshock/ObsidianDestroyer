@@ -48,8 +48,10 @@ public final class ODEntityListener implements Listener {
 			return;
 
 		long free = Runtime.getRuntime().freeMemory();
-		if(free < 104857600)
+		if(free < 104857600) {
+			Log.severe("Running out of memory. Not checking explosion.");
 			return;
+		}
 
 		int radius = this.config.getRadius();
 
