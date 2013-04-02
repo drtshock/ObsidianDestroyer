@@ -99,8 +99,8 @@ public final class ODCommands implements CommandExecutor {
 		sender.sendMessage(ChatColor.YELLOW + "---------------------------------------------");
 
 		if (config.getConfigFile().exists()) {
-			for (String s : config.printLoadedConfig()) {
-				sender.sendMessage(ChatColor.YELLOW + s);
+			for (String s : config.getConfigList()) {
+				sender.sendMessage(s);
 			}
 		} else {
 			sender.sendMessage(ChatColor.RED + "None - Config file deleted - please reload");

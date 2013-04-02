@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
+
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
@@ -40,6 +42,7 @@ public final class ODConfig {
 	private boolean checkUpdate = true;
 	private int checkitemid = 38;
 	private boolean ignorecancel = false;
+	public static String[] values;
 
 	public ODConfig(ObsidianDestroyer plugin) {
 		this.plugin = plugin;
@@ -79,32 +82,76 @@ public final class ODConfig {
 
 	private void loadData() {
 		try {
+
+			values = new String [20];
+			ChatColor y = ChatColor.YELLOW;
+			ChatColor g = ChatColor.GRAY;
+
 			this.bukkitConfig.load(this.configFile);
 
 			this.checkUpdate = this.bukkitConfig.getBoolean("checkupdate", true);
+			values[0] = y + "checkupdate: " + g + this.checkUpdate;
 
 			this.explosionRadius = this.bukkitConfig.getInt("Radius", 3);
+			values[1] = y + "ExplosionRadius: " + g + this.getRadius();
+
 			this.waterProtection = this.bukkitConfig.getBoolean("FluidsProtect", true);
+			values[2] = y + "FluidsProtect: " + g + this.getWaterProtection();
+
 			this.checkitemid = this.bukkitConfig.getInt("CheckItemId", 38);
+			values[3] = y + "CheckItemId: " + g + this.getCheckItemId();
+
 			this.ignorecancel = this.bukkitConfig.getBoolean("IgnoreCancel", false);
+			values[4] = y + "IgnoreCancel: " + g + this.getIgnoreCancel();
+
 			this.bedrockEnabled = this.bukkitConfig.getBoolean("Durability.Bedrock.Enabled", false);
+			values[5] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
+
 
 			this.tntEnabled = this.bukkitConfig.getBoolean("EnabledFor.TNT", true);
+			values[6] = y + "TNTEnabled: " + g + this.getTntEnabled();
+
 			this.cannonsEnabled = this.bukkitConfig.getBoolean("EnabledFor.Cannons", false);
+			values[7] = y + "CannonsEnabled: " + g + this.getCannonsEnabled();
+
 			this.creepersEnabled = this.bukkitConfig.getBoolean("EnabledFor.Creepers", false);
+			values[8] = y + "CreepersEnabled: " + g + this.getCreepersEnabled();
+
 			this.ghastsEnabled = this.bukkitConfig.getBoolean("EnabledFor.Ghasts", false);
+			values[9] = y + "GhastsEnabled: " + g + this.getGhastsEnabled();
+
 			this.withersEnabled = this.bukkitConfig.getBoolean("EnabledFor.Withers", false);
+			values[10] = y + "WithersEnabled: " + g + this.getWithersEnabled();
+
 
 			this.durabilityEnabled = this.bukkitConfig.getBoolean("Durability.Enabled", false);
+			values[11] = y + "DurabilityEnabled: " + g + this.getDurabilityEnabled();
+
 			this.odurability = this.bukkitConfig.getInt("Durability.Obsidian", 1);
+			values[12] = y + "ObsidianDurability: " + g + this.getoDurability();
+
 			this.edurability = this.bukkitConfig.getInt("Durability.EnchantmentTable", 1);
+			values[13] = y + "EnchantmentTableDurability: " + g + this.geteDurability();
+
 			this.ecdurability = this.bukkitConfig.getInt("Durability.EnderChest", 1);
+			values[14] = y + "EnderchestDurability: " + g + this.getecDurability();
+
 			this.adurability = this.bukkitConfig.getInt("Durability.Anvil", 1);
+			values[15] = y + "AnvilDurability: " + g + this.getaDurability();
+
 			this.bdurability = this.bukkitConfig.getInt("Durability.Bedrock.Durability", 1);
+			values[16] = y + "BedrockDurability: " + g + this.getbDurability();
+
 			this.durabilityTimerEnabled = this.bukkitConfig.getBoolean("Durability.ResetEnabled", true);
+			values[17] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
+
 			this.durabilityTime = readLong("Durability.ResetAfter", "600000");
+			values[18] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
+
 
 			this.chanceToDropBlock = this.bukkitConfig.getDouble("Blocks.ChanceToDrop", 0.7D);
+			values[19] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -112,7 +159,7 @@ public final class ODConfig {
 
 	private void writeDefault() {
 		write("Version", ObsidianDestroyer.getVersion());
-		write("autoupdate", Boolean.valueOf(this.checkUpdate));
+		write("checkupdate", Boolean.valueOf(this.checkUpdate));
 		write("Radius", Integer.valueOf(this.explosionRadius));
 		write("FluidsProtect", Boolean.valueOf(this.waterProtection));
 		write("CheckItemId", Integer.valueOf(this.checkitemid));
@@ -250,12 +297,12 @@ public final class ODConfig {
 		return this.ignorecancel;
 	}
 
-	public String[] printLoadedConfig() {
-		return new String[] { "this doesn't work." };
-	}
-
 	public File getConfigFile() {
 		return this.configFile;
+	}
+
+	public String[] getConfigList() {
+		return values;
 	}
 
 	public Plugin getPlugin() {
