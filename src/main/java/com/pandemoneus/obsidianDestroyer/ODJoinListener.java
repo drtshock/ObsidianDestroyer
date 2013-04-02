@@ -45,9 +45,7 @@ public class ODJoinListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onInteract(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
-		if(player.hasPermission("obsidiandestroyer.info") 
-				&& event.getAction() == Action.LEFT_CLICK_BLOCK
-				&& config.getDurabilityEnabled()) {
+		if(event.getAction() == Action.LEFT_CLICK_BLOCK && config.getDurabilityEnabled()) {
 			if(player.getItemInHand().getAmount() > 0) {
 				if(player.getItemInHand().getTypeId() == config.getCheckItemId()) {
 
