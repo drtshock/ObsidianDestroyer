@@ -40,7 +40,6 @@ public final class ODConfig {
 	private boolean checkUpdate = true;
 	private int checkitemid = 38;
 	private boolean ignorecancel = false;
-	//private boolean checkspawners = false;
 
 	public ODConfig(ObsidianDestroyer plugin) {
 		this.plugin = plugin;
@@ -291,6 +290,7 @@ public final class ODConfig {
 
 		HashMap<Integer, Integer> map = null;
 		Object result = null;
+
 		try {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(this.durabilityFile));
 			result = ois.readObject();
@@ -298,6 +298,14 @@ public final class ODConfig {
 			ois.close();
 		} catch (IOException ioe) {
 			Log.severe("Failed reading obsidian durability for " + ObsidianDestroyer.getPluginName());
+			Log.severe("Deleting current durability file and creating new one.");
+			this.durabilityFile.delete();
+
+			try {
+				this.durabilityFile.createNewFile();
+			} catch (IOException exception) {
+				Log.severe("Couldn't create new durability file.");
+			}
 			ioe.printStackTrace();
 		} catch (ClassNotFoundException cnfe) {
 			Log.severe("Obsidian durability file contains an unknown class, was it modified?");
