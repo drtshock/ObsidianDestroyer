@@ -44,7 +44,7 @@ public final class ODConfig {
 	private boolean ignorecancel = false;
 	private boolean checkmemory = false;
 	private boolean bypassAllBlocks = false;
-	private static String[] values = new String[21];
+	private static String[] values = new String[22];
 
 	public ODConfig(ObsidianDestroyer plugin) {
 		this.plugin = plugin;
