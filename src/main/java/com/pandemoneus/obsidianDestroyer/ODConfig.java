@@ -43,6 +43,7 @@ public final class ODConfig {
 	private int checkitemid = 38;
 	private boolean ignorecancel = false;
 	private boolean checkmemory = false;
+	private boolean bypassAllBlocks = false;
 	private static String[] values = new String[21];
 
 	public ODConfig(ObsidianDestroyer plugin) {
@@ -92,6 +93,7 @@ public final class ODConfig {
 			this.checkUpdate = this.bukkitConfig.getBoolean("checkupdate", true);
 			this.explosionRadius = this.bukkitConfig.getInt("Radius", 3);
 			this.waterProtection = this.bukkitConfig.getBoolean("FluidsProtect", true);
+			this.bypassAllBlocks = this.bukkitConfig.getBoolean("BypassAllBlocks", false);
 			this.checkitemid = this.bukkitConfig.getInt("CheckItemId", 38);
 			this.ignorecancel = this.bukkitConfig.getBoolean("IgnoreCancel", false);
 			this.checkmemory = this.bukkitConfig.getBoolean("check-memory", false);
@@ -117,24 +119,25 @@ public final class ODConfig {
 			values[0] = y + "checkupdate: " + g + this.checkUpdate;
 			values[1] = y + "ExplosionRadius: " + g + this.getRadius();
 			values[2] = y + "FluidsProtect: " + g + this.getWaterProtection();
-			values[3] = y + "CheckItemId: " + g + this.getCheckItemId();
-			values[4] = y + "IgnoreCancel: " + g + this.getIgnoreCancel();
-			values[5] = y + "CheckMemory: " + g + this.getCheckMemory();
-			values[6] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
-			values[7] = y + "TNTEnabled: " + g + this.getTntEnabled();
-			values[8] = y + "CannonsEnabled: " + g + this.getCannonsEnabled();
-			values[9] = y + "CreepersEnabled: " + g + this.getCreepersEnabled();
-			values[10] = y + "GhastsEnabled: " + g + this.getGhastsEnabled();
-			values[11] = y + "WithersEnabled: " + g + this.getWithersEnabled();
-			values[12] = y + "DurabilityEnabled: " + g + this.getDurabilityEnabled();
-			values[13] = y + "ObsidianDurability: " + g + this.getoDurability();
-			values[14] = y + "EnchantmentTableDurability: " + g + this.geteDurability();
-			values[15] = y + "EnderchestDurability: " + g + this.getecDurability();
-			values[16] = y + "AnvilDurability: " + g + this.getaDurability();
-			values[17] = y + "BedrockDurability: " + g + this.getbDurability();
-			values[18] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
-			values[19] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
-			values[20] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
+			values[3] = y + "BypassAllBlocks: " + g + this.getBypassAllBlocks();
+			values[4] = y + "CheckItemId: " + g + this.getCheckItemId();
+			values[5] = y + "IgnoreCancel: " + g + this.getIgnoreCancel();
+			values[6] = y + "CheckMemory: " + g + this.getCheckMemory();
+			values[7] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
+			values[8] = y + "TNTEnabled: " + g + this.getTntEnabled();
+			values[9] = y + "CannonsEnabled: " + g + this.getCannonsEnabled();
+			values[10] = y + "CreepersEnabled: " + g + this.getCreepersEnabled();
+			values[11] = y + "GhastsEnabled: " + g + this.getGhastsEnabled();
+			values[12] = y + "WithersEnabled: " + g + this.getWithersEnabled();
+			values[13] = y + "DurabilityEnabled: " + g + this.getDurabilityEnabled();
+			values[14] = y + "ObsidianDurability: " + g + this.getoDurability();
+			values[15] = y + "EnchantmentTableDurability: " + g + this.geteDurability();
+			values[16] = y + "EnderchestDurability: " + g + this.getecDurability();
+			values[17] = y + "AnvilDurability: " + g + this.getaDurability();
+			values[18] = y + "BedrockDurability: " + g + this.getbDurability();
+			values[19] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
+			values[20] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
+			values[21] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -146,6 +149,7 @@ public final class ODConfig {
 		write("checkupdate", Boolean.valueOf(this.checkUpdate));
 		write("Radius", Integer.valueOf(this.explosionRadius));
 		write("FluidsProtect", Boolean.valueOf(this.waterProtection));
+		write("BypassAllBlocks", Boolean.valueOf(this.bypassAllBlocks));
 		write("CheckItemId", Integer.valueOf(this.checkitemid));
 		write("IgnoreCancel", Boolean.valueOf(this.ignorecancel));
 		write("check-memory", Boolean.valueOf(this.checkmemory));
@@ -292,6 +296,10 @@ public final class ODConfig {
 
 	public boolean getCheckMemory() {
 		return this.checkmemory;
+	}
+
+	public boolean getBypassAllBlocks() {
+		return this.bypassAllBlocks;
 	}
 
 	public Plugin getPlugin() {

@@ -15,6 +15,9 @@ Radius: 3
 # False means that water won't protect blocks from explosions.
 FluidsProtect: true
 
+# Whether or not you want to bypass fluid protect for all blocks.
+BypassAllBlocks: false
+
 # The id of the item you use to check durability.
 CheckItemId: 38
 

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Timer;
-import net.minecraft.server.v1_5_R2.MathHelper;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -86,7 +85,7 @@ public final class ODEntityListener implements Listener {
 		if (eventTypeRep.equals("CraftSnowball")) {
 			Iterator<Block> iter = event.blockList().iterator();
 			while (iter.hasNext()) {
-				org.bukkit.block.Block block = (org.bukkit.block.Block)iter.next();
+				Block block = (org.bukkit.block.Block)iter.next();
 				blowBlockUp(block.getLocation());
 			}
 			return;
@@ -121,20 +120,25 @@ public final class ODEntityListener implements Listener {
 
 		Block b = at.getBlock();
 
-		if (b.getTypeId() == 49)
+		if (b.getTypeId() == 49) {
 			ApplyDurability(at, this.config.getoDurability());
+		}
 
-		if (b.getTypeId() == 116)
+		if (b.getTypeId() == 116) {
 			ApplyDurability(at, this.config.geteDurability());
+		}
 
-		if (b.getTypeId() == 130)
+		if (b.getTypeId() == 130) {
 			ApplyDurability(at, this.config.getecDurability());
+		}
 
-		if (b.getTypeId() == 145)
+		if (b.getTypeId() == 145) {
 			ApplyDurability(at, this.config.getaDurability());
+		}
 
-		if(b.getTypeId() == 7 && this.config.getBedrockEnabled())
+		if (b.getTypeId() == 7 && this.config.getBedrockEnabled()) {
 			ApplyDurability(at, this.config.getbDurability());
+		}
 	}
 
 	private void ApplyDurability(Location at, int dura) {
@@ -197,24 +201,32 @@ public final class ODEntityListener implements Listener {
 						double d2 = event.getLocation().getZ();
 
 						for (float f2 = 0.3F; f1 > 0.0F; f1 -= f2 * 0.75F) {
-							int l = MathHelper.floor(d0);
-							int i1 = MathHelper.floor(d1);
-							int j1 = MathHelper.floor(d2);
+							int l = (int) Math.floor(d0);
+							int i1 = (int) Math.floor(d1);
+							int j1 = (int) Math.floor(d2);
 							int k1 = world.getBlockTypeIdAt(l, i1, j1);
 
 							if ((k1 > 0) && (k1 != 8) && (k1 != 9) && (k1 != 10) && (k1 != 11))
 								f1 -= (net.minecraft.server.v1_5_R2.Block.byId[k1].a(((CraftEntity)event.getEntity()).getHandle()) + 0.3F) * f2;
 
 							if ((f1 > 0.0F) && (i1 < 256) && (i1 >= 0) && (k1 != 8) && (k1 != 9) && (k1 != 10) && (k1 != 11)) {
-								org.bukkit.block.Block block = world.getBlockAt(l, i1, j1);
+								Block block = world.getBlockAt(l, i1, j1);
 
-								if ((block.getType() != Material.AIR) && (!event.blockList().contains(block)))
-									event.blockList().add(block);
+								if (block.getTypeId() == 49
+										|| block.getTypeId() == 116
+										|| block.getTypeId() == 130
+										|| block.getTypeId() == 145
+										|| (block.getTypeId() == 7 && this.config.getBedrockEnabled())) {
+
+
+									if ((block.getType() != Material.AIR) && (!event.blockList().contains(block)))
+										event.blockList().add(block);
+								}
+
+								d0 += d3 * f2;
+								d1 += d4 * f2;
+								d2 += d5 * f2;
 							}
-
-							d0 += d3 * f2;
-							d1 += d4 * f2;
-							d2 += d5 * f2;
 						}
 					}
 				}
