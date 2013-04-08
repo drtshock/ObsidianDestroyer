@@ -2,6 +2,7 @@ package com.pandemoneus.obsidianDestroyer;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import org.bukkit.Location;
@@ -34,7 +35,7 @@ public final class ODEntityListener implements Listener {
 	}
 
 	@EventHandler(priority=EventPriority.HIGHEST)
-	public void OnExplosionPrime(ExplosionPrimeEvent event) {
+	public void onExplosionPrime(ExplosionPrimeEvent event) {
 
 		if (!event.isCancelled())
 			this._entityPowerMap.put(Integer.valueOf(event.getEntity().getEntityId()), Float.valueOf(event.getRadius()));
@@ -95,7 +96,7 @@ public final class ODEntityListener implements Listener {
 				&& (this._entityPowerMap.containsKey(Integer.valueOf(event.getEntity().getEntityId()))) 
 				&& !this.config.getWaterProtection()) {
 
-			CorrectExplosion(event, ((Float)this._entityPowerMap.get(Integer.valueOf(event.getEntity().getEntityId()))).floatValue());
+			correctExplosion(event, ((Float)this._entityPowerMap.get(Integer.valueOf(event.getEntity().getEntityId()))).floatValue());
 			this._entityPowerMap.remove(Integer.valueOf(event.getEntity().getEntityId()));
 		}
 
@@ -121,27 +122,27 @@ public final class ODEntityListener implements Listener {
 		Block b = at.getBlock();
 
 		if (b.getTypeId() == 49) {
-			ApplyDurability(at, this.config.getoDurability());
+			applyDurability(at, this.config.getoDurability());
 		}
 
 		if (b.getTypeId() == 116) {
-			ApplyDurability(at, this.config.geteDurability());
+			applyDurability(at, this.config.geteDurability());
 		}
 
 		if (b.getTypeId() == 130) {
-			ApplyDurability(at, this.config.getecDurability());
+			applyDurability(at, this.config.getecDurability());
 		}
 
 		if (b.getTypeId() == 145) {
-			ApplyDurability(at, this.config.getaDurability());
+			applyDurability(at, this.config.getaDurability());
 		}
 
 		if (b.getTypeId() == 7 && this.config.getBedrockEnabled()) {
-			ApplyDurability(at, this.config.getbDurability());
+			applyDurability(at, this.config.getbDurability());
 		}
 	}
 
-	private void ApplyDurability(Location at, int dura) {
+	private void applyDurability(Location at, int dura) {
 
 		Integer representation = Integer.valueOf(at.getWorld().hashCode() + at.getBlockX() * 2389 + at.getBlockY() * 4027 + at.getBlockZ() * 2053);
 
@@ -176,10 +177,26 @@ public final class ODEntityListener implements Listener {
 			destroyBlockAndDropItem(at);
 	}
 
-	protected void CorrectExplosion(EntityExplodeEvent event, float power) {
+	protected void correctExplosion(EntityExplodeEvent event, float power) {
 
 		World world = event.getEntity().getWorld();
-		event.blockList().clear();
+
+		if(!this.config.getBypassAllBlocks()) {
+			List<Block> blocks = event.blockList();
+
+			for(Block block : blocks) {
+
+				if (block.getTypeId() == 49
+						|| block.getTypeId() == 116
+						|| block.getTypeId() == 130
+						|| block.getTypeId() == 145
+						|| (block.getTypeId() == 7 && this.config.getBedrockEnabled())) {
+					event.blockList().remove(block);
+				}
+			}
+		} else {
+			event.blockList().clear();
+		}
 
 		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
@@ -212,15 +229,8 @@ public final class ODEntityListener implements Listener {
 							if ((f1 > 0.0F) && (i1 < 256) && (i1 >= 0) && (k1 != 8) && (k1 != 9) && (k1 != 10) && (k1 != 11)) {
 								Block block = world.getBlockAt(l, i1, j1);
 
-								if (block.getTypeId() == 49
-										|| block.getTypeId() == 116
-										|| block.getTypeId() == 130
-										|| block.getTypeId() == 145
-										|| (block.getTypeId() == 7 && this.config.getBedrockEnabled())) {
-
-
-									if ((block.getType() != Material.AIR) && (!event.blockList().contains(block)))
-										event.blockList().add(block);
+								if ((block.getType() != Material.AIR) && (!event.blockList().contains(block))) {
+									event.blockList().add(block);
 								}
 
 								d0 += d3 * f2;
@@ -238,7 +248,7 @@ public final class ODEntityListener implements Listener {
 		if (at == null)
 			return;
 
-		org.bukkit.block.Block b = at.getBlock();
+		Block b = at.getBlock();
 
 		if ((!b.getType().equals(Material.OBSIDIAN)) && (!b.getType().equals(Material.ENCHANTMENT_TABLE)) && (!b.getType().equals(Material.ENDER_CHEST)) && 
 				(!b.getType().equals(Material.ANVIL)) && (!b.getType().equals(Material.MOB_SPAWNER)) && (!b.getType().equals(Material.BEDROCK)))
