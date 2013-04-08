@@ -41,7 +41,7 @@ public final class ODEntityListener implements Listener {
 			this._entityPowerMap.put(Integer.valueOf(event.getEntity().getEntityId()), Float.valueOf(event.getRadius()));
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onEntityExplode(EntityExplodeEvent event) {
 
 		if (((event == null) || (event.isCancelled())) && (!this.config.getIgnoreCancel()))
@@ -230,7 +230,7 @@ public final class ODEntityListener implements Listener {
 								Block block = world.getBlockAt(l, i1, j1);
 
 								if ((block.getType() != Material.AIR) && (!event.blockList().contains(block))) {
-									event.blockList().add(block);
+									blowBlockUp(block.getLocation());
 								}
 
 								d0 += d3 * f2;
