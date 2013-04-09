@@ -145,45 +145,10 @@ public final class ODConfig {
 	}
 
 	private void writeDefault() {
-		write("Version", ObsidianDestroyer.getVersion());
-		write("checkupdate", Boolean.valueOf(this.checkUpdate));
-		write("Radius", Integer.valueOf(this.explosionRadius));
-		write("FluidsProtect", Boolean.valueOf(this.waterProtection));
-		write("BypassAllBlocks", Boolean.valueOf(this.bypassAllBlocks));
-		write("CheckItemId", Integer.valueOf(this.checkitemid));
-		write("IgnoreCancel", Boolean.valueOf(this.ignorecancel));
-		write("check-memory", Boolean.valueOf(this.checkmemory));
-
-		write("EnabledFor.TNT", Boolean.valueOf(this.tntEnabled));
-		write("EnabledFor.Cannons", Boolean.valueOf(this.cannonsEnabled));
-		write("EnabledFor.Creepers", Boolean.valueOf(this.creepersEnabled));
-		write("EnabledFor.Ghasts", Boolean.valueOf(this.ghastsEnabled));
-		write("EnabledFor.Withers", Boolean.valueOf(this.withersEnabled));
-
-
-		write("Durability.Enabled", Boolean.valueOf(this.durabilityEnabled));
-		write("Durability.Obsidian", Integer.valueOf(this.odurability));
-		write("Durability.EnchantmentTable", Integer.valueOf(this.edurability));
-		write("Durability.EnderChest", Integer.valueOf(this.ecdurability));
-		write("Durability.Anvil", Integer.valueOf(this.adurability));
-		write("Durability.Bedrock.Enabled", Boolean.valueOf(this.bedrockEnabled));
-		write("Durability.Bedrock.Durability", Integer.valueOf(this.bdurability));
-		write("Durability.ResetEnabled", Boolean.valueOf(this.durabilityTimerEnabled));
-		write("Durability.ResetAfter", this.durabilityTime);
-
-		write("Blocks.ChanceToDrop", Double.valueOf(this.chanceToDropBlock));
+		this.configFile.delete();
+		this.plugin.saveDefaultConfig();
 
 		loadData();
-	}
-
-	private void write(String key, Object o) {
-		try {
-			this.bukkitConfig.load(this.configFile);
-			this.bukkitConfig.set(key, o);
-			this.bukkitConfig.save(this.configFile);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	private long readLong(String key, String def) {
