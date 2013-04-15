@@ -23,12 +23,8 @@ public final class ObsidianDestroyer extends JavaPlugin {
     private ODConfig config = new ODConfig(this);
     private final ODEntityListener entityListener = new ODEntityListener(this);
     private final ODJoinListener joinListener = new ODJoinListener(this);
-    public static ObsidianDestroyer plugin;
     public static Logger log;
 
-
-    private static String version;
-    private static final String PLUGIN_NAME = "ObsidianDestroyer";
     public static boolean update = false;
     public static String name = "";
 
@@ -45,9 +41,6 @@ public final class ObsidianDestroyer extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        log = getServer().getLogger();
-        PluginDescriptionFile pdfFile = getDescription();
-        version = pdfFile.getVersion();
 
         getCommand("obsidiandestroyer").setExecutor(cmdExecutor);
         getCommand("od").setExecutor(cmdExecutor);
@@ -87,32 +80,6 @@ public final class ObsidianDestroyer extends JavaPlugin {
     }
 
     /**
-     * Returns the version of the plugin.
-     * 
-     * @return the version of the plugin
-     */
-    public static String getVersion() {
-        return version;
-    }
-
-    /**
-     * Returns the name of the plugin.
-     * 
-     * @return the name of the plugin
-     */
-    public static String getPluginName() {
-        return PLUGIN_NAME;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return getPluginName();
-    }
-
-    /**
      * Returns the config of this plugin.
      * 
      * @return the config of this plugin
@@ -130,13 +97,4 @@ public final class ObsidianDestroyer extends JavaPlugin {
         return entityListener;
     }
 
-    /**
-     * Method that handles what gets reloaded
-     * 
-     * @return true if everything loaded properly, otherwise false
-     */
-    public boolean reload() {
-        reloadConfig();
-        return true;
-    }
 }

@@ -15,11 +15,10 @@ import org.bukkit.plugin.Plugin;
 public final class ODConfig {
 
     private ObsidianDestroyer plugin;
-    private static String pluginName;
-    private static String pluginVersion;
-    private static String directory = "plugins" + File.separator + ObsidianDestroyer.getPluginName() + File.separator;
-    private File configFile = new File(directory + "config.yml");
-    private File durabilityFile = new File(directory + "durability.dat");
+    private static String PLUGIN_VERSION;
+    private static String DIRECTORY = "plugins" + File.separator + "ObsidianDestroyer" + File.separator;
+    private File configFile = new File(DIRECTORY + "config.yml");
+    private File durabilityFile = new File(DIRECTORY + "durability.dat");
     private YamlConfiguration bukkitConfig = new YamlConfiguration();
 
     private int explosionRadius = 3;
@@ -44,28 +43,27 @@ public final class ODConfig {
     private boolean ignorecancel = false;
     private boolean checkmemory = false;
     private boolean bypassAllBlocks = false;
-    private static String[] values = new String[22];
+    private static String[] VALUES = new String[22];
 
     public ODConfig(ObsidianDestroyer plugin) {
         this.plugin = plugin;
-        pluginName = ObsidianDestroyer.getPluginName();
     }
 
     public boolean loadConfig() {
         boolean isErrorFree = true;
-        pluginVersion = ObsidianDestroyer.getVersion();
+        PLUGIN_VERSION = plugin.getDescription().getVersion();
 
-        new File(directory).mkdir();
+        new File(DIRECTORY).mkdir();
 
         if (this.configFile.exists()) {
             try {
                 this.bukkitConfig.load(this.configFile);
 
-                if (this.bukkitConfig.getString("Version", "").equals(pluginVersion))
+                if (this.bukkitConfig.getString("Version", "").equals(PLUGIN_VERSION))
                     loadData();
 
                 else {
-                    Log.info(pluginName + " config file outdated, adding old data and creating new values. Make sure you change those!");
+                    plugin.getLogger().info(" config file outdated, adding old data and creating new VALUES. Make sure you change those!");
                     loadData();
                     writeDefault();
                 }
@@ -75,7 +73,7 @@ public final class ODConfig {
             }
         }
         else {
-            Log.info(pluginName + " config file not found, creating new config file :D");
+            this.plugin.getLogger().info("config file not found, creating new config file :D");
             this.plugin.saveDefaultConfig();
         }
 
@@ -116,28 +114,28 @@ public final class ODConfig {
             this.durabilityTime = readLong("Durability.ResetAfter", "600000");
             this.chanceToDropBlock = this.bukkitConfig.getDouble("Blocks.ChanceToDrop", 0.7D);
 
-            values[0] = y + "checkupdate: " + g + this.checkUpdate;
-            values[1] = y + "ExplosionRadius: " + g + this.getRadius();
-            values[2] = y + "FluidsProtect: " + g + this.getWaterProtection();
-            values[3] = y + "BypassAllBlocks: " + g + this.getBypassAllBlocks();
-            values[4] = y + "CheckItemId: " + g + this.getCheckItemId();
-            values[5] = y + "IgnoreCancel: " + g + this.getIgnoreCancel();
-            values[6] = y + "CheckMemory: " + g + this.getCheckMemory();
-            values[7] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
-            values[8] = y + "TNTEnabled: " + g + this.getTntEnabled();
-            values[9] = y + "CannonsEnabled: " + g + this.getCannonsEnabled();
-            values[10] = y + "CreepersEnabled: " + g + this.getCreepersEnabled();
-            values[11] = y + "GhastsEnabled: " + g + this.getGhastsEnabled();
-            values[12] = y + "WithersEnabled: " + g + this.getWithersEnabled();
-            values[13] = y + "DurabilityEnabled: " + g + this.getDurabilityEnabled();
-            values[14] = y + "ObsidianDurability: " + g + this.getoDurability();
-            values[15] = y + "EnchantmentTableDurability: " + g + this.geteDurability();
-            values[16] = y + "EnderchestDurability: " + g + this.getecDurability();
-            values[17] = y + "AnvilDurability: " + g + this.getaDurability();
-            values[18] = y + "BedrockDurability: " + g + this.getbDurability();
-            values[19] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
-            values[20] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
-            values[21] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
+            VALUES[0] = y + "checkupdate: " + g + this.checkUpdate;
+            VALUES[1] = y + "ExplosionRadius: " + g + this.getRadius();
+            VALUES[2] = y + "FluidsProtect: " + g + this.getWaterProtection();
+            VALUES[3] = y + "BypassAllBlocks: " + g + this.getBypassAllBlocks();
+            VALUES[4] = y + "CheckItemId: " + g + this.getCheckItemId();
+            VALUES[5] = y + "IgnoreCancel: " + g + this.getIgnoreCancel();
+            VALUES[6] = y + "CheckMemory: " + g + this.getCheckMemory();
+            VALUES[7] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
+            VALUES[8] = y + "TNTEnabled: " + g + this.getTntEnabled();
+            VALUES[9] = y + "CannonsEnabled: " + g + this.getCannonsEnabled();
+            VALUES[10] = y + "CreepersEnabled: " + g + this.getCreepersEnabled();
+            VALUES[11] = y + "GhastsEnabled: " + g + this.getGhastsEnabled();
+            VALUES[12] = y + "WithersEnabled: " + g + this.getWithersEnabled();
+            VALUES[13] = y + "DurabilityEnabled: " + g + this.getDurabilityEnabled();
+            VALUES[14] = y + "ObsidianDurability: " + g + this.getoDurability();
+            VALUES[15] = y + "EnchantmentTableDurability: " + g + this.geteDurability();
+            VALUES[16] = y + "EnderchestDurability: " + g + this.getecDurability();
+            VALUES[17] = y + "AnvilDurability: " + g + this.getaDurability();
+            VALUES[18] = y + "BedrockDurability: " + g + this.getbDurability();
+            VALUES[19] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
+            VALUES[20] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
+            VALUES[21] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -164,7 +162,7 @@ public final class ODConfig {
         try {
             tmp = Long.parseLong(value);
         } catch (NumberFormatException nfe) {
-            Log.warning("Error parsing a long from the config file. Key=" + key);
+            this.plugin.getLogger().warning("Error parsing a long from the config file. Key=" + key);
             nfe.printStackTrace();
         }
 
@@ -256,7 +254,7 @@ public final class ODConfig {
     }
 
     public String[] getConfigList() {
-        return values;
+        return VALUES;
     }
 
     public boolean getCheckMemory() {
@@ -277,7 +275,7 @@ public final class ODConfig {
 
         HashMap<Integer, Integer> map = this.plugin.getListener().getObsidianDurability();
 
-        new File(directory).mkdir();
+        new File(DIRECTORY).mkdir();
 
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(this.durabilityFile));
@@ -285,7 +283,7 @@ public final class ODConfig {
             oos.flush();
             oos.close();
         } catch (IOException e) {
-            Log.severe("Failed writing obsidian durability for " + ObsidianDestroyer.getPluginName());
+            plugin.getLogger().severe("Failed writing obsidian durability");
             e.printStackTrace();
         }
     }
@@ -295,7 +293,7 @@ public final class ODConfig {
         if ((!this.durabilityFile.exists()) || (this.plugin.getListener() == null) || (this.plugin.getListener().getObsidianDurability() == null))
             return null;
 
-        new File(directory).mkdir();
+        new File(DIRECTORY).mkdir();
 
         HashMap<Integer, Integer> map = null;
         Object result = null;
@@ -306,18 +304,18 @@ public final class ODConfig {
             map = (HashMap<Integer, Integer>)result;
             ois.close();
         } catch (IOException ioe) {
-            Log.severe("Failed reading obsidian durability for " + ObsidianDestroyer.getPluginName());
-            Log.severe("Deleting current durability file and creating new one.");
+            this.plugin.getLogger().severe("Failed reading obsidian durability.");
+            this.plugin.getLogger().severe("Deleting current durability file and creating new one.");
             this.durabilityFile.delete();
 
             try {
                 this.durabilityFile.createNewFile();
             } catch (IOException exception) {
-                Log.severe("Couldn't create new durability file.");
+                this.plugin.getLogger().severe("Couldn't create new durability file.");
             }
             ioe.printStackTrace();
         } catch (ClassNotFoundException cnfe) {
-            Log.severe("Obsidian durability file contains an unknown class, was it modified?");
+            this.plugin.getLogger().severe("durability.dat contains an unknown class, was it modified?");
             cnfe.printStackTrace();
         }
 

@@ -51,7 +51,7 @@ public final class ODEntityListener implements Listener {
         int radius = this.config.getRadius();
 
         if (radius < 0) {
-            Log.warning("Explosion radius is less than zero. Current value: " + radius);
+            plugin.getLogger().warning("Explosion radius is less than zero. Current value: " + radius);
             return;
         }
 
@@ -88,7 +88,7 @@ public final class ODEntityListener implements Listener {
 
         long free = Runtime.getRuntime().freeMemory();
         if(free < 104857600) {
-            Log.severe("Running out of memory. Not checking explosion.");
+            plugin.getLogger().severe("Running out of memory. Not checking explosion.");
             return;
         }
 
@@ -258,8 +258,9 @@ public final class ODEntityListener implements Listener {
     }
 
     private void destroyBlockAndDropItem(Location at) {
-        if (at == null)
+        if (at == null) {
             return;
+        }
 
         Block b = at.getBlock();
 

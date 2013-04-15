@@ -23,7 +23,6 @@ public final class ODCommands implements CommandExecutor {
      * Associates this object with a plugin
      * 
      * @param plugin
-     *            the plugin
      */
     public ODCommands(ObsidianDestroyer plugin) {
         this.plugin = plugin;
@@ -77,7 +76,7 @@ public final class ODCommands implements CommandExecutor {
     // Removed all isOp checks as permissions default to op now.
 
     private void showHelp(CommandSender sender) {
-        sender.sendMessage(ChatColor.DARK_PURPLE + "ObsidianDestroyer " + ChatColor.LIGHT_PURPLE + "v" + ObsidianDestroyer.getVersion());
+        sender.sendMessage(ChatColor.DARK_PURPLE + "ObsidianDestroyer " + ChatColor.LIGHT_PURPLE + "v" + plugin.getDescription().getVersion());
         sender.sendMessage(ChatColor.DARK_PURPLE + "Available commands:");
         sender.sendMessage(ChatColor.DARK_PURPLE + "/od - gives version and shows commands.");
         sender.sendMessage(ChatColor.DARK_PURPLE + "/od reload - " + ChatColor.LIGHT_PURPLE + "reloads the plugin's config file");
@@ -85,20 +84,16 @@ public final class ODCommands implements CommandExecutor {
     }
 
     private void reloadPlugin(CommandSender sender) {
-        Log.info("'" + sender.getName() + "' requested reload of ObsidianDestroyer");
-        sender.sendMessage(ChatColor.GREEN + "Reloading ObsidianDestroyer!");
-
-        if (plugin.reload()) {
-            sender.sendMessage(ChatColor.GREEN + "Success!");
-        }
+        sender.sendMessage(ChatColor.GREEN + "Reloading ObsidianDestroyer config!");
+        this.plugin.reloadConfig();
     }
 
     private void getConfigInfo(CommandSender sender) {
         sender.sendMessage(ChatColor.DARK_PURPLE + "Currently loaded config of ObsidianDestroyer:");
         sender.sendMessage(ChatColor.DARK_PURPLE + "---------------------------------------------");
 
-        if (plugin.getODConfig().getConfigFile().exists()) {
-            for (String s : plugin.getODConfig().getConfigList()) {
+        if (this.plugin.getODConfig().getConfigFile().exists()) {
+            for (String s : this.plugin.getODConfig().getConfigList()) {
                 sender.sendMessage(s);
             }
         } else {
@@ -107,7 +102,7 @@ public final class ODCommands implements CommandExecutor {
     }
 
     private void resetDurability(CommandSender sender) {
-        ODEntityListener listener = plugin.getListener();
+        ODEntityListener listener = this.plugin.getListener();
 
         listener.setObsidianDurability(new HashMap<Integer, Integer>());
 
@@ -123,7 +118,7 @@ public final class ODCommands implements CommandExecutor {
 
         listener.setObsidianTimer(new HashMap<Integer, Timer>());
 
-        Log.info("'" + sender.getName() + "' requested reset of Obsidian durabilities");
+        this.plugin.getLogger().info("'" + sender.getName() + "' requested reset of Obsidian durabilities");
         sender.sendMessage(ChatColor.GREEN + "Reset all Obsidian durabilities!");
     }
 }
