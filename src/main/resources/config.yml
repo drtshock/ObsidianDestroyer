@@ -54,6 +54,8 @@ Durability:
     Durability: 100
 
 # Reset will run a timer to clear the durability of blocks after a certain time.
+# If you have issues with your server running out of memory then disabling this
+# can save some memory :)
   ResetEnabled: true
   ResetAfter: '600000'
 

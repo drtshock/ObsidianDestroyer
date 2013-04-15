@@ -70,7 +70,16 @@ public final class ObsidianDestroyer extends JavaPlugin {
     public void startMetrics() { 	
         PluginDescriptionFile pdfFile = this.getDescription();
         try {	
-            Metrics metrics = new Metrics(this);	
+            Metrics metrics = new Metrics(this);
+
+            metrics.addCustomData(new Metrics.Plotter("Obsidian Durability") {
+
+                @Override
+                public int getValue() {
+                    return config.getoDurability();
+                }
+            });
+
             metrics.start();
         } catch (IOException e) {
             ObsidianDestroyer.log.warning("[" + pdfFile.getName() + "] Failed to submit the stats :-("); // Failed to submit the stats :-(

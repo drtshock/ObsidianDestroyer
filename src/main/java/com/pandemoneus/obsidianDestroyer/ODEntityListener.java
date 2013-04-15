@@ -44,8 +44,9 @@ public final class ODEntityListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
     public void onEntityExplode(EntityExplodeEvent event) {
 
-        if (((event == null) || (event.isCancelled())) && (!this.config.getIgnoreCancel()))
+        if (((event == null) || (event.isCancelled())) && (!this.config.getIgnoreCancel())) {
             return;
+        }
 
         long free = Runtime.getRuntime().freeMemory();
         if(free < 104857600) {
@@ -62,26 +63,34 @@ public final class ODEntityListener implements Listener {
 
         Entity detonator = event.getEntity();
 
-        if (detonator == null)
+        if (detonator == null) {
             return;
+        }
 
         Location detonatorLoc = detonator.getLocation();
         String eventTypeRep = event.getEntity().toString();
 
-        if ((!eventTypeRep.equals("CraftTNTPrimed")) && (!eventTypeRep.equals("CraftCreeper")) && (!eventTypeRep.equals("CraftFireball")) && (!eventTypeRep.equals("CraftGhast")) && (!eventTypeRep.equals("CraftSnowball")))
+        if ((!eventTypeRep.equals("CraftTNTPrimed")) && (!eventTypeRep.equals("CraftCreeper"))
+                && (!eventTypeRep.equals("CraftFireball")) && (!eventTypeRep.equals("CraftGhast"))
+                && (!eventTypeRep.equals("CraftSnowball"))) {
             return;
+        }
 
-        if ((eventTypeRep.equals("CraftTNTPrimed")) && (!this.config.getTntEnabled()))
+        if ((eventTypeRep.equals("CraftTNTPrimed")) && (!this.config.getTntEnabled())) {
             return;
+        }
 
-        if ((eventTypeRep.equals("CraftSnowball")) && (!this.config.getCannonsEnabled()))
+        if ((eventTypeRep.equals("CraftSnowball")) && (!this.config.getCannonsEnabled())) {
             return;
+        }
 
-        if ((eventTypeRep.equals("CraftCreeper")) && (!this.config.getCreepersEnabled()))
+        if ((eventTypeRep.equals("CraftCreeper")) && (!this.config.getCreepersEnabled())) {
             return;
+        }
 
-        if (((eventTypeRep.equals("CraftFireball")) || (eventTypeRep.equals("CraftGhast"))) && (!this.config.getGhastsEnabled()))
+        if (((eventTypeRep.equals("CraftFireball")) || (eventTypeRep.equals("CraftGhast"))) && (!this.config.getGhastsEnabled())) {
             return;
+        }
 
         if (eventTypeRep.equals("CraftSnowball")) {
             Iterator<Block> iter = event.blockList().iterator();
@@ -116,8 +125,9 @@ public final class ODEntityListener implements Listener {
 
     private void blowBlockUp(Location at) {
 
-        if (at == null)
+        if (at == null) {
             return;
+        }
 
         Block b = at.getBlock();
 
@@ -151,25 +161,29 @@ public final class ODEntityListener implements Listener {
                 int currentDurability = ((Integer)this.obsidianDurability.get(representation)).intValue();
                 currentDurability++;
 
-                if (checkIfMax(currentDurability, dura))
+                if (checkIfMax(currentDurability, dura)) {
                     dropBlockAndResetTime(representation, at);
+                }
 
                 else {
                     this.obsidianDurability.put(representation, Integer.valueOf(currentDurability));
 
-                    if (this.config.getDurabilityResetTimerEnabled())
+                    if (this.config.getDurabilityResetTimerEnabled()) {
                         startNewTimer(representation);
+                    }
                 }
             }
 
             else {
                 this.obsidianDurability.put(representation, Integer.valueOf(1));
 
-                if (this.config.getDurabilityResetTimerEnabled())
+                if (this.config.getDurabilityResetTimerEnabled()) {
                     startNewTimer(representation);
+                }
 
-                if (checkIfMax(1, dura))
+                if (checkIfMax(1, dura)) {
                     dropBlockAndResetTime(representation, at);
+                }
             }
         }
 
@@ -185,7 +199,6 @@ public final class ODEntityListener implements Listener {
             List<Block> blocks = event.blockList();
 
             for(Block block : blocks) {
-
                 if (block.getTypeId() == 49
                         || block.getTypeId() == 116
                         || block.getTypeId() == 130
@@ -251,16 +264,19 @@ public final class ODEntityListener implements Listener {
         Block b = at.getBlock();
 
         if ((!b.getType().equals(Material.OBSIDIAN)) && (!b.getType().equals(Material.ENCHANTMENT_TABLE)) && (!b.getType().equals(Material.ENDER_CHEST)) && 
-                (!b.getType().equals(Material.ANVIL)) && (!b.getType().equals(Material.MOB_SPAWNER)) && (!b.getType().equals(Material.BEDROCK)))
+                (!b.getType().equals(Material.ANVIL)) && (!b.getType().equals(Material.MOB_SPAWNER)) && (!b.getType().equals(Material.BEDROCK))) {
             return;
+        }
 
         double chance = this.config.getChanceToDropBlock();
 
-        if (chance > 1.0D)
+        if (chance > 1.0D) {
             chance = 1.0D;
+        }
 
-        if (chance < 0.0D)
+        if (chance < 0.0D) {
             chance = 0.0D;
+        }
 
         double random = Math.random();
 
@@ -278,8 +294,9 @@ public final class ODEntityListener implements Listener {
     }
 
     private void startNewTimer(Integer representation) {
-        if (this.obsidianTimer.get(representation) != null) 
+        if (this.obsidianTimer.get(representation) != null) {
             ((Timer)this.obsidianTimer.get(representation)).cancel();
+        }
 
         Timer timer = new Timer();
         timer.schedule(new ODTimerTask(this.plugin, representation), this.config.getDurabilityResetTime());
@@ -305,8 +322,9 @@ public final class ODEntityListener implements Listener {
     }
 
     public void setObsidianDurability(HashMap<Integer, Integer> map) {
-        if (map == null)
+        if (map == null) {
             return;
+        }
 
         this.obsidianDurability = map;
     }
@@ -316,8 +334,9 @@ public final class ODEntityListener implements Listener {
     }
 
     public void setObsidianTimer(HashMap<Integer, Timer> map) {
-        if (map == null)
+        if (map == null) {
             return;
+        }
 
         this.obsidianTimer = map;
     }
