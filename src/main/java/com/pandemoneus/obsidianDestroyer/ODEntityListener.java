@@ -48,12 +48,6 @@ public final class ODEntityListener implements Listener {
             return;
         }
 
-        long free = Runtime.getRuntime().freeMemory();
-        if(free < 104857600) {
-            Log.severe("Running out of memory. Not checking explosion.");
-            return;
-        }
-
         int radius = this.config.getRadius();
 
         if (radius < 0) {
@@ -89,6 +83,12 @@ public final class ODEntityListener implements Listener {
         }
 
         if (((eventTypeRep.equals("CraftFireball")) || (eventTypeRep.equals("CraftGhast"))) && (!this.config.getGhastsEnabled())) {
+            return;
+        }
+
+        long free = Runtime.getRuntime().freeMemory();
+        if(free < 104857600) {
+            Log.severe("Running out of memory. Not checking explosion.");
             return;
         }
 
