@@ -86,12 +86,6 @@ public final class ODEntityListener implements Listener {
             return;
         }
 
-        long free = Runtime.getRuntime().freeMemory();
-        if(free < 104857600) {
-            plugin.getLogger().severe("Running out of memory. Not checking explosion.");
-            return;
-        }
-
         if (eventTypeRep.equals("CraftSnowball")) {
             Iterator<Block> iter = event.blockList().iterator();
             while (iter.hasNext()) {
@@ -185,10 +179,9 @@ public final class ODEntityListener implements Listener {
                     dropBlockAndResetTime(representation, at);
                 }
             }
-        }
-
-        else
+        } else {
             destroyBlockAndDropItem(at);
+        }
     }
 
     protected void correctExplosion(EntityExplodeEvent event, float power) {

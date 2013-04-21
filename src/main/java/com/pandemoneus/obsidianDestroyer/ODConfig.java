@@ -41,9 +41,8 @@ public final class ODConfig {
     private boolean checkUpdate = true;
     private int checkitemid = 38;
     private boolean ignorecancel = false;
-    private boolean checkmemory = false;
     private boolean bypassAllBlocks = false;
-    private static String[] VALUES = new String[22];
+    private static String[] VALUES = new String[21];
 
     public ODConfig(ObsidianDestroyer plugin) {
         this.plugin = plugin;
@@ -94,7 +93,6 @@ public final class ODConfig {
             this.bypassAllBlocks = this.bukkitConfig.getBoolean("BypassAllBlocks", false);
             this.checkitemid = this.bukkitConfig.getInt("CheckItemId", 38);
             this.ignorecancel = this.bukkitConfig.getBoolean("IgnoreCancel", false);
-            this.checkmemory = this.bukkitConfig.getBoolean("check-memory", false);
             this.bedrockEnabled = this.bukkitConfig.getBoolean("Durability.Bedrock.Enabled", false);
 
             this.tntEnabled = this.bukkitConfig.getBoolean("EnabledFor.TNT", true);
@@ -120,22 +118,21 @@ public final class ODConfig {
             VALUES[3] = y + "BypassAllBlocks: " + g + this.getBypassAllBlocks();
             VALUES[4] = y + "CheckItemId: " + g + this.getCheckItemId();
             VALUES[5] = y + "IgnoreCancel: " + g + this.getIgnoreCancel();
-            VALUES[6] = y + "CheckMemory: " + g + this.getCheckMemory();
-            VALUES[7] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
-            VALUES[8] = y + "TNTEnabled: " + g + this.getTntEnabled();
-            VALUES[9] = y + "CannonsEnabled: " + g + this.getCannonsEnabled();
-            VALUES[10] = y + "CreepersEnabled: " + g + this.getCreepersEnabled();
-            VALUES[11] = y + "GhastsEnabled: " + g + this.getGhastsEnabled();
-            VALUES[12] = y + "WithersEnabled: " + g + this.getWithersEnabled();
-            VALUES[13] = y + "DurabilityEnabled: " + g + this.getDurabilityEnabled();
-            VALUES[14] = y + "ObsidianDurability: " + g + this.getoDurability();
-            VALUES[15] = y + "EnchantmentTableDurability: " + g + this.geteDurability();
-            VALUES[16] = y + "EnderchestDurability: " + g + this.getecDurability();
-            VALUES[17] = y + "AnvilDurability: " + g + this.getaDurability();
-            VALUES[18] = y + "BedrockDurability: " + g + this.getbDurability();
-            VALUES[19] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
-            VALUES[20] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
-            VALUES[21] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
+            VALUES[6] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
+            VALUES[7] = y + "TNTEnabled: " + g + this.getTntEnabled();
+            VALUES[8] = y + "CannonsEnabled: " + g + this.getCannonsEnabled();
+            VALUES[9] = y + "CreepersEnabled: " + g + this.getCreepersEnabled();
+            VALUES[10] = y + "GhastsEnabled: " + g + this.getGhastsEnabled();
+            VALUES[11] = y + "WithersEnabled: " + g + this.getWithersEnabled();
+            VALUES[12] = y + "DurabilityEnabled: " + g + this.getDurabilityEnabled();
+            VALUES[13] = y + "ObsidianDurability: " + g + this.getoDurability();
+            VALUES[14] = y + "EnchantmentTableDurability: " + g + this.geteDurability();
+            VALUES[15] = y + "EnderchestDurability: " + g + this.getecDurability();
+            VALUES[16] = y + "AnvilDurability: " + g + this.getaDurability();
+            VALUES[17] = y + "BedrockDurability: " + g + this.getbDurability();
+            VALUES[18] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
+            VALUES[19] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
+            VALUES[20] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -255,10 +252,6 @@ public final class ODConfig {
 
     public String[] getConfigList() {
         return VALUES;
-    }
-
-    public boolean getCheckMemory() {
-        return this.checkmemory;
     }
 
     public boolean getBypassAllBlocks() {
