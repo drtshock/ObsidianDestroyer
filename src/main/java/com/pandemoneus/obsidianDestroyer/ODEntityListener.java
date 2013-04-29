@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
+import java.util.logging.Level;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -51,7 +52,7 @@ public final class ODEntityListener implements Listener {
         int radius = this.config.getRadius();
 
         if (radius < 0) {
-            plugin.getLogger().warning("Explosion radius is less than zero. Current value: " + radius);
+            plugin.getLogger().log(Level.WARNING, "Explosion radius is less than zero. Current value: {0}", radius);
             return;
         }
 
