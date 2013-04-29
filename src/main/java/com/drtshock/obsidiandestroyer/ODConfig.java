@@ -93,7 +93,7 @@ public final class ODConfig {
             this.bypassAllBlocks = this.bukkitConfig.getBoolean("BypassAllBlocks", false);
             this.checkitemid = this.bukkitConfig.getInt("CheckItemId", 38);
             this.ignorecancel = this.bukkitConfig.getBoolean("IgnoreCancel", false);
-            this.bedrockEnabled = this.bukkitConfig.getBoolean("Durability.Bedrock.Enabled", false);
+            this.bedrockEnabled = this.bukkitConfig.getBoolean("Bedrock.Enabled", false);
 
             this.tntEnabled = this.bukkitConfig.getBoolean("EnabledFor.TNT", true);
             this.cannonsEnabled = this.bukkitConfig.getBoolean("EnabledFor.Cannons", false);
@@ -106,7 +106,7 @@ public final class ODConfig {
             this.edurability = this.bukkitConfig.getInt("Durability.EnchantmentTable", 1);
             this.ecdurability = this.bukkitConfig.getInt("Durability.EnderChest", 1);
             this.adurability = this.bukkitConfig.getInt("Durability.Anvil", 1);
-            this.bdurability = this.bukkitConfig.getInt("Durability.Bedrock.Durability", 1);
+            this.bdurability = this.bukkitConfig.getInt("Bedrock.Durability", 1);
             this.durabilityTimerEnabled = this.bukkitConfig.getBoolean("Durability.ResetEnabled", true);
 
             this.durabilityTime = readLong("Durability.ResetAfter", "600000");
@@ -118,17 +118,17 @@ public final class ODConfig {
             VALUES[3] = y + "BypassAllBlocks: " + g + this.getBypassAllBlocks();
             VALUES[4] = y + "CheckItemId: " + g + this.getCheckItemId();
             VALUES[5] = y + "IgnoreCancel: " + g + this.getIgnoreCancel();
-            VALUES[6] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
-            VALUES[7] = y + "TNTEnabled: " + g + this.getTntEnabled();
-            VALUES[8] = y + "CannonsEnabled: " + g + this.getCannonsEnabled();
-            VALUES[9] = y + "CreepersEnabled: " + g + this.getCreepersEnabled();
-            VALUES[10] = y + "GhastsEnabled: " + g + this.getGhastsEnabled();
-            VALUES[11] = y + "WithersEnabled: " + g + this.getWithersEnabled();
-            VALUES[12] = y + "DurabilityEnabled: " + g + this.getDurabilityEnabled();
-            VALUES[13] = y + "ObsidianDurability: " + g + this.getoDurability();
-            VALUES[14] = y + "EnchantmentTableDurability: " + g + this.geteDurability();
-            VALUES[15] = y + "EnderchestDurability: " + g + this.getecDurability();
-            VALUES[16] = y + "AnvilDurability: " + g + this.getaDurability();
+            VALUES[6] = y + "TNTEnabled: " + g + this.getTntEnabled();
+            VALUES[7] = y + "CannonsEnabled: " + g + this.getCannonsEnabled();
+            VALUES[8] = y + "CreepersEnabled: " + g + this.getCreepersEnabled();
+            VALUES[9] = y + "GhastsEnabled: " + g + this.getGhastsEnabled();
+            VALUES[10] = y + "WithersEnabled: " + g + this.getWithersEnabled();
+            VALUES[11] = y + "DurabilityEnabled: " + g + this.getDurabilityEnabled();
+            VALUES[12] = y + "ObsidianDurability: " + g + this.getoDurability();
+            VALUES[13] = y + "EnchantmentTableDurability: " + g + this.geteDurability();
+            VALUES[14] = y + "EnderchestDurability: " + g + this.getecDurability();
+            VALUES[15] = y + "AnvilDurability: " + g + this.getaDurability();
+            VALUES[16] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
             VALUES[17] = y + "BedrockDurability: " + g + this.getbDurability();
             VALUES[18] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
             VALUES[19] = y + "ResetAfter: " + g + this.getDurabilityResetTime();

@@ -79,6 +79,8 @@ public final class ODCommands implements CommandExecutor {
         sender.sendMessage(ChatColor.DARK_PURPLE + "/od - gives version and shows commands.");
         sender.sendMessage(ChatColor.DARK_PURPLE + "/od reload - " + ChatColor.LIGHT_PURPLE + "reloads the plugin's config file");
         sender.sendMessage(ChatColor.DARK_PURPLE + "/od info - " + ChatColor.LIGHT_PURPLE + " shows the currently loaded config");
+        sender.sendMessage(ChatColor.DARK_PURPLE + "/od reset - " + ChatColor.LIGHT_PURPLE + " reset all durability timers.");
+
     }
 
     private void reloadPlugin(CommandSender sender) {
@@ -116,7 +118,6 @@ public final class ODCommands implements CommandExecutor {
 
         listener.setObsidianTimer(new HashMap<Integer, Timer>());
 
-        this.plugin.getLogger().info("'" + sender.getName() + "' requested reset of Obsidian durabilities");
         sender.sendMessage(ChatColor.GREEN + "Reset all Obsidian durabilities!");
     }
 }
