@@ -1,4 +1,4 @@
-package com.pandemoneus.obsidianDestroyer;
+package com.drtshock.obsidiandestroyer;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -10,10 +10,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 /**
- * Command class. Available commands are: od od reload od info
  * 
- * @author Pandemoneus
- * 
+ * @author drtshock
  */
 public final class ODCommands implements CommandExecutor {
 

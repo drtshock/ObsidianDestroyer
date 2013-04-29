@@ -1,4 +1,4 @@
-package com.pandemoneus.obsidianDestroyer;
+package com.drtshock.obsidiandestroyer;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,6 +20,10 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * 
+ * @author drtshock
+ */
 public final class ODEntityListener implements Listener {
 
     private ObsidianDestroyer plugin;
@@ -189,22 +193,6 @@ public final class ODEntityListener implements Listener {
 
         World world = event.getEntity().getWorld();
 
-        if(!this.config.getBypassAllBlocks()) {
-            List<Block> blocks = event.blockList();
-
-            for(Block block : blocks) {
-                if (block.getTypeId() == 49
-                        || block.getTypeId() == 116
-                        || block.getTypeId() == 130
-                        || block.getTypeId() == 145
-                        || (block.getTypeId() == 7 && this.config.getBedrockEnabled())) {
-                    event.blockList().remove(block);
-                }
-            }
-        } else {
-            event.blockList().clear();
-        }
-
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 for (int k = 0; k < 16; k++) {
@@ -230,14 +218,15 @@ public final class ODEntityListener implements Listener {
                             int j1 = (int) Math.floor(d2);
                             int k1 = world.getBlockTypeIdAt(l, i1, j1);
 
-                            if ((k1 > 0) && (k1 != 8) && (k1 != 9) && (k1 != 10) && (k1 != 11))
+                            if ((k1 > 0) && (k1 != 8) && (k1 != 9) && (k1 != 10) && (k1 != 11)) {
                                 f1 -= (net.minecraft.server.v1_5_R2.Block.byId[k1].a(((CraftEntity)event.getEntity()).getHandle()) + 0.3F) * f2;
+                            }
 
                             if ((f1 > 0.0F) && (i1 < 256) && (i1 >= 0) && (k1 != 8) && (k1 != 9) && (k1 != 10) && (k1 != 11)) {
                                 Block block = world.getBlockAt(l, i1, j1);
 
                                 if ((block.getType() != Material.AIR) && (!event.blockList().contains(block))) {
-                                    blowBlockUp(block.getLocation());
+                                    event.blockList().add(block);
                                 }
 
                                 d0 += d3 * f2;

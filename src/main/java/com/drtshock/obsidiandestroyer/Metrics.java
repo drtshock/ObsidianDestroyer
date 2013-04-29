@@ -1,4 +1,4 @@
-package com.pandemoneus.obsidianDestroyer;
+package com.drtshock.obsidiandestroyer;
 
 /*
  * Copyright 2011 Tyler Blair. All rights reserved.

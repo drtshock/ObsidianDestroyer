@@ -1,4 +1,4 @@
-package com.pandemoneus.obsidianDestroyer;
+package com.drtshock.obsidiandestroyer;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -11,6 +11,10 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+/**
+ * 
+ * @author drtshock
+ */
 public class ODJoinListener implements Listener {
 
     private ODEntityListener odlistener;
@@ -39,7 +43,6 @@ public class ODJoinListener implements Listener {
             event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "Visit " + ChatColor.GRAY + "http://dev.bukkit.org/obsidiandestroyer" + 
                     ChatColor.DARK_PURPLE + " to download.");
         }
-        return;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -82,8 +85,6 @@ public class ODJoinListener implements Listener {
                         }
 
                         this.currentDurability = 0;
-
-                        return;
                     }
                 }
             }

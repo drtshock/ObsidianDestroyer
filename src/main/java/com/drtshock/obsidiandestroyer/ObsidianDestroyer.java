@@ -1,6 +1,7 @@
-package com.pandemoneus.obsidianDestroyer;
+package com.drtshock.obsidiandestroyer;
 
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -16,9 +17,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public final class ObsidianDestroyer extends JavaPlugin {
 
-    /**
-     * Plugin related stuff
-     */
     private final ODCommands cmdExecutor = new ODCommands(this);
     private ODConfig config = new ODConfig(this);
     private final ODEntityListener entityListener = new ODEntityListener(this);
@@ -28,20 +26,16 @@ public final class ObsidianDestroyer extends JavaPlugin {
     public static boolean update = false;
     public static String name = "";
 
-    /**
-     * {@inheritDoc}
-     */
+    
     @Override
     public void onDisable() {
         config.saveDurabilityToFile();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     @Override
     public void onEnable() {
-
+        log = getServer().getLogger();
         getCommand("obsidiandestroyer").setExecutor(cmdExecutor);
         getCommand("od").setExecutor(cmdExecutor);
 
@@ -61,7 +55,6 @@ public final class ObsidianDestroyer extends JavaPlugin {
     }
 
     public void startMetrics() { 	
-        PluginDescriptionFile pdfFile = this.getDescription();
         try {	
             Metrics metrics = new Metrics(this);
 
@@ -75,7 +68,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 
             metrics.start();
         } catch (IOException e) {
-            ObsidianDestroyer.log.warning("[" + pdfFile.getName() + "] Failed to submit the stats :-("); // Failed to submit the stats :-(
+            log.log(Level.WARNING, "Failed to submit the stats :-("); // Failed to submit the stats :-(
         }
     }
 

@@ -36,10 +36,10 @@ EnabledFor:
 # Durability = amount of explosions within the radius defined above
 # within the time limit that will make a block blow up.
 Durability:
-  Enabled: false
-  Obsidian: 8
+  Enabled: true
+  Obsidian: 3
   EnchantmentTable: 2
-  EnderChest: 2
+  EnderChest: 5
   Anvil: 2
   
  # Settings for bedrock. Recommended to be disabled or at a very high rate.

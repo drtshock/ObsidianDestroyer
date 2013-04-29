@@ -1,4 +1,4 @@
-package com.pandemoneus.obsidianDestroyer;
+package com.drtshock.obsidiandestroyer;
 
 import java.io.File;
 import java.io.FileInputStream;

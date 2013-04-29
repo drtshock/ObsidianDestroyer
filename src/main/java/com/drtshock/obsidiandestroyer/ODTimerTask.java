@@ -1,8 +1,12 @@
-package com.pandemoneus.obsidianDestroyer;
+package com.drtshock.obsidiandestroyer;
 
 import java.util.HashMap;
 import java.util.TimerTask;
 
+/**
+ * 
+ * @author drtshock
+ */
 public final class ODTimerTask extends TimerTask {
 
     private ObsidianDestroyer plugin;
@@ -13,12 +17,9 @@ public final class ODTimerTask extends TimerTask {
         this.duraID = duraID;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void run() {
-        resetDurability(duraID);		
+        resetDurability(duraID);
     }
 
     private void resetDurability(Integer id) {
