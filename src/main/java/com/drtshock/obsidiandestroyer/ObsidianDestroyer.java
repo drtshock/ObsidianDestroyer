@@ -30,6 +30,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
     @Override
     public void onDisable() {
         config.saveDurabilityToFile();
+        saveConfig();
     }
 
     

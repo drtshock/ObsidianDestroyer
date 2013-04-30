@@ -50,7 +50,7 @@ public final class ODConfig {
 
     public boolean loadConfig() {
         boolean isErrorFree = true;
-        PLUGIN_VERSION = plugin.getDescription().getVersion();
+        PLUGIN_VERSION = "2.13";
 
         new File(DIRECTORY).mkdir();
 
@@ -58,11 +58,10 @@ public final class ODConfig {
             try {
                 this.bukkitConfig.load(this.configFile);
 
-                if (this.bukkitConfig.getString("Version", "").equals(PLUGIN_VERSION))
+                if (this.bukkitConfig.getString("Version", "").equals(PLUGIN_VERSION)) {
                     loadData();
-
-                else {
-                    plugin.getLogger().info(" config file outdated, adding old data and creating new VALUES. Make sure you change those!");
+                } else {
+                    plugin.getLogger().info("Config file outdated. Renamed old and wrote new. Make sure to change.");
                     loadData();
                     writeDefault();
                 }
@@ -140,9 +139,8 @@ public final class ODConfig {
     }
 
     private void writeDefault() {
-        this.configFile.delete();
+        this.configFile.renameTo(new File(DIRECTORY + "config.yml.old"));
         this.plugin.saveDefaultConfig();
-
         loadData();
     }
 
