@@ -21,10 +21,10 @@ public final class ObsidianDestroyer extends JavaPlugin {
     private ODConfig config = new ODConfig(this);
     private final ODEntityListener entityListener = new ODEntityListener(this);
     private final ODJoinListener joinListener = new ODJoinListener(this);
-    public static Logger log;
+    public static Logger LOG;
 
-    public static boolean update = false;
-    public static String name = "";
+    public static boolean UPDATE = false;
+    public static String NAME = "";
 
     
     @Override
@@ -36,7 +36,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
     
     @Override
     public void onEnable() {
-        log = getServer().getLogger();
+        LOG = getServer().getLogger();
         getCommand("obsidiandestroyer").setExecutor(cmdExecutor);
         getCommand("od").setExecutor(cmdExecutor);
 
@@ -50,8 +50,8 @@ public final class ObsidianDestroyer extends JavaPlugin {
 
         if(config.getCheckUpdate()) {
             Updater updater = new Updater(this, "obsidiandestroyer", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
-            update = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE; 
-            name = updater.getLatestVersionString();
+            UPDATE = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE; 
+            NAME = updater.getLatestVersionString();
         }
     }
 
@@ -69,7 +69,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 
             metrics.start();
         } catch (IOException e) {
-            log.log(Level.WARNING, "Failed to submit the stats :-("); // Failed to submit the stats :-(
+            LOG.log(Level.WARNING, "Failed to submit the stats :-("); // Failed to submit the stats :-(
         }
     }
 
