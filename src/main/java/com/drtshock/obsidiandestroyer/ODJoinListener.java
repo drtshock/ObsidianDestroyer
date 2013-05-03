@@ -36,9 +36,9 @@ public class ODJoinListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent event) {
 
-        if(event.getPlayer().isOp() && ObsidianDestroyer.update) {
+        if(event.getPlayer().isOp() && ObsidianDestroyer.UPDATE) {
             event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "There is a new update for ObsidianDestroyer!");
-            event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "Version: " + ChatColor.GRAY + ObsidianDestroyer.name + 
+            event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "Version: " + ChatColor.GRAY + ObsidianDestroyer.NAME + 
                     ChatColor.DARK_PURPLE + " is the latest version!");
             event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "Visit " + ChatColor.GRAY + "http://dev.bukkit.org/obsidiandestroyer" + 
                     ChatColor.DARK_PURPLE + " to download.");
