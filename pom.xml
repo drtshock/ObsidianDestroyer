@@ -76,36 +76,33 @@
             <version>1.5.2-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-        	<groupId>org.bukkit</groupId>
-        	<artifactId>craftbukkit</artifactId>
-        	<version>1.5.2-R0.1-SNAPSHOT</version><!--$NO-MVN-MAN-VER$-->
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
+            <version>1.5.2-R0.1-SNAPSHOT</version><!--$NO-MVN-MAN-VER$-->
         </dependency>
         <dependency>
-                <groupId>com.massivecraft</groupId>
-                <artifactId>factions</artifactId>
-                <version>1.8.0</version>
+            <groupId>com.massivecraft</groupId>
+            <artifactId>factions</artifactId>
+            <version>1.8.0</version>
         </dependency>
     </dependencies>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
     <dependencyManagement>
-    	<dependencies>
-    		<dependency>
-    			<groupId>org.bukkit</groupId>
-    			<artifactId>craftbukkit</artifactId>
-    			<version>LATEST</version>
-    		</dependency>
-    		<dependency>
-    			<groupId>org.bukkit</groupId>
-    			<artifactId>bukkit</artifactId>
-    			<version>LATEST</version>
-    		</dependency>
-                <dependency>
-                        <groupId>com.massivecraft</groupId>
-                        <artifactId>factions</artifactId>
-                        <version>LATEST</version>
-                </dependency>
-    	</dependencies>
+        <dependencies>
+            <dependency>
+                <groupId>org.bukkit</groupId>
+                <artifactId>craftbukkit</artifactId>
+                <version>LATEST</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bukkit</groupId>
+                <artifactId>bukkit</artifactId>
+                <version>LATEST</version>
+            </dependency>
+            <dependency>
+                <groupId>com.massivecraft</groupId>
+                <artifactId>factions</artifactId>
+                <version>LATEST</version>
+            </dependency>
+        </dependencies>
     </dependencyManagement>
 </project>
