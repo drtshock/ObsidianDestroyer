@@ -288,16 +288,16 @@ public final class ODEntityListener implements Listener {
         {
             if (((float) Runtime.getRuntime().freeMemory() + (1024 * 1024 * config.getMinFreeMemoryLimit())) >= Runtime.getRuntime().maxMemory())
             {
-        	    if (DisplayWarning)
-        	    {
-        		    plugin.LOG.info("Server Memory: " + ((Runtime.getRuntime().freeMemory() / 1024) / 1024) + "MB free out of " + ((Runtime.getRuntime().maxMemory() / 1024) / 1024) + "MB available.");
+                if (DisplayWarning)
+                {
+                    plugin.LOG.info("Server Memory: " + ((Runtime.getRuntime().freeMemory() / 1024) / 1024) + "MB free out of " + ((Runtime.getRuntime().maxMemory() / 1024) / 1024) + "MB available.");
                     plugin.LOG.info("Server is running low on resources.. Let's not start a new timer, there are " + this.obsidianTimer.size() + " other timers running!");
-        		    DisplayWarning = false;
+                    DisplayWarning = false;
         	    }
-        	    return;
+                return;
             }
             else
-        	    DisplayWarning = true;
+                DisplayWarning = true;
         }
 
         Timer timer = new Timer();

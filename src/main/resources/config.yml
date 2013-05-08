@@ -4,7 +4,7 @@
 # Made with love <3
 
 # Do not touch this line. It will rewrite your config.
-Version: '2.13'
+Version: ${project.version}
 
 # This will only check for updates. We will never download them for you.
 checkupdate: true
