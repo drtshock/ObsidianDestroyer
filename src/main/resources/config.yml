@@ -53,6 +53,13 @@ Durability:
 # can save some memory :)
   ResetEnabled: true
   ResetAfter: '600000'
+  
+# Experimental Timer safety. Use this if you are having issues with your server running out of memory.
+# This is not a fix to out of memory errors. Though it can help prevent this plugin from crashing your server.
+# "SystemMinMemory" = Minimun amount of RAM that can be availabe.
+# If there is less than this amount of memory available, no new timer threads will be created.
+  UseTimerSafety: false
+  SystemMinMemory: 80
 
 # Chance to drop. Setting to anything at or above 1 will make them always drop.
 Blocks:

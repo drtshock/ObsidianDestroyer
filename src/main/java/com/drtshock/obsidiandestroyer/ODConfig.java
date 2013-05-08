@@ -11,6 +11,7 @@ import java.util.HashMap;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 
 public final class ODConfig {
 
@@ -42,7 +43,9 @@ public final class ODConfig {
     private int checkitemid = 38;
     private boolean ignorecancel = false;
     private boolean bypassAllBlocks = false;
-    private static String[] VALUES = new String[21];
+    private static String[] VALUES = new String[23];
+    private boolean durabilityTimerSafey = false;
+    private int minFreeMemoryLimit = 80;
 
     public ODConfig(ObsidianDestroyer plugin) {
         this.plugin = plugin;
@@ -50,7 +53,8 @@ public final class ODConfig {
 
     public boolean loadConfig() {
         boolean isErrorFree = true;
-        PLUGIN_VERSION = "2.13";
+    	PluginDescriptionFile pdfFile = plugin.getDescription();
+    	PLUGIN_VERSION = pdfFile.getVersion();
 
         new File(DIRECTORY).mkdir();
 
@@ -76,6 +80,25 @@ public final class ODConfig {
         }
 
         return isErrorFree;
+    }
+    
+    public void reloadConfig() {
+        if (this.configFile.exists()) {
+            try {
+                this.bukkitConfig.load(this.configFile);
+                plugin.LOG.info("Config file found, reloading config...");
+                
+                if (this.bukkitConfig.getString("Version", "").equals(PLUGIN_VERSION)) {
+                    loadData();
+                }
+                else {
+                	plugin.LOG.info("Version mismatch between plugin and config file!");                     	
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void loadData() {
@@ -108,6 +131,9 @@ public final class ODConfig {
             this.bdurability = this.bukkitConfig.getInt("Bedrock.Durability", 1);
             this.durabilityTimerEnabled = this.bukkitConfig.getBoolean("Durability.ResetEnabled", true);
 
+            this.durabilityTimerSafey = this.bukkitConfig.getBoolean("Durability.UseTimerSafety", false);
+            this.minFreeMemoryLimit = this.bukkitConfig.getInt("Durability.SystemMinMemory", 80);
+            
             this.durabilityTime = readLong("Durability.ResetAfter", "600000");
             this.chanceToDropBlock = this.bukkitConfig.getDouble("Blocks.ChanceToDrop", 0.7D);
 
@@ -132,6 +158,8 @@ public final class ODConfig {
             VALUES[18] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
             VALUES[19] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
             VALUES[20] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
+            VALUES[21] = y + "UseTimerSafety: " + g + this.getDurabilityTimerSafey();
+            VALUES[22] = y + "SystemMinMemory: " + g + this.getMinFreeMemoryLimit();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,7 +168,42 @@ public final class ODConfig {
 
     private void writeDefault() {
         this.configFile.renameTo(new File(DIRECTORY + "config.yml.old"));
-        this.plugin.saveDefaultConfig();
+        
+        this.bukkitConfig.set("Version", this.PLUGIN_VERSION);
+        this.bukkitConfig.set("checkupdate", this.getCheckUpdate());
+        this.bukkitConfig.set("Radius", this.getRadius());
+        this.bukkitConfig.set("FluidsProtect", this.getWaterProtection());
+        this.bukkitConfig.set("BypassAllBlocks", this.getBypassAllBlocks());
+        this.bukkitConfig.set("CheckItemId", this.getCheckItemId());
+        this.bukkitConfig.set("IgnoreCancel", this.getIgnoreCancel());
+        this.bukkitConfig.set("Bedrock.Enabled", this.getBedrockEnabled());
+
+        this.bukkitConfig.set("EnabledFor.TNT", this.getTntEnabled());
+        this.bukkitConfig.set("EnabledFor.Cannons", this.getCannonsEnabled());
+        this.bukkitConfig.set("EnabledFor.Creepers", this.getCannonsEnabled());
+        this.bukkitConfig.set("EnabledFor.Ghasts", this.getGhastsEnabled());
+        this.bukkitConfig.set("EnabledFor.Withers", this.getWithersEnabled());
+
+        this.bukkitConfig.set("Durability.Enabled", this.getDurabilityEnabled());
+        this.bukkitConfig.set("Durability.Obsidian", this.getoDurability());
+        this.bukkitConfig.set("Durability.EnchantmentTable", this.geteDurability());
+        this.bukkitConfig.set("Durability.EnderChest", this.getecDurability());
+        this.bukkitConfig.set("Durability.Anvil", this.getaDurability());
+        this.bukkitConfig.set("Bedrock.Durability", this.getbDurability());
+        this.bukkitConfig.set("Durability.ResetEnabled", this.getDurabilityResetTimerEnabled());
+
+        this.bukkitConfig.set("Durability.UseTimerSafety", this.getDurabilityTimerSafey());
+        this.bukkitConfig.set("Durability.SystemMinMemory", this.getMinFreeMemoryLimit());
+            
+        this.bukkitConfig.set("Durability.ResetAfter", this.getDurabilityResetTime());
+        this.bukkitConfig.set("Blocks.ChanceToDrop", this.getChanceToDropBlock());
+        
+        try {
+			this.bukkitConfig.save(this.configFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        
         loadData();
     }
 
@@ -258,6 +321,14 @@ public final class ODConfig {
 
     public Plugin getPlugin() {
         return this.plugin;
+    }
+    
+    public int getMinFreeMemoryLimit() {
+    	return this.minFreeMemoryLimit;
+    }
+    
+    public boolean getDurabilityTimerSafey() {
+    	return this.durabilityTimerSafey;
     }
 
     public void saveDurabilityToFile() {

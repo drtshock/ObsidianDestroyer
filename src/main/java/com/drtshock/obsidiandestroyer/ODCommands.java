@@ -85,7 +85,7 @@ public final class ODCommands implements CommandExecutor {
 
     private void reloadPlugin(CommandSender sender) {
         sender.sendMessage(ChatColor.GREEN + "Reloading ObsidianDestroyer config!");
-        this.plugin.reloadConfig();
+        this.plugin.getODConfig().reloadConfig();
     }
 
     private void getConfigInfo(CommandSender sender) {

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -36,7 +35,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
     
     @Override
     public void onEnable() {
-        LOG = getServer().getLogger();
+        LOG = getLogger();
         getCommand("obsidiandestroyer").setExecutor(cmdExecutor);
         getCommand("od").setExecutor(cmdExecutor);
 
