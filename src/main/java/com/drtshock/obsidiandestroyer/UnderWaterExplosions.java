@@ -8,15 +8,19 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 public class UnderWaterExplosions {
+	private static ObsidianDestroyer OD;
 	private static int radius = 1;
 	private static int cannonRadius = 2;
 	private static ArrayList<Integer> fluidBlocks = new ArrayList<Integer>();
 	
-	public static void Handle (EntityExplodeEvent event) {
+	public static void Handle (EntityExplodeEvent event, ObsidianDestroyer plugin) {
+		OD = plugin;
+		
 		fluidBlocks.add(8);
 		fluidBlocks.add(9);
 		fluidBlocks.add(10);
 		fluidBlocks.add(11);
+		
 		explodeUnderWater(event);
 	}
 	
@@ -30,17 +34,19 @@ public class UnderWaterExplosions {
 		int redstoneCount = 0;
 		
 		// Protects TNT cannons from exploding themselves
-        for (int x = -cannonRadius; x <= cannonRadius; x++)
-            for (int y = -cannonRadius; y <= cannonRadius; y++)
-                for (int z = -cannonRadius; z <= cannonRadius; z++) {
-                	Location targetLoc = new Location(entity.getWorld(), entity.getLocation().getX() + x, entity.getLocation().getY() + y, entity.getLocation().getZ() + z);
-                	if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE))
-                		redstoneCount++;
-                }
-		
-        if (redstoneCount >= 6) {
-        	return;
-        }
+		if (OD.getODConfig().getProtectTNTCannons()) {
+	        for (int x = -cannonRadius; x <= cannonRadius; x++)
+	            for (int y = -cannonRadius; y <= cannonRadius; y++)
+	                for (int z = -cannonRadius; z <= cannonRadius; z++) {
+	                	Location targetLoc = new Location(entity.getWorld(), entity.getLocation().getX() + x, entity.getLocation().getY() + y, entity.getLocation().getZ() + z);
+	                	if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE))
+	                		redstoneCount++;
+	                }
+			
+	        if (redstoneCount >= 6) {
+	        	return;
+	        }
+		}
 				
         // Creates air where water used to be and sets up the boom if the explosion is from within a liquid
         for (int x = -radius; x <= radius; x++)
