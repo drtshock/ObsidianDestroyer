@@ -107,6 +107,8 @@ public final class ODEntityListener implements Listener {
             correctExplosion(event, ((Float)this._entityPowerMap.get(Integer.valueOf(event.getEntity().getEntityId()))).floatValue());
             this._entityPowerMap.remove(Integer.valueOf(event.getEntity().getEntityId()));
         }
+        
+        UnderWaterExplosions.Handle(event);
 
         for (int x = -radius; x <= radius; x++)
             for (int y = -radius; y <= radius; y++)
