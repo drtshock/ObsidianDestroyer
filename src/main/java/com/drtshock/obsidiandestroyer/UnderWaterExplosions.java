@@ -39,7 +39,7 @@ public class UnderWaterExplosions {
 	            for (int y = -cannonRadius; y <= cannonRadius; y++)
 	                for (int z = -cannonRadius; z <= cannonRadius; z++) {
 	                	Location targetLoc = new Location(entity.getWorld(), entity.getLocation().getX() + x, entity.getLocation().getY() + y, entity.getLocation().getZ() + z);
-	                	if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE))
+	                	if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_ON) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_OFF))
 	                		redstoneCount++;
 	                }
 			
