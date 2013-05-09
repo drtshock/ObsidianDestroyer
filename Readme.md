@@ -1,4 +1,4 @@
-ObsidianDestroyer plugin v2.13<br>
+ObsidianDestroyer plugin v3.0<br>
 by Pandemoneus<br>
 https://github.com/Pandemoneus<br>
 
@@ -19,7 +19,7 @@ How to uninstall:
 Options:
 -----------------
 Radius - determines how far around the origin of the explosion Obsidian can be destroyed (default: 3) WARNING: High values probably cause lag<br>
-FluidsProtect - set to false if you want obsidan to be able to hit by explosions from within water (default: true)<br>
+FluidsProtect - set to false if you want Obsidan to be able to hit by explosions from within water (default: true)<br>
 EnabledFor.TNT - set true if TNT is allowed to destroy Obsidian (default: true)<br>
 EnabledFor.Cannons - set true if you would like the cannons plugin to break obsidian (default: false) https://github.com/DerPavlov/Cannons/<br>
 EnabledFor.Creepers - set true if Creepers are allowed to destroy Obsidian (default: false)<br>
@@ -28,8 +28,11 @@ Durability.Enabled - set true if you want to use the durability feature (default
 Durability.Amount - determines after how many TNT explosions in the radius the Obsidian block gets destroyed (default: 1)<br>
 Durability.ResetEnabled - set true if you want to reset the durability back to max after a certain time has passed (default: true)<br>
 Durability.ResetTime - time in milliseconds that has to pass before the durability is reset (default: '600000' (10 minutes))<br>
-Blocks.ChanceToDrop - set the chance to drop an obsidian block when it was blown up, set to 1.0 to always drop a block (default: 0.7 (70%))
-
+Blocks.ChanceToDrop - set the chance to drop an Obsidian block when it was blown up, set to 1.0 to always drop a block (default: 0.7 (70%))
+Durability.UseTimerSafety - Use if your are experiencing crashes due to the server running out of memory (default: false)
+Durability.SystemMinMemory - Amount of RAM (in MB) reserved for the server.  The plugin will lose some functionality if free server memory is below this amount (default: 80)
+Explosions.BypassAllFluidProtection - Allows explosions from within a liquid to destroy the liquid, and the surrounding blocks (default: false)
+Explosions.TNTCannonsProtected - Protects "TNT Cannons" from destroying themselves when used (default: true)
 
 Permission nodes:
 -----------------

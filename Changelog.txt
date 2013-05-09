@@ -1,3 +1,10 @@
+Version 3.0
++ Release
++ Updated documentation
+
+Version 2.14.3
++ Fixed auto updater
+
 Version 2.14.2
 + Implemented bypass of explosion protections for fluids
 + Ability to protect "TNT Cannons" from the bypass
