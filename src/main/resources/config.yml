@@ -65,4 +65,9 @@ Durability:
 Blocks:
   ChanceToDrop: 0.7
   
+# Enables a bypass to allow explosions to effect blocks under/next to liquids.
+Explosions:
+  BypassAllFluidProtection: false
+  TNTCannonsProtected: true
+  
 # Thats it :3

@@ -43,9 +43,11 @@ public final class ODConfig {
     private int checkitemid = 38;
     private boolean ignorecancel = false;
     private boolean bypassAllBlocks = false;
-    private static String[] VALUES = new String[23];
+    private static String[] VALUES = new String[25];
     private boolean durabilityTimerSafey = false;
     private int minFreeMemoryLimit = 80;
+    private boolean explodeInLiquid = false;
+    private boolean protectTNTCannons = true;
 
     public ODConfig(ObsidianDestroyer plugin) {
         this.plugin = plugin;
@@ -136,6 +138,9 @@ public final class ODConfig {
             
             this.durabilityTime = readLong("Durability.ResetAfter", "600000");
             this.chanceToDropBlock = this.bukkitConfig.getDouble("Blocks.ChanceToDrop", 0.7D);
+            
+            this.explodeInLiquid = this.bukkitConfig.getBoolean("Explosions.BypassAllFluidProtection", false);
+            this.protectTNTCannons = this.bukkitConfig.getBoolean("Explosions.TNTCannonsProtected", true);
 
             VALUES[0] = y + "checkupdate: " + g + this.checkUpdate;
             VALUES[1] = y + "ExplosionRadius: " + g + this.getRadius();
@@ -160,6 +165,8 @@ public final class ODConfig {
             VALUES[20] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
             VALUES[21] = y + "UseTimerSafety: " + g + this.getDurabilityTimerSafey();
             VALUES[22] = y + "SystemMinMemory: " + g + this.getMinFreeMemoryLimit();
+            VALUES[23] = y + "BypassAllFluidProtection: " + g + this.getExplodeInLiquids();
+            VALUES[24] = y + "TNTCannonsProtected: " + g + this.getProtectTNTCannons();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,6 +204,9 @@ public final class ODConfig {
             
         this.bukkitConfig.set("Durability.ResetAfter", this.getDurabilityResetTime());
         this.bukkitConfig.set("Blocks.ChanceToDrop", this.getChanceToDropBlock());
+        
+        this.bukkitConfig.set("Explosions.BypassAllFluidProtection", this.getExplodeInLiquids());
+        this.bukkitConfig.set("Explosions.TNTCannonsProtected", this.getProtectTNTCannons());
         
         try {
 			this.bukkitConfig.save(this.configFile);
@@ -329,6 +339,14 @@ public final class ODConfig {
     
     public boolean getDurabilityTimerSafey() {
     	return this.durabilityTimerSafey;
+    }
+    
+    public boolean getExplodeInLiquids() {
+    	return this.explodeInLiquid;
+    }
+    
+    public boolean getProtectTNTCannons() {
+    	return this.protectTNTCannons;
     }
 
     public void saveDurabilityToFile() {
