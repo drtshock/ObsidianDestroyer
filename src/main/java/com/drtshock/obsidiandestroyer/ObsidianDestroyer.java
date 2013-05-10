@@ -58,7 +58,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
         try {	
             Metrics metrics = new Metrics(this);
 
-            metrics.addCustomData(new Metrics.Plotter("Obsidian Durability Per Server") {
+            metrics.addDurabilityChart(new Metrics.Plotter("Obsidian Durability Per Server") {
 
                 @Override
                 public String getColumnName() {

@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.pandemoneus</groupId>
     <artifactId>ObsidianDestroyer</artifactId>
-    <version>3.0</version>
+    <version>3.0.1-SNAPSHOT</version>
     <name>ObsidianDestroyer</name>
     <url>https://github.com/drtshock/ObsidianDestroyer</url>
     
