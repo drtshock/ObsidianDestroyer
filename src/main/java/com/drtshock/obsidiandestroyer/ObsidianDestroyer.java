@@ -42,10 +42,10 @@ public final class ObsidianDestroyer extends JavaPlugin {
         config.loadConfig();
         entityListener.setObsidianDurability(config.loadDurabilityFromFile());
 
-        startMetrics();
-
         getServer().getPluginManager().registerEvents(entityListener, this);
         getServer().getPluginManager().registerEvents(joinListener, this);
+        
+        startMetrics();
 
         if(config.getCheckUpdate()) {
             Updater updater = new Updater(this, "obsidiandestroyer", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
@@ -58,11 +58,16 @@ public final class ObsidianDestroyer extends JavaPlugin {
         try {	
             Metrics metrics = new Metrics(this);
 
-            metrics.addCustomData(new Metrics.Plotter("Obsidian Durability") {
+            metrics.addCustomData(new Metrics.Plotter("Obsidian Durability Per Server") {
 
                 @Override
+                public String getColumnName() {
+                    return String.valueOf(config.getoDurability());
+                }
+            	
+                @Override
                 public int getValue() {
-                    return config.getoDurability();
+                    return 1;
                 }
             });
 
