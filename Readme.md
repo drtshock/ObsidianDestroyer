@@ -28,11 +28,11 @@ Durability.Enabled - set true if you want to use the durability feature (default
 Durability.Amount - determines after how many TNT explosions in the radius the Obsidian block gets destroyed (default: 1)<br>
 Durability.ResetEnabled - set true if you want to reset the durability back to max after a certain time has passed (default: true)<br>
 Durability.ResetTime - time in milliseconds that has to pass before the durability is reset (default: '600000' (10 minutes))<br>
-Blocks.ChanceToDrop - set the chance to drop an Obsidian block when it was blown up, set to 1.0 to always drop a block (default: 0.7 (70%))
-Durability.UseTimerSafety - Use if your are experiencing crashes due to the server running out of memory (default: false)
-Durability.SystemMinMemory - Amount of RAM (in MB) reserved for the server.  The plugin will lose some functionality if free server memory is below this amount (default: 80)
-Explosions.BypassAllFluidProtection - Allows explosions from within a liquid to destroy the liquid, and the surrounding blocks (default: false)
-Explosions.TNTCannonsProtected - Protects "TNT Cannons" from destroying themselves when used (default: true)
+Blocks.ChanceToDrop - set the chance to drop an Obsidian block when it was blown up, set to 1.0 to always drop a block (default: 0.7 (70%))<br>
+Durability.UseTimerSafety - Use if your are experiencing crashes due to the server running out of memory (default: false)<br>
+Durability.SystemMinMemory - Amount of RAM (in MB) reserved for the server.  The plugin will lose some functionality if free server memory is below this amount (default: 80)<br>
+Explosions.BypassAllFluidProtection - Allows explosions from within a liquid to destroy the liquid, and the surrounding blocks (default: false)<br>
+Explosions.TNTCannonsProtected - Protects "TNT Cannons" from destroying themselves when used (default: true)<br>
 
 Permission nodes:
 -----------------
