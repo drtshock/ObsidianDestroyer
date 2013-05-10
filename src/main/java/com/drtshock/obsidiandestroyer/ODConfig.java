@@ -117,7 +117,7 @@ public final class ODConfig {
             this.bypassAllBlocks = this.bukkitConfig.getBoolean("BypassAllBlocks", false);
             this.checkitemid = this.bukkitConfig.getInt("CheckItemId", 38);
             this.ignorecancel = this.bukkitConfig.getBoolean("IgnoreCancel", false);
-            this.bedrockEnabled = this.bukkitConfig.getBoolean("Bedrock.Enabled", false);
+            this.bedrockEnabled = this.bukkitConfig.getBoolean("Durability.Bedrock.Enabled", false);
 
             this.tntEnabled = this.bukkitConfig.getBoolean("EnabledFor.TNT", true);
             this.cannonsEnabled = this.bukkitConfig.getBoolean("EnabledFor.Cannons", false);
@@ -130,7 +130,7 @@ public final class ODConfig {
             this.edurability = this.bukkitConfig.getInt("Durability.EnchantmentTable", 1);
             this.ecdurability = this.bukkitConfig.getInt("Durability.EnderChest", 1);
             this.adurability = this.bukkitConfig.getInt("Durability.Anvil", 1);
-            this.bdurability = this.bukkitConfig.getInt("Bedrock.Durability", 1);
+            this.bdurability = this.bukkitConfig.getInt("Durability.Bedrock.Durability", 1);
             this.durabilityTimerEnabled = this.bukkitConfig.getBoolean("Durability.ResetEnabled", true);
 
             this.durabilityTimerSafey = this.bukkitConfig.getBoolean("Durability.UseTimerSafety", false);
@@ -183,7 +183,7 @@ public final class ODConfig {
         this.bukkitConfig.set("BypassAllBlocks", this.getBypassAllBlocks());
         this.bukkitConfig.set("CheckItemId", this.getCheckItemId());
         this.bukkitConfig.set("IgnoreCancel", this.getIgnoreCancel());
-        this.bukkitConfig.set("Bedrock.Enabled", this.getBedrockEnabled());
+        this.bukkitConfig.set("Durability.Bedrock.Enabled", this.getBedrockEnabled());
 
         this.bukkitConfig.set("EnabledFor.TNT", this.getTntEnabled());
         this.bukkitConfig.set("EnabledFor.Cannons", this.getCannonsEnabled());
@@ -196,7 +196,7 @@ public final class ODConfig {
         this.bukkitConfig.set("Durability.EnchantmentTable", this.geteDurability());
         this.bukkitConfig.set("Durability.EnderChest", this.getecDurability());
         this.bukkitConfig.set("Durability.Anvil", this.getaDurability());
-        this.bukkitConfig.set("Bedrock.Durability", this.getbDurability());
+        this.bukkitConfig.set("Durability.Bedrock.Durability", this.getbDurability());
         this.bukkitConfig.set("Durability.ResetEnabled", this.getDurabilityResetTimerEnabled());
 
         this.bukkitConfig.set("Durability.UseTimerSafety", this.getDurabilityTimerSafey());
