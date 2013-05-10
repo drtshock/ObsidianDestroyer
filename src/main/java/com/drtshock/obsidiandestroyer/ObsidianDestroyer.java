@@ -6,6 +6,8 @@ import java.util.logging.Logger;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.drtshock.obsidiandestroyer.Metrics.Graph;
+
 /**
  * The ObsidianDestroyer plugin.
  * 
@@ -57,8 +59,10 @@ public final class ObsidianDestroyer extends JavaPlugin {
     public void startMetrics() { 	
         try {	
             Metrics metrics = new Metrics(this);
-
-            metrics.addDurabilityChart(new Metrics.Plotter("Obsidian Durability Per Server") {
+            
+            Graph graph = metrics.createGraph("Durability");
+            
+            graph.addPlotter(new Metrics.Plotter("Obsidian Durability Per Server") {
 
                 @Override
                 public String getColumnName() {

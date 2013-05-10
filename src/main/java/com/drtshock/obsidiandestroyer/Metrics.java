@@ -209,17 +209,6 @@ public class Metrics {
         // Ensure the default graph is included in the submitted graphs
         graphs.add(defaultGraph);
     }
-    
-    public void addDurabilityChart(final Plotter plotter) {
-        if (plotter == null) {
-            throw new IllegalArgumentException("Plotter cannot be null");
-        }
-
-        final Graph graph = new Graph("Durability");
-        graph.addPlotter(plotter);
-
-        graphs.add(graph);
-    }
 
     /**
      * Start measuring statistics. This will immediately create an async repeating task as the plugin and send
