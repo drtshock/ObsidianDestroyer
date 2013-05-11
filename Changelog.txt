@@ -1,3 +1,9 @@
+Version 3.0.2
++ Disable the plugin per world, through a listing in the config
+
+Version 3.0.1
++ Corrected custom metrics
+
 Version 3.0
 + Release
 + Updated documentation

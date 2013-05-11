@@ -33,6 +33,7 @@ Durability.UseTimerSafety - Use if your are experiencing crashes due to the serv
 Durability.SystemMinMemory - Amount of RAM (in MB) reserved for the server.  The plugin will lose some functionality if free server memory is below this amount (default: 80)<br>
 Explosions.BypassAllFluidProtection - Allows explosions from within a liquid to destroy the liquid, and the surrounding blocks (default: false)<br>
 Explosions.TNTCannonsProtected - Protects "TNT Cannons" from destroying themselves when used (default: true)<br>
+DisabledOnWorlds - A list of worlds that the plugin will not be used. (default: [])<br>
 
 Permission nodes:
 -----------------
