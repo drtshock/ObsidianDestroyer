@@ -70,4 +70,8 @@ Explosions:
   BypassAllFluidProtection: false
   TNTCannonsProtected: true
   
+# List of worlds that the plugin will not interact with.
+# Example: DisabledOnWorlds: [world_survival, world_creative]
+DisabledOnWorlds: []
+  
 # Thats it :3

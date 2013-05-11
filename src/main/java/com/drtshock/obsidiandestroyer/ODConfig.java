@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 
 import org.bukkit.ChatColor;
@@ -43,11 +45,12 @@ public final class ODConfig {
     private int checkitemid = 38;
     private boolean ignorecancel = false;
     private boolean bypassAllBlocks = false;
-    private static String[] VALUES = new String[25];
+    private static String[] VALUES = new String[26];
     private boolean durabilityTimerSafey = false;
     private int minFreeMemoryLimit = 80;
     private boolean explodeInLiquid = false;
     private boolean protectTNTCannons = true;
+    private ArrayList<String> disabledWorlds = new ArrayList<String>();
 
     public ODConfig(ObsidianDestroyer plugin) {
         this.plugin = plugin;
@@ -141,7 +144,9 @@ public final class ODConfig {
             
             this.explodeInLiquid = this.bukkitConfig.getBoolean("Explosions.BypassAllFluidProtection", false);
             this.protectTNTCannons = this.bukkitConfig.getBoolean("Explosions.TNTCannonsProtected", true);
-
+            
+            this.disabledWorlds = (ArrayList<String>) this.bukkitConfig.getStringList("DisabledOnWorlds");
+            
             VALUES[0] = y + "checkupdate: " + g + this.checkUpdate;
             VALUES[1] = y + "ExplosionRadius: " + g + this.getRadius();
             VALUES[2] = y + "FluidsProtect: " + g + this.getWaterProtection();
@@ -167,6 +172,10 @@ public final class ODConfig {
             VALUES[22] = y + "SystemMinMemory: " + g + this.getMinFreeMemoryLimit();
             VALUES[23] = y + "BypassAllFluidProtection: " + g + this.getExplodeInLiquids();
             VALUES[24] = y + "TNTCannonsProtected: " + g + this.getProtectTNTCannons();
+            VALUES[25] = y + "DisabledOnWorlds: " + g;
+            for (String dWorld : this.getDisabledWorlds()) {
+            	VALUES[25] += dWorld + " ";
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -207,6 +216,8 @@ public final class ODConfig {
         
         this.bukkitConfig.set("Explosions.BypassAllFluidProtection", this.getExplodeInLiquids());
         this.bukkitConfig.set("Explosions.TNTCannonsProtected", this.getProtectTNTCannons());
+        
+        this.bukkitConfig.set("DisabledOnWorlds", this.getDisabledWorlds());
         
         try {
 			this.bukkitConfig.save(this.configFile);
@@ -347,6 +358,10 @@ public final class ODConfig {
     
     public boolean getProtectTNTCannons() {
     	return this.protectTNTCannons;
+    }
+    
+    public List<String> getDisabledWorlds() {
+    	return this.disabledWorlds;
     }
 
     public void saveDurabilityToFile() {

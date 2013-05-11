@@ -52,6 +52,10 @@ public final class ODEntityListener implements Listener {
         if (((event == null) || (event.isCancelled())) && (!this.config.getIgnoreCancel())) {
             return;
         }
+        
+        if (this.config.getDisabledWorlds().contains(event.getLocation().getWorld().getName())) {
+        	return;
+        }
 
         int radius = this.config.getRadius();
 
