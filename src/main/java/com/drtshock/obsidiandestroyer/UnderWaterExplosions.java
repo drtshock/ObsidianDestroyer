@@ -10,6 +10,12 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.struct.FFlag;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
+import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 
 public class UnderWaterExplosions {
 	private static ObsidianDestroyer OD;
@@ -37,18 +43,40 @@ public class UnderWaterExplosions {
 		boolean bBoom = false;
 		int redstoneCount = 0;
 		
+		// Hook to prevent liquids from being destroyed if Towny has explosions disabled
+		if (ObsidianDestroyer.hookedTowny()) {
+			TownyWorld townyWorld;
+			try {
+				townyWorld = TownyUniverse.getDataSource().getWorld(event.getLocation().getWorld().getName());
+
+				if (!townyWorld.isUsingTowny())
+					return;
+
+			} catch (NotRegisteredException e) {
+				// failed to get world so abort
+				return;
+			}
+			
+			try {
+				TownBlock townBlock = townyWorld.getTownBlock(Coord.parseCoord(event.getLocation()));
+				if (!townBlock.getPermissions().explosion && !townyWorld.isForceExpl())
+					return;
+				if (townyWorld.isWarZone(Coord.parseCoord(event.getLocation())) && !TownyWarConfig.explosionsBreakBlocksInWarZone())
+					return;
+			} catch (NotRegisteredException e) {
+				// Block not registered so continue
+			}
+			
+			if (!townyWorld.isExpl())
+				return;
+		}
+		
 		// Protects TNT cannons from exploding themselves
 		if (OD.getODConfig().getProtectTNTCannons()) {
 	        for (int x = -cannonRadius; x <= cannonRadius; x++)
 	            for (int y = -cannonRadius; y <= cannonRadius; y++)
 	                for (int z = -cannonRadius; z <= cannonRadius; z++) {
 	                	Location targetLoc = new Location(entity.getWorld(), entity.getLocation().getX() + x, entity.getLocation().getY() + y, entity.getLocation().getZ() + z);
-	                	                	
-	            		if (ObsidianDestroyer.hookedFactions()) {
-	            			Faction faction = Board.getFactionAt(event.getLocation());
-	            			if (faction.getFlag(FFlag.EXPLOSIONS) == false || faction.noExplosionsInTerritory())
-	            				return;
-	            		}
 	                	
 	                	if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_ON) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_OFF))
 	                		redstoneCount++;
@@ -65,6 +93,16 @@ public class UnderWaterExplosions {
                 for (int z = -radius; z <= radius; z++) {
                 	Location targetLoc = new Location(entity.getWorld(), entity.getLocation().getX() + x, entity.getLocation().getY() + y, entity.getLocation().getZ() + z);
                 	
+                	// TODO: Check every block in the explosion for Towny..
+                	
+                	// Hook to prevent liquids from being destroyed in Faction territory that has explosions disabled
+            		if (ObsidianDestroyer.hookedFactions()) {
+            			Faction faction = Board.getFactionAt(event.getLocation());
+            			if (faction.getFlag(FFlag.EXPLOSIONS) == false || faction.noExplosionsInTerritory())
+            				return;
+            		}
+                	
+            		// Replace any liquid blocks with air.
                 	if (fluidBlocks.contains(targetLoc.getBlock().getTypeId()) && targetLoc.getBlock().isLiquid()) {             		
                 		targetLoc.getBlock().setType(Material.AIR);
                 		if (!bBoom)

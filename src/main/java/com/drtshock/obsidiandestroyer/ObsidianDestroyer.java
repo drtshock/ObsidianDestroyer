@@ -31,6 +31,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
     public static String NAME = "";
     
     private static boolean hookedFactions = false;
+    private static boolean hookedTowny = false;
 
     
     @Override
@@ -50,6 +51,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
         config.loadConfig();
         entityListener.setObsidianDurability(config.loadDurabilityFromFile());
         checkFactionsHook();
+        checkTownyHook();
 
         pm.registerEvents(entityListener, this);
         pm.registerEvents(joinListener, this);
@@ -117,7 +119,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
             hookedFactions = true;
         }
     }
-    
+        
     /**
      * Gets the state of the Factions hook.
      * 
@@ -127,4 +129,24 @@ public final class ObsidianDestroyer extends JavaPlugin {
         return hookedFactions;
     }
     
+    /**
+     * Checks to see if the Towny plugin is active.
+     */
+    private void checkTownyHook() {
+        Plugin plug = pm.getPlugin("Towny");
+		
+        if (plug != null) {
+            LOG.info("Towny Found! Enabling hook..");
+            hookedTowny = true;
+        }
+    }
+    
+    /**
+     * Gets the state of the Towny hook.
+     * 
+     * @return Towny hook state
+     */
+    public static boolean hookedTowny() {
+        return hookedTowny;
+    }
 }
