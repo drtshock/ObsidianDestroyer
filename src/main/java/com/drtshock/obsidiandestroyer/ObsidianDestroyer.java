@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.drtshock.obsidiandestroyer.Metrics.Graph;
@@ -23,9 +25,12 @@ public final class ObsidianDestroyer extends JavaPlugin {
     private final ODEntityListener entityListener = new ODEntityListener(this);
     private final ODJoinListener joinListener = new ODJoinListener(this);
     public static Logger LOG;
+    private static PluginManager pm;
 
     public static boolean UPDATE = false;
     public static String NAME = "";
+    
+    private static boolean hookedFactions = false;
 
     
     @Override
@@ -37,12 +42,14 @@ public final class ObsidianDestroyer extends JavaPlugin {
     
     @Override
     public void onEnable() {
+        pm = getServer().getPluginManager();
         LOG = getLogger();
         getCommand("obsidiandestroyer").setExecutor(cmdExecutor);
         getCommand("od").setExecutor(cmdExecutor);
 
         config.loadConfig();
         entityListener.setObsidianDurability(config.loadDurabilityFromFile());
+        checkFactionsHook();
 
         getServer().getPluginManager().registerEvents(entityListener, this);
         getServer().getPluginManager().registerEvents(joinListener, this);
@@ -98,5 +105,26 @@ public final class ObsidianDestroyer extends JavaPlugin {
     public ODEntityListener getListener() {
         return entityListener;
     }
-
+    
+    /**
+     * Checks to see if the Factions plugin is active.
+     */
+    private void checkFactionsHook() {
+        Plugin plug = pm.getPlugin("Factions");
+		
+        if (plug != null) {
+            LOG.info("Factions Found! Enabling hook..");
+            hookedFactions = true;
+        }
+    }
+    
+    /**
+     * Gets the state of the Factions hook.
+     * 
+     * @return Factions hook state
+     */
+    public static boolean hookedFactions() {
+        return hookedFactions;
+    }
+    
 }

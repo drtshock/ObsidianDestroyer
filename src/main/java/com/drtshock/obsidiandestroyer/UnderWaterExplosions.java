@@ -7,6 +7,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
+import com.massivecraft.factions.Board;
+import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.struct.FFlag;
+
 public class UnderWaterExplosions {
 	private static ObsidianDestroyer OD;
 	private static int radius = 1;
@@ -39,6 +43,13 @@ public class UnderWaterExplosions {
 	            for (int y = -cannonRadius; y <= cannonRadius; y++)
 	                for (int z = -cannonRadius; z <= cannonRadius; z++) {
 	                	Location targetLoc = new Location(entity.getWorld(), entity.getLocation().getX() + x, entity.getLocation().getY() + y, entity.getLocation().getZ() + z);
+	                	                	
+	            		if (ObsidianDestroyer.hookedFactions()) {
+	            			Faction faction = Board.getFactionAt(event.getLocation());
+	            			if (faction.getFlag(FFlag.EXPLOSIONS) == false || faction.noExplosionsInTerritory())
+	            				return;
+	            		}
+	                	
 	                	if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_ON) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_OFF))
 	                		redstoneCount++;
 	                }
