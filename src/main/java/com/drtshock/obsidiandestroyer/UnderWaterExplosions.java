@@ -45,9 +45,9 @@ public class UnderWaterExplosions {
 			
 	        if (redstoneCount >= 6) {
 	        	return;
-	        }
+            }
 		}
-				
+		
         // Creates air where water used to be and sets up the boom if the explosion is from within a liquid
         for (int x = -radius; x <= radius; x++)
             for (int y = -radius; y <= radius; y++)
@@ -63,8 +63,9 @@ public class UnderWaterExplosions {
         
         // Creates a new explosion at the cleared location
         if (bBoom) {
+        	event.setCancelled(true);
         	event.getLocation().getBlock().setType(Material.AIR);
-			Float f = Float.valueOf(4);
+			Float f = Float.valueOf(3);
 			entity.getWorld().createExplosion(event.getLocation(), f);
         }
 	}
