@@ -113,7 +113,7 @@ public final class ODEntityListener implements Listener {
         }
         
         if (config.getExplodeInLiquids())
-        	UnderWaterExplosions.Handle(event, this.plugin);
+        	ExplosionsInLiquid.Handle(event, this.plugin);
 
         for (int x = -radius; x <= radius; x++)
             for (int y = -radius; y <= radius; y++)

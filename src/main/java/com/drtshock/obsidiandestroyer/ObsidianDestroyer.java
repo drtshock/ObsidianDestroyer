@@ -54,7 +54,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
         entityListener.setObsidianDurability(config.loadDurabilityFromFile());
         checkFactionsHook();
         checkTownyHook();
-        checkWGHook();
+        checkWorldGuardGHook();
 
         pm.registerEvents(entityListener, this);
         pm.registerEvents(joinListener, this);
@@ -132,7 +132,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
      * 
      * @return Factions hook state
      */
-    public static boolean hookedFactions() {
+    public static boolean isHookedFactions() {
         return hookedFactions;
     }
     
@@ -153,14 +153,14 @@ public final class ObsidianDestroyer extends JavaPlugin {
      * 
      * @return Towny hook state
      */
-    public static boolean hookedTowny() {
+    public static boolean isHookedTowny() {
         return hookedTowny;
     }
     
     /**
      * Checks to see if the WorldGuard plugin is active.
      */
-    private void checkWGHook() {
+    private void checkWorldGuardGHook() {
         Plugin plug = pm.getPlugin("WorldGuard");
 		
         if (plug != null) {
@@ -174,7 +174,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
      * 
      * @return WorldGuard hook state
      */
-    public static boolean hookedWG() {
+    public static boolean isHookedWorldGuard() {
         return hookedWG;
     }
     
