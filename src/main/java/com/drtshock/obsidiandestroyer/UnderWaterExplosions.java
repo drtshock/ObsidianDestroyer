@@ -106,10 +106,14 @@ public class UnderWaterExplosions {
             		
             		// Hook to prevent liquids from being destroyed in protected worldguard regions
             		if (ObsidianDestroyer.hookedWG()) {
-            			RegionManager regionManager = OD.getWorldGuard().getRegionManager(targetLoc.getWorld());
-            			ApplicableRegionSet set = regionManager.getApplicableRegions(targetLoc);
-            			if (!set.allows(com.sk89q.worldguard.protection.flags.DefaultFlag.TNT))
-            				return;
+            			try {
+            			    RegionManager regionManager = OD.getWorldGuard().getRegionManager(targetLoc.getWorld());
+            			    ApplicableRegionSet set = regionManager.getApplicableRegions(targetLoc);
+            			    if (!set.allows(com.sk89q.worldguard.protection.flags.DefaultFlag.TNT))
+            			        return;
+            			} catch (Exception e) {
+            				e.printStackTrace();
+            			}
             		}
                 	
             		// Replace any liquid blocks with air.
