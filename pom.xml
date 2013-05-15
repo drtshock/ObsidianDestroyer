@@ -69,8 +69,8 @@
             <url>http://minor.royaldev.org:8081/nexus/content/groups/public</url>
         </repository>
         <repository>
-            <id>sk89q-maven</id>
-            <url>http://maven.sk89q.com/repo</url>
+            <id>sk89q</id>
+            <url>http://maven.sk89q.com/repo/</url>
         </repository>
     </repositories>
     <dependencies>
