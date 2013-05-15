@@ -85,6 +85,11 @@
             <artifactId>factions</artifactId>
             <version>1.8.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.palmergames</groupId>
+            <artifactId>towny</artifactId>
+            <version>0.82.1.0</version>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
