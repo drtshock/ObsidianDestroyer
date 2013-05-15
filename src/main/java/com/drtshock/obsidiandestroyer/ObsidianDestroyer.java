@@ -9,6 +9,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.drtshock.obsidiandestroyer.Metrics.Graph;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 /**
  * The ObsidianDestroyer plugin.
@@ -32,6 +33,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
     
     private static boolean hookedFactions = false;
     private static boolean hookedTowny = false;
+    private static boolean hookedWG = false;
 
     
     @Override
@@ -52,6 +54,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
         entityListener.setObsidianDurability(config.loadDurabilityFromFile());
         checkFactionsHook();
         checkTownyHook();
+        checkWGHook();
 
         pm.registerEvents(entityListener, this);
         pm.registerEvents(joinListener, this);
@@ -119,7 +122,11 @@ public final class ObsidianDestroyer extends JavaPlugin {
             hookedFactions = true;
         }
     }
-        
+    
+    /* ====================================================
+     * Hooks to other plugins
+     * ==================================================== */
+
     /**
      * Gets the state of the Factions hook.
      * 
@@ -148,5 +155,42 @@ public final class ObsidianDestroyer extends JavaPlugin {
      */
     public static boolean hookedTowny() {
         return hookedTowny;
+    }
+    
+    /**
+     * Checks to see if the WorldGuard plugin is active.
+     */
+    private void checkWGHook() {
+        Plugin plug = pm.getPlugin("WorldGuard");
+		
+        if (plug != null) {
+            LOG.info("WorldGuard Found! Enabling hook..");
+            hookedWG = true;
+        }
+    }
+    
+    /**
+     * Gets the state of the WorldGuard hook.
+     * 
+     * @return WorldGuard hook state
+     */
+    public static boolean hookedWG() {
+        return hookedWG;
+    }
+    
+    /**
+     * Gets the WorldGuard plugin
+     * 
+     * @return WorldGuardPlugin
+     */
+    public WorldGuardPlugin getWorldGuard() {
+        Plugin plugin = pm.getPlugin("WorldGuard");
+     
+        // WorldGuard may not be loaded
+        if (plugin == null || !(plugin instanceof WorldGuardPlugin)) {
+            return null; // Maybe you want throw an exception instead
+        }
+     
+        return (WorldGuardPlugin) plugin;
     }
 }

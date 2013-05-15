@@ -16,6 +16,8 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.managers.RegionManager;
 
 public class UnderWaterExplosions {
 	private static ObsidianDestroyer OD;
@@ -99,6 +101,14 @@ public class UnderWaterExplosions {
             		if (ObsidianDestroyer.hookedFactions()) {
             			Faction faction = Board.getFactionAt(event.getLocation());
             			if (faction.getFlag(FFlag.EXPLOSIONS) == false || faction.noExplosionsInTerritory())
+            				return;
+            		}
+            		
+            		// Hook to prevent liquids from being destroyed in protected worldguard regions
+            		if (ObsidianDestroyer.hookedWG()) {
+            			RegionManager regionManager = OD.getWorldGuard().getRegionManager(targetLoc.getWorld());
+            			ApplicableRegionSet set = regionManager.getApplicableRegions(targetLoc);
+            			if (!set.allows(com.sk89q.worldguard.protection.flags.DefaultFlag.TNT))
             				return;
             		}
                 	
