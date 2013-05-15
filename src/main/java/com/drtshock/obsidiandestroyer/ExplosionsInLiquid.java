@@ -50,7 +50,7 @@ public class ExplosionsInLiquid {
      * 
      * @param event EntityExplodeEvent
      */
-	private static void explosionInLiquid(EntityExplodeEvent event) {
+    private static void explosionInLiquid(EntityExplodeEvent event) {
         if (radius <= 0 || event.isCancelled())
             return;
         

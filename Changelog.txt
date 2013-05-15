@@ -1,3 +1,7 @@
+Version 3.1
++ Added hooks into WorldGuard, Factions, and Towny for ExplosionsInLiquid
++ All features/fixes from 3.0.x
+
 Version 3.0.2
 + Disable the plugin per world, through a listing in the config
 
