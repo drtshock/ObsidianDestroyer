@@ -90,6 +90,11 @@
             <artifactId>towny</artifactId>
             <version>0.82.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.sk89q</groupId>
+            <artifactId>worldguard</artifactId>
+            <version>846-6283382</version>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
