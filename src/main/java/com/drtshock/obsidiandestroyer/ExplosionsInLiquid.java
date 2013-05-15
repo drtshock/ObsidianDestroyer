@@ -21,9 +21,9 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 
 public class ExplosionsInLiquid {
     private static ObsidianDestroyer OD;
-    private static int radius = 1;
-    private static int cannonRadius = 2;
-    private static ArrayList<Integer> fluidBlocks = new ArrayList<Integer>();
+    private static int RADIUS = 1;
+    private static int CANNON_RADIUS = 2;
+    private static ArrayList<Integer> FLUID_BLOCKS = new ArrayList<Integer>();
     
     /**
      * Handles an explosion if it occurs from within a liquid.
@@ -33,13 +33,13 @@ public class ExplosionsInLiquid {
      * @param event EntityExplodeEvent
      * @param plugin ObsidianDestroyer
      */
-    public static void Handle (EntityExplodeEvent event, ObsidianDestroyer plugin) {
+    public static void Handle(EntityExplodeEvent event, ObsidianDestroyer plugin) {
         OD = plugin;
         
-        fluidBlocks.add(8);
-        fluidBlocks.add(9);
-        fluidBlocks.add(10);
-        fluidBlocks.add(11);
+        FLUID_BLOCKS.add(8);
+        FLUID_BLOCKS.add(9);
+        FLUID_BLOCKS.add(10);
+        FLUID_BLOCKS.add(11);
         
         explosionInLiquid(event);
     }
@@ -51,7 +51,7 @@ public class ExplosionsInLiquid {
      * @param event EntityExplodeEvent
      */
 	private static void explosionInLiquid(EntityExplodeEvent event) {
-        if (radius <= 0 || event.isCancelled())
+        if (RADIUS <= 0 || event.isCancelled())
             return;
         
         Entity entity = event.getEntity();
@@ -89,9 +89,9 @@ public class ExplosionsInLiquid {
         
         // Protects TNT cannons from exploding themselves
         if (OD.getODConfig().getProtectTNTCannons()) {
-            for (int x = -cannonRadius; x <= cannonRadius; x++)
-                for (int y = -cannonRadius; y <= cannonRadius; y++)
-                    for (int z = -cannonRadius; z <= cannonRadius; z++) {
+            for (int x = -CANNON_RADIUS; x <= CANNON_RADIUS; x++)
+                for (int y = -CANNON_RADIUS; y <= CANNON_RADIUS; y++)
+                    for (int z = -CANNON_RADIUS; z <= CANNON_RADIUS; z++) {
                         Location targetLoc = new Location(entity.getWorld(), entity.getLocation().getX() + x, entity.getLocation().getY() + y, entity.getLocation().getZ() + z);
                         
                         if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_ON) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_OFF))
@@ -103,9 +103,9 @@ public class ExplosionsInLiquid {
         }
         
         // Creates air where water used to be and sets up the boom if the explosion is from within a liquid
-        for (int x = -radius; x <= radius; x++)
-            for (int y = -radius; y <= radius; y++)
-                for (int z = -radius; z <= radius; z++) {
+        for (int x = -RADIUS; x <= RADIUS; x++)
+            for (int y = -RADIUS; y <= RADIUS; y++)
+                for (int z = -RADIUS; z <= RADIUS; z++) {
                     Location targetLoc = new Location(entity.getWorld(), entity.getLocation().getX() + x, entity.getLocation().getY() + y, entity.getLocation().getZ() + z);
                     
                     // TODO: Check every block in the explosion for Towny..
@@ -130,7 +130,7 @@ public class ExplosionsInLiquid {
                     }
                     
                     // Replace any liquid blocks with air.
-                    if (fluidBlocks.contains(targetLoc.getBlock().getTypeId()) && targetLoc.getBlock().isLiquid()) {                     
+                    if (FLUID_BLOCKS.contains(targetLoc.getBlock().getTypeId()) && targetLoc.getBlock().isLiquid()) {                     
                         targetLoc.getBlock().setType(Material.AIR);
                         if (!bBoom)
                             bBoom = true;

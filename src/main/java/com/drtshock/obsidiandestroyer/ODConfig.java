@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -70,7 +71,7 @@ public final class ODConfig {
                 if (this.bukkitConfig.getString("Version", "").equals(PLUGIN_VERSION)) {
                     loadData();
                 } else {
-                    plugin.getLogger().info("Config file outdated. Renamed old and wrote new. Make sure to change.");
+                    ObsidianDestroyer.LOG.info("Config file outdated. Renamed old and wrote new. Make sure to change.");
                     loadData();
                     writeDefault();
                 }
@@ -80,7 +81,7 @@ public final class ODConfig {
             }
         }
         else {
-            this.plugin.getLogger().info("config file not found, creating new config file :D");
+            ObsidianDestroyer.LOG.info("config file not found, creating new config file :D");
             this.plugin.saveDefaultConfig();
         }
 
@@ -91,13 +92,13 @@ public final class ODConfig {
         if (this.configFile.exists()) {
             try {
                 this.bukkitConfig.load(this.configFile);
-                plugin.LOG.info("Config file found, reloading config...");
+                ObsidianDestroyer.LOG.info("Config file found, reloading config...");
                 
                 if (this.bukkitConfig.getString("Version", "").equals(PLUGIN_VERSION)) {
                     loadData();
                 }
                 else {
-                	plugin.LOG.info("Version mismatch between plugin and config file!");                     	
+                	ObsidianDestroyer.LOG.info("Version mismatch between plugin and config file!");                     	
                 }
             }
             catch (Exception e) {
@@ -232,7 +233,7 @@ public final class ODConfig {
         try {
             this.bukkitConfig.load(this.configFile);
         } catch (Exception e) {
-            e.printStackTrace();
+            ObsidianDestroyer.LOG.warning("Failed to read reset time.");
         }
 
         String value = this.bukkitConfig.getString(key, def);
@@ -241,8 +242,7 @@ public final class ODConfig {
         try {
             tmp = Long.parseLong(value);
         } catch (NumberFormatException nfe) {
-            this.plugin.getLogger().warning("Error parsing a long from the config file. Key=" + key);
-            nfe.printStackTrace();
+            ObsidianDestroyer.LOG.warning("Error parsing a long from the config file. Key=" + key);
         }
 
         return tmp;
@@ -378,8 +378,7 @@ public final class ODConfig {
             oos.flush();
             oos.close();
         } catch (IOException e) {
-            plugin.getLogger().severe("Failed writing obsidian durability");
-            e.printStackTrace();
+            ObsidianDestroyer.LOG.severe("Failed writing obsidian durability");
         }
     }
 
@@ -399,19 +398,17 @@ public final class ODConfig {
             map = (HashMap<Integer, Integer>)result;
             ois.close();
         } catch (IOException ioe) {
-            this.plugin.getLogger().severe("Failed reading obsidian durability.");
-            this.plugin.getLogger().severe("Deleting current durability file and creating new one.");
+            ObsidianDestroyer.LOG.severe("Failed reading obsidian durability.");
+            ObsidianDestroyer.LOG.severe("Deleting current durability file and creating new one.");
             this.durabilityFile.delete();
 
             try {
                 this.durabilityFile.createNewFile();
             } catch (IOException exception) {
-                this.plugin.getLogger().severe("Couldn't create new durability file.");
+                ObsidianDestroyer.LOG.severe("Couldn't create new durability file.");
             }
-            ioe.printStackTrace();
         } catch (ClassNotFoundException cnfe) {
-            this.plugin.getLogger().severe("durability.dat contains an unknown class, was it modified?");
-            cnfe.printStackTrace();
+            ObsidianDestroyer.LOG.severe("durability.dat contains an unknown class, was it modified?");
         }
 
         return map;
