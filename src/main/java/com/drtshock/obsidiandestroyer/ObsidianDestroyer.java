@@ -182,13 +182,14 @@ public final class ObsidianDestroyer extends JavaPlugin {
      * Gets the WorldGuard plugin
      * 
      * @return WorldGuardPlugin
+     * @throws Exception 
      */
-    public WorldGuardPlugin getWorldGuard() {
+    public WorldGuardPlugin getWorldGuard() throws Exception {
         Plugin plugin = pm.getPlugin("WorldGuard");
      
         // WorldGuard may not be loaded
         if (plugin == null || !(plugin instanceof WorldGuardPlugin)) {
-            return null; // Maybe you want throw an exception instead
+            throw new Exception("WorldGuard could not be reached!");
         }
      
         return (WorldGuardPlugin) plugin;
