@@ -14,9 +14,9 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 /**
  * The ObsidianDestroyer plugin.
  * 
- * Allows certain explosions to destroy Obsidian.
+ * Allows certain explosions to destroy Obsidian and other blocks.
  * 
- * @author drtshock
+ * @author drtshock, squidicuz
  * 
  */
 public final class ObsidianDestroyer extends JavaPlugin {
@@ -26,14 +26,14 @@ public final class ObsidianDestroyer extends JavaPlugin {
     private final ODEntityListener entityListener = new ODEntityListener(this);
     private final ODJoinListener joinListener = new ODJoinListener(this);
     public static Logger LOG;
-    private static PluginManager pm;
+    private static PluginManager PM;
 
     public static boolean UPDATE = false;
     public static String NAME = "";
     
-    private static boolean hookedFactions = false;
-    private static boolean hookedTowny = false;
-    private static boolean hookedWG = false;
+    private static boolean IS_FACTIONS_HOOKED = false;
+    private static boolean IS_TOWNY_HOOKED = false;
+    private static boolean IS_WORLDGUARD_HOOKED = false;
 
     
     @Override
@@ -45,7 +45,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
     
     @Override
     public void onEnable() {
-        pm = getServer().getPluginManager();
+        PM = getServer().getPluginManager();
         LOG = getLogger();
         getCommand("obsidiandestroyer").setExecutor(cmdExecutor);
         getCommand("od").setExecutor(cmdExecutor);
@@ -56,8 +56,8 @@ public final class ObsidianDestroyer extends JavaPlugin {
         checkTownyHook();
         checkWorldGuardGHook();
 
-        pm.registerEvents(entityListener, this);
-        pm.registerEvents(joinListener, this);
+        PM.registerEvents(entityListener, this);
+        PM.registerEvents(joinListener, this);
         
         startMetrics();
 
@@ -89,7 +89,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 
             metrics.start();
         } catch (IOException e) {
-            LOG.log(Level.WARNING, "Failed to submit the stats :-("); // Failed to submit the stats :-(
+            LOG.log(Level.WARNING, "Failed to submit the stats D:"); // Failed to submit the stats :-(
         }
     }
 
@@ -115,11 +115,11 @@ public final class ObsidianDestroyer extends JavaPlugin {
      * Checks to see if the Factions plugin is active.
      */
     private void checkFactionsHook() {
-        Plugin plug = pm.getPlugin("Factions");
+        Plugin plug = PM.getPlugin("Factions");
 		
         if (plug != null) {
             LOG.info("Factions Found! Enabling hook..");
-            hookedFactions = true;
+            IS_FACTIONS_HOOKED = true;
         }
     }
     
@@ -133,18 +133,18 @@ public final class ObsidianDestroyer extends JavaPlugin {
      * @return Factions hook state
      */
     public static boolean isHookedFactions() {
-        return hookedFactions;
+        return IS_FACTIONS_HOOKED;
     }
     
     /**
      * Checks to see if the Towny plugin is active.
      */
     private void checkTownyHook() {
-        Plugin plug = pm.getPlugin("Towny");
+        Plugin plug = PM.getPlugin("Towny");
 		
         if (plug != null) {
             LOG.info("Towny Found! Enabling hook..");
-            hookedTowny = true;
+            IS_TOWNY_HOOKED = true;
         }
     }
     
@@ -154,18 +154,18 @@ public final class ObsidianDestroyer extends JavaPlugin {
      * @return Towny hook state
      */
     public static boolean isHookedTowny() {
-        return hookedTowny;
+        return IS_TOWNY_HOOKED;
     }
     
     /**
      * Checks to see if the WorldGuard plugin is active.
      */
     private void checkWorldGuardGHook() {
-        Plugin plug = pm.getPlugin("WorldGuard");
+        Plugin plug = PM.getPlugin("WorldGuard");
 		
         if (plug != null) {
             LOG.info("WorldGuard Found! Enabling hook..");
-            hookedWG = true;
+            IS_WORLDGUARD_HOOKED = true;
         }
     }
     
@@ -175,7 +175,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
      * @return WorldGuard hook state
      */
     public static boolean isHookedWorldGuard() {
-        return hookedWG;
+        return IS_WORLDGUARD_HOOKED;
     }
     
     /**
@@ -185,7 +185,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
      * @throws Exception 
      */
     public WorldGuardPlugin getWorldGuard() throws Exception {
-        Plugin plugin = pm.getPlugin("WorldGuard");
+        Plugin plugin = PM.getPlugin("WorldGuard");
      
         // WorldGuard may not be loaded
         if (plugin == null || !(plugin instanceof WorldGuardPlugin)) {

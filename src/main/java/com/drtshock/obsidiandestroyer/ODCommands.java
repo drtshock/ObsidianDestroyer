@@ -10,25 +10,17 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 /**
- * 
+ *
  * @author drtshock
  */
 public final class ODCommands implements CommandExecutor {
 
     private ObsidianDestroyer plugin;
 
-    /**
-     * Associates this object with a plugin
-     * 
-     * @param plugin
-     */
     public ODCommands(ObsidianDestroyer plugin) {
         this.plugin = plugin;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
@@ -64,19 +56,21 @@ public final class ODCommands implements CommandExecutor {
                 } else {
                     sender.sendMessage(ChatColor.RED + "You are not authorized to use this command.");
                 }
+            } else if (command.equalsIgnoreCase("version")) {
+                if (sender.hasPermission("obsidiandestroyer.help")) {
+                    sender.sendMessage(ChatColor.DARK_PURPLE + "ObsidianDestroyer version: " + ChatColor.GRAY + this.plugin.getDescription().getVersion());
+                }
             }
         }
 
         return true;
     }
 
-
     // Removed all isOp checks as permissions default to op now.
-
     private void showHelp(CommandSender sender) {
         sender.sendMessage(ChatColor.DARK_PURPLE + "ObsidianDestroyer " + ChatColor.LIGHT_PURPLE + "v" + plugin.getDescription().getVersion());
         sender.sendMessage(ChatColor.DARK_PURPLE + "Available commands:");
-        sender.sendMessage(ChatColor.DARK_PURPLE + "/od - gives version and shows commands.");
+        sender.sendMessage(ChatColor.DARK_PURPLE + "/od version - gives version and shows commands.");
         sender.sendMessage(ChatColor.DARK_PURPLE + "/od reload - " + ChatColor.LIGHT_PURPLE + "reloads the plugin's config file");
         sender.sendMessage(ChatColor.DARK_PURPLE + "/od info - " + ChatColor.LIGHT_PURPLE + " shows the currently loaded config");
         sender.sendMessage(ChatColor.DARK_PURPLE + "/od reset - " + ChatColor.LIGHT_PURPLE + " reset all durability timers.");
