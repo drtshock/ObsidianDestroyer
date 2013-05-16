@@ -10,7 +10,6 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.struct.FFlag;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
@@ -67,8 +66,7 @@ public class ExplosionsInLiquid {
 
                 if (!townyWorld.isUsingTowny())
                     return;
-
-            } catch (NotRegisteredException e) {
+            } catch (Exception e) {
                 // failed to get world so abort
                 return;
             }
@@ -79,7 +77,7 @@ public class ExplosionsInLiquid {
                     return;
                 if (townyWorld.isWarZone(Coord.parseCoord(event.getLocation())) && !TownyWarConfig.explosionsBreakBlocksInWarZone())
                     return;
-            } catch (NotRegisteredException e) {
+            } catch (Exception e) {
                 // Block not registered so continue
             }
             

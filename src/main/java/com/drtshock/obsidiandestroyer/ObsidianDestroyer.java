@@ -111,6 +111,9 @@ public final class ObsidianDestroyer extends JavaPlugin {
         return entityListener;
     }
     
+    /* ====================================================
+     * Hooks to other plugins
+     * ==================================================== */
     /**
      * Checks to see if the Factions plugin is active.
      */
@@ -122,10 +125,6 @@ public final class ObsidianDestroyer extends JavaPlugin {
             IS_FACTIONS_HOOKED = true;
         }
     }
-    
-    /* ====================================================
-     * Hooks to other plugins
-     * ==================================================== */
 
     /**
      * Gets the state of the Factions hook.
