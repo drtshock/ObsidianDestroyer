@@ -121,8 +121,13 @@ public final class ObsidianDestroyer extends JavaPlugin {
         Plugin plug = PM.getPlugin("Factions");
 		
         if (plug != null) {
-            LOG.info("Factions Found! Enabling hook..");
-            IS_FACTIONS_HOOKED = true;
+            String[] ver = plug.getDescription().getVersion().split("\\.");
+            if (ver[0] + "." + ver[1].equalsIgnoreCase("1.8") != null) {
+                LOG.info("Factions 1.8.x Found! Enabling hook..");
+                IS_FACTIONS_HOOKED = true;
+            } else if (ver[0] + "." + ver[1].equalsIgnoreCase("1.6") != null) {
+            	LOG.info("Factions found, but v1.6.x is not supported!");
+            }
         }
     }
 
