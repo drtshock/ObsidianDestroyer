@@ -9,7 +9,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
-import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -116,7 +115,7 @@ public final class ODConfig {
 
             this.checkUpdate = this.bukkitConfig.getBoolean("checkupdate", true);
             this.explosionRadius = this.bukkitConfig.getInt("Radius", 3);
-            this.waterProtection = this.bukkitConfig.getBoolean("BypassFluidsProtect", true);
+            this.waterProtection = this.bukkitConfig.getBoolean("FluidsProtectObsidian", true);
             this.checkitemid = this.bukkitConfig.getInt("CheckItemId", 38);
             this.ignorecancel = this.bukkitConfig.getBoolean("IgnoreCancel", false);
             this.bedrockEnabled = this.bukkitConfig.getBoolean("Durability.Bedrock.Enabled", false);
@@ -148,7 +147,7 @@ public final class ODConfig {
             
             VALUES[0] = y + "checkupdate: " + g + this.checkUpdate;
             VALUES[1] = y + "ExplosionRadius: " + g + this.getRadius();
-            VALUES[2] = y + "BypassFluidsProtect: " + g + this.getWaterProtection();
+            VALUES[2] = y + "FluidsProtectObsidian: " + g + this.getWaterProtection();
             VALUES[3] = y + "CheckItemId: " + g + this.getCheckItemId();
             VALUES[4] = y + "IgnoreCancel: " + g + this.getIgnoreCancel();
             VALUES[5] = y + "TNTEnabled: " + g + this.getTntEnabled();
@@ -186,7 +185,7 @@ public final class ODConfig {
         this.bukkitConfig.set("Version", this.PLUGIN_VERSION);
         this.bukkitConfig.set("checkupdate", this.getCheckUpdate());
         this.bukkitConfig.set("Radius", this.getRadius());
-        this.bukkitConfig.set("FluidsProtect", this.getWaterProtection());
+        this.bukkitConfig.set("FluidsProtectObsidian", this.getWaterProtection());
         this.bukkitConfig.set("CheckItemId", this.getCheckItemId());
         this.bukkitConfig.set("IgnoreCancel", this.getIgnoreCancel());
         this.bukkitConfig.set("Durability.Bedrock.Enabled", this.getBedrockEnabled());
@@ -313,7 +312,7 @@ public final class ODConfig {
     }
 
     public boolean getWaterProtection() {
-        return !this.waterProtection;
+        return this.waterProtection;
     }
 
     public int getCheckItemId() {

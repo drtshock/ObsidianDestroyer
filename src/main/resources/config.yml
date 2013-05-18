@@ -64,7 +64,7 @@ Blocks:
   
 # False means that water won't protect blocks listed above from explosions.
 # This only applies to obsidian, anvils, enderchests, and enchanting tables.
-BypassFluidsProtect: false
+FluidsProtectObsidian: true
 
 # Enables a bypass to allow explosions to affect ALL blocks under / next to liquids.
 # This will bypass ALL blocks. We recommend not to use both this AND fluids protect.
