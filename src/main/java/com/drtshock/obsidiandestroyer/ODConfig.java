@@ -44,7 +44,7 @@ public final class ODConfig {
     private boolean checkUpdate = true;
     private int checkitemid = 38;
     private boolean ignorecancel = false;
-    private static String[] VALUES = new String[26];
+    private static String[] VALUES = new String[25];
     private boolean durabilityTimerSafey = false;
     private int minFreeMemoryLimit = 80;
     private boolean explodeInLiquid = false;
@@ -170,9 +170,10 @@ public final class ODConfig {
             VALUES[22] = y + "BypassAllFluidProtection: " + g + this.getExplodeInLiquids();
             VALUES[23] = y + "TNTCannonsProtected: " + g + this.getProtectTNTCannons();
             VALUES[24] = y + "DisabledOnWorlds: " + g;
-            for (String dWorld : this.getDisabledWorlds()) {
-            	VALUES[25] += dWorld + " ";
-            }
+            if (this.getDisabledWorlds() != null)
+                for (String dWorld : this.getDisabledWorlds()) {
+                    VALUES[24] += dWorld + " ";
+                }
 
         } catch (Exception e) {
             e.printStackTrace();
