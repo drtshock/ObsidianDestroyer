@@ -116,7 +116,7 @@ public final class ODConfig {
 
             this.checkUpdate = this.bukkitConfig.getBoolean("checkupdate", true);
             this.explosionRadius = this.bukkitConfig.getInt("Radius", 3);
-            this.waterProtection = this.bukkitConfig.getBoolean("FluidsProtect", true);
+            this.waterProtection = this.bukkitConfig.getBoolean("BypassFluidsProtect", true);
             this.checkitemid = this.bukkitConfig.getInt("CheckItemId", 38);
             this.ignorecancel = this.bukkitConfig.getBoolean("IgnoreCancel", false);
             this.bedrockEnabled = this.bukkitConfig.getBoolean("Durability.Bedrock.Enabled", false);
