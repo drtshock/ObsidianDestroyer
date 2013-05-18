@@ -1,6 +1,7 @@
 # ObsidianDestroyer by Pandamoneous
 # Now authored by drtshock and squidicuzz
 # For information and updates visit http://dev.bukkit.org/server-mods/ObsidianDestroyer
+
 # Made with love <3
 
 # Do not touch this line. It will rewrite your config.
@@ -12,12 +13,6 @@ checkupdate: true
 # The explosion radius that will affect blocks 
 Radius: 3
 
-# False means that water won't protect blocks from explosions.
-FluidsProtect: true
-
-# Whether or not you want to bypass fluid protect for all blocks.
-BypassAllBlocks: false
-
 # The id of the item you use to check durability.
 CheckItemId: 38
 
@@ -28,10 +23,12 @@ IgnoreCancel: false
 # Explosion types you want us to handle.
 EnabledFor:
   TNT: true
-  Cannons: false
   Creepers: false
   Ghasts: false
   Withers: false
+  
+  # Used to integrate with the cannons plugin.
+  Cannons: false
 
 # Durability = amount of explosions within the radius defined above
 # within the time limit that will make a block blow up.
@@ -63,11 +60,19 @@ Durability:
 
 # Chance to drop. Setting to anything at or above 1 will make them always drop.
 Blocks:
-  ChanceToDrop: 0.7
+  ChanceToDrop: 0.69
   
-# Enables a bypass to allow explosions to effect blocks under/next to liquids.
+# False means that water won't protect blocks listed above from explosions.
+# This only applies to obsidian, anvils, enderchests, and enchanting tables.
+BypassFluidsProtect: false
+
+# Enables a bypass to allow explosions to affect ALL blocks under / next to liquids.
+# This will bypass ALL blocks. We recommend not to use both this AND fluids protect.
 Explosions:
   BypassAllFluidProtection: false
+  
+  # Protects "TNT cannons" from being destroyed when used. 
+  # This doesn't do anything unless the above option is true.
   TNTCannonsProtected: true
   
 # List of worlds that the plugin will not interact with.

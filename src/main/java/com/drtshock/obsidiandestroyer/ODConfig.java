@@ -45,7 +45,6 @@ public final class ODConfig {
     private boolean checkUpdate = true;
     private int checkitemid = 38;
     private boolean ignorecancel = false;
-    private boolean bypassAllBlocks = false;
     private static String[] VALUES = new String[26];
     private boolean durabilityTimerSafey = false;
     private int minFreeMemoryLimit = 80;
@@ -118,7 +117,6 @@ public final class ODConfig {
             this.checkUpdate = this.bukkitConfig.getBoolean("checkupdate", true);
             this.explosionRadius = this.bukkitConfig.getInt("Radius", 3);
             this.waterProtection = this.bukkitConfig.getBoolean("FluidsProtect", true);
-            this.bypassAllBlocks = this.bukkitConfig.getBoolean("BypassAllBlocks", false);
             this.checkitemid = this.bukkitConfig.getInt("CheckItemId", 38);
             this.ignorecancel = this.bukkitConfig.getBoolean("IgnoreCancel", false);
             this.bedrockEnabled = this.bukkitConfig.getBoolean("Durability.Bedrock.Enabled", false);
@@ -150,30 +148,29 @@ public final class ODConfig {
             
             VALUES[0] = y + "checkupdate: " + g + this.checkUpdate;
             VALUES[1] = y + "ExplosionRadius: " + g + this.getRadius();
-            VALUES[2] = y + "FluidsProtect: " + g + this.getWaterProtection();
-            VALUES[3] = y + "BypassAllBlocks: " + g + this.getBypassAllBlocks();
-            VALUES[4] = y + "CheckItemId: " + g + this.getCheckItemId();
-            VALUES[5] = y + "IgnoreCancel: " + g + this.getIgnoreCancel();
-            VALUES[6] = y + "TNTEnabled: " + g + this.getTntEnabled();
-            VALUES[7] = y + "CannonsEnabled: " + g + this.getCannonsEnabled();
-            VALUES[8] = y + "CreepersEnabled: " + g + this.getCreepersEnabled();
-            VALUES[9] = y + "GhastsEnabled: " + g + this.getGhastsEnabled();
-            VALUES[10] = y + "WithersEnabled: " + g + this.getWithersEnabled();
-            VALUES[11] = y + "DurabilityEnabled: " + g + this.getDurabilityEnabled();
-            VALUES[12] = y + "ObsidianDurability: " + g + this.getoDurability();
-            VALUES[13] = y + "EnchantmentTableDurability: " + g + this.geteDurability();
-            VALUES[14] = y + "EnderchestDurability: " + g + this.getecDurability();
-            VALUES[15] = y + "AnvilDurability: " + g + this.getaDurability();
-            VALUES[16] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
-            VALUES[17] = y + "BedrockDurability: " + g + this.getbDurability();
-            VALUES[18] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
-            VALUES[19] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
-            VALUES[20] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
-            VALUES[21] = y + "UseTimerSafety: " + g + this.getDurabilityTimerSafey();
-            VALUES[22] = y + "SystemMinMemory: " + g + this.getMinFreeMemoryLimit();
-            VALUES[23] = y + "BypassAllFluidProtection: " + g + this.getExplodeInLiquids();
-            VALUES[24] = y + "TNTCannonsProtected: " + g + this.getProtectTNTCannons();
-            VALUES[25] = y + "DisabledOnWorlds: " + g;
+            VALUES[2] = y + "BypassFluidsProtect: " + g + this.getWaterProtection();
+            VALUES[3] = y + "CheckItemId: " + g + this.getCheckItemId();
+            VALUES[4] = y + "IgnoreCancel: " + g + this.getIgnoreCancel();
+            VALUES[5] = y + "TNTEnabled: " + g + this.getTntEnabled();
+            VALUES[6] = y + "CannonsEnabled: " + g + this.getCannonsEnabled();
+            VALUES[7] = y + "CreepersEnabled: " + g + this.getCreepersEnabled();
+            VALUES[8] = y + "GhastsEnabled: " + g + this.getGhastsEnabled();
+            VALUES[9] = y + "WithersEnabled: " + g + this.getWithersEnabled();
+            VALUES[10] = y + "DurabilityEnabled: " + g + this.getDurabilityEnabled();
+            VALUES[11] = y + "ObsidianDurability: " + g + this.getoDurability();
+            VALUES[12] = y + "EnchantmentTableDurability: " + g + this.geteDurability();
+            VALUES[13] = y + "EnderchestDurability: " + g + this.getecDurability();
+            VALUES[14] = y + "AnvilDurability: " + g + this.getaDurability();
+            VALUES[15] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
+            VALUES[16] = y + "BedrockDurability: " + g + this.getbDurability();
+            VALUES[17] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
+            VALUES[18] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
+            VALUES[19] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
+            VALUES[20] = y + "UseTimerSafety: " + g + this.getDurabilityTimerSafey();
+            VALUES[21] = y + "SystemMinMemory: " + g + this.getMinFreeMemoryLimit();
+            VALUES[22] = y + "BypassAllFluidProtection: " + g + this.getExplodeInLiquids();
+            VALUES[23] = y + "TNTCannonsProtected: " + g + this.getProtectTNTCannons();
+            VALUES[24] = y + "DisabledOnWorlds: " + g;
             for (String dWorld : this.getDisabledWorlds()) {
             	VALUES[25] += dWorld + " ";
             }
@@ -190,7 +187,6 @@ public final class ODConfig {
         this.bukkitConfig.set("checkupdate", this.getCheckUpdate());
         this.bukkitConfig.set("Radius", this.getRadius());
         this.bukkitConfig.set("FluidsProtect", this.getWaterProtection());
-        this.bukkitConfig.set("BypassAllBlocks", this.getBypassAllBlocks());
         this.bukkitConfig.set("CheckItemId", this.getCheckItemId());
         this.bukkitConfig.set("IgnoreCancel", this.getIgnoreCancel());
         this.bukkitConfig.set("Durability.Bedrock.Enabled", this.getBedrockEnabled());
@@ -317,7 +313,7 @@ public final class ODConfig {
     }
 
     public boolean getWaterProtection() {
-        return this.waterProtection;
+        return !this.waterProtection;
     }
 
     public int getCheckItemId() {
@@ -334,10 +330,6 @@ public final class ODConfig {
 
     public String[] getConfigList() {
         return VALUES;
-    }
-
-    public boolean getBypassAllBlocks() {
-        return this.bypassAllBlocks;
     }
 
     public Plugin getPlugin() {
