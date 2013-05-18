@@ -29,21 +29,11 @@ public final class ODEntityListener implements Listener {
     public ODConfig config;
     public HashMap<Integer, Integer> obsidianDurability = new HashMap<Integer, Integer>();
     private HashMap<Integer, Timer> obsidianTimer = new HashMap<Integer, Timer>();
-    private Random _random = new Random();
-    private HashMap<Integer, Float> _entityPowerMap;
     private boolean DisplayWarning = true;
 
     public ODEntityListener(ObsidianDestroyer plugin) {
         this.plugin = plugin;
         this.config = plugin.getODConfig();
-        this._entityPowerMap = new HashMap<Integer, Float>();
-    }
-
-    @EventHandler(priority=EventPriority.HIGHEST)
-    public void onExplosionPrime(ExplosionPrimeEvent event) {
-
-        if (!event.isCancelled())
-            this._entityPowerMap.put(Integer.valueOf(event.getEntity().getEntityId()), Float.valueOf(event.getRadius()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
@@ -102,14 +92,6 @@ public final class ODEntityListener implements Listener {
                 blowBlockUp(block.getLocation());
             }
             return;
-        }
-
-        if ((!event.isCancelled()) && (event.getEntityType() != EntityType.ENDER_DRAGON) 
-                && (this._entityPowerMap.containsKey(Integer.valueOf(event.getEntity().getEntityId()))) 
-                && !this.config.getWaterProtection()) {
-
-            correctExplosion(event, ((Float)this._entityPowerMap.get(Integer.valueOf(event.getEntity().getEntityId()))).floatValue());
-            this._entityPowerMap.remove(Integer.valueOf(event.getEntity().getEntityId()));
         }
         
         if (config.getExplodeInLiquids())
@@ -193,57 +175,6 @@ public final class ODEntityListener implements Listener {
             }
         } else {
             destroyBlockAndDropItem(at);
-        }
-    }
-
-    protected void correctExplosion(EntityExplodeEvent event, float power) {
-
-        World world = event.getEntity().getWorld();
-
-        for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < 16; j++) {
-                for (int k = 0; k < 16; k++) {
-                    if ((i == 0) || (i == 15) || (j == 0) || (j == 15) || (k == 0) || (k == 15)) {
-
-                        double d3 = i / 15.0F * 2.0F - 1.0F;
-                        double d4 = j / 15.0F * 2.0F - 1.0F;
-                        double d5 = k / 15.0F * 2.0F - 1.0F;
-                        double d6 = Math.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
-
-                        d3 /= d6;
-                        d4 /= d6;
-                        d5 /= d6;
-                        float f1 = power * (0.7F + this._random.nextFloat() * 0.6F);
-
-                        double d0 = event.getLocation().getX();
-                        double d1 = event.getLocation().getY();
-                        double d2 = event.getLocation().getZ();
-
-                        for (float f2 = 0.3F; f1 > 0.0F; f1 -= f2 * 0.75F) {
-                            int l = (int) Math.floor(d0);
-                            int i1 = (int) Math.floor(d1);
-                            int j1 = (int) Math.floor(d2);
-                            int k1 = world.getBlockTypeIdAt(l, i1, j1);
-
-                            if ((k1 > 0) && (k1 != 8) && (k1 != 9) && (k1 != 10) && (k1 != 11)) {
-                                f1 -= (net.minecraft.server.v1_5_R3.Block.byId[k1].a(((CraftEntity)event.getEntity()).getHandle()) + 0.3F) * f2;
-                            }
-
-                            if ((f1 > 0.0F) && (i1 < 256) && (i1 >= 0) && (k1 != 8) && (k1 != 9) && (k1 != 10) && (k1 != 11)) {
-                                Block block = world.getBlockAt(l, i1, j1);
-
-                                if ((block.getType() != Material.AIR) && (!event.blockList().contains(block))) {
-                                    event.blockList().add(block);
-                                }
-
-                                d0 += d3 * f2;
-                                d1 += d4 * f2;
-                                d2 += d5 * f2;
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 
