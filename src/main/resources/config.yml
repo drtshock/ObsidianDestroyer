@@ -34,7 +34,7 @@ EnabledFor:
 # within the time limit that will make a block blow up.
 Durability:
   Enabled: true
-  Obsidian: 3
+  Obsidian: 4
   EnchantmentTable: 2
   EnderChest: 5
   Anvil: 2
