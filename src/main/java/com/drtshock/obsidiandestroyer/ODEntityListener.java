@@ -2,25 +2,20 @@ package com.drtshock.obsidiandestroyer;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Random;
 import java.util.Timer;
 import java.util.logging.Level;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_5_R3.entity.CraftEntity;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * 
+ *
  * @author drtshock
  */
 public final class ODEntityListener implements Listener {
@@ -42,9 +37,9 @@ public final class ODEntityListener implements Listener {
         if (((event == null) || (event.isCancelled())) && (!this.config.getIgnoreCancel())) {
             return;
         }
-        
+
         if (this.config.getDisabledWorlds().contains(event.getLocation().getWorld().getName())) {
-        	return;
+            return;
         }
 
         int radius = this.config.getRadius();
@@ -88,17 +83,18 @@ public final class ODEntityListener implements Listener {
         if (eventTypeRep.equals("CraftSnowball")) {
             Iterator<Block> iter = event.blockList().iterator();
             while (iter.hasNext()) {
-                Block block = (org.bukkit.block.Block)iter.next();
+                Block block = (org.bukkit.block.Block) iter.next();
                 blowBlockUp(block.getLocation());
             }
             return;
         }
-        
-        if (config.getExplodeInLiquids())
-        	ExplosionsInLiquid.Handle(event, this.plugin);
 
-        for (int x = -radius; x <= radius; x++)
-            for (int y = -radius; y <= radius; y++)
+        if (config.getExplodeInLiquids()) {
+            ExplosionsInLiquid.Handle(event, this.plugin);
+        }
+
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = -radius; y <= radius; y++) {
                 for (int z = -radius; z <= radius; z++) {
                     Location targetLoc = new Location(detonator.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
 
@@ -109,6 +105,8 @@ public final class ODEntityListener implements Listener {
                         blowBlockUp(targetLoc);
                     }
                 }
+            }
+        }
     }
 
     private void blowBlockUp(Location at) {
@@ -146,23 +144,19 @@ public final class ODEntityListener implements Listener {
 
         if ((this.config.getDurabilityEnabled()) && (dura > 1)) {
             if (this.obsidianDurability.containsKey(representation)) {
-                int currentDurability = ((Integer)this.obsidianDurability.get(representation)).intValue();
+                int currentDurability = ((Integer) this.obsidianDurability.get(representation)).intValue();
                 currentDurability++;
 
                 if (checkIfMax(currentDurability, dura)) {
                     dropBlockAndResetTime(representation, at);
-                }
-
-                else {
+                } else {
                     this.obsidianDurability.put(representation, Integer.valueOf(currentDurability));
 
                     if (this.config.getDurabilityResetTimerEnabled()) {
                         startNewTimer(representation);
                     }
                 }
-            }
-
-            else {
+            } else {
                 this.obsidianDurability.put(representation, Integer.valueOf(1));
 
                 if (this.config.getDurabilityResetTimerEnabled()) {
@@ -185,8 +179,8 @@ public final class ODEntityListener implements Listener {
 
         Block b = at.getBlock();
 
-        if ((!b.getType().equals(Material.OBSIDIAN)) && (!b.getType().equals(Material.ENCHANTMENT_TABLE)) && (!b.getType().equals(Material.ENDER_CHEST)) && 
-                (!b.getType().equals(Material.ANVIL)) && (!b.getType().equals(Material.MOB_SPAWNER)) && (!b.getType().equals(Material.BEDROCK))) {
+        if ((!b.getType().equals(Material.OBSIDIAN)) && (!b.getType().equals(Material.ENCHANTMENT_TABLE)) && (!b.getType().equals(Material.ENDER_CHEST))
+                && (!b.getType().equals(Material.ANVIL)) && (!b.getType().equals(Material.MOB_SPAWNER)) && (!b.getType().equals(Material.BEDROCK))) {
             return;
         }
 
@@ -217,7 +211,7 @@ public final class ODEntityListener implements Listener {
 
     private void startNewTimer(Integer representation) {
         if (this.obsidianTimer.get(representation) != null) {
-            ((Timer)this.obsidianTimer.get(representation)).cancel();
+            ((Timer) this.obsidianTimer.get(representation)).cancel();
         }
 
         // EXPERIMENTAL: Some safety just in case the server is running low on memory.
@@ -225,14 +219,14 @@ public final class ODEntityListener implements Listener {
         if (config.getDurabilityTimerSafey()) {
             if (((float) Runtime.getRuntime().freeMemory() + (1024 * 1024 * config.getMinFreeMemoryLimit())) >= Runtime.getRuntime().maxMemory()) {
                 if (DisplayWarning) {
-                    ObsidianDestroyer.LOG.info("Server Memory: " + ((Runtime.getRuntime().freeMemory() / 1024) / 1024) + "MB free out of " + ((Runtime.getRuntime().maxMemory() / 1024) / 1024) + "MB available.");
-                    ObsidianDestroyer.LOG.info("Server is running low on resources.. Let's not start a new timer, there are " + this.obsidianTimer.size() + " other timers running!");
+                    ObsidianDestroyer.LOG.log(Level.INFO, "Server Memory: {0}MB free out of {1}MB available.", new Object[]{(Runtime.getRuntime().freeMemory() / 1024) / 1024, (Runtime.getRuntime().maxMemory() / 1024) / 1024});
+                    ObsidianDestroyer.LOG.log(Level.INFO, "Server is running low on resources.. Let''s not start a new timer, there are {0} other timers running!", this.obsidianTimer.size());
                     DisplayWarning = false;
                 }
                 return;
-            }
-            else
+            } else {
                 DisplayWarning = true;
+            }
         }
 
         Timer timer = new Timer();
@@ -247,7 +241,7 @@ public final class ODEntityListener implements Listener {
 
         if (this.config.getDurabilityResetTimerEnabled()) {
             if (this.obsidianTimer.get(representation) != null) {
-                ((Timer)this.obsidianTimer.get(representation)).cancel();
+                ((Timer) this.obsidianTimer.get(representation)).cancel();
             }
 
             this.obsidianTimer.remove(representation);
