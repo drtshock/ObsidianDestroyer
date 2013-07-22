@@ -1,6 +1,8 @@
 # ObsidianDestroyer by Pandamoneous
 # Now authored by drtshock and squidicuzz
 # For information and updates visit http://dev.bukkit.org/server-mods/ObsidianDestroyer
+# Join irc for live support http://webchat.esper.net/?channels=drtshock&prompt=1
+# Or use our issue tracker @ https://github.com/drtshock/ObsidianDestroyer/issues
 
 # Made with love <3
 
@@ -38,6 +40,8 @@ Durability:
   EnchantmentTable: 2
   EnderChest: 5
   Anvil: 2
+  EndPortal: 50
+  EndPortalFrame: 50
   
  # Settings for bedrock. Recommended to be disabled or at a very high rate.
  # If enabled, people can blow holes in the bottom of your world.

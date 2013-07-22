@@ -23,7 +23,6 @@ public final class ODConfig {
     private File configFile = new File(DIRECTORY + "config.yml");
     private File durabilityFile = new File(DIRECTORY + "durability.dat");
     private YamlConfiguration bukkitConfig = new YamlConfiguration();
-
     private int explosionRadius = 3;
     private boolean tntEnabled = true;
     private boolean cannonsEnabled = false;
@@ -37,6 +36,8 @@ public final class ODConfig {
     private int ecdurability = 1;
     private int adurability = 1;
     private int bdurability = 1;
+    private int fdurability = 1;
+    private int epdurability = 1;
     private boolean durabilityTimerEnabled = true;
     private long durabilityTime = 600000L;
     private double chanceToDropBlock = 0.7D;
@@ -44,7 +45,7 @@ public final class ODConfig {
     private boolean checkUpdate = true;
     private int checkitemid = 38;
     private boolean ignorecancel = false;
-    private static String[] VALUES = new String[25];
+    private static String[] VALUES = new String[27];
     private boolean durabilityTimerSafey = false;
     private int minFreeMemoryLimit = 80;
     private boolean explodeInLiquid = false;
@@ -57,8 +58,8 @@ public final class ODConfig {
 
     public boolean loadConfig() {
         boolean isErrorFree = true;
-    	PluginDescriptionFile pdfFile = plugin.getDescription();
-    	PLUGIN_VERSION = pdfFile.getVersion();
+        PluginDescriptionFile pdfFile = plugin.getDescription();
+        PLUGIN_VERSION = pdfFile.getVersion();
 
         new File(DIRECTORY).mkdir();
 
@@ -73,33 +74,29 @@ public final class ODConfig {
                     loadData();
                     writeDefault();
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             ObsidianDestroyer.LOG.info("config file not found, creating new config file :D");
             this.plugin.saveDefaultConfig();
         }
 
         return isErrorFree;
     }
-    
+
     public void reloadConfig() {
         if (this.configFile.exists()) {
             try {
                 this.bukkitConfig.load(this.configFile);
                 ObsidianDestroyer.LOG.info("Config file found, reloading config...");
-                
+
                 if (this.bukkitConfig.getString("Version", "").equals(PLUGIN_VERSION)) {
                     loadData();
+                } else {
+                    ObsidianDestroyer.LOG.info("Version mismatch between plugin and config file!");
                 }
-                else {
-                	ObsidianDestroyer.LOG.info("Version mismatch between plugin and config file!");                     	
-                }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -131,20 +128,22 @@ public final class ODConfig {
             this.edurability = this.bukkitConfig.getInt("Durability.EnchantmentTable", 1);
             this.ecdurability = this.bukkitConfig.getInt("Durability.EnderChest", 1);
             this.adurability = this.bukkitConfig.getInt("Durability.Anvil", 1);
+            this.fdurability = this.bukkitConfig.getInt("Durability.EndPortalFrame", 1);
+            this.fdurability = this.bukkitConfig.getInt("Durability.EndPortal", 1);
             this.bdurability = this.bukkitConfig.getInt("Durability.Bedrock.Durability", 1);
             this.durabilityTimerEnabled = this.bukkitConfig.getBoolean("Durability.ResetEnabled", true);
 
             this.durabilityTimerSafey = this.bukkitConfig.getBoolean("Durability.UseTimerSafety", false);
             this.minFreeMemoryLimit = this.bukkitConfig.getInt("Durability.SystemMinMemory", 80);
-            
+
             this.durabilityTime = readLong("Durability.ResetAfter", "600000");
             this.chanceToDropBlock = this.bukkitConfig.getDouble("Blocks.ChanceToDrop", 0.7D);
-            
+
             this.explodeInLiquid = this.bukkitConfig.getBoolean("Explosions.BypassAllFluidProtection", false);
             this.protectTNTCannons = this.bukkitConfig.getBoolean("Explosions.TNTCannonsProtected", true);
-            
+
             this.disabledWorlds = (ArrayList<String>) this.bukkitConfig.getStringList("DisabledOnWorlds");
-            
+
             VALUES[0] = y + "checkupdate: " + g + this.checkUpdate;
             VALUES[1] = y + "ExplosionRadius: " + g + this.getRadius();
             VALUES[2] = y + "FluidsProtectObsidian: " + g + this.getWaterProtection();
@@ -162,18 +161,21 @@ public final class ODConfig {
             VALUES[14] = y + "AnvilDurability: " + g + this.getaDurability();
             VALUES[15] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
             VALUES[16] = y + "BedrockDurability: " + g + this.getbDurability();
-            VALUES[17] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
-            VALUES[18] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
-            VALUES[19] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
-            VALUES[20] = y + "UseTimerSafety: " + g + this.getDurabilityTimerSafey();
-            VALUES[21] = y + "SystemMinMemory: " + g + this.getMinFreeMemoryLimit();
-            VALUES[22] = y + "BypassAllFluidProtection: " + g + this.getExplodeInLiquids();
-            VALUES[23] = y + "TNTCannonsProtected: " + g + this.getProtectTNTCannons();
-            VALUES[24] = y + "DisabledOnWorlds: " + g;
-            if (this.getDisabledWorlds() != null)
+            VALUES[17] = y + "EndPortalDurability:" + g + this.getepDurability();
+            VALUES[18] = y + "EndPortalFrameDurability:" + g + this.getfDurability();
+            VALUES[19] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
+            VALUES[20] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
+            VALUES[21] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
+            VALUES[22] = y + "UseTimerSafety: " + g + this.getDurabilityTimerSafey();
+            VALUES[23] = y + "SystemMinMemory: " + g + this.getMinFreeMemoryLimit();
+            VALUES[24] = y + "BypassAllFluidProtection: " + g + this.getExplodeInLiquids();
+            VALUES[25] = y + "TNTCannonsProtected: " + g + this.getProtectTNTCannons();
+            VALUES[26] = y + "DisabledOnWorlds: " + g;
+            if (this.getDisabledWorlds() != null) {
                 for (String dWorld : this.getDisabledWorlds()) {
-                    VALUES[24] += dWorld + " ";
+                    VALUES[26] += dWorld + " ";
                 }
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -182,7 +184,7 @@ public final class ODConfig {
 
     private void writeDefault() {
         this.configFile.renameTo(new File(DIRECTORY + "config.yml.old"));
-        
+
         this.bukkitConfig.set("Version", this.PLUGIN_VERSION);
         this.bukkitConfig.set("checkupdate", this.getCheckUpdate());
         this.bukkitConfig.set("Radius", this.getRadius());
@@ -202,26 +204,28 @@ public final class ODConfig {
         this.bukkitConfig.set("Durability.EnchantmentTable", this.geteDurability());
         this.bukkitConfig.set("Durability.EnderChest", this.getecDurability());
         this.bukkitConfig.set("Durability.Anvil", this.getaDurability());
+        this.bukkitConfig.set("Durability.EndPortal", this.epdurability);
+        this.bukkitConfig.set("Durability.EndPortalFrame", this.fdurability);
         this.bukkitConfig.set("Durability.Bedrock.Durability", this.getbDurability());
         this.bukkitConfig.set("Durability.ResetEnabled", this.getDurabilityResetTimerEnabled());
 
         this.bukkitConfig.set("Durability.UseTimerSafety", this.getDurabilityTimerSafey());
         this.bukkitConfig.set("Durability.SystemMinMemory", this.getMinFreeMemoryLimit());
-            
+
         this.bukkitConfig.set("Durability.ResetAfter", this.getDurabilityResetTime());
         this.bukkitConfig.set("Blocks.ChanceToDrop", this.getChanceToDropBlock());
-        
+
         this.bukkitConfig.set("Explosions.BypassAllFluidProtection", this.getExplodeInLiquids());
         this.bukkitConfig.set("Explosions.TNTCannonsProtected", this.getProtectTNTCannons());
-        
+
         this.bukkitConfig.set("DisabledOnWorlds", this.getDisabledWorlds());
-        
+
         try {
-			this.bukkitConfig.save(this.configFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-        
+            this.bukkitConfig.save(this.configFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         loadData();
     }
 
@@ -296,6 +300,14 @@ public final class ODConfig {
         return this.bdurability;
     }
 
+    public int getfDurability() {
+        return this.fdurability;
+    }
+
+    public int getepDurability() {
+        return this.epdurability;
+    }
+
     public boolean getBedrockEnabled() {
         return this.bedrockEnabled;
     }
@@ -335,30 +347,31 @@ public final class ODConfig {
     public Plugin getPlugin() {
         return this.plugin;
     }
-    
+
     public int getMinFreeMemoryLimit() {
-    	return this.minFreeMemoryLimit;
+        return this.minFreeMemoryLimit;
     }
-    
+
     public boolean getDurabilityTimerSafey() {
-    	return this.durabilityTimerSafey;
+        return this.durabilityTimerSafey;
     }
-    
+
     public boolean getExplodeInLiquids() {
-    	return this.explodeInLiquid;
+        return this.explodeInLiquid;
     }
-    
+
     public boolean getProtectTNTCannons() {
-    	return this.protectTNTCannons;
+        return this.protectTNTCannons;
     }
-    
+
     public List<String> getDisabledWorlds() {
-    	return this.disabledWorlds;
+        return this.disabledWorlds;
     }
 
     public void saveDurabilityToFile() {
-        if ((this.plugin.getListener() == null) || (this.plugin.getListener().getObsidianDurability() == null))
+        if ((this.plugin.getListener() == null) || (this.plugin.getListener().getObsidianDurability() == null)) {
             return;
+        }
 
         HashMap<Integer, Integer> map = this.plugin.getListener().getObsidianDurability();
 
@@ -376,8 +389,9 @@ public final class ODConfig {
 
     @SuppressWarnings("unchecked")
     public HashMap<Integer, Integer> loadDurabilityFromFile() {
-        if ((!this.durabilityFile.exists()) || (this.plugin.getListener() == null) || (this.plugin.getListener().getObsidianDurability() == null))
+        if ((!this.durabilityFile.exists()) || (this.plugin.getListener() == null) || (this.plugin.getListener().getObsidianDurability() == null)) {
             return null;
+        }
 
         new File(DIRECTORY).mkdir();
 
@@ -387,7 +401,7 @@ public final class ODConfig {
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(this.durabilityFile));
             result = ois.readObject();
-            map = (HashMap<Integer, Integer>)result;
+            map = (HashMap<Integer, Integer>) result;
             ois.close();
         } catch (IOException ioe) {
             ObsidianDestroyer.LOG.severe("Failed reading obsidian durability.");

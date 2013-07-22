@@ -136,6 +136,14 @@ public final class ODEntityListener implements Listener {
         if (b.getTypeId() == 7 && this.config.getBedrockEnabled()) {
             applyDurability(at, this.config.getbDurability());
         }
+
+        if (b.getTypeId() == 120) {
+            applyDurability(at, this.config.getfDurability());
+        }
+
+        if (b.getTypeId() == 119) {
+            applyDurability(at, this.config.getepDurability());
+        }
     }
 
     private void applyDurability(Location at, int dura) {
@@ -180,7 +188,8 @@ public final class ODEntityListener implements Listener {
         Block b = at.getBlock();
 
         if ((!b.getType().equals(Material.OBSIDIAN)) && (!b.getType().equals(Material.ENCHANTMENT_TABLE)) && (!b.getType().equals(Material.ENDER_CHEST))
-                && (!b.getType().equals(Material.ANVIL)) && (!b.getType().equals(Material.MOB_SPAWNER)) && (!b.getType().equals(Material.BEDROCK))) {
+                && (!b.getType().equals(Material.ANVIL)) && (!b.getType().equals(Material.MOB_SPAWNER)) && (!b.getType().equals(Material.BEDROCK))
+                && (!b.getType().equals(Material.ENDER_PORTAL_FRAME)) && (!b.getType().equals(Material.ENDER_PORTAL))) {
             return;
         }
 
