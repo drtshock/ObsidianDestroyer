@@ -9,7 +9,4 @@ commands:
         description: ObisidanDestroyer
         usage: |
                /<command>
-    od:
-        description: ObisidanDestroyer
-        usage: |
-               /<command>
+        aliases: [od]

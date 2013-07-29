@@ -44,7 +44,6 @@ public final class ObsidianDestroyer extends JavaPlugin {
         PM = getServer().getPluginManager();
         LOG = getLogger();
         getCommand("obsidiandestroyer").setExecutor(cmdExecutor);
-        getCommand("od").setExecutor(cmdExecutor);
 
         config.loadConfig();
         entityListener.setObsidianDurability(config.loadDurabilityFromFile());

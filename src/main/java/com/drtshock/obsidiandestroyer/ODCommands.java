@@ -71,8 +71,8 @@ public final class ODCommands implements CommandExecutor {
         sender.sendMessage(ChatColor.DARK_PURPLE + "ObsidianDestroyer " + ChatColor.LIGHT_PURPLE + "v" + plugin.getDescription().getVersion());
         sender.sendMessage(ChatColor.DARK_PURPLE + "Available commands:");
         sender.sendMessage(ChatColor.DARK_PURPLE + "/od version - gives version and shows commands.");
-        sender.sendMessage(ChatColor.DARK_PURPLE + "/od reload - " + ChatColor.LIGHT_PURPLE + "reloads the plugin's config file");
-        sender.sendMessage(ChatColor.DARK_PURPLE + "/od info - " + ChatColor.LIGHT_PURPLE + " shows the currently loaded config");
+        sender.sendMessage(ChatColor.DARK_PURPLE + "/od reload - " + ChatColor.LIGHT_PURPLE + "reloads the plugin's config file.");
+        sender.sendMessage(ChatColor.DARK_PURPLE + "/od info - " + ChatColor.LIGHT_PURPLE + " shows the currently loaded config.");
         sender.sendMessage(ChatColor.DARK_PURPLE + "/od reset - " + ChatColor.LIGHT_PURPLE + " reset all durability timers.");
 
     }
