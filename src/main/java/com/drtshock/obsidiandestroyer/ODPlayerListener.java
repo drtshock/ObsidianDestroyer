@@ -35,7 +35,6 @@ public class ODPlayerListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent event) {
-
         if (event.getPlayer().isOp() && ObsidianDestroyer.UPDATE) {
             event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "There is a new update for ObsidianDestroyer \\o/");
             event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "Version: " + ChatColor.GRAY + ObsidianDestroyer.NAME
@@ -47,8 +46,8 @@ public class ODPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInteract(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && config.getDurabilityEnabled()) {
+        if (config.getDurabilityEnabled() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            Player player = event.getPlayer();
             if (player.getItemInHand().getAmount() > 0) {
                 if (player.getItemInHand().getTypeId() == config.getCheckItemId()) {
 
@@ -67,32 +66,32 @@ public class ODPlayerListener implements Listener {
                             this.currentDurability = ((Integer) odlistener.obsidianDurability.get(representation)).intValue();
                         }
 
-                        if (block == Material.OBSIDIAN) {
+                        else if (block == Material.OBSIDIAN) {
                             player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this obsidian block is: "
                                     + ChatColor.WHITE + (config.getoDurability() - this.currentDurability) + "/" + config.getoDurability());
                         }
 
-                        if (block == Material.ENDER_CHEST) {
+                        else if (block == Material.ENDER_CHEST) {
                             player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this ender chest is: "
                                     + ChatColor.WHITE + (config.getecDurability() - this.currentDurability) + "/" + config.getecDurability());
                         }
 
-                        if (block == Material.ANVIL) {
+                        else if (block == Material.ANVIL) {
                             player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this anvil is: "
                                     + ChatColor.WHITE + (config.getaDurability() - this.currentDurability) + "/" + config.getaDurability());
                         }
 
-                        if (block == Material.ENCHANTMENT_TABLE) {
+                        else if (block == Material.ENCHANTMENT_TABLE) {
                             player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this enchantment table is: "
                                     + ChatColor.WHITE + (config.geteDurability() - this.currentDurability) + "/" + config.geteDurability());
                         }
 
-                        if (block == Material.ENDER_PORTAL) {
+                        else if (block == Material.ENDER_PORTAL) {
                             player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this ender portal is: "
                                     + ChatColor.WHITE + (config.getfDurability() - this.currentDurability) + "/" + config.getfDurability());
                         }
 
-                        if (block == Material.ENDER_PORTAL_FRAME) {
+                        else if (block == Material.ENDER_PORTAL_FRAME) {
                             player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this ender portal frame is: "
                                     + ChatColor.WHITE + (config.getepDurability() - this.currentDurability) + "/" + config.getepDurability());
                         }
