@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -31,6 +32,7 @@ public final class ODConfig {
     private boolean withersEnabled = false;
     private boolean durabilityEnabled = false;
     private boolean bedrockEnabled = false;
+    private double minBedrockLevel = 10;
     private int odurability = 1;
     private int edurability = 1;
     private int ecdurability = 1;
@@ -45,7 +47,7 @@ public final class ODConfig {
     private boolean checkUpdate = true;
     private int checkitemid = 38;
     private boolean ignorecancel = false;
-    private static String[] VALUES = new String[27];
+    private static String[] VALUES = new String[28];
     private boolean durabilityTimerSafey = false;
     private int minFreeMemoryLimit = 80;
     private boolean explodeInLiquid = false;
@@ -131,6 +133,7 @@ public final class ODConfig {
             this.fdurability = this.bukkitConfig.getInt("Durability.EndPortalFrame", 1);
             this.fdurability = this.bukkitConfig.getInt("Durability.EndPortal", 1);
             this.bdurability = this.bukkitConfig.getInt("Durability.Bedrock.Durability", 1);
+            this.minBedrockLevel = this.bukkitConfig.getInt("Durability.Bedrock.MinimumLevel", 10);
             this.durabilityTimerEnabled = this.bukkitConfig.getBoolean("Durability.ResetEnabled", true);
 
             this.durabilityTimerSafey = this.bukkitConfig.getBoolean("Durability.UseTimerSafety", false);
@@ -161,19 +164,20 @@ public final class ODConfig {
             VALUES[14] = y + "AnvilDurability: " + g + this.getaDurability();
             VALUES[15] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
             VALUES[16] = y + "BedrockDurability: " + g + this.getbDurability();
-            VALUES[17] = y + "EndPortalDurability:" + g + this.getepDurability();
-            VALUES[18] = y + "EndPortalFrameDurability:" + g + this.getfDurability();
-            VALUES[19] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
-            VALUES[20] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
-            VALUES[21] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
-            VALUES[22] = y + "UseTimerSafety: " + g + this.getDurabilityTimerSafey();
-            VALUES[23] = y + "SystemMinMemory: " + g + this.getMinFreeMemoryLimit();
-            VALUES[24] = y + "BypassAllFluidProtection: " + g + this.getExplodeInLiquids();
-            VALUES[25] = y + "TNTCannonsProtected: " + g + this.getProtectTNTCannons();
-            VALUES[26] = y + "DisabledOnWorlds: " + g;
+            VALUES[17] = y + "MinimumBedrockLevel: " + g + this.getMinimumBedrockLevel();
+            VALUES[18] = y + "EndPortalDurability:" + g + this.getepDurability();
+            VALUES[19] = y + "EndPortalFrameDurability:" + g + this.getfDurability();
+            VALUES[20] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
+            VALUES[21] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
+            VALUES[22] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
+            VALUES[23] = y + "UseTimerSafety: " + g + this.getDurabilityTimerSafey();
+            VALUES[24] = y + "SystemMinMemory: " + g + this.getMinFreeMemoryLimit();
+            VALUES[25] = y + "BypassAllFluidProtection: " + g + this.getExplodeInLiquids();
+            VALUES[26] = y + "TNTCannonsProtected: " + g + this.getProtectTNTCannons();
+            VALUES[27] = y + "DisabledOnWorlds: " + g;
             if (this.getDisabledWorlds() != null) {
                 for (String dWorld : this.getDisabledWorlds()) {
-                    VALUES[26] += dWorld + " ";
+                    VALUES[27] += dWorld + " ";
                 }
             }
 
@@ -185,46 +189,7 @@ public final class ODConfig {
     private void writeDefault() {
         this.configFile.renameTo(new File(DIRECTORY + "config.yml.old"));
 
-        this.bukkitConfig.set("Version", this.PLUGIN_VERSION);
-        this.bukkitConfig.set("checkupdate", this.getCheckUpdate());
-        this.bukkitConfig.set("Radius", this.getRadius());
-        this.bukkitConfig.set("FluidsProtectObsidian", this.getWaterProtection());
-        this.bukkitConfig.set("CheckItemId", this.getCheckItemId());
-        this.bukkitConfig.set("IgnoreCancel", this.getIgnoreCancel());
-        this.bukkitConfig.set("Durability.Bedrock.Enabled", this.getBedrockEnabled());
-
-        this.bukkitConfig.set("EnabledFor.TNT", this.getTntEnabled());
-        this.bukkitConfig.set("EnabledFor.Cannons", this.getCannonsEnabled());
-        this.bukkitConfig.set("EnabledFor.Creepers", this.getCannonsEnabled());
-        this.bukkitConfig.set("EnabledFor.Ghasts", this.getGhastsEnabled());
-        this.bukkitConfig.set("EnabledFor.Withers", this.getWithersEnabled());
-
-        this.bukkitConfig.set("Durability.Enabled", this.getDurabilityEnabled());
-        this.bukkitConfig.set("Durability.Obsidian", this.getoDurability());
-        this.bukkitConfig.set("Durability.EnchantmentTable", this.geteDurability());
-        this.bukkitConfig.set("Durability.EnderChest", this.getecDurability());
-        this.bukkitConfig.set("Durability.Anvil", this.getaDurability());
-        this.bukkitConfig.set("Durability.EndPortal", this.epdurability);
-        this.bukkitConfig.set("Durability.EndPortalFrame", this.fdurability);
-        this.bukkitConfig.set("Durability.Bedrock.Durability", this.getbDurability());
-        this.bukkitConfig.set("Durability.ResetEnabled", this.getDurabilityResetTimerEnabled());
-
-        this.bukkitConfig.set("Durability.UseTimerSafety", this.getDurabilityTimerSafey());
-        this.bukkitConfig.set("Durability.SystemMinMemory", this.getMinFreeMemoryLimit());
-
-        this.bukkitConfig.set("Durability.ResetAfter", this.getDurabilityResetTime());
-        this.bukkitConfig.set("Blocks.ChanceToDrop", this.getChanceToDropBlock());
-
-        this.bukkitConfig.set("Explosions.BypassAllFluidProtection", this.getExplodeInLiquids());
-        this.bukkitConfig.set("Explosions.TNTCannonsProtected", this.getProtectTNTCannons());
-
-        this.bukkitConfig.set("DisabledOnWorlds", this.getDisabledWorlds());
-
-        try {
-            this.bukkitConfig.save(this.configFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.plugin.saveDefaultConfig();
 
         loadData();
     }
@@ -242,7 +207,7 @@ public final class ODConfig {
         try {
             tmp = Long.parseLong(value);
         } catch (NumberFormatException nfe) {
-            ObsidianDestroyer.LOG.warning("Error parsing a long from the config file. Key=" + key);
+            ObsidianDestroyer.LOG.log(Level.WARNING, "Error parsing a long from the config file. Key={0}", key);
         }
 
         return tmp;
@@ -310,6 +275,10 @@ public final class ODConfig {
 
     public boolean getBedrockEnabled() {
         return this.bedrockEnabled;
+    }
+    
+    public double getMinimumBedrockLevel() {
+        return this.minBedrockLevel;
     }
 
     public boolean getDurabilityResetTimerEnabled() {

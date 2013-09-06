@@ -44,10 +44,12 @@ Durability:
   EndPortalFrame: 50
   
  # Settings for bedrock. Recommended to be disabled or at a very high rate.
- # If enabled, people can blow holes in the bottom of your world.
+ # MinimumLevel is the lowest Y coordinate that bedrock can be blown up.
+ # Below that it will act like normal bedrock and be indestructable.
   Bedrock:
     Enabled: false
     Durability: 100
+    MinimumLevel: 10
 
 # Reset will run a timer to clear the durability of blocks after a certain time.
 # If you have issues with your server running out of memory then disabling this
