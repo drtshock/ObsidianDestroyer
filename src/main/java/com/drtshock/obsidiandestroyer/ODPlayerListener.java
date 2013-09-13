@@ -35,7 +35,7 @@ public class ODPlayerListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent event) {
-        if (event.getPlayer().isOp() && ObsidianDestroyer.UPDATE) {
+        if (event.getPlayer().hasPermission("obsidiandestroyer.update") && ObsidianDestroyer.UPDATE) {
             event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "There is a new update for ObsidianDestroyer \\o/");
             event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "Version: " + ChatColor.GRAY + ObsidianDestroyer.NAME
                     + ChatColor.DARK_PURPLE + " is the latest version!");
@@ -49,7 +49,7 @@ public class ODPlayerListener implements Listener {
         if (config.getDurabilityEnabled() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Player player = event.getPlayer();
             if (player.getItemInHand().getAmount() > 0) {
-                if (player.getItemInHand().getTypeId() == config.getCheckItemId()) {
+                if (player.getItemInHand().getType() == Material.RED_ROSE) {
 
                     Material block = event.getClickedBlock().getType();
                     Location loc = event.getClickedBlock().getLocation();

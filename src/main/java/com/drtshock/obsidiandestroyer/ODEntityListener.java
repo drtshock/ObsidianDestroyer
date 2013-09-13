@@ -117,31 +117,31 @@ public final class ODEntityListener implements Listener {
 
         Block b = at.getBlock();
 
-        if (b.getTypeId() == 49) {
+        if (b.getType() == Material.OBSIDIAN) {
             applyDurability(at, this.config.getoDurability());
         }
 
-        if (b.getTypeId() == 116) {
+        if (b.getType() == Material.ENCHANTMENT_TABLE) {
             applyDurability(at, this.config.geteDurability());
         }
 
-        if (b.getTypeId() == 130) {
+        if (b.getType() == Material.ENDER_CHEST) {
             applyDurability(at, this.config.getecDurability());
         }
 
-        if (b.getTypeId() == 145) {
+        if (b.getType() == Material.ANVIL) {
             applyDurability(at, this.config.getaDurability());
         }
 
-        if (b.getTypeId() == 7 && this.config.getBedrockEnabled() && b.getLocation().getY() >= this.config.getMinimumBedrockLevel()) {
+        if (b.getType() == Material.BEDROCK && this.config.getBedrockEnabled() && b.getLocation().getY() >= this.config.getMinimumBedrockLevel()) {
             applyDurability(at, this.config.getbDurability());
         }
 
-        if (b.getTypeId() == 120) {
+        if (b.getType() == Material.ENDER_PORTAL) {
             applyDurability(at, this.config.getfDurability());
         }
 
-        if (b.getTypeId() == 119) {
+        if (b.getType() == Material.ENDER_PORTAL_FRAME) {
             applyDurability(at, this.config.getepDurability());
         }
     }

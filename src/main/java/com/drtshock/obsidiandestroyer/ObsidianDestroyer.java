@@ -26,7 +26,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
     private final ODEntityListener entityListener = new ODEntityListener(this);
     private final ODPlayerListener playerListener = new ODPlayerListener(this);
     public static Logger LOG;
-    private static PluginManager PM;
+    private PluginManager PM;
     public static boolean UPDATE = false;
     public static String NAME = "";
     private static boolean IS_FACTIONS_HOOKED = false;
