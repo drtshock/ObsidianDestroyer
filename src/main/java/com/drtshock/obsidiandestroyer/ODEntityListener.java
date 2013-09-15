@@ -58,7 +58,6 @@ public final class ODEntityListener implements Listener {
 
         Location detonatorLoc = detonator.getLocation();
         String eventTypeRep = event.getEntity().toString();
-        Bukkit.broadcastMessage(eventTypeRep);
 
         if ((!eventTypeRep.equals("CraftTNTPrimed")) && (!eventTypeRep.equals("CraftCreeper"))
                 && (!eventTypeRep.equals("CraftFireball")) && (!eventTypeRep.equals("CraftGhast"))
