@@ -29,6 +29,7 @@ EnabledFor:
   Creepers: false
   Ghasts: false
   Withers: false
+  TNTCarts: false
   
   # Used to integrate with the cannons plugin.
   Cannons: false

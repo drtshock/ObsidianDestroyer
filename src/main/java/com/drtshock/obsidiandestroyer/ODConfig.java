@@ -30,6 +30,7 @@ public final class ODConfig {
     private boolean creepersEnabled = false;
     private boolean ghastsEnabled = false;
     private boolean withersEnabled = false;
+    private boolean tntCartEnabled = false;
     private boolean durabilityEnabled = false;
     private boolean bedrockEnabled = false;
     private double minBedrockLevel = 10;
@@ -46,7 +47,7 @@ public final class ODConfig {
     private boolean waterProtection = true;
     private boolean checkUpdate = true;
     private boolean ignorecancel = false;
-    private static String[] VALUES = new String[27];
+    private static String[] VALUES = new String[28];
     private boolean durabilityTimerSafey = false;
     private int minFreeMemoryLimit = 80;
     private boolean explodeInLiquid = false;
@@ -122,6 +123,7 @@ public final class ODConfig {
             this.creepersEnabled = this.bukkitConfig.getBoolean("EnabledFor.Creepers", false);
             this.ghastsEnabled = this.bukkitConfig.getBoolean("EnabledFor.Ghasts", false);
             this.withersEnabled = this.bukkitConfig.getBoolean("EnabledFor.Withers", false);
+            this.tntCartEnabled = this.bukkitConfig.getBoolean("EnabledFor.TNTCarts", false);
 
             this.durabilityEnabled = this.bukkitConfig.getBoolean("Durability.Enabled", false);
             this.odurability = this.bukkitConfig.getInt("Durability.Obsidian", 1);
@@ -154,27 +156,28 @@ public final class ODConfig {
             VALUES[6] = y + "CreepersEnabled: " + g + this.getCreepersEnabled();
             VALUES[7] = y + "GhastsEnabled: " + g + this.getGhastsEnabled();
             VALUES[8] = y + "WithersEnabled: " + g + this.getWithersEnabled();
-            VALUES[9] = y + "DurabilityEnabled: " + g + this.getDurabilityEnabled();
-            VALUES[10] = y + "ObsidianDurability: " + g + this.getoDurability();
-            VALUES[11] = y + "EnchantmentTableDurability: " + g + this.geteDurability();
-            VALUES[12] = y + "EnderchestDurability: " + g + this.getecDurability();
-            VALUES[13] = y + "AnvilDurability: " + g + this.getaDurability();
-            VALUES[14] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
-            VALUES[15] = y + "BedrockDurability: " + g + this.getbDurability();
-            VALUES[16] = y + "MinimumBedrockLevel: " + g + this.getMinimumBedrockLevel();
-            VALUES[17] = y + "EndPortalDurability:" + g + this.getepDurability();
-            VALUES[18] = y + "EndPortalFrameDurability:" + g + this.getfDurability();
-            VALUES[19] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
-            VALUES[20] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
-            VALUES[21] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
-            VALUES[22] = y + "UseTimerSafety: " + g + this.getDurabilityTimerSafey();
-            VALUES[23] = y + "SystemMinMemory: " + g + this.getMinFreeMemoryLimit();
-            VALUES[24] = y + "BypassAllFluidProtection: " + g + this.getExplodeInLiquids();
-            VALUES[25] = y + "TNTCannonsProtected: " + g + this.getProtectTNTCannons();
-            VALUES[26] = y + "DisabledOnWorlds: " + g;
+            VALUES[9] = y + "TNTCartsEnabled: " + g + this.getTNTCartsEnabled();
+            VALUES[10] = y + "DurabilityEnabled: " + g + this.getDurabilityEnabled();
+            VALUES[11] = y + "ObsidianDurability: " + g + this.getoDurability();
+            VALUES[12] = y + "EnchantmentTableDurability: " + g + this.geteDurability();
+            VALUES[13] = y + "EnderchestDurability: " + g + this.getecDurability();
+            VALUES[14] = y + "AnvilDurability: " + g + this.getaDurability();
+            VALUES[15] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
+            VALUES[16] = y + "BedrockDurability: " + g + this.getbDurability();
+            VALUES[17] = y + "MinimumBedrockLevel: " + g + this.getMinimumBedrockLevel();
+            VALUES[18] = y + "EndPortalDurability:" + g + this.getepDurability();
+            VALUES[19] = y + "EndPortalFrameDurability:" + g + this.getfDurability();
+            VALUES[20] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
+            VALUES[21] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
+            VALUES[22] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
+            VALUES[23] = y + "UseTimerSafety: " + g + this.getDurabilityTimerSafey();
+            VALUES[24] = y + "SystemMinMemory: " + g + this.getMinFreeMemoryLimit();
+            VALUES[25] = y + "BypassAllFluidProtection: " + g + this.getExplodeInLiquids();
+            VALUES[26] = y + "TNTCannonsProtected: " + g + this.getProtectTNTCannons();
+            VALUES[27] = y + "DisabledOnWorlds: " + g;
             if (this.getDisabledWorlds() != null) {
                 for (String dWorld : this.getDisabledWorlds()) {
-                    VALUES[26] += dWorld + " ";
+                    VALUES[27] += dWorld + " ";
                 }
             }
 
@@ -238,6 +241,10 @@ public final class ODConfig {
         return this.withersEnabled;
     }
 
+    public boolean getTNTCartsEnabled() {
+        return this.tntCartEnabled;
+    }
+
     public boolean getDurabilityEnabled() {
         return this.durabilityEnabled;
     }
@@ -273,7 +280,7 @@ public final class ODConfig {
     public boolean getBedrockEnabled() {
         return this.bedrockEnabled;
     }
-    
+
     public double getMinimumBedrockLevel() {
         return this.minBedrockLevel;
     }

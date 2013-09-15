@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Timer;
 import java.util.logging.Level;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -57,10 +58,11 @@ public final class ODEntityListener implements Listener {
 
         Location detonatorLoc = detonator.getLocation();
         String eventTypeRep = event.getEntity().toString();
+        Bukkit.broadcastMessage(eventTypeRep);
 
         if ((!eventTypeRep.equals("CraftTNTPrimed")) && (!eventTypeRep.equals("CraftCreeper"))
                 && (!eventTypeRep.equals("CraftFireball")) && (!eventTypeRep.equals("CraftGhast"))
-                && (!eventTypeRep.equals("CraftSnowball"))) {
+                && (!eventTypeRep.equals("CraftSnowball")) && (!eventTypeRep.equals("CraftMinecartTNT"))) {
             return;
         }
 
@@ -77,6 +79,10 @@ public final class ODEntityListener implements Listener {
         }
 
         if (((eventTypeRep.equals("CraftFireball")) || (eventTypeRep.equals("CraftGhast"))) && (!this.config.getGhastsEnabled())) {
+            return;
+        }
+        
+        if ((eventTypeRep.equals("CraftMinecartTNT")) && (!this.config.getTNTCartsEnabled())) {
             return;
         }
 
@@ -211,7 +217,7 @@ public final class ODEntityListener implements Listener {
             at.getWorld().dropItemNaturally(at, is);
         }
 
-        b.setTypeId(Material.AIR.getId());
+        b.setType(Material.AIR);
     }
 
     private boolean checkIfMax(int value, int Dura) {
