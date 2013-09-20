@@ -8,7 +8,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.drtshock.obsidiandestroyer.Metrics.Graph;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 /**
@@ -54,36 +53,10 @@ public final class ObsidianDestroyer extends JavaPlugin {
         PM.registerEvents(entityListener, this);
         PM.registerEvents(playerListener, this);
 
-        startMetrics();
-
         if (config.getCheckUpdate()) {
             Updater updater = new Updater(this, "obsidiandestroyer", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
             UPDATE = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
             NAME = updater.getLatestVersionString();
-        }
-    }
-
-    public void startMetrics() {
-        try {
-            Metrics metrics = new Metrics(this);
-
-            Graph graph = metrics.createGraph("Durability");
-
-            graph.addPlotter(new Metrics.Plotter("Obsidian Durability Per Server") {
-                @Override
-                public String getColumnName() {
-                    return String.valueOf(config.getoDurability());
-                }
-
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
-
-            metrics.start();
-        } catch (IOException e) {
-            LOG.log(Level.WARNING, "Failed to submit the stats D:"); // Failed to submit the stats :-(
         }
     }
 
