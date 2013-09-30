@@ -39,7 +39,7 @@ public class ODPlayerListener implements Listener {
             event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "There is a new update for ObsidianDestroyer \\o/");
             event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "Version: " + ChatColor.GRAY + ObsidianDestroyer.NAME
                     + ChatColor.DARK_PURPLE + " is the latest version!");
-            event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "Visit " + ChatColor.GRAY + "http://dev.bukkit.org/server-mods/obsidiandestroyer"
+            event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "Visit " + ChatColor.GRAY + "http://dev.bukkit.org/potato/obsidiandestroyer"
                     + ChatColor.DARK_PURPLE + " to download.");
         }
     }
