@@ -1,5 +1,6 @@
 package com.drtshock.obsidiandestroyer;
 
+import com.drtshock.obsidiandestroyer.Metrics.Graph;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,6 +50,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
         checkFactionsHook();
         checkTownyHook();
         checkWorldGuardGHook();
+        startMetrics();
 
         PM.registerEvents(entityListener, this);
         PM.registerEvents(playerListener, this);
@@ -57,6 +59,27 @@ public final class ObsidianDestroyer extends JavaPlugin {
             Updater updater = new Updater(this, "obsidiandestroyer", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
             UPDATE = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
             NAME = updater.getLatestVersionString();
+        }
+    }
+    
+    private void startMetrics() {
+        try {
+            Metrics metrics = new Metrics(this);
+
+            Graph graph = metrics.createGraph("Durability");
+            graph.addPlotter(new Metrics.Plotter() {
+                @Override
+                public String getColumnName() {
+                    return getConfig().getString("Durability.Obsidian");
+                }
+
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+        } catch (IOException ex) {
+            getLogger().warning("Failed to load metrics :(");
         }
     }
 
