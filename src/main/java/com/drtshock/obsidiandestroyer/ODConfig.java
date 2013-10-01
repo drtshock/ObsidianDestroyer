@@ -102,6 +102,9 @@ public final class ODConfig {
                 e.printStackTrace();
             }
         }
+        if(ObsidianDestroyer.UPDATE && !this.getCheckUpdate()) {
+            ObsidianDestroyer.UPDATE = false;
+        }
     }
 
     private void loadData() {
