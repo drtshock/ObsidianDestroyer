@@ -1,6 +1,7 @@
 package com.drtshock.obsidiandestroyer;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -46,7 +47,7 @@ public class ODPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInteract(PlayerInteractEvent event) {
-        if (config.getDurabilityEnabled() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+        if (config.getDurabilityEnabled() && event.getAction() == Action.LEFT_CLICK_BLOCK) {
             Player player = event.getPlayer();
             if (player.getItemInHand().getAmount() > 0) {
                 if (player.getItemInHand().getType() == Material.RED_ROSE) {
@@ -59,6 +60,10 @@ public class ODPlayerListener implements Listener {
                             || block == Material.ENCHANTMENT_TABLE
                             || block == Material.ENDER_PORTAL
                             || block == Material.ENDER_PORTAL_FRAME) {
+
+                        if (player.getGameMode() == GameMode.CREATIVE) {
+                            event.setCancelled(true);
+                        }
 
                         Integer representation = Integer.valueOf(loc.getWorld().hashCode() + loc.getBlockX() * 2389 + loc.getBlockY() * 4027 + loc.getBlockZ() * 2053);
 
