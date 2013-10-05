@@ -20,7 +20,6 @@ public class ODPlayerListener implements Listener {
 
     private ODEntityListener odlistener;
     public ODConfig config;
-    private int currentDurability = 0;
 
     public ODPlayerListener(ObsidianDestroyer plugin) {
         this.config = plugin.getODConfig();
@@ -66,42 +65,41 @@ public class ODPlayerListener implements Listener {
                         }
 
                         Integer representation = Integer.valueOf(loc.getWorld().hashCode() + loc.getBlockX() * 2389 + loc.getBlockY() * 4027 + loc.getBlockZ() * 2053);
+                        int currentDurability = 0;
 
                         if (odlistener.obsidianDurability.containsKey(representation)) {
-                            this.currentDurability = ((Integer) odlistener.obsidianDurability.get(representation)).intValue();
+                            currentDurability = ((Integer) odlistener.obsidianDurability.get(representation)).intValue();
                         }
 
-                        else if (block == Material.OBSIDIAN) {
+                        if (block == Material.OBSIDIAN) {
                             player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this obsidian block is: "
-                                    + ChatColor.WHITE + (config.getoDurability() - this.currentDurability) + "/" + config.getoDurability());
+                                    + ChatColor.WHITE + (config.getoDurability() - currentDurability) + "/" + config.getoDurability());
                         }
 
                         else if (block == Material.ENDER_CHEST) {
                             player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this ender chest is: "
-                                    + ChatColor.WHITE + (config.getecDurability() - this.currentDurability) + "/" + config.getecDurability());
+                                    + ChatColor.WHITE + (config.getecDurability() - currentDurability) + "/" + config.getecDurability());
                         }
 
                         else if (block == Material.ANVIL) {
                             player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this anvil is: "
-                                    + ChatColor.WHITE + (config.getaDurability() - this.currentDurability) + "/" + config.getaDurability());
+                                    + ChatColor.WHITE + (config.getaDurability() - currentDurability) + "/" + config.getaDurability());
                         }
 
                         else if (block == Material.ENCHANTMENT_TABLE) {
                             player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this enchantment table is: "
-                                    + ChatColor.WHITE + (config.geteDurability() - this.currentDurability) + "/" + config.geteDurability());
+                                    + ChatColor.WHITE + (config.geteDurability() - currentDurability) + "/" + config.geteDurability());
                         }
 
                         else if (block == Material.ENDER_PORTAL) {
                             player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this ender portal is: "
-                                    + ChatColor.WHITE + (config.getfDurability() - this.currentDurability) + "/" + config.getfDurability());
+                                    + ChatColor.WHITE + (config.getfDurability() - currentDurability) + "/" + config.getfDurability());
                         }
 
                         else if (block == Material.ENDER_PORTAL_FRAME) {
                             player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this ender portal frame is: "
-                                    + ChatColor.WHITE + (config.getepDurability() - this.currentDurability) + "/" + config.getepDurability());
+                                    + ChatColor.WHITE + (config.getepDurability() - currentDurability) + "/" + config.getepDurability());
                         }
-
-                        this.currentDurability = 0;
                     }
                 }
             }
