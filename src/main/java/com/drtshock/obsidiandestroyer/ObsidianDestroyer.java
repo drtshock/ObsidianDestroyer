@@ -11,6 +11,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import java.io.File;
 
 /**
  * The ObsidianDestroyer plugin.
@@ -56,14 +57,26 @@ public final class ObsidianDestroyer extends JavaPlugin {
         PM.registerEvents(entityListener, this);
         PM.registerEvents(playerListener, this);
 
+        checkUpdate();
+    }
+    
+    // PROTECTED
+    protected void checkUpdate() {
         if (config.getCheckUpdate()) {
-            Updater.UpdateType updateType = (config.getDownloadUpdate() ? UpdateType.DEFAULT : UpdateType.NO_DOWNLOAD);
-            Updater updater = new Updater(this, 43718, this.getFile(), updateType, false);
-            UPDATE = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
-            NAME = updater.getLatestName();
-            if (updater.getResult() == Updater.UpdateResult.SUCCESS) {
-                LOG.info("Successfully updated ObsidianDestroyer for next restart!");
-            }
+            final ObsidianDestroyer plugin = this;
+            final File file = this.getFile();
+            final Updater.UpdateType updateType = (config.getDownloadUpdate() ? UpdateType.DEFAULT : UpdateType.NO_DOWNLOAD);
+            getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
+                @Override
+                public void run() {
+                    Updater updater = new Updater(plugin, 43718, file, updateType, false);
+                    ObsidianDestroyer.UPDATE = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
+                    ObsidianDestroyer.NAME = updater.getLatestName();
+                    if (updater.getResult() == Updater.UpdateResult.SUCCESS) {
+                        getLogger().info("Successfully updated ObsidianDestroyer for next restart!");
+                    }
+                }
+            });
         }
     }
 
