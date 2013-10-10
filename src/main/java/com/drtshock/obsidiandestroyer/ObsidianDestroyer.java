@@ -88,12 +88,12 @@ public final class ObsidianDestroyer extends JavaPlugin {
             graph.addPlotter(new Metrics.Plotter() {
                 @Override
                 public String getColumnName() {
-                    return "Obsidian Durability";
+                    return getConfig().getString("Durability.Obsidian");
                 }
 
                 @Override
                 public int getValue() {
-                    return config.getoDurability();
+                    return 1;
                 }
             });
         } catch (IOException ex) {
