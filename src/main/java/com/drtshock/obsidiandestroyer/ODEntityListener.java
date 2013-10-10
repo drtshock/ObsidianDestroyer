@@ -1,10 +1,11 @@
 package com.drtshock.obsidiandestroyer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Timer;
 import java.util.logging.Level;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -80,16 +81,22 @@ public final class ODEntityListener implements Listener {
         if (((eventTypeRep.equals("CraftFireball")) || (eventTypeRep.equals("CraftGhast"))) && (!this.config.getGhastsEnabled())) {
             return;
         }
-        
+
         if ((eventTypeRep.equals("CraftMinecartTNT")) && (!this.config.getTNTCartsEnabled())) {
             return;
         }
 
         if (eventTypeRep.equals("CraftSnowball")) {
             Iterator<Block> iter = event.blockList().iterator();
+            List<Location> hitLocs = new ArrayList<Location>();
             while (iter.hasNext()) {
                 Block block = (org.bukkit.block.Block) iter.next();
-                blowBlockUp(block.getLocation());
+                Location blockLoc = block.getLocation();
+                if (!hitLocs.contains(blockLoc)) {
+                    hitLocs.add(blockLoc);
+                    blowBlockUp(blockLoc);
+                    iter.remove();
+                }
             }
             return;
         }
