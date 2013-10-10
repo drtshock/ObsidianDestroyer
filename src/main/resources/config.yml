@@ -9,8 +9,11 @@
 # Do not touch this line. It will rewrite your config.
 Version: ${project.version}
 
-# This will only check for updates. We will never download them for you.
+# This will only check for updates by default. You can also enable this to download them for you (I don't recommend this).
+# This plugin does not break between minecraft versions so you should not have an issue updating to the most recent build.
+# For this to work you need to add your curse api key to /plugins/updater/config.yml
 checkupdate: true
+downloadupdate: false
 
 # The explosion radius that will affect blocks 
 Radius: 3

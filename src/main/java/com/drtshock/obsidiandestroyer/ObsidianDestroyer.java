@@ -1,6 +1,7 @@
 package com.drtshock.obsidiandestroyer;
 
 import com.drtshock.obsidiandestroyer.Metrics.Graph;
+import com.drtshock.obsidiandestroyer.Updater.UpdateType;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,12 +57,16 @@ public final class ObsidianDestroyer extends JavaPlugin {
         PM.registerEvents(playerListener, this);
 
         if (config.getCheckUpdate()) {
-            Updater updater = new Updater(this, "obsidiandestroyer", this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false);
+            Updater.UpdateType updateType = (config.getDownloadUpdate() && config.getCheckUpdate() ? UpdateType.DEFAULT : UpdateType.NO_DOWNLOAD);
+            Updater updater = new Updater(this, 43718, this.getFile(), updateType, false);
             UPDATE = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
-            NAME = updater.getLatestVersionString();
+            NAME = updater.getLatestName();
+            if (updater.getResult() == Updater.UpdateResult.SUCCESS) {
+                LOG.info("Successfully updated ObsidianDestroyer for next restart!");
+            }
         }
     }
-    
+
     private void startMetrics() {
         try {
             Metrics metrics = new Metrics(this);

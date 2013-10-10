@@ -46,8 +46,9 @@ public final class ODConfig {
     private double chanceToDropBlock = 0.7D;
     private boolean waterProtection = true;
     private boolean checkUpdate = true;
+    private boolean downloadUpdate = false;
     private boolean ignorecancel = false;
-    private static String[] VALUES = new String[28];
+    private static String[] VALUES = new String[29];
     private boolean durabilityTimerSafey = false;
     private int minFreeMemoryLimit = 80;
     private boolean explodeInLiquid = false;
@@ -102,7 +103,7 @@ public final class ODConfig {
                 e.printStackTrace();
             }
         }
-        if(ObsidianDestroyer.UPDATE && !this.getCheckUpdate()) {
+        if (ObsidianDestroyer.UPDATE && !this.getCheckUpdate()) {
             ObsidianDestroyer.UPDATE = false;
         }
     }
@@ -116,6 +117,7 @@ public final class ODConfig {
             this.bukkitConfig.load(this.configFile);
 
             this.checkUpdate = this.bukkitConfig.getBoolean("checkupdate", true);
+            this.downloadUpdate = this.bukkitConfig.getBoolean("downloadupdate", false);
             this.explosionRadius = this.bukkitConfig.getInt("Radius", 3);
             this.waterProtection = this.bukkitConfig.getBoolean("FluidsProtectObsidian", true);
             this.ignorecancel = this.bukkitConfig.getBoolean("IgnoreCancel", false);
@@ -151,36 +153,37 @@ public final class ODConfig {
             this.disabledWorlds = (ArrayList<String>) this.bukkitConfig.getStringList("DisabledOnWorlds");
 
             VALUES[0] = y + "checkupdate: " + g + this.checkUpdate;
-            VALUES[1] = y + "ExplosionRadius: " + g + this.getRadius();
-            VALUES[2] = y + "FluidsProtectObsidian: " + g + this.getWaterProtection();
-            VALUES[3] = y + "IgnoreCancel: " + g + this.getIgnoreCancel();
-            VALUES[4] = y + "TNTEnabled: " + g + this.getTntEnabled();
-            VALUES[5] = y + "CannonsEnabled: " + g + this.getCannonsEnabled();
-            VALUES[6] = y + "CreepersEnabled: " + g + this.getCreepersEnabled();
-            VALUES[7] = y + "GhastsEnabled: " + g + this.getGhastsEnabled();
-            VALUES[8] = y + "WithersEnabled: " + g + this.getWithersEnabled();
-            VALUES[9] = y + "TNTCartsEnabled: " + g + this.getTNTCartsEnabled();
-            VALUES[10] = y + "DurabilityEnabled: " + g + this.getDurabilityEnabled();
-            VALUES[11] = y + "ObsidianDurability: " + g + this.getoDurability();
-            VALUES[12] = y + "EnchantmentTableDurability: " + g + this.geteDurability();
-            VALUES[13] = y + "EnderchestDurability: " + g + this.getecDurability();
-            VALUES[14] = y + "AnvilDurability: " + g + this.getaDurability();
-            VALUES[15] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
-            VALUES[16] = y + "BedrockDurability: " + g + this.getbDurability();
-            VALUES[17] = y + "MinimumBedrockLevel: " + g + this.getMinimumBedrockLevel();
-            VALUES[18] = y + "EndPortalDurability:" + g + this.getepDurability();
-            VALUES[19] = y + "EndPortalFrameDurability:" + g + this.getfDurability();
-            VALUES[20] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
-            VALUES[21] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
-            VALUES[22] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
-            VALUES[23] = y + "UseTimerSafety: " + g + this.getDurabilityTimerSafey();
-            VALUES[24] = y + "SystemMinMemory: " + g + this.getMinFreeMemoryLimit();
-            VALUES[25] = y + "BypassAllFluidProtection: " + g + this.getExplodeInLiquids();
-            VALUES[26] = y + "TNTCannonsProtected: " + g + this.getProtectTNTCannons();
-            VALUES[27] = y + "DisabledOnWorlds: " + g;
+            VALUES[1] = y + "downloadupdate: " + g + this.downloadUpdate;
+            VALUES[2] = y + "ExplosionRadius: " + g + this.getRadius();
+            VALUES[3] = y + "FluidsProtectObsidian: " + g + this.getWaterProtection();
+            VALUES[4] = y + "IgnoreCancel: " + g + this.getIgnoreCancel();
+            VALUES[5] = y + "TNTEnabled: " + g + this.getTntEnabled();
+            VALUES[6] = y + "CannonsEnabled: " + g + this.getCannonsEnabled();
+            VALUES[7] = y + "CreepersEnabled: " + g + this.getCreepersEnabled();
+            VALUES[8] = y + "GhastsEnabled: " + g + this.getGhastsEnabled();
+            VALUES[9] = y + "WithersEnabled: " + g + this.getWithersEnabled();
+            VALUES[10] = y + "TNTCartsEnabled: " + g + this.getTNTCartsEnabled();
+            VALUES[11] = y + "DurabilityEnabled: " + g + this.getDurabilityEnabled();
+            VALUES[12] = y + "ObsidianDurability: " + g + this.getoDurability();
+            VALUES[13] = y + "EnchantmentTableDurability: " + g + this.geteDurability();
+            VALUES[14] = y + "EnderchestDurability: " + g + this.getecDurability();
+            VALUES[15] = y + "AnvilDurability: " + g + this.getaDurability();
+            VALUES[16] = y + "BedrockEnabled: " + g + this.getBedrockEnabled();
+            VALUES[17] = y + "BedrockDurability: " + g + this.getbDurability();
+            VALUES[18] = y + "MinimumBedrockLevel: " + g + this.getMinimumBedrockLevel();
+            VALUES[19] = y + "EndPortalDurability:" + g + this.getepDurability();
+            VALUES[20] = y + "EndPortalFrameDurability:" + g + this.getfDurability();
+            VALUES[21] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
+            VALUES[22] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
+            VALUES[23] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
+            VALUES[24] = y + "UseTimerSafety: " + g + this.getDurabilityTimerSafey();
+            VALUES[25] = y + "SystemMinMemory: " + g + this.getMinFreeMemoryLimit();
+            VALUES[26] = y + "BypassAllFluidProtection: " + g + this.getExplodeInLiquids();
+            VALUES[27] = y + "TNTCannonsProtected: " + g + this.getProtectTNTCannons();
+            VALUES[28] = y + "DisabledOnWorlds: " + g;
             if (this.getDisabledWorlds() != null) {
                 for (String dWorld : this.getDisabledWorlds()) {
-                    VALUES[27] += dWorld + " ";
+                    VALUES[28] += dWorld + " ";
                 }
             }
 
@@ -222,6 +225,10 @@ public final class ODConfig {
 
     public boolean getCheckUpdate() {
         return this.checkUpdate;
+    }
+
+    public boolean getDownloadUpdate() {
+        return this.downloadUpdate;
     }
 
     public boolean getTntEnabled() {
