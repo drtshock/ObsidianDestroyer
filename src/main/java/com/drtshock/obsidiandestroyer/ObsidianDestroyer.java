@@ -57,7 +57,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
         PM.registerEvents(playerListener, this);
 
         if (config.getCheckUpdate()) {
-            Updater.UpdateType updateType = (config.getDownloadUpdate() && config.getCheckUpdate() ? UpdateType.DEFAULT : UpdateType.NO_DOWNLOAD);
+            Updater.UpdateType updateType = (config.getDownloadUpdate() ? UpdateType.DEFAULT : UpdateType.NO_DOWNLOAD);
             Updater updater = new Updater(this, 43718, this.getFile(), updateType, false);
             UPDATE = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
             NAME = updater.getLatestName();
