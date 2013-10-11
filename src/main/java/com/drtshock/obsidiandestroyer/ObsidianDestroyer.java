@@ -1,6 +1,7 @@
 package com.drtshock.obsidiandestroyer;
 
 import com.drtshock.obsidiandestroyer.Metrics.Graph;
+import com.drtshock.obsidiandestroyer.Updater.UpdateResult;
 import com.drtshock.obsidiandestroyer.Updater.UpdateType;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -59,7 +60,7 @@ public final class ObsidianDestroyer extends JavaPlugin {
 
         checkUpdate();
     }
-    
+
     // PROTECTED
     protected void checkUpdate() {
         if (config.getCheckUpdate()) {
@@ -72,8 +73,10 @@ public final class ObsidianDestroyer extends JavaPlugin {
                     Updater updater = new Updater(plugin, 43718, file, updateType, false);
                     ObsidianDestroyer.UPDATE = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
                     ObsidianDestroyer.NAME = updater.getLatestName();
-                    if (updater.getResult() == Updater.UpdateResult.SUCCESS) {
-                        getLogger().info("Successfully updated ObsidianDestroyer for next restart!");
+                    if (updater.getResult() == UpdateResult.SUCCESS) {
+                        getLogger().log(Level.INFO, "Successfully updated ObsidianDestroyer to version {0} for next restart!", updater.getLatestName());
+                    } else if (updater.getResult() == UpdateResult.NO_UPDATE) {
+                        getLogger().log(Level.INFO, "We didn't find an update!");
                     }
                 }
             });
