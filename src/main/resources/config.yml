@@ -66,7 +66,7 @@ Durability:
 # This is not a fix to out of memory errors. Though it can help prevent this plugin from crashing your server.
 # "SystemMinMemory" = Minimun amount (MegaBytes) of RAM that can be availabe.
 # If there is less than this amount of memory available, no new timer threads will be created.
-  UseTimerSafety: false
+  UseTimerSafety: true
   SystemMinMemory: 80
 
 # Chance to drop. Setting to anything at or above 1 will make them always drop.
