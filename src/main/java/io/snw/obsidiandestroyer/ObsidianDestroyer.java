@@ -1,6 +1,7 @@
 package io.snw.obsidiandestroyer;
 
 import io.snw.obsidiandestroyer.commands.ODCommand;
+import io.snw.obsidiandestroyer.listeners.PlayerListener;
 import io.snw.obsidiandestroyer.util.Metrics;
 import io.snw.obsidiandestroyer.util.Updater;
 import io.snw.obsidiandestroyer.listeners.EntityExplodeListener;
@@ -22,6 +23,7 @@ public class ObsidianDestroyer extends JavaPlugin {
         saveDefaultConfig();
         getCommand("od").setExecutor(new ODCommand(this));
         getServer().getPluginManager().registerEvents(new EntityExplodeListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         checkUpdate();
         startMetrics();
     }
