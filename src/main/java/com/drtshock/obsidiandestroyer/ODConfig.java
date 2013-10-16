@@ -189,7 +189,7 @@ public final class ODConfig {
             VALUES[18] = y + "MinimumBedrockLevel: " + g + this.getMinimumBedrockLevel();
             VALUES[19] = y + "EndPortalDurability:" + g + this.getepDurability();
             VALUES[20] = y + "EndPortalFrameDurability:" + g + this.getfDurability();
-            VALUES[21] = y + "ResetEnabled: " + g + this.getDurabilityEnabled();
+            VALUES[21] = y + "ResetEnabled: " + g + this.getDurabilityResetTimerEnabled();
             VALUES[22] = y + "ResetAfter: " + g + this.getDurabilityResetTime();
             VALUES[23] = y + "ChanceToDrop: " + g + this.getChanceToDropBlock();
             VALUES[24] = y + "UseTimerSafety: " + g + this.getDurabilityTimerSafey();
