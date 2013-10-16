@@ -1,0 +1,118 @@
+Version 3.1
++ Added hooks into WorldGuard, Factions, and Towny for ExplosionsInLiquid
++ All features/fixes from 3.0.x
+
+Version 3.0.2
++ Disable the plugin per world, through a listing in the config
+
+Version 3.0.1
++ Corrected custom metrics
+
+Version 3.0
++ Release
++ Updated documentation
+
+Version 2.14.3
++ Fixed auto updater
+
+Version 2.14.2
++ Implemented bypass of explosion protections for fluids
++ Ability to protect "TNT Cannons" from the bypass
+
+Version 2.14.1
++ Experimental Timer Thread limiter
++ Corrected issue with config file not updating
++ Corrected issue with config file not reloading
++ Corrected logger
+
+Version 2.10
++ Update to minecraft version 1.5
+* Easier way to create config.
++ Add config comments.
++ Bring code up to formatting standards.
+* Add ignore cancel check for issues with other plugins.
+
+Version 2.9
++ Add way to check durability of a block.
+* Fix error when executing commands from console.
+
+Version 2.8
++ Add anvil support.
++ Individual durability for each block type.
++ Bypass vanilla waterprotection if FluidProtect: false
+
+Version 2.7
++ Works with factions if TnT explosions are turned off.
++ Added an auto updater. You can disable it in the config.
+
+Version 2.6
+* Fix issue when chance to drop is above 1 not breaking obsidian.
+
+Version 2.5
++ Added ender chests.
++ Add console as CommandSender.
+
+Version 2.4
++ Built against 1.4.6R0.2
++ Added surpress warnings for deprecations in metrics.
+* Worked around the new itemstack / byte deprecation in ODEntityListener.class
+
+Version 2.3
++ Added FluidsProtect option into config.  Can enable damage to obsidian in water.
+* Corrected bug with plugin version reporting null
+
+Version 2.2
+* Corrected Metrics not starting.
+
+Version 2.1.x
++ Fluids stop all damage to obsidian
+
+Version 2.1
++ Removed Vault dependency.
+
+Version 2.0
++ Added 1.4.5 support
++ New author / maintainers: drtshock, squidicc
+
+Version 1.3.1
++ Corrected issue with Cannons plugin support drop
+
+Version 1.3
++ Added metrics support
+
+Version 1.25
++ Added Cannons plugin support
+
+Version 1.21
++ Added echantment Tables
+
+Version 1.1
++ Updated for minecraft 1.2
+
+Version 1.052
++ Added chance to drop Obsidian blocks
+
+Version 1.051
++ Fixed NullPointerException in config
+
+Version 1.05
++ Durability can now restore back to max after a certain time passed
+
+Version 1.04
++ Durability now saves when the server reloads/restarts
+
+Version 1.03
++ Added durability
+
+Version 1.02
++ Added Permissions
++ Added aliases
++ Increased maintainability
+
+Version 1.01
++ Added command to reload config ingame
++ Added command to show loaded config ingame
++ Added check to not mess with plugins that prevent explosions
+
+Version 1.0
+Initial Release
