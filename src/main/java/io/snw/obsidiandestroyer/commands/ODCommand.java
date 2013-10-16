@@ -1,4 +1,4 @@
-package io.snw.obsidiandestroyer.io.snw.obsidiandestroyer.commands;
+package io.snw.obsidiandestroyer.commands;
 
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import org.bukkit.command.Command;

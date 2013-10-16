@@ -1,8 +1,8 @@
 package io.snw.obsidiandestroyer;
 
-import io.snw.obsidiandestroyer.io.snw.obsidiandestroyer.commands.ODCommand;
-import io.snw.obsidiandestroyer.io.snw.obsidiandestroyer.util.Metrics;
-import io.snw.obsidiandestroyer.io.snw.obsidiandestroyer.util.Updater;
+import io.snw.obsidiandestroyer.commands.ODCommand;
+import io.snw.obsidiandestroyer.util.Metrics;
+import io.snw.obsidiandestroyer.util.Updater;
 import io.snw.obsidiandestroyer.listeners.EntityExplodeListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
