@@ -24,57 +24,10 @@ Radius: 3
 # Setting this to true may cause errors with other plugins. But it will make us handle all explosions
 # no matter what other plugins try to do.
 IgnoreCancel: false
-
-# Explosion types you want us to handle.
-EnabledFor:
-  TNT: true
-  Creepers: false
-  Ghasts: false
-  Withers: false
-  TNTCarts: false
   
-  # Used to integrate with the cannons plugin.
-  Cannons: false
-
-# Durability = amount of explosions within the radius defined above
-# within the time limit that will make a block blow up.
-Durability:
-  Enabled: true
-  Obsidian: 4
-  EnchantmentTable: 2
-  EnderChest: 5
-  Anvil: 2
-  EndPortal: 50
-  EndPortalFrame: 50
-  
- # Settings for bedrock. Recommended to be disabled or at a very high rate.
- # MinimumLevel is the lowest Y coordinate that bedrock can be blown up.
- # Below that it will act like normal bedrock and be indestructable.
-  Bedrock:
-    Enabled: false
-    Durability: 100
-    MinimumLevel: 10
-
-# Reset will run a timer to clear the durability of blocks after a certain time.
-# If you have issues with your server running out of memory then disabling this
-# can save some memory :)
-  ResetEnabled: true
-  ResetAfter: '600000'
-  
-# Experimental Timer safety. Use this if you are having issues with your server running out of memory.
-# This is not a fix to out of memory errors. Though it can help prevent this plugin from crashing your server.
-# "SystemMinMemory" = Minimun amount (MegaBytes) of RAM that can be availabe.
-# If there is less than this amount of memory available, no new timer threads will be created.
-  UseTimerSafety: true
-  SystemMinMemory: 80
-
-# Chance to drop. Setting to anything at or above 1 will make them always drop.
-Blocks:
-  ChanceToDrop: 0.69
-  
-# False means that water won't protect blocks listed above from explosions.
-# This only applies to obsidian, anvils, enderchests, and enchanting tables.
-FluidsProtectObsidian: true
+# False means that water and lava won't protect industructable materials from explosions.
+# This only applies if the material is enabled in materials.yml
+FluidsProtectIndustructables: true
 
 # Enables a bypass to allow explosions to affect ALL blocks under / next to liquids.
 # This will bypass ALL blocks. We recommend not to use both this AND fluids protect.
