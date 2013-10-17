@@ -1,4 +1,4 @@
-package io.snw.obsidiandestroyer;
+package io.snw.obsidiandestroyer.datatypes;
 
 import org.bukkit.Material;
 

@@ -1,8 +1,8 @@
 package io.snw.obsidiandestroyer.managers;
 
-import io.snw.obsidiandestroyer.BlockTimer;
-import io.snw.obsidiandestroyer.DurabilityBlock;
-import io.snw.obsidiandestroyer.TimerState;
+import io.snw.obsidiandestroyer.datatypes.BlockTimer;
+import io.snw.obsidiandestroyer.datatypes.DurabilityBlock;
+import io.snw.obsidiandestroyer.enumerations.TimerState;
 
 import java.util.ArrayList;
 import java.util.HashMap;

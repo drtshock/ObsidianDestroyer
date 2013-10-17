@@ -1,4 +1,4 @@
-package io.snw.obsidiandestroyer;
+package io.snw.obsidiandestroyer.datatypes;
 
 import io.snw.obsidiandestroyer.managers.ConfigManager;
 import io.snw.obsidiandestroyer.managers.HookManager;

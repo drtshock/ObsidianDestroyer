@@ -1,4 +1,4 @@
-package io.snw.obsidiandestroyer;
+package io.snw.obsidiandestroyer.datatypes;
 
 public class BlockTimer {
     private long timeToLive = 10000;

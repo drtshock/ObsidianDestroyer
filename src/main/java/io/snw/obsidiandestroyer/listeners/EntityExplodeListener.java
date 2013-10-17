@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import io.snw.obsidiandestroyer.LiquidExplosion;
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
+import io.snw.obsidiandestroyer.datatypes.LiquidExplosion;
 import io.snw.obsidiandestroyer.managers.BlockManager;
 import io.snw.obsidiandestroyer.managers.ConfigManager;
 

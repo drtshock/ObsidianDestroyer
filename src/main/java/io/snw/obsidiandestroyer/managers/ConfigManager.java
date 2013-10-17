@@ -1,7 +1,7 @@
 package io.snw.obsidiandestroyer.managers;
 
-import io.snw.obsidiandestroyer.DurabilityBlock;
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
+import io.snw.obsidiandestroyer.datatypes.DurabilityBlock;
 
 import java.io.File;
 import java.io.FileNotFoundException;
