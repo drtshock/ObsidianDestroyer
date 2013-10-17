@@ -162,44 +162,44 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   PORTAL:
-      Durability:
-        Amount: 20
-        Enabled: true
-        ChanceToDrop: 0.0
-        ResetEnabled: true
-        ResetAfter: 600000
-      EnabledFor:
-        TNT: true
-        Creepers: false
-        Ghasts: true
-        Cannons: false
-        Withers: false
+    Durability:
+      Amount: 20
+      Enabled: true
+      ChanceToDrop: 0.0
+      ResetEnabled: true
+      ResetAfter: 600000
+    EnabledFor:
+      TNT: true
+      Creepers: false
+      Ghasts: true
+      Cannons: false
+      Withers: false
       Minecarts: false
   ENDER_PORTAL_FRAME:
-      Durability:
-        Amount: 20
-        Enabled: true
-        ChanceToDrop: 0.0
-        ResetEnabled: true
-        ResetAfter: 600000
-      EnabledFor:
-        TNT: true
-        Creepers: false
-        Ghasts: false
-        Cannons: false
-        Withers: false
+    Durability:
+      Amount: 20
+      Enabled: true
+      ChanceToDrop: 0.0
+      ResetEnabled: true
+      ResetAfter: 600000
+    EnabledFor:
+      TNT: true
+      Creepers: false
+      Ghasts: false
+      Cannons: false
+      Withers: false
       Minecarts: false
   ENDER_PORTAL:
-      Durability:
-        Amount: 20
-        Enabled: true
-        ChanceToDrop: 0.0
-        ResetEnabled: true
-        ResetAfter: 600000
-      EnabledFor:
-        TNT: true
-        Creepers: false
-        Ghasts: false
-        Cannons: false
-        Withers: false
+    Durability:
+      Amount: 20
+      Enabled: true
+      ChanceToDrop: 0.0
+      ResetEnabled: true
+      ResetAfter: 600000
+    EnabledFor:
+      TNT: true
+      Creepers: false
+      Ghasts: false
+      Cannons: false
+      Withers: false
       Minecarts: false
