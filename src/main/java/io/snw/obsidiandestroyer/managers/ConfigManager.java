@@ -218,11 +218,11 @@ public class ConfigManager {
         return config.getBoolean("DurabilityRegeneratesOverTime", false);
     }
 
-    public boolean getExplodeInLiquids() {
+    public boolean getFluidsProtectIndustructables() {
         return config.getBoolean("FluidsProtectIndustructables", true);
     }
 
-    public boolean getWaterProtection() {
+    public boolean getBypassAllFluidProtection() {
         return config.getBoolean("Explosions.BypassAllFluidProtection", false);
     }
 

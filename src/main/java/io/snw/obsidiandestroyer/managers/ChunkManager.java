@@ -91,16 +91,15 @@ public class ChunkManager {
             }
         }
 
-        // Liquid override
-        if (ConfigManager.getInstance().getExplodeInLiquids()) {
+        // Liquid overrides
+        if (ConfigManager.getInstance().getBypassAllFluidProtection()) {
             LiquidExplosion.Handle(event);
+        } else if ((detonatorLoc.getBlock().isLiquid()) && (ConfigManager.getInstance().getFluidsProtectIndustructables())) {
+            return;
         }
 
         // Check explosion blocks
         for (Block block : event.blockList()) {
-            if ((detonatorLoc.getBlock().isLiquid()) && (ConfigManager.getInstance().getWaterProtection())) {
-                return;
-            }
             if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), event.getEntity().toString())) {
                 blocksIgnored.add(block);
             }
@@ -117,9 +116,6 @@ public class ChunkManager {
                         }
                         if (!MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name()) || targetLoc.getBlock().getType() == Material.AIR) {
                             continue;
-                        }
-                        if ((detonatorLoc.getBlock().isLiquid()) && (ConfigManager.getInstance().getWaterProtection())) {
-                            return;
                         }
                         if (ChunkManager.getInstance().blowBlockUp(targetLoc, event.getEntity().toString())) {
                             blocksIgnored.add(targetLoc.getBlock());
