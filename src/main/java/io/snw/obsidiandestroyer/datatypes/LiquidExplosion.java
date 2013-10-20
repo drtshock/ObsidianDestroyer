@@ -54,7 +54,7 @@ public class LiquidExplosion {
         }
 
         Entity entity = event.getEntity();
-        boolean bBoom = false;
+        boolean secondaryExplosion = false;
         int redstoneCount = 0;
 
         // Hook to prevent liquids from being destroyed if Towny has explosions disabled
@@ -63,18 +63,21 @@ public class LiquidExplosion {
             try {
                 townyWorld = TownyUniverse.getDataSource().getWorld(event.getLocation().getWorld().getName());
 
-                if (!townyWorld.isUsingTowny())
+                if (!townyWorld.isUsingTowny()) {
                     return;
+                }
             } catch (Exception e) {
                 // failed to get world so abort
                 return;
             }
             try {
                 TownBlock townBlock = townyWorld.getTownBlock(Coord.parseCoord(event.getLocation()));
-                if (!townBlock.getPermissions().explosion && !townyWorld.isForceExpl())
+                if (!townBlock.getPermissions().explosion && !townyWorld.isForceExpl()) {
                     return;
-                if (townyWorld.isWarZone(Coord.parseCoord(event.getLocation())) && !TownyWarConfig.explosionsBreakBlocksInWarZone())
+                }
+                if (townyWorld.isWarZone(Coord.parseCoord(event.getLocation())) && !TownyWarConfig.explosionsBreakBlocksInWarZone()) {
                     return;
+                }
             } catch (Exception e) {
                 // Block not registered so continue
             }
@@ -92,7 +95,9 @@ public class LiquidExplosion {
                         Location targetLoc = new Location(entity.getWorld(), entity.getLocation().getX() + x, entity.getLocation().getY() + y, entity.getLocation().getZ() + z);
 
                         if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_ON) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_OFF))
-                            redstoneCount++;
+                            if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_ON) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_OFF)) {
+                                redstoneCount++;
+                            }
                     }
                 }
             }
@@ -111,8 +116,9 @@ public class LiquidExplosion {
                     // Hook to prevent liquids from being destroyed in Faction territory that has explosions disabled
                     if (HookManager.getInstance().isHookedFactions()) {
                         Faction faction = Board.getFactionAt(event.getLocation());
-                        if (faction.getFlag(FFlag.EXPLOSIONS) == false)
+                        if (faction.getFlag(FFlag.EXPLOSIONS) == false) {
                             return;
+                        }
                     }
 
                     // Hook to prevent liquids from being destroyed in protected worldguard regions
@@ -120,8 +126,9 @@ public class LiquidExplosion {
                         try {
                             RegionManager regionManager = HookManager.getInstance().getWorldGuard().getRegionManager(targetLoc.getWorld());
                             ApplicableRegionSet set = regionManager.getApplicableRegions(targetLoc);
-                            if (!set.allows(com.sk89q.worldguard.protection.flags.DefaultFlag.TNT))
+                            if (!set.allows(com.sk89q.worldguard.protection.flags.DefaultFlag.TNT)) {
                                 return;
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -130,15 +137,16 @@ public class LiquidExplosion {
                     // Replace any liquid blocks with air.
                     if (FLUID_MATERIALS.contains(targetLoc.getBlock().getType()) && targetLoc.getBlock().isLiquid()) {
                         targetLoc.getBlock().setType(Material.AIR);
-                        if (!bBoom)
-                            bBoom = true;
+                        if (!secondaryExplosion) {
+                            secondaryExplosion = true;
+                        }
                     }
                 }
             }
         }
 
         // Creates a new explosion at the cleared location
-        if (bBoom) {
+        if (secondaryExplosion) {
             event.setCancelled(true);
             event.getLocation().getBlock().setType(Material.AIR);
             Float f = Float.valueOf(3);

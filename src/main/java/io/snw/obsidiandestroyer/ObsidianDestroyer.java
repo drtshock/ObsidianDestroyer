@@ -33,9 +33,9 @@ public class ObsidianDestroyer extends JavaPlugin {
         new MaterialManager();
         new ChunkManager();
         getCommand("od").setExecutor(new ODCommand(this));
-        getServer().getPluginManager().registerEvents(new EntityExplodeListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
-        getServer().getPluginManager().registerEvents(new BlockListener(this), this);
+        getServer().getPluginManager().registerEvents(new EntityExplodeListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        getServer().getPluginManager().registerEvents(new BlockListener(), this);
         checkUpdate();
         startMetrics();
     }

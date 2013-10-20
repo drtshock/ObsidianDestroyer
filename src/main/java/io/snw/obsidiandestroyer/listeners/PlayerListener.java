@@ -17,16 +17,11 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerListener implements Listener {
 
-    private ObsidianDestroyer plugin;
-
-    public PlayerListener(ObsidianDestroyer p) {
-        this.plugin = p;
-    }
-
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        if (plugin.getNeedsUpdate()) {
-            event.getPlayer().sendMessage("An update is available!");
+        if (ObsidianDestroyer.getInstance().getNeedsUpdate() && event.getPlayer().hasPermission("obsidiandestroyer.notify")) {
+            event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "Version " + ChatColor.GRAY + ObsidianDestroyer.getInstance().getLatestVersion() + ChatColor.DARK_PURPLE + " is available for update.");
+            event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "Download it from http://dev.bukkit.org/meatballs/obsidiandestroyer");
         }
     }
 
@@ -42,7 +37,7 @@ public class PlayerListener implements Listener {
                     if (player.getGameMode() == GameMode.CREATIVE) {
                         event.setCancelled(true);
                     }
-                    int amount = ((Integer) ChunkManager.getInstance().getMaterialDurability(block).intValue());
+                    int amount = (Integer) ChunkManager.getInstance().getMaterialDurability(block).intValue();
                     int max = mm.getDurability(block.getType().name());
                     player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this block is: " + ChatColor.WHITE + (max - amount) + "/" + max);
                 }

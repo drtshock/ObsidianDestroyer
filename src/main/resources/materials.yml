@@ -332,6 +332,62 @@ HandledMaterials:
       Cannons: true
       Withers: false
       Minecarts: false
+  CHEST:
+    Durability:
+      Amount: 3
+      Enabled: false
+      ChanceToDrop: 0.8
+      ResetEnabled: true
+      ResetAfter: 1000000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  FURNACE:
+    Durability:
+      Amount: 2
+      Enabled: false
+      ChanceToDrop: 0.7
+      ResetEnabled: true
+      ResetAfter: 1000000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  BURNING_FURNACE:
+    Durability:
+      Amount: 2
+      Enabled: false
+      ChanceToDrop: 0.7
+      ResetEnabled: true
+      ResetAfter: 1000000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  GLOWSTONE:
+    Durability:
+      Amount: 2
+      Enabled: false
+      ChanceToDrop: 0.3
+      ResetEnabled: true
+      ResetAfter: 600000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: true
+      Cannons: true
+      Withers: true
+      Minecarts: false
 
 # You can keep on adding more...
 # Copy paste one from above.  Just make sure the material name exists.
