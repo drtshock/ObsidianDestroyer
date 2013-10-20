@@ -1,15 +1,18 @@
 package io.snw.obsidiandestroyer.managers;
 
+import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.datatypes.BlockTimer;
-import io.snw.obsidiandestroyer.datatypes.DurabilityBlock;
 import io.snw.obsidiandestroyer.enumerations.TimerState;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -18,17 +21,19 @@ import org.bukkit.inventory.ItemStack;
 
 public class BlockManager {
     private static BlockManager instance;
+
+    @Deprecated
     private HashMap<Integer, Integer> durability = new HashMap<Integer, Integer>();
+    @Deprecated
     private HashMap<Integer, BlockTimer> timer = new HashMap<Integer, BlockTimer>();
-    private Map<String, DurabilityBlock> durabilityBlocks = new HashMap<String, DurabilityBlock>();
+
+    private final File durabilityDir;
+    private ConcurrentMap<String, ChunkWrapper> chunks =  new ConcurrentHashMap<String, ChunkWrapper>();
 
     public BlockManager() {
         instance = this;
-        durabilityBlocks = ConfigManager.getInstance().getDurabilityBlocks();
-    }
-
-    public void setDuraBlocks(Map<String, DurabilityBlock> rBocks) {
-        this.durabilityBlocks = rBocks;
+ 
+        durabilityDir = new File(ObsidianDestroyer.getInstance().getDataFolder(), "data" + File.separator + "entities");
     }
 
     /**
@@ -49,28 +54,28 @@ public class BlockManager {
             return null; 
         }
 
-        if (!contains(block.getType().name())) {
+        if (!MaterialManager.getInstance().contains(block.getType().name())) {
             return null;
         }
 
         final String eventTypeRep = event.getEntity().toString();
 
-        if (eventTypeRep.equals("CraftTNTPrimed") && !getTntEnabled(block.getType().name())) {
+        if (eventTypeRep.equals("CraftTNTPrimed") && !MaterialManager.getInstance().getTntEnabled(block.getType().name())) {
             return null;
         }
-        if (eventTypeRep.equals("CraftSnowball") && !getCannonsEnabled(block.getType().name())) {
+        if (eventTypeRep.equals("CraftSnowball") && !MaterialManager.getInstance().getCannonsEnabled(block.getType().name())) {
             return null;
         }
-        if (eventTypeRep.equals("CraftCreeper") && !getCreepersEnabled(block.getType().name())) {
+        if (eventTypeRep.equals("CraftCreeper") && !MaterialManager.getInstance().getCreepersEnabled(block.getType().name())) {
             return null;
         }
-        if (eventTypeRep.equals("CraftWither") && !getWithersEnabled(block.getType().name())) {
+        if (eventTypeRep.equals("CraftWither") && !MaterialManager.getInstance().getWithersEnabled(block.getType().name())) {
             return null;
         }
-        if (eventTypeRep.equals("CraftMinecartTNT") && !getTntMinecartsEnabled(block.getType().name())) {
+        if (eventTypeRep.equals("CraftMinecartTNT") && !MaterialManager.getInstance().getTntMinecartsEnabled(block.getType().name())) {
             return null;
         }
-        if ((eventTypeRep.equals("CraftFireball") || eventTypeRep.equals("CraftGhast")) && !getGhastsEnabled(block.getType().name())) {
+        if ((eventTypeRep.equals("CraftFireball") || eventTypeRep.equals("CraftGhast")) && !MaterialManager.getInstance().getGhastsEnabled(block.getType().name())) {
             return null;
         }
 
@@ -78,7 +83,7 @@ public class BlockManager {
         //ObsidianDestroyer.LOG.info("Protecting Block..!");
         returnedBlock = block;
         Integer representation = at.getWorld().hashCode() + at.getBlockX() * 2389 + at.getBlockY() * 4027 + at.getBlockZ() * 2053;
-        if (getDurabilityEnabled(block.getType().name()) && getDurability(block.getType().name()) > 1) {
+        if (MaterialManager.getInstance().getDurabilityEnabled(block.getType().name()) && MaterialManager.getInstance().getDurability(block.getType().name()) > 1) {
             if (durability.containsKey(representation) && checkDurabilityActive(representation) == TimerState.RUN) {
                 int currentDurability = (int) durability.get(representation);
                 currentDurability++;
@@ -88,13 +93,13 @@ public class BlockManager {
                 } else {
                     // counter has not reached max durability yet
                     durability.put(representation, currentDurability);
-                    if (getDurabilityResetTimerEnabled(block.getType().name())) {
+                    if (MaterialManager.getInstance().getDurabilityResetTimerEnabled(block.getType().name())) {
                         startNewTimer(representation, block.getType().name());
                     }
                 }
             } else {
                 durability.put(representation, 1);
-                if (getDurabilityResetTimerEnabled(block.getType().name())) {
+                if (MaterialManager.getInstance().getDurabilityResetTimerEnabled(block.getType().name())) {
                     startNewTimer(representation, block.getType().name());
                 }
                 if (checkIfMax(1, block.getType().name())) {
@@ -114,12 +119,12 @@ public class BlockManager {
 
         final Block b = at.getBlock();
 
-        if (!contains(b.getType().name())) {
+        if (!MaterialManager.getInstance().contains(b.getType().name())) {
             return;
         }
 
         //ObsidianDestroyer.LOG.info("Destroying Block!!");
-        double chance = getChanceToDropBlock(b.getType().name());
+        double chance = MaterialManager.getInstance().getChanceToDropBlock(b.getType().name());
 
         if (chance > 1.0)
             chance = 1.0;
@@ -144,14 +149,14 @@ public class BlockManager {
     }
 
     private boolean checkIfMax(int value, String id) {
-        return value == getDurability(id);
+        return value == MaterialManager.getInstance().getDurability(id);
     }
 
     private void dropBlockAndResetTime(Integer representation, Location at, String key) {
         durability.remove(representation);
         destroyBlockAndDropItem(at);
 
-        if (getDurabilityResetTimerEnabled(key)) {
+        if (MaterialManager.getInstance().getDurabilityResetTimerEnabled(key)) {
             if (timer.get(representation) != null) {
                 timer.remove(representation);
             }
@@ -165,7 +170,7 @@ public class BlockManager {
             timer.remove(representation);
         }
 
-        timer.put(representation, new BlockTimer(getDurabilityResetTime(material)));
+        timer.put(representation, new BlockTimer(MaterialManager.getInstance().getDurabilityResetTime(material)));
     }
 
     @Deprecated
@@ -206,10 +211,41 @@ public class BlockManager {
     }
 
     /**
+     * Loads a chunk into the block manager
+     * 
+     * @param chunk the chunk to load
+     */
+    public void loadChunk(Chunk chunk){
+            String str = chunkToString(chunk);
+            ChunkWrapper wrapper = new ChunkWrapper(chunk, durabilityDir);
+            wrapper.load();
+            chunks.put(str, wrapper);
+    }
+
+    /**
+     * Unloads a chunk from the block manager
+     * 
+     * @param chunk the chunk to unload
+     */
+    public void unloadChunk(Chunk chunk){
+            String key = chunkToString(chunk);
+            ChunkWrapper wrapper = chunks.get(key);
+            if(wrapper != null){
+                    wrapper.save(false, false);
+                    chunks.remove(wrapper);
+            }
+    }
+
+    private String chunkToString(Chunk chunk){
+        return chunk.getX() + "." + chunk.getZ() + "." + chunk.getWorld().getName();
+    }
+
+    /**
      * Returns the HashMap containing all saved durabilities.
      * 
      * @return the HashMap containing all saved durabilities
      */
+    @Deprecated
     public HashMap<Integer, Integer> getMaterialDurability() {
         return durability;
     }
@@ -219,6 +255,7 @@ public class BlockManager {
      * 
      * @param map containing all saved durabilities
      */
+    @Deprecated
     public void setMaterialDurability(HashMap<Integer, Integer> map) {
         if (map == null) {
             return;
@@ -232,6 +269,7 @@ public class BlockManager {
      * 
      * @return the HashMap containing all saved durability timers
      */
+    @Deprecated
     public HashMap<Integer, BlockTimer> getMaterialTimer() {
         return timer;
     }
@@ -241,6 +279,7 @@ public class BlockManager {
      * 
      * @param map containing all saved durability timers
      */
+    @Deprecated
     public void setMaterialTimer(HashMap<Integer, BlockTimer> map) {
         if (map == null) {
             return;
@@ -256,156 +295,5 @@ public class BlockManager {
      */
     public static BlockManager getInstance() {
         return instance;
-    }
-
-    /**
-     * Checks if the managed blocks contains an item
-     * 
-     * @param item to compare against
-     * @return true if item equals managed block
-     */
-    public boolean contains(String material) {
-        if (durabilityBlocks.containsKey(material)) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Returns whether durability for block is enabled.
-     * 
-     * @return whether durability for block is enabled
-     */
-    public boolean getDurabilityEnabled(String material) {
-        if (durabilityBlocks.containsKey(material)) {
-            return durabilityBlocks.get(material).getEnabled();
-        }
-        return false;
-    }
-
-    /**
-     * Returns the max durability.
-     * 
-     * @return the max durability
-     */
-    public int getDurability(String material) {
-        if (durabilityBlocks.containsKey(material)) {
-            return durabilityBlocks.get(material).getDurability();
-        }
-        return 0;
-    }
-
-    /**
-     * Returns whether durability timer for block is enabled.
-     * 
-     * @return whether durability timer for block is enabled
-     */
-    public boolean getDurabilityResetTimerEnabled(String material) {
-        if (durabilityBlocks.containsKey(material)) {
-            return durabilityBlocks.get(material).getResetEnabled();
-        }
-        return false;
-    }
-
-    /**
-     * Returns the time in milliseconds after which the durability gets reset.
-     * 
-     * @return the time in milliseconds after which the durability gets reset
-     */
-    public long getDurabilityResetTime(String material) {
-        if (durabilityBlocks.containsKey(material)) {
-            return durabilityBlocks.get(material).getResetTime();
-        }
-        return 100000L;
-    }
-
-    /**
-     * Returns the chance to drop an item from a blown up block.
-     * 
-     * @return the chance to drop an item from a blown up block
-     */
-    public double getChanceToDropBlock(String material) {
-        if (durabilityBlocks.containsKey(material)) {
-            return durabilityBlocks.get(material).getChanceTopDrop();
-        }
-        return 0.6D;
-    }
-
-    /**
-     * Returns if Fireball damage is enabled for block
-     * 
-     * @param key
-     * @return
-     */
-    private boolean getGhastsEnabled(String material) {
-        if (durabilityBlocks.containsKey(material)) {
-            return durabilityBlocks.get(material).getGhastsEnabled();
-        }
-        return false;
-    }
-
-    /**
-     * Returns if Creeper damage is enabled for block
-     * 
-     * @param key
-     * @return
-     */
-    private boolean getCreepersEnabled(String material) {
-        if (durabilityBlocks.containsKey(material)) {
-            return durabilityBlocks.get(material).getCreepersEnabled();
-        }
-        return false;
-    }
-
-    /**
-     * Returns if Cannon damage is enabled for block
-     * 
-     * @param key
-     * @return
-     */
-    private boolean getCannonsEnabled(String material) {
-        if (durabilityBlocks.containsKey(material)) {
-            return durabilityBlocks.get(material).getCannonsEnabled();
-        }
-        return false;
-    }
-
-    /**
-     * Returns if TNT damage is enabled for block
-     * 
-     * @param key
-     * @return
-     */
-    private boolean getTntEnabled(String material) {
-        if (durabilityBlocks.containsKey(material)) {
-            return durabilityBlocks.get(material).getTntEnabled();
-        }
-        return false;
-    }
-
-    /**
-     * Returns if TNT minecart damage is enabled for block
-     * 
-     * @param key
-     * @return
-     */
-    private boolean getTntMinecartsEnabled(String material) {
-        if (durabilityBlocks.containsKey(material)) {
-            return durabilityBlocks.get(material).getTntMinecartsEnabled();
-        }
-        return false;
-    }
-
-    /**
-     * Returns if Wither damage is enabled for block
-     * 
-     * @param key
-     * @return
-     */
-    private boolean getWithersEnabled(String material) {
-        if (durabilityBlocks.containsKey(material)) {
-            return durabilityBlocks.get(material).getWithersEnabled();
-        }
-        return false;
     }
 }

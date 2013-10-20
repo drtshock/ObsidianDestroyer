@@ -2,6 +2,7 @@ package io.snw.obsidiandestroyer.listeners;
 
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.managers.BlockManager;
+import io.snw.obsidiandestroyer.managers.MaterialManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -38,14 +39,15 @@ public class PlayerListener implements Listener {
             Material itemInHand = player.getItemInHand().getType();
             Block block = event.getClickedBlock();
             if (itemInHand == Material.RED_ROSE) {
-                BlockManager bm = BlockManager.getInstance();
+                MaterialManager mm = MaterialManager.getInstance();
                 Location loc = block.getLocation();
-                if (bm.getDurabilityEnabled(block.getType().name())) {
+                if (mm.getDurabilityEnabled(block.getType().name())) {
                     if (player.getGameMode() == GameMode.CREATIVE) {
                         event.setCancelled(true);
                     }
                     int amount = 0;
-                    int max = bm.getDurability(block.getType().name());
+                    int max = mm.getDurability(block.getType().name());
+                    BlockManager bm = BlockManager.getInstance();
                     Integer representation = Integer.valueOf(loc.getWorld().hashCode() + loc.getBlockX() * 2389 + loc.getBlockY() * 4027 + loc.getBlockZ() * 2053);
                     if (bm.getMaterialDurability().containsKey(representation)) {
                         amount = ((Integer) bm.getMaterialDurability(representation).intValue());

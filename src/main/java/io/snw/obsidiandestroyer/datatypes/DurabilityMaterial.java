@@ -2,7 +2,7 @@ package io.snw.obsidiandestroyer.datatypes;
 
 import org.bukkit.Material;
 
-public class DurabilityBlock {
+public class DurabilityMaterial {
     private Material type;
     private int dura;
     private boolean enabled;
@@ -16,7 +16,7 @@ public class DurabilityBlock {
     private boolean withersEnabled = false;
     private boolean tntMinecartsEnabled;
 
-    public DurabilityBlock(Material type, int dura, boolean enabled, double chanceToDrop, boolean resetEnabled, long resetTime, boolean tnt, boolean cannons, boolean creepers, boolean ghasts, boolean withers, boolean minecarts) {
+    public DurabilityMaterial(Material type, int dura, boolean enabled, double chanceToDrop, boolean resetEnabled, long resetTime, boolean tnt, boolean cannons, boolean creepers, boolean ghasts, boolean withers, boolean minecarts) {
         this.type = type;
         this.dura = dura;
         this.enabled = enabled;

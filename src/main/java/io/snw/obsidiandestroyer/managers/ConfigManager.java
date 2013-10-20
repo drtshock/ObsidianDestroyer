@@ -1,7 +1,7 @@
 package io.snw.obsidiandestroyer.managers;
 
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
-import io.snw.obsidiandestroyer.datatypes.DurabilityBlock;
+import io.snw.obsidiandestroyer.datatypes.DurabilityMaterial;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -105,9 +105,9 @@ public class ConfigManager {
         return config.getInt("Radius");
     }
 
-    public Map<String, DurabilityBlock> getDurabilityBlocks() {
+    public Map<String, DurabilityMaterial> getDurabilityBlocks() {
         ConfigurationSection section = materials.getConfigurationSection("HandledMaterials");
-        Map<String, DurabilityBlock> durabilityBlocks = new HashMap<String, DurabilityBlock>();
+        Map<String, DurabilityMaterial> durabilityBlocks = new HashMap<String, DurabilityMaterial>();
         for (String durabilityMaterial : section.getKeys(false)) {
             ConfigurationSection s = section.getConfigurationSection(durabilityMaterial);
             ObsidianDestroyer.LOG.info("Apply Durability to " + durabilityMaterial);
@@ -117,7 +117,7 @@ public class ConfigManager {
                 continue;
             }
             // derp constructor!
-            DurabilityBlock durablock = new DurabilityBlock(material,
+            DurabilityMaterial durablock = new DurabilityMaterial(material,
                     s.getInt("Durability.Amount"), 
                     s.getBoolean("Durability.Enabled"),
                     s.getDouble("ChanceToDrop"),

@@ -8,6 +8,8 @@ import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.datatypes.LiquidExplosion;
 import io.snw.obsidiandestroyer.managers.BlockManager;
 import io.snw.obsidiandestroyer.managers.ConfigManager;
+import io.snw.obsidiandestroyer.managers.MaterialManager;
+import io.snw.obsidiandestroyer.util.GlobalVariables;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -33,7 +35,7 @@ public class EntityExplodeListener implements Listener {
             return;
         }
 
-        if (ConfigManager.getInstance().getDisabledWorlds().contains(event.getLocation().getWorld().getName())) {
+        if (GlobalVariables.disabledWorlds.contains(event.getLocation().getWorld().getName())) {
             return;
         }
 
@@ -101,7 +103,7 @@ public class EntityExplodeListener implements Listener {
                         if (blocksToBeRemoved.contains(targetLoc.getBlock())) {
                             continue;
                         }
-                        if (!BlockManager.getInstance().contains(targetLoc.getBlock().getType().name()) || targetLoc.getBlock().getType() == Material.AIR) {
+                        if (!MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name()) || targetLoc.getBlock().getType() == Material.AIR) {
                             continue;
                         }
                         if ((detonatorLoc.getBlock().isLiquid()) && (ConfigManager.getInstance().getWaterProtection())) {
