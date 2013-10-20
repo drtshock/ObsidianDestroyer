@@ -7,5 +7,5 @@ softdepend: [Factions, Towny, WorldGuard]
 commands:
     od:
         description: ObsidianDestroyer command.
-        usage: /<command>
+        usage: /<command> <reload | reloadDB | reset | version>
         aliases: [obsidiandestroyer]

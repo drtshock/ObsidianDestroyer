@@ -19,9 +19,7 @@ downloadupdate: false
 # Blocks in this radius will be affected.
 Radius: 3
 
-# The id of the item you use to check durability.
-# NO LONGER USED. Can only use a red rose now.
-# CheckItemId: 38
+# DURABILITY IS NOW IN THE MATERIALS.YML FILE
 
 # Setting this to true may cause errors with other plugins. But it will make us handle all explosions
 #  no matter what other plugins try to do.  Honestly not sure what this really does...

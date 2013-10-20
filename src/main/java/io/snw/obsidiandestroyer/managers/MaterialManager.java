@@ -34,7 +34,7 @@ public class MaterialManager {
     /**
      * Checks if the managed blocks contains an item
      *
-     * @param item to compare against
+     * @param material to compare against
      * @return true if item equals managed block
      */
     public boolean contains(String material) {

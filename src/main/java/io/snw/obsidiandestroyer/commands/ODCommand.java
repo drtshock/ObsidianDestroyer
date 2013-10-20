@@ -13,12 +13,6 @@ import java.util.logging.Level;
 
 public class ODCommand implements CommandExecutor {
 
-    private ObsidianDestroyer plugin;
-
-    public ODCommand(ObsidianDestroyer p) {
-        this.plugin = p;
-    }
-
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0) {
@@ -55,7 +49,7 @@ public class ODCommand implements CommandExecutor {
                 }
             } else if (command.equalsIgnoreCase("version")) {
                 if (sender.hasPermission("obsidiandestroyer.help")) {
-                    sender.sendMessage(ChatColor.DARK_PURPLE + "ObsidianDestroyer version: " + ChatColor.GRAY + this.plugin.getDescription().getVersion());
+                    sender.sendMessage(ChatColor.DARK_PURPLE + "ObsidianDestroyer version: " + ChatColor.GRAY + ObsidianDestroyer.getInstance().getDescription().getVersion());
                 }
             }
         }
@@ -64,13 +58,14 @@ public class ODCommand implements CommandExecutor {
     }
 
     private void showHelp(CommandSender sender) {
-        sender.sendMessage(ChatColor.GREEN + "--------------------------------------------------");
-        sender.sendMessage(ChatColor.DARK_PURPLE + "ObsidianDestroyer " + ChatColor.LIGHT_PURPLE + "v" + plugin.getDescription().getVersion());
+        sender.sendMessage(ChatColor.GREEN + "" + ChatColor.STRIKETHROUGH + "                                                             ");
+        sender.sendMessage(ChatColor.DARK_PURPLE + "ObsidianDestroyer " + ChatColor.LIGHT_PURPLE + "v" + ObsidianDestroyer.getInstance().getDescription().getVersion());
         sender.sendMessage(ChatColor.DARK_PURPLE + "Available commands:");
-        sender.sendMessage(ChatColor.DARK_PURPLE + "/od version - gives version and shows commands.");
+        sender.sendMessage(ChatColor.DARK_PURPLE + "/od version - " + ChatColor.LIGHT_PURPLE + "gives version and shows commands.");
         sender.sendMessage(ChatColor.DARK_PURPLE + "/od reload - " + ChatColor.LIGHT_PURPLE + "reloads the plugin's config file.");
         sender.sendMessage(ChatColor.DARK_PURPLE + "/od reloadDB - " + ChatColor.LIGHT_PURPLE + "reloads the durability database.");
         sender.sendMessage(ChatColor.DARK_PURPLE + "/od reset - " + ChatColor.LIGHT_PURPLE + " reset all durability damage and timers.");
+        sender.sendMessage(ChatColor.GREEN + "" + ChatColor.STRIKETHROUGH + "                                                             ");
     }
 
     private void reloadDurabilites(CommandSender sender) {

@@ -20,7 +20,7 @@ HandledMaterials:
       # Setting to anything at or above 1 will make them always drop.
       ChanceToDrop: 0.9
 
-      # Wether the durability for this material will reset after some time
+      # Whether the durability for this material will reset after some time
       ResetEnabled: true
 
       # The time it takes for this material to fully reset or regenerate
@@ -391,3 +391,5 @@ HandledMaterials:
 
 # You can keep on adding more...
 # Copy paste one from above.  Just make sure the material name exists.
+# Get material names from http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html
+# Make sure they are all caps and include the underscores.
