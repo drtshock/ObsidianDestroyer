@@ -30,7 +30,6 @@ public class LiquidExplosion {
      * Hooks and checks explosion settings in: WorldGuard, Factions, and Towny
      *
      * @param event  EntityExplodeEvent
-     * @param plugin ObsidianDestroyer
      */
     public static void Handle(EntityExplodeEvent event) {
 
