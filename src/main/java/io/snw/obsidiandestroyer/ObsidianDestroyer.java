@@ -20,15 +20,13 @@ import java.util.logging.Logger;
 
 public class ObsidianDestroyer extends JavaPlugin {
 
-    public ObsidianDestroyer plugin;
-    public static Logger LOG;
     private static ObsidianDestroyer instance;
+    public static Logger LOG;
     private boolean update = false;
     private String name = "";
 
     @Override
     public void onEnable() {
-        this.plugin = this;
         instance = this;
         LOG = getLogger();
         new ConfigManager();
@@ -40,7 +38,7 @@ public class ObsidianDestroyer extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         getServer().getPluginManager().registerEvents(new BlockListener(this), this);
         checkUpdate();
-        //startMetrics(); //FIXME: crashes
+        startMetrics();
     }
 
     @Override
@@ -49,10 +47,10 @@ public class ObsidianDestroyer extends JavaPlugin {
     }
 
     protected void checkUpdate() {
-        if (getConfig().getBoolean("checkupdate")) {
+        if (ConfigManager.getInstance().getCheckUpdate()) {
             final ObsidianDestroyer plugin = this;
             final File file = this.getFile();
-            final Updater.UpdateType updateType = (getConfig().getBoolean("downloadupdate") ? Updater.UpdateType.DEFAULT : Updater.UpdateType.NO_DOWNLOAD);
+            final Updater.UpdateType updateType = (ConfigManager.getInstance().getDownloadUpdate() ? Updater.UpdateType.DEFAULT : Updater.UpdateType.NO_DOWNLOAD);
             getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
                 @Override
                 public void run() {
@@ -77,7 +75,7 @@ public class ObsidianDestroyer extends JavaPlugin {
             graph.addPlotter(new Metrics.Plotter() {
                 @Override
                 public String getColumnName() {
-                    return getConfig().getString("Durability.Obsidian");
+                    return ConfigManager.getInstance().getObsidianDurability();
                 }
 
                 @Override
@@ -100,5 +98,9 @@ public class ObsidianDestroyer extends JavaPlugin {
 
     public static ObsidianDestroyer getInstance() {
         return instance;
+    }
+
+    public static void debug(String debug) {
+        LOG.info(debug);
     }
 }

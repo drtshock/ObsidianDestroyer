@@ -2,7 +2,7 @@ package io.snw.obsidiandestroyer.managers;
 
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.datatypes.Key;
-import io.snw.obsidiandestroyer.io.ASRFile;
+import io.snw.obsidiandestroyer.datatypes.io.ODRFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +32,11 @@ public class ChunkWrapper {
         this.durabilitiesDir = durabilitiesDir;
     }
 
+    /**
+     * Gets the world name
+     * 
+     * @return the world name
+     */
     public String getWorldName() {
         return world;
     }
@@ -140,6 +145,10 @@ public class ChunkWrapper {
         durabilities.remove(representation);
     }
 
+    public void removeKeys() {
+        durabilities.clear();
+    }
+
     /**
      * Does the chunk contains this location key
      * 
@@ -170,18 +179,12 @@ public class ChunkWrapper {
      * @param clear set to true to clear self after saving
      */
     public void save(boolean load, boolean clear) {
-        File durabilityFile = new File(durabilitiesDir, chunkX + "." + chunkZ + "." + world + ".asr");
+        File durabilityFile = new File(durabilitiesDir, chunkX + "." + chunkZ + "." + world + ".odr");
         // Used for sane file creation
         boolean noDuraFile = false;
-        List<Integer> expiredDurabilities = new ArrayList<Integer>();
-        for(Key key : durabilities.values()) {
-            if (MaterialManager.getInstance().getDurabilityResetTimerEnabled(key.toLocation().getBlock().getType().name())) {
-                if (System.currentTimeMillis() > key.durabilityTime) {
-                    expiredDurabilities.add(key.hashCode());
-                }
-            }
+        if (this.durabilities.size() > 0) {
+            durabilities.remove(expiredDurabilities());
         }
-        durabilities.remove(expiredDurabilities);
         if (this.durabilities.size() <= 0) {
             if (durabilityFile.exists()) {
                 durabilityFile.delete();
@@ -189,7 +192,7 @@ public class ChunkWrapper {
             noDuraFile = true;
         }
         if (!noDuraFile) {
-            ASRFile region = new ASRFile();
+            ODRFile region = new ODRFile();
             try {
                 region.prepare(durabilityFile, true);
                 for(Key key : durabilities.values()) {
@@ -208,13 +211,34 @@ public class ChunkWrapper {
         }
     }
 
+    private List<Integer> expiredDurabilities() {
+        List<Integer> expiredDurabilities = new ArrayList<Integer>();
+        for(Key key : durabilities.values()) {
+            if (MaterialManager.getInstance().getDurabilityResetTimerEnabled(key.toLocation().getBlock().getType().name())) {
+                long currentTime = System.currentTimeMillis();
+                if (currentTime > key.durabilityTime) {
+                    if (ConfigManager.getInstance().getMaterialsRegenerateOverTime()) {
+                        long regenTime = MaterialManager.getInstance().getDurabilityResetTime(key.toLocation().getBlock().getType().name());
+                        int amount = Math.max(1, Math.round((float) (currentTime - key.durabilityTime) / regenTime));
+                        int durability = key.durabilityAmount - amount;
+                        if (durability <= 0) {
+                            expiredDurabilities.add(key.hashCode());
+                        }
+                    } else {
+                        expiredDurabilities.add(key.hashCode());
+                    }
+                }
+            }
+        }
+        return expiredDurabilities;
+    }
+
     /**
      * Loads a specific directory
      * 
-     * @param isTimer set to true if loading block information
      */
     public void load() {
-        File file = new File(durabilitiesDir, chunkX + "." + chunkZ + "." + world + ".asr");
+        File file = new File(durabilitiesDir, chunkX + "." + chunkZ + "." + world + ".odr");
         if (!file.exists()) {
              return;
         }
@@ -233,13 +257,25 @@ public class ChunkWrapper {
             ObsidianDestroyer.LOG.log(Level.SEVERE, "Wrong world.." );
             return;
         }
-        ASRFile region = new ASRFile();
+        ODRFile region = new ODRFile();
         try {
             region.prepare(file, false);
             Key info = null;
             while((info = region.getNext(bWorld)) != null) {
-                if (System.currentTimeMillis() > info.durabilityTime && MaterialManager.getInstance().getDurabilityResetTimerEnabled(info.toLocation().getBlock().getType().name())) {
-                    continue;
+                long currentTime = System.currentTimeMillis();
+                if (currentTime > info.durabilityTime && MaterialManager.getInstance().getDurabilityResetTimerEnabled(info.toLocation().getBlock().getType().name())) {
+                    if (ConfigManager.getInstance().getMaterialsRegenerateOverTime()) {
+                        long regenTime = MaterialManager.getInstance().getDurabilityResetTime(info.toLocation().getBlock().getType().name());
+                        long result = currentTime - info.durabilityTime;
+                        int amount = Math.max(1, Math.round((float) result / regenTime));
+                        int durability = info.durabilityAmount - amount;
+                        if (durability <= 0) {
+                            continue;
+                        }
+                        info = new Key(info.toLocation(), durability, currentTime + regenTime);
+                    } else {
+                        continue;
+                    }
                 }
                 durabilities.put(info.hashCode(), info);
             }

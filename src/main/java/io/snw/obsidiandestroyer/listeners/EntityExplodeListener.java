@@ -2,6 +2,7 @@ package io.snw.obsidiandestroyer.listeners;
 
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.managers.ChunkManager;
+import io.snw.obsidiandestroyer.managers.ConfigManager;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,7 +17,7 @@ public class EntityExplodeListener implements Listener {
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
         // do not do anything in case explosions get canceled
-        if (event == null || event.isCancelled()) {
+        if (event == null || (event.isCancelled() && !ConfigManager.getInstance().getIgnoreCancel())) {
             return;
         }
 

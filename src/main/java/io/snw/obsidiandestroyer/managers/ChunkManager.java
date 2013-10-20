@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.logging.Level;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -29,10 +30,12 @@ public class ChunkManager {
     private int percent = 0;
     private List<String> disabledWorlds;
 
+    /**
+     * Creates wrappers around chunks
+     */
     public ChunkManager() {
         instance = this;
 
-        disabledWorlds = ConfigManager.getInstance().getDisabledWorlds();
         durabilityDir = new File(ObsidianDestroyer.getInstance().getDataFolder(), "data" + File.separator + "durabilities");
         if (!durabilityDir.exists()) {
             durabilityDir.mkdirs();
@@ -186,14 +189,14 @@ public class ChunkManager {
                     if (!MaterialManager.getInstance().getDurabilityResetTimerEnabled(block.getType().name())) {
                         addBlock(block, currentDurability);
                     } else {
-                        startNewTimer(block, currentDurability);
+                        startNewTimer(block, currentDurability, state);
                     }
                 }
             } else {
                 if (!MaterialManager.getInstance().getDurabilityResetTimerEnabled(block.getType().name())) {
                     addBlock(block, 1);
                 } else {
-                    startNewTimer(block, 1);
+                    startNewTimer(block, 1, state);
                 }
                 if (checkIfMax(1, block.getType().name())) {
                     dropBlockAndResetTime(at);
@@ -261,13 +264,33 @@ public class ChunkManager {
     }
 
     /**
+     * Reset all durabilites
+     * 
+     * @return time taken in milliseconds
+     */
+    public long resetAllDurabilities() {
+        long time = System.currentTimeMillis();
+        for (File odr : durabilityDir.listFiles()) {
+            if (odr.getName().endsWith(".odr")) {
+                if(!odr.delete()) {
+                    ObsidianDestroyer.LOG.log(Level.WARNING, "Failed to remove file " + odr.getName());
+                }
+            }
+        }
+        for (ChunkWrapper chunk : chunks.values()) {
+            chunk.removeKeys();
+        }
+        return time;
+    }
+
+    /**
      * Starts a new timer for a block
      * 
      * @param block the block to start a durability timer for
      * @param damage the damage done to the block
      */
-    private void startNewTimer(Block block, int damage) {
-        if (checkDurabilityActive(block.getLocation()) == TimerState.RUN) {
+    private void startNewTimer(Block block, int damage, TimerState state) {
+        if (state == TimerState.RUN) {
             getWrapper(block.getChunk()).removeKey(block);
         }
 
@@ -287,10 +310,26 @@ public class ChunkManager {
         if (!MaterialManager.getInstance().getDurabilityResetTimerEnabled(location.getBlock().getType().name())) {
             return TimerState.INACTIVE;
         }
+        long currentTime = System.currentTimeMillis();
         Long time = getWrapper(location.getChunk()).getDurabilityTime(location);
-        if (System.currentTimeMillis() > time) {
-            getWrapper(location.getChunk()).removeKey(location);
-            return TimerState.END;
+        if (currentTime > time) {
+            if (ConfigManager.getInstance().getMaterialsRegenerateOverTime()) {
+                int currentDurability = getWrapper(location.getChunk()).getDurability(location);
+                long regenTime = MaterialManager.getInstance().getDurabilityResetTime(location.getBlock().getType().name());
+                long result = currentTime - time;
+                int amount = Math.max(1, Math.round((float) result / regenTime));
+                currentDurability -= amount;
+                if (currentDurability <= 0) {
+                    getWrapper(location.getChunk()).removeKey(location);
+                    return TimerState.END;
+                } else {
+                    startNewTimer(location.getBlock(), currentDurability, TimerState.RUN);
+                    return TimerState.RUN;
+                }
+            } else {
+                getWrapper(location.getChunk()).removeKey(location);
+                return TimerState.END;
+            }
         }
         return TimerState.RUN;
     }
@@ -320,10 +359,17 @@ public class ChunkManager {
     }
 
     /**
+     * Loads the world that will be ignored
+     */
+    public void loadDisabledWorlds() {
+        disabledWorlds = ConfigManager.getInstance().getDisabledWorlds();
+    }
+
+    /**
      *  Loads the chunk manager
      */
     public void load() {
-        // Load
+        loadDisabledWorlds();
         chunks.clear();
         for(World world : ObsidianDestroyer.getInstance().getServer().getWorlds()) {
             for(Chunk chunk : world.getLoadedChunks()) {

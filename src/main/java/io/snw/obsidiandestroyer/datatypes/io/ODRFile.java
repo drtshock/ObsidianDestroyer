@@ -1,4 +1,4 @@
-package io.snw.obsidiandestroyer.io;
+package io.snw.obsidiandestroyer.datatypes.io;
 
 import io.snw.obsidiandestroyer.datatypes.Key;
 
@@ -13,7 +13,7 @@ import java.nio.channels.FileChannel;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-public class ASRFile {
+public class ODRFile {
 
     private FileOutputStream output;
     private FileInputStream input;
@@ -22,10 +22,10 @@ public class ASRFile {
     private boolean write = false;
 
     /**
-     * Creates a new ASRegion file
+     * Creates a new ODRegion file
      * 
      */
-    public ASRFile() {
+    public ODRFile() {
         buffer = ByteBuffer.allocateDirect(24);
     }
 
@@ -112,7 +112,7 @@ public class ASRFile {
     }
 
     /**
-     * Closes the ASRegion, saving it to disk if needed
+     * Closes the ODRegion, saving it to disk if needed
      * 
      * @throws IOException thrown if something goes wrong
      */
