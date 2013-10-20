@@ -94,7 +94,7 @@ HandledMaterials:
   NETHER_BRICK_STAIRS:
     Durability:
       Amount: 3
-      Enabled: fakse
+      Enabled: false
       ChanceToDrop: 0.7
       ResetEnabled: true
       ResetAfter: 300000
