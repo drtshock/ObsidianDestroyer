@@ -31,12 +31,13 @@ public class ConfigManager {
         instance = this;
         this.loaded = false;
         if (!loaded) {
-            try {
-                loadFiles(false);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            loadFiles(false);
         }
+    }
+
+    public void reload() {
+        this.loaded = false;
+        loadFiles(false);
     }
 
     /**
@@ -66,17 +67,20 @@ public class ConfigManager {
         }
         File configFile = new File(ObsidianDestroyer.getInstance().getDataFolder(), "config.yml");
         if (!configFile.exists()) {
+            //ObsidianDestroyer.LOG.info("Creating config File...");
             createFile(configFile, "config.yml");
         } else {
+            //ObsidianDestroyer.LOG.info("Loading config File...");
         }
         config = YamlConfiguration.loadConfiguration(configFile);
 
-        if (!config.getString("Version", "").equals(ObsidianDestroyer.getInstance().getDescription().getVersion())) {
+        String version = ObsidianDestroyer.getInstance().getDescription().getVersion();
+        if (config != null && !config.getString("Version", version).equals(version)) {
             if (update) {
-                ObsidianDestroyer.LOG.log(Level.WARNING, "Loading failed on update check.  Aborting...");
+                ObsidianDestroyer.LOG.log(Level.SEVERE, "Loading failed on update check.  Aborting...");
                 return;
             }
-            ObsidianDestroyer.LOG.info("Config File outdated, backing up old...");
+            ObsidianDestroyer.LOG.log(Level.WARNING, "Config File outdated, backing up old...");
             File configFileOld = new File(ObsidianDestroyer.getInstance().getDataFolder(), "config.yml.old");
             try {
                 config.save(configFileOld);
@@ -87,12 +91,17 @@ public class ConfigManager {
             configFile.delete();
             loadFiles(true);
             return;
+        } else if (config.getString("Version", "null") == "null") {
+            loaded = false;
+            return;
         }
 
         File structuresFile = new File(ObsidianDestroyer.getInstance().getDataFolder(), "materials.yml");
         if (!structuresFile.exists()) {
+            ObsidianDestroyer.debug("Creating materials File...");
             createFile(structuresFile, "materials.yml");
         } else {
+            ObsidianDestroyer.debug("Loading materials File...");
         }
         materials = YamlConfiguration.loadConfiguration(structuresFile);
         loaded = true;
@@ -160,6 +169,24 @@ public class ConfigManager {
     }
 
     /**
+     * Gets verbose mode enabled
+     * 
+     * @return verbose mode enabled
+     */
+    public boolean getVerbose() {
+        return config.getBoolean("Verbose", false);
+    }
+
+    /**
+     * Get debug mode enabled
+     * 
+     * @return debug mode enabled
+     */
+    public boolean getDebug() {
+        return config.getBoolean("Debug", false);
+    }
+
+    /**
      * Gets the list of disabled worlds from the config
      *
      * @return list of world names
@@ -190,7 +217,12 @@ public class ConfigManager {
                 }
                 DurabilityMaterial durablock = new DurabilityMaterial(material, materialSection);
                 if (durablock.getEnabled()) {
+                    if (getVerbose()) {
+                        ObsidianDestroyer.LOG.info("Loaded durability of '" + durablock.getDurability() + "' for '" + durabilityMaterial + "'");
+                    }
                     durabilityMaterials.put(material.name(), durablock);
+                } else if (getDebug()) {
+                    ObsidianDestroyer.debug("Disabled durability of '" + durablock.getDurability() + "' for '" + durabilityMaterial + "'");
                 }
             } catch (Exception e) {
                 ObsidianDestroyer.LOG.log(Level.SEVERE, "Failed loading material '" + durabilityMaterial + "'");

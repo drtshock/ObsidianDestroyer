@@ -79,15 +79,21 @@ public class ODCommand implements CommandExecutor {
         long time = System.currentTimeMillis();
         try {
             ConfigManager.getInstance().backup(false);
-            new ConfigManager(false);
-            MaterialManager.getInstance().load();
-            ChunkManager.getInstance().loadDisabledWorlds();
-            sender.sendMessage(ChatColor.GREEN + "Reloading ObsidianDestroyer config completed in " + (System.currentTimeMillis() - time) + " ms!");
+            ConfigManager.getInstance().reload();
+            if (ConfigManager.getInstance().isLoaded()) {
+                MaterialManager.getInstance().load();
+                ChunkManager.getInstance().loadDisabledWorlds();
+                sender.sendMessage(ChatColor.GREEN + "Reloading ObsidianDestroyer config completed in " + (System.currentTimeMillis() - time) + " ms!");
+                return;
+            }
         } catch (Exception e) {
-            new ConfigManager(true).backup(true);
-            ObsidianDestroyer.LOG.log(Level.SEVERE, "The config has encountered an error on load. Recovered a backup from memory...");
-            sender.sendMessage(ChatColor.RED + "Reloading ObsidianDestroyer config failed, restored from memory. See log file.  Completed in " + (System.currentTimeMillis() - time) + " ms!");
+            e.printStackTrace();
         }
+        new ConfigManager(true).backup(true);
+        MaterialManager.getInstance().load();
+        ChunkManager.getInstance().loadDisabledWorlds();
+        ObsidianDestroyer.LOG.log(Level.SEVERE, "The config has encountered an error on load. Recovered a backup from memory...");
+        sender.sendMessage(ChatColor.RED + "Reloading ObsidianDestroyer config failed, restored from memory. See log file.  Completed in " + (System.currentTimeMillis() - time) + " ms!");
     }
 
     private void resetDurability(CommandSender sender) {

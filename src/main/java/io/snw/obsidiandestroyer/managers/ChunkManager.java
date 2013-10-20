@@ -64,7 +64,7 @@ public class ChunkManager {
 
         final Location detonatorLoc = detonator.getLocation();
         final String eventTypeRep = event.getEntity().toString();
-        //ObsidianDestroyer.LOG.info("EventTypeRep: " + eventTypeRep);
+        //ObsidianDestroyer.debug("EventTypeRep: " + eventTypeRep);
 
         // List of blocks that will be removed from the blocklist
         List<Block> blocksIgnored = new ArrayList<Block>();
@@ -222,7 +222,6 @@ public class ChunkManager {
             return;
         }
 
-        //ObsidianDestroyer.LOG.info("Destroying Block!!");
         double chance = MaterialManager.getInstance().getChanceToDropBlock(b.getType().name());
 
         if (chance > 1.0)
