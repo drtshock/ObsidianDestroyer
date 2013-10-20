@@ -3,22 +3,16 @@ package io.snw.obsidiandestroyer.managers;
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.datatypes.DurabilityMaterial;
 import io.snw.obsidiandestroyer.util.Util;
+import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-
-import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigManager {
     private static ConfigManager instance;
@@ -30,7 +24,7 @@ public class ConfigManager {
 
     /**
      * Initializes a new config manager
-     * 
+     *
      * @param loaded is the manager loaded
      */
     public ConfigManager(boolean loaded) {
@@ -47,7 +41,7 @@ public class ConfigManager {
 
     /**
      * Create a copy of the files in memory
-     * 
+     *
      * @param apply the copy in memory to the current instance
      */
     public void backup(boolean apply) {
@@ -62,7 +56,7 @@ public class ConfigManager {
 
     /**
      * Loads config and material file
-     * 
+     *
      * @param update for recursive check
      */
     private void loadFiles(boolean update) {
@@ -110,8 +104,8 @@ public class ConfigManager {
 
     /**
      * Create a file from a resource
-     * 
-     * @param file the file to be created
+     *
+     * @param file     the file to be created
      * @param resource the resource to be used
      */
     private void createFile(File file, String resource) {
@@ -162,7 +156,7 @@ public class ConfigManager {
 
     /**
      * Gets the current instance of the config manager
-     * 
+     *
      * @return class instance
      */
     public static ConfigManager getInstance() {
@@ -171,7 +165,7 @@ public class ConfigManager {
 
     /**
      * Gets the list of disabled worlds from the config
-     * 
+     *
      * @return list of world names
      */
     public List<String> getDisabledWorlds() {
@@ -180,7 +174,7 @@ public class ConfigManager {
 
     /**
      * Translates the materials.yml from memory into a map for quick access
-     * 
+     *
      * @return map of materials keys and material durability data
      */
     public Map<String, DurabilityMaterial> getDurabilityMaterials() {

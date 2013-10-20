@@ -3,7 +3,6 @@ package io.snw.obsidiandestroyer.listeners;
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.managers.ChunkManager;
 import io.snw.obsidiandestroyer.managers.MaterialManager;
-
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;

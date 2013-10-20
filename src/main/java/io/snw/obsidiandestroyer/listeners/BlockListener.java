@@ -2,7 +2,6 @@ package io.snw.obsidiandestroyer.listeners;
 
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.managers.ChunkManager;
-
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,12 +24,12 @@ public class BlockListener implements Listener {
         }
     }
 
-    @EventHandler (priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onChunkLoad(ChunkLoadEvent event) {
         ChunkManager.getInstance().loadChunk(event.getChunk());
     }
 
-    @EventHandler (priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onChunkUnload(ChunkUnloadEvent event) {
         ChunkManager.getInstance().unloadChunk(event.getChunk());
     }

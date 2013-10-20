@@ -24,7 +24,7 @@ public class MaterialManager {
 
     /**
      * Gets the instance
-     * 
+     *
      * @return instance
      */
     public static MaterialManager getInstance() {
@@ -33,7 +33,7 @@ public class MaterialManager {
 
     /**
      * Checks if the managed blocks contains an item
-     * 
+     *
      * @param item to compare against
      * @return true if item equals managed block
      */
@@ -46,7 +46,7 @@ public class MaterialManager {
 
     /**
      * Returns whether durability for block is enabled.
-     * 
+     *
      * @return whether durability for block is enabled
      */
     public boolean getDurabilityEnabled(String material) {
@@ -58,7 +58,7 @@ public class MaterialManager {
 
     /**
      * Returns the max durability.
-     * 
+     *
      * @return the max durability
      */
     public int getDurability(String material) {
@@ -70,7 +70,7 @@ public class MaterialManager {
 
     /**
      * Returns whether durability timer for block is enabled.
-     * 
+     *
      * @return whether durability timer for block is enabled
      */
     public boolean getDurabilityResetTimerEnabled(String material) {
@@ -82,7 +82,7 @@ public class MaterialManager {
 
     /**
      * Returns the time in milliseconds after which the durability gets reset.
-     * 
+     *
      * @return the time in milliseconds after which the durability gets reset
      */
     public long getDurabilityResetTime(String material) {
@@ -94,7 +94,7 @@ public class MaterialManager {
 
     /**
      * Returns the chance to drop an item from a blown up block.
-     * 
+     *
      * @return the chance to drop an item from a blown up block
      */
     public double getChanceToDropBlock(String material) {
@@ -106,7 +106,7 @@ public class MaterialManager {
 
     /**
      * Returns if Fireball damage is enabled for block
-     * 
+     *
      * @param material key
      * @return Fireball damage is enabled for block
      */
@@ -119,7 +119,7 @@ public class MaterialManager {
 
     /**
      * Returns if Creeper damage is enabled for block
-     * 
+     *
      * @param material key
      * @return Creeper damage is enabled for block
      */
@@ -132,7 +132,7 @@ public class MaterialManager {
 
     /**
      * Returns if Cannon damage is enabled for block
-     * 
+     *
      * @param material key
      * @return Cannon damage is enabled for block
      */
@@ -145,7 +145,7 @@ public class MaterialManager {
 
     /**
      * Returns if TNT damage is enabled for block
-     * 
+     *
      * @param material key
      * @return TNT damage is enabled for block
      */
@@ -158,7 +158,7 @@ public class MaterialManager {
 
     /**
      * Returns if TNT minecart damage is enabled for block
-     * 
+     *
      * @param material key
      * @return TNT minecart damage is enabled for block
      */
@@ -171,7 +171,7 @@ public class MaterialManager {
 
     /**
      * Returns if Wither damage is enabled for block
-     * 
+     *
      * @param material key
      * @return Wither damage is enabled for block
      */

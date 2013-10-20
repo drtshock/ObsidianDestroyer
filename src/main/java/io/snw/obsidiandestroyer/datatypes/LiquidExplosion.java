@@ -1,15 +1,5 @@
 package io.snw.obsidiandestroyer.datatypes;
 
-import io.snw.obsidiandestroyer.managers.ConfigManager;
-import io.snw.obsidiandestroyer.managers.HookManager;
-
-import java.util.ArrayList;
-
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.event.entity.EntityExplodeEvent;
-
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.struct.FFlag;
@@ -20,6 +10,14 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
+import io.snw.obsidiandestroyer.managers.ConfigManager;
+import io.snw.obsidiandestroyer.managers.HookManager;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.bukkit.event.entity.EntityExplodeEvent;
+
+import java.util.ArrayList;
 
 public class LiquidExplosion {
     private static int RADIUS = 1;
@@ -30,8 +28,8 @@ public class LiquidExplosion {
      * Handles an explosion if it occurs from within a liquid.
      * Cancels the explosion, removes any nearby liquids found, and creates a new explosion in the cleared location.
      * Hooks and checks explosion settings in: WorldGuard, Factions, and Towny
-     * 
-     * @param event EntityExplodeEvent
+     *
+     * @param event  EntityExplodeEvent
      * @param plugin ObsidianDestroyer
      */
     public static void Handle(EntityExplodeEvent event) {
@@ -47,7 +45,7 @@ public class LiquidExplosion {
     /**
      * Creates a custom explosion in the liquid.
      * Checks with other plugins to see if it has to cancel the event.
-     * 
+     *
      * @param event EntityExplodeEvent
      */
     private static void explosionInLiquid(EntityExplodeEvent event) {
@@ -80,7 +78,7 @@ public class LiquidExplosion {
             } catch (Exception e) {
                 // Block not registered so continue
             }
-            
+
             if (!townyWorld.isExpl()) {
                 return;
             }
@@ -92,7 +90,7 @@ public class LiquidExplosion {
                 for (int y = -CANNON_RADIUS; y <= CANNON_RADIUS; y++) {
                     for (int z = -CANNON_RADIUS; z <= CANNON_RADIUS; z++) {
                         Location targetLoc = new Location(entity.getWorld(), entity.getLocation().getX() + x, entity.getLocation().getY() + y, entity.getLocation().getZ() + z);
-                        
+
                         if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_ON) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_OFF))
                             redstoneCount++;
                     }

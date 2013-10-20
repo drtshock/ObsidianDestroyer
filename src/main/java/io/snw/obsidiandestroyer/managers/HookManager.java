@@ -1,10 +1,8 @@
 package io.snw.obsidiandestroyer.managers;
 
-import io.snw.obsidiandestroyer.ObsidianDestroyer;
-
-import org.bukkit.plugin.Plugin;
-
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import io.snw.obsidiandestroyer.ObsidianDestroyer;
+import org.bukkit.plugin.Plugin;
 
 public class HookManager {
     private static HookManager instance;

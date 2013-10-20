@@ -1,17 +1,12 @@
 package io.snw.obsidiandestroyer.datatypes.io;
 
 import io.snw.obsidiandestroyer.datatypes.Key;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-
 import org.bukkit.Location;
 import org.bukkit.World;
+
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 public class ODRFile {
 
@@ -23,7 +18,6 @@ public class ODRFile {
 
     /**
      * Creates a new ODRegion file
-     * 
      */
     public ODRFile() {
         buffer = ByteBuffer.allocateDirect(24);
@@ -31,8 +25,8 @@ public class ODRFile {
 
     /**
      * Prepares the file for read or write
-     * 
-     * @param file the file to prepare
+     *
+     * @param file  the file to prepare
      * @param write true to write to the file, false otherwise
      * @throws FileNotFoundException thrown if the file is missing
      */
@@ -40,7 +34,7 @@ public class ODRFile {
         if (write) {
             output = new FileOutputStream(file, false);
             channel = output.getChannel();
-        }else{
+        } else {
             input = new FileInputStream(file);
             channel = input.getChannel();
         }
@@ -49,8 +43,8 @@ public class ODRFile {
 
     /**
      * Writes a block to file
-     * 
-     * @param location the location of the block
+     *
+     * @param location   the location of the block
      * @param duraAmount material durability amount
      * @throws IOException thrown if something happens
      */
@@ -60,12 +54,12 @@ public class ODRFile {
 
     /**
      * Writes a block location to file
-     * 
-     * @param x the x location
-     * @param y the y location
-     * @param z the z location
+     *
+     * @param x          the x location
+     * @param y          the y location
+     * @param z          the z location
      * @param duraAmount material durability amount
-     * @param duraTime material durability reset time
+     * @param duraTime   material durability reset time
      * @throws IOException thrown if something happens
      */
     public void write(int x, int y, int z, int duraAmount, long duraTime) throws IOException {
@@ -81,7 +75,7 @@ public class ODRFile {
 
     /**
      * Writes an entity to file
-     * 
+     *
      * @param location the location of the entity
      * @param duraTime material durability reset time
      * @param duraTime material durability reset time
@@ -93,7 +87,7 @@ public class ODRFile {
 
     /**
      * Gets the next block in the file
-     * 
+     *
      * @param world the world for location creation/reading
      * @return the entry (a block) or null if EOF has been reached / nothing was read
      * @throws IOException thrown if something happens
@@ -101,7 +95,7 @@ public class ODRFile {
     public Key getNext(World world) throws IOException {
         int read = channel.read(buffer);
         if (read <= 0) {
-                return null;
+            return null;
         }
         buffer.position(0);
         int x = buffer.getInt(), y = buffer.getInt(), z = buffer.getInt();
@@ -113,7 +107,7 @@ public class ODRFile {
 
     /**
      * Closes the ODRegion, saving it to disk if needed
-     * 
+     *
      * @throws IOException thrown if something goes wrong
      */
     public void close() throws IOException {

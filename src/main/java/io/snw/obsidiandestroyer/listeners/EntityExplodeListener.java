@@ -3,7 +3,6 @@ package io.snw.obsidiandestroyer.listeners;
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.managers.ChunkManager;
 import io.snw.obsidiandestroyer.managers.ConfigManager;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -11,7 +10,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 public class EntityExplodeListener implements Listener {
 
     public EntityExplodeListener(ObsidianDestroyer plugin) {
-        
+
     }
 
     @EventHandler

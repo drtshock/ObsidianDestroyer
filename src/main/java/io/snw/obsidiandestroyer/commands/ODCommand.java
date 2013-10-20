@@ -1,16 +1,15 @@
 package io.snw.obsidiandestroyer.commands;
 
-import java.util.logging.Level;
-
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.managers.ChunkManager;
 import io.snw.obsidiandestroyer.managers.ConfigManager;
 import io.snw.obsidiandestroyer.managers.MaterialManager;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+
+import java.util.logging.Level;
 
 public class ODCommand implements CommandExecutor {
 

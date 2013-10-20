@@ -3,6 +3,11 @@ package io.snw.obsidiandestroyer.managers;
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.datatypes.Key;
 import io.snw.obsidiandestroyer.datatypes.io.ODRFile;
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,12 +16,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 
 public class ChunkWrapper {
 
@@ -27,8 +26,8 @@ public class ChunkWrapper {
 
     /**
      * Wraps a chunk with a ChunkWrapper
-     * 
-     * @param chunk the chunk to wrap
+     *
+     * @param chunk           the chunk to wrap
      * @param durabilitiesDir the directory to store this wrapper in
      */
     ChunkWrapper(Chunk chunk, File durabilitiesDir) {
@@ -40,7 +39,7 @@ public class ChunkWrapper {
 
     /**
      * Gets the world name
-     * 
+     *
      * @return the world name
      */
     public String getWorldName() {
@@ -49,7 +48,7 @@ public class ChunkWrapper {
 
     /**
      * Gets the Key of the location
-     * 
+     *
      * @param location the location to get the key from
      * @return the key from the location
      */
@@ -62,7 +61,7 @@ public class ChunkWrapper {
 
     /**
      * Gets the durability of a hash representation
-     * 
+     *
      * @param representation the hash representation to check
      * @return the durability of the hash representation
      */
@@ -72,7 +71,7 @@ public class ChunkWrapper {
 
     /**
      * Gets the durability time of a hash representation
-     * 
+     *
      * @param representation the hash representation to check
      * @return the durability time of the hash representation
      */
@@ -82,7 +81,7 @@ public class ChunkWrapper {
 
     /**
      * Gets the durability time of the location
-     * 
+     *
      * @param location the location to check
      * @return the durability of the location
      */
@@ -92,7 +91,7 @@ public class ChunkWrapper {
 
     /**
      * Gets the durability time of the location
-     * 
+     *
      * @param location the location to check
      * @return the durability time of the location
      */
@@ -102,9 +101,9 @@ public class ChunkWrapper {
 
     /**
      * Adds a block to the chunk
-     * 
+     *
      * @param durability the damage done to the block
-     * @param block the block to add
+     * @param block      the block to add
      */
     public void addBlock(int durability, Block block) {
         Key key = new Key(block.getLocation(), durability);
@@ -113,10 +112,10 @@ public class ChunkWrapper {
 
     /**
      * Adds a block with a timer to the chunk
-     * 
+     *
      * @param durability the damage done to the block
-     * @param time the time value of the block
-     * @param block the block to be added
+     * @param time       the time value of the block
+     * @param block      the block to be added
      */
     public void addBlockTimer(int durability, long time, Block block) {
         Key key = new Key(block.getLocation(), durability, time);
@@ -125,7 +124,7 @@ public class ChunkWrapper {
 
     /**
      * Removes a key from the chunk
-     * 
+     *
      * @param block the block to remove
      */
     public void removeKey(Block block) {
@@ -134,7 +133,7 @@ public class ChunkWrapper {
 
     /**
      * Removes a key from the chunk
-     * 
+     *
      * @param location the location to remove
      */
     public void removeKey(Location location) {
@@ -144,7 +143,7 @@ public class ChunkWrapper {
 
     /**
      * Removes a key from the chunk
-     * 
+     *
      * @param representation the hash representation to remove
      */
     public void removeKey(int representation) {
@@ -160,7 +159,7 @@ public class ChunkWrapper {
 
     /**
      * Does the chunk contains this location key
-     * 
+     *
      * @param location the location to check the chunk for
      * @return true if the location is found within the chunk
      */
@@ -173,7 +172,7 @@ public class ChunkWrapper {
 
     /**
      * Does the chunk contains this location key
-     * 
+     *
      * @param representation the hash representation to check the chunk for
      * @return true if the hash representation is found within the chunk
      */
@@ -183,8 +182,8 @@ public class ChunkWrapper {
 
     /**
      * Saves the chunk information
-     * 
-     * @param load set to true to load data after saving
+     *
+     * @param load  set to true to load data after saving
      * @param clear set to true to clear self after saving
      */
     public void save(boolean load, boolean clear) {
@@ -204,11 +203,11 @@ public class ChunkWrapper {
             ODRFile region = new ODRFile();
             try {
                 region.prepare(durabilityFile, true);
-                for(Key key : durabilities.values()) {
+                for (Key key : durabilities.values()) {
                     region.write(key.x, key.y, key.z, key.durabilityAmount, key.durabilityTime);
                 }
                 region.close();
-            } catch(IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -222,12 +221,12 @@ public class ChunkWrapper {
 
     /**
      * Gets a list of durability keys that are not worth saving
-     * 
+     *
      * @return list of expired durability keys
      */
     private List<Integer> expiredDurabilities() {
         List<Integer> expiredDurabilities = new ArrayList<Integer>();
-        for(Key key : durabilities.values()) {
+        for (Key key : durabilities.values()) {
             if (MaterialManager.getInstance().getDurabilityResetTimerEnabled(key.toLocation().getBlock().getType().name())) {
                 long currentTime = System.currentTimeMillis();
                 if (currentTime > key.durabilityTime) {
@@ -249,12 +248,11 @@ public class ChunkWrapper {
 
     /**
      * Loads a specific directory
-     * 
      */
     public void load() {
         File file = new File(durabilitiesDir, chunkX + "." + chunkZ + "." + world + ".odr");
         if (!file.exists()) {
-             return;
+            return;
         }
         String[] fileParts = file.getName().split("\\.");
         if (fileParts.length < 3) {
@@ -268,14 +266,14 @@ public class ChunkWrapper {
             return;
         }
         if (!w.equals(world)) {
-            ObsidianDestroyer.LOG.log(Level.SEVERE, "Wrong world.." );
+            ObsidianDestroyer.LOG.log(Level.SEVERE, "Wrong world..");
             return;
         }
         ODRFile region = new ODRFile();
         try {
             region.prepare(file, false);
             Key info = null;
-            while((info = region.getNext(bWorld)) != null) {
+            while ((info = region.getNext(bWorld)) != null) {
                 long currentTime = System.currentTimeMillis();
                 if (currentTime > info.durabilityTime && MaterialManager.getInstance().getDurabilityResetTimerEnabled(info.toLocation().getBlock().getType().name())) {
                     if (ConfigManager.getInstance().getMaterialsRegenerateOverTime()) {

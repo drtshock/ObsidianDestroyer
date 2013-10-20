@@ -2,15 +2,14 @@ package io.snw.obsidiandestroyer;
 
 import io.snw.obsidiandestroyer.commands.ODCommand;
 import io.snw.obsidiandestroyer.listeners.BlockListener;
-import io.snw.obsidiandestroyer.listeners.PlayerListener;
-import io.snw.obsidiandestroyer.util.Metrics;
-import io.snw.obsidiandestroyer.util.Updater;
 import io.snw.obsidiandestroyer.listeners.EntityExplodeListener;
+import io.snw.obsidiandestroyer.listeners.PlayerListener;
 import io.snw.obsidiandestroyer.managers.ChunkManager;
 import io.snw.obsidiandestroyer.managers.ConfigManager;
 import io.snw.obsidiandestroyer.managers.HookManager;
 import io.snw.obsidiandestroyer.managers.MaterialManager;
-
+import io.snw.obsidiandestroyer.util.Metrics;
+import io.snw.obsidiandestroyer.util.Updater;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;

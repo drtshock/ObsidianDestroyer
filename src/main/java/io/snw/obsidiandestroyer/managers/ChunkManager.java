@@ -3,6 +3,11 @@ package io.snw.obsidiandestroyer.managers;
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.datatypes.LiquidExplosion;
 import io.snw.obsidiandestroyer.enumerations.TimerState;
+import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,21 +17,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 
-import org.bukkit.Chunk;
-import org.bukkit.Effect;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.inventory.ItemStack;
-
 public class ChunkManager {
     private static ChunkManager instance;
 
     private final File durabilityDir;
-    private ConcurrentMap<String, ChunkWrapper> chunks =  new ConcurrentHashMap<String, ChunkWrapper>();
+    private ConcurrentMap<String, ChunkWrapper> chunks = new ConcurrentHashMap<String, ChunkWrapper>();
     private boolean doneSave = false;
     private int percent = 0;
     private List<String> disabledWorlds;
@@ -47,7 +42,7 @@ public class ChunkManager {
 
     /**
      * Handles the entity explosion event
-     * 
+     *
      * @param event the entity explosion event to handle
      */
     public void handleExplosion(EntityExplodeEvent event) {
@@ -133,14 +128,14 @@ public class ChunkManager {
 
     /**
      * Handles a block on an EntityExplodeEvent
-     * 
-     * @param at the location of the block
+     *
+     * @param at           the location of the block
      * @param eventTypeRep the entity that triggered the event
      * @return true if the blow is handled by the plugin
      */
     private boolean blowBlockUp(final Location at, String eventTypeRep) {
         if (at == null) {
-            return false; 
+            return false;
         }
         Block block = at.getBlock();
         if (block == null) {
@@ -213,7 +208,7 @@ public class ChunkManager {
 
     /**
      * Destroys a block and drops and item at a location
-     * 
+     *
      * @param at the location to destroy and drop
      */
     private void destroyBlockAndDropItem(final Location at) {
@@ -258,7 +253,7 @@ public class ChunkManager {
 
     /**
      * Drops at block at a location
-     * 
+     *
      * @param at the location the drop the block at
      */
     private void dropBlockAndResetTime(Location at) {
@@ -268,14 +263,14 @@ public class ChunkManager {
 
     /**
      * Reset all durabilites
-     * 
+     *
      * @return time taken in milliseconds
      */
     public long resetAllDurabilities() {
         long time = System.currentTimeMillis();
         for (File odr : durabilityDir.listFiles()) {
             if (odr.getName().endsWith(".odr")) {
-                if(!odr.delete()) {
+                if (!odr.delete()) {
                     ObsidianDestroyer.LOG.log(Level.WARNING, "Failed to remove file " + odr.getName());
                 }
             }
@@ -288,8 +283,8 @@ public class ChunkManager {
 
     /**
      * Starts a new timer for a block
-     * 
-     * @param block the block to start a durability timer for
+     *
+     * @param block  the block to start a durability timer for
      * @param damage the damage done to the block
      */
     private void startNewTimer(Block block, int damage, TimerState state) {
@@ -302,7 +297,7 @@ public class ChunkManager {
 
     /**
      * Check if there is an active durability reset
-     * 
+     *
      * @param location the location to check
      * @return the state of the durability timer object
      */
@@ -339,7 +334,7 @@ public class ChunkManager {
 
     /**
      * Gets the Material durability from a location
-     * 
+     *
      * @param block the block to the checks durability
      * @return the durabiltiy value
      */
@@ -349,7 +344,7 @@ public class ChunkManager {
 
     /**
      * Gets the Material durability from a location
-     * 
+     *
      * @param location the location to checks durability
      * @return the durability value
      */
@@ -369,13 +364,13 @@ public class ChunkManager {
     }
 
     /**
-     *  Loads the chunk manager
+     * Loads the chunk manager
      */
     public void load() {
         loadDisabledWorlds();
         chunks.clear();
-        for(World world : ObsidianDestroyer.getInstance().getServer().getWorlds()) {
-            for(Chunk chunk : world.getLoadedChunks()) {
+        for (World world : ObsidianDestroyer.getInstance().getServer().getWorlds()) {
+            for (Chunk chunk : world.getLoadedChunks()) {
                 loadChunk(chunk);
             }
         }
@@ -388,7 +383,7 @@ public class ChunkManager {
         doneSave = false;
         Double max = ((Integer) chunks.size()).doubleValue();
         Double done = 0.0;
-        for(String key : chunks.keySet()) {
+        for (String key : chunks.keySet()) {
             ChunkWrapper w = chunks.get(key);
             w.save(false, true);
             done++;
@@ -400,7 +395,7 @@ public class ChunkManager {
 
     /**
      * Loads a chunk into the chunk manager
-     * 
+     *
      * @param chunk the chunk to load
      */
     public void loadChunk(Chunk chunk) {
@@ -412,7 +407,7 @@ public class ChunkManager {
 
     /**
      * Unloads a chunk from the chunk manager
-     * 
+     *
      * @param chunk the chunk to unload
      */
     public void unloadChunk(Chunk chunk) {
@@ -430,8 +425,8 @@ public class ChunkManager {
 
     /**
      * Adds a block to the chunk
-     * 
-     * @param block the block to be added
+     *
+     * @param block  the block to be added
      * @param damage the damage value of the block
      */
     public void addBlock(Block block, int damage) {
@@ -445,10 +440,10 @@ public class ChunkManager {
 
     /**
      * Adds a block to the chunk
-     * 
-     * @param block the block to be added
+     *
+     * @param block  the block to be added
      * @param damage the damage value of the block
-     * @param time the time value of the block
+     * @param time   the time value of the block
      */
     public void addBlock(Block block, int damage, long time) {
         String c = chunkToString(block.getChunk());
@@ -462,7 +457,7 @@ public class ChunkManager {
 
     /**
      * Remove a block from the chunk
-     * 
+     *
      * @param block the block to be removed
      */
     public void removeBlock(Block block) {
@@ -471,7 +466,7 @@ public class ChunkManager {
 
     /**
      * Remove a location from the chunk
-     * 
+     *
      * @param location the location to be removed
      */
     public void removeLocation(Location location) {
@@ -482,7 +477,7 @@ public class ChunkManager {
 
     /**
      * Does the chunk contain this block
-     * 
+     *
      * @param block the block to check the chunk for
      * @return true if block found within chunk
      */
@@ -492,7 +487,7 @@ public class ChunkManager {
 
     /**
      * Does the chunk contain this location
-     * 
+     *
      * @param location the location to check the chunk for
      * @return true if location found within chunk
      */
@@ -504,7 +499,7 @@ public class ChunkManager {
 
     /**
      * Gets the chunk wrapper from a chunk
-     * 
+     *
      * @param chunk the chunk to get a wrapper from
      * @return the ChunkWrapper that belongs to the chunk
      */
@@ -516,7 +511,7 @@ public class ChunkManager {
 
     /**
      * Gets the percentage of the save done
-     * 
+     *
      * @return the percentage done
      */
     public int percentSaveDone() {
@@ -528,7 +523,7 @@ public class ChunkManager {
 
     /**
      * Determines if the save has been completed
-     * 
+     *
      * @return true if completed, false otherwise
      */
     public boolean isSaveDone() {
@@ -537,7 +532,7 @@ public class ChunkManager {
 
     /**
      * Gets a list of worlds the plugin will ignore
-     * 
+     *
      * @return list of world names to ignore
      */
     public List<String> getDisabledWorlds() {
@@ -546,7 +541,7 @@ public class ChunkManager {
 
     /**
      * Gets the instance
-     * 
+     *
      * @return instance
      */
     public static ChunkManager getInstance() {
