@@ -86,7 +86,7 @@ public class ODCommand implements CommandExecutor {
         } catch (Exception e) {
             new ConfigManager(true).backup(true);
             ObsidianDestroyer.LOG.log(Level.SEVERE, "The config has encountered an error on load. Recovered a backup from memory...");
-            sender.sendMessage(ChatColor.RED + "Reloading ObsidianDestroyer failed, restored from memory. See log file.  Completed in " + (System.currentTimeMillis() - time) + " ms!");
+            sender.sendMessage(ChatColor.RED + "Reloading ObsidianDestroyer config failed, restored from memory. See log file.  Completed in " + (System.currentTimeMillis() - time) + " ms!");
         }
     }
 
