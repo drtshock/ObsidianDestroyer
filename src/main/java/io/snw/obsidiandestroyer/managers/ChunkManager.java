@@ -182,7 +182,7 @@ public class ChunkManager {
                 }
             }
             if (state == TimerState.RUN || state == TimerState.INACTIVE) {
-                int currentDurability = getWrapper(block.getChunk()).getDurability(block.getLocation());
+                int currentDurability = getMaterialDurability(block);
                 currentDurability++;
                 if (checkIfMax(currentDurability, block.getType().name())) {
                     // counter has reached max durability, remove and drop an item
@@ -262,7 +262,7 @@ public class ChunkManager {
      * @param at the location the drop the block at
      */
     private void dropBlockAndResetTime(Location at) {
-        getWrapper(at.getChunk()).removeKey(at);
+        removeLocation(at);
         destroyBlockAndDropItem(at);
     }
 
@@ -294,7 +294,7 @@ public class ChunkManager {
      */
     private void startNewTimer(Block block, int damage, TimerState state) {
         if (state == TimerState.RUN) {
-            getWrapper(block.getChunk()).removeKey(block);
+            removeBlock(block);
         }
 
         addBlock(block, damage, MaterialManager.getInstance().getDurabilityResetTime(block.getType().name()));
@@ -314,7 +314,7 @@ public class ChunkManager {
             return TimerState.INACTIVE;
         }
         long currentTime = System.currentTimeMillis();
-        Long time = getWrapper(location.getChunk()).getDurabilityTime(location);
+        long time = getWrapper(location.getChunk()).getDurabilityTime(location);
         if (currentTime > time) {
             if (ConfigManager.getInstance().getMaterialsRegenerateOverTime()) {
                 int currentDurability = getWrapper(location.getChunk()).getDurability(location);
@@ -330,7 +330,7 @@ public class ChunkManager {
                     return TimerState.RUN;
                 }
             } else {
-                getWrapper(location.getChunk()).removeKey(location);
+                removeLocation(location);
                 return TimerState.END;
             }
         }
@@ -354,7 +354,7 @@ public class ChunkManager {
      * @return the durability value
      */
     public Integer getMaterialDurability(Location location) {
-        if (checkDurabilityActive(location) != TimerState.RUN && !getWrapper(location.getChunk()).contains(location)) {
+        if (checkDurabilityActive(location) != TimerState.RUN && !contains(location)) {
             return 0;
         } else {
             return getWrapper(location.getChunk()).getDurability(location);
