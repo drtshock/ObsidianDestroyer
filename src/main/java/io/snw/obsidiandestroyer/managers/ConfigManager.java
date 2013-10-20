@@ -66,10 +66,8 @@ public class ConfigManager {
         }
         File configFile = new File(ObsidianDestroyer.getInstance().getDataFolder(), "config.yml");
         if (!configFile.exists()) {
-            ObsidianDestroyer.LOG.info("Creating config File...");
             createFile(configFile, "config.yml");
         } else {
-            ObsidianDestroyer.LOG.info("Loading config File...");
         }
         config = YamlConfiguration.loadConfiguration(configFile);
 
@@ -93,10 +91,8 @@ public class ConfigManager {
 
         File structuresFile = new File(ObsidianDestroyer.getInstance().getDataFolder(), "materials.yml");
         if (!structuresFile.exists()) {
-            ObsidianDestroyer.LOG.info("Creating materials File...");
             createFile(structuresFile, "materials.yml");
         } else {
-            ObsidianDestroyer.LOG.info("Loading materials File...");
         }
         materials = YamlConfiguration.loadConfiguration(structuresFile);
         loaded = true;
@@ -194,7 +190,6 @@ public class ConfigManager {
                 }
                 DurabilityMaterial durablock = new DurabilityMaterial(material, materialSection);
                 if (durablock.getEnabled()) {
-                    ObsidianDestroyer.LOG.info("Loaded Durability monitor for '" + durabilityMaterial + "'");
                     durabilityMaterials.put(material.name(), durablock);
                 }
             } catch (Exception e) {
