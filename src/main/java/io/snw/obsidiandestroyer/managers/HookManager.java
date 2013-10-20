@@ -8,9 +8,9 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 public class HookManager {
     private static HookManager instance;
-    private boolean IS_FACTIONS_HOOKED = false;
-    private boolean IS_TOWNY_HOOKED = false;
-    private boolean IS_WORLDGUARD_HOOKED = false;
+    private boolean isFactionHooked = false;
+    private boolean isTownyHooked = false;
+    private boolean isWorldGuardHooked = false;
 
     public HookManager() {
         instance = this;
@@ -24,7 +24,7 @@ public class HookManager {
     }
 
     /**
-     * Checks to see if the Factions plugin is active.
+     * Checks to see if the Factions plugin is active and sets flag.
      */
     private void checkFactionsHook() {
         Plugin plug = ObsidianDestroyer.getInstance().getServer().getPluginManager().getPlugin("Factions");
@@ -34,7 +34,7 @@ public class HookManager {
             String version = ver[0] + "." + ver[1];
             if (version.equalsIgnoreCase("1.8")) {
                 ObsidianDestroyer.LOG.info("Factions 1.8.x Found! Enabling hook..");
-                IS_FACTIONS_HOOKED = true;
+                isFactionHooked = true;
             } else if (version.equalsIgnoreCase("1.6")) {
                 ObsidianDestroyer.LOG.info("Factions found, but v1.6.x is not supported!");
             }
@@ -46,19 +46,19 @@ public class HookManager {
      *
      * @return Factions hook state
      */
-    public  boolean isHookedFactions() {
-        return IS_FACTIONS_HOOKED;
+    public boolean isHookedFactions() {
+        return isFactionHooked;
     }
 
     /**
-     * Checks to see if the Towny plugin is active.
+     * Checks to see if the Towny plugin is active and sets flag.
      */
     private void checkTownyHook() {
         Plugin plug = ObsidianDestroyer.getInstance().getServer().getPluginManager().getPlugin("Towny");
 
         if (plug != null) {
             ObsidianDestroyer.LOG.info("Towny Found! Enabling hook..");
-            IS_TOWNY_HOOKED = true;
+            isTownyHooked = true;
         }
     }
 
@@ -68,18 +68,18 @@ public class HookManager {
      * @return Towny hook state
      */
     public boolean isHookedTowny() {
-        return IS_TOWNY_HOOKED;
+        return isTownyHooked;
     }
 
     /**
-     * Checks to see if the WorldGuard plugin is active.
+     * Checks to see if the WorldGuard plugin is active and sets flag.
      */
     private void checkWorldGuardGHook() {
         Plugin plug = ObsidianDestroyer.getInstance().getServer().getPluginManager().getPlugin("WorldGuard");
 
         if (plug != null) {
             ObsidianDestroyer.LOG.info("WorldGuard Found! Enabling hook..");
-            IS_WORLDGUARD_HOOKED = true;
+            isWorldGuardHooked = true;
         }
     }
 
@@ -89,7 +89,7 @@ public class HookManager {
      * @return WorldGuard hook state
      */
     public boolean isHookedWorldGuard() {
-        return IS_WORLDGUARD_HOOKED;
+        return isWorldGuardHooked;
     }
 
     /**

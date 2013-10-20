@@ -24,10 +24,9 @@ public class ASRFile {
     /**
      * Creates a new ASRegion file
      * 
-     * @param useTime true to make a timer file, false otherwise
      */
     public ASRFile() {
-        buffer = ByteBuffer.allocateDirect(23);
+        buffer = ByteBuffer.allocateDirect(24);
     }
 
     /**
@@ -38,14 +37,14 @@ public class ASRFile {
      * @throws FileNotFoundException thrown if the file is missing
      */
     public void prepare(File file, boolean write) throws FileNotFoundException {
-            if (write) {
-                    output = new FileOutputStream(file, false);
-                    channel = output.getChannel();
-            }else{
-                    input = new FileInputStream(file);
-                    channel = input.getChannel();
-            }
-            this.write = write;
+        if (write) {
+            output = new FileOutputStream(file, false);
+            channel = output.getChannel();
+        }else{
+            input = new FileInputStream(file);
+            channel = input.getChannel();
+        }
+        this.write = write;
     }
 
     /**
@@ -56,7 +55,7 @@ public class ASRFile {
      * @throws IOException thrown if something happens
      */
     public void write(Location location, int duraAmount) throws IOException {
-            write(location.getBlockX(), location.getBlockY(), location.getBlockZ(), duraAmount, 0L);
+        write(location.getBlockX(), location.getBlockY(), location.getBlockZ(), duraAmount, 0L);
     }
 
     /**
@@ -75,6 +74,7 @@ public class ASRFile {
         buffer.putInt(y);
         buffer.putInt(z);
         buffer.putInt(duraAmount);
+        buffer.putLong(duraTime);
         buffer.flip();
         channel.write(buffer);
     }

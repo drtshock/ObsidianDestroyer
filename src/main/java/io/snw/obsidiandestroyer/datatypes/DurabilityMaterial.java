@@ -1,6 +1,7 @@
 package io.snw.obsidiandestroyer.datatypes;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 
 public class DurabilityMaterial {
     private Material type;
@@ -9,26 +10,26 @@ public class DurabilityMaterial {
     private double chanceToDrop;
     private boolean resetEnabled;
     private long resetTime;
-    private boolean tntEnabled = true;
-    private boolean cannonsEnabled = false;
-    private boolean creepersEnabled = false;
-    private boolean ghastsEnabled = false;
-    private boolean withersEnabled = false;
+    private boolean tntEnabled;
+    private boolean cannonsEnabled;
+    private boolean creepersEnabled;
+    private boolean ghastsEnabled;
+    private boolean withersEnabled;
     private boolean tntMinecartsEnabled;
 
-    public DurabilityMaterial(Material type, int dura, boolean enabled, double chanceToDrop, boolean resetEnabled, long resetTime, boolean tnt, boolean cannons, boolean creepers, boolean ghasts, boolean withers, boolean minecarts) {
+    public DurabilityMaterial(Material type, ConfigurationSection section) {
         this.type = type;
-        this.dura = dura;
-        this.enabled = enabled;
-        this.chanceToDrop = chanceToDrop;
-        this.resetEnabled = resetEnabled;
-        this.resetTime = resetTime;
-        this.tntEnabled = tnt;
-        this.cannonsEnabled = cannons;
-        this.creepersEnabled = creepers;
-        this.ghastsEnabled = ghasts;
-        this.withersEnabled = withers;
-        this.tntMinecartsEnabled = minecarts;
+        this.dura = section.getInt("Durability.Amount", 5);
+        this.enabled = section.getBoolean("Durability.Enabled", true);
+        this.chanceToDrop = section.getDouble("ChanceToDrop", 0.7);
+        this.resetEnabled = section.getBoolean("Durability.ResetEnabled", false);
+        this.resetTime = section.getLong("Durability.ResetAfter", 10000L);
+        this.tntEnabled = section.getBoolean("EnabledFor.TNT", true);
+        this.cannonsEnabled = section.getBoolean("EnabledFor.Cannons", false);
+        this.creepersEnabled = section.getBoolean("EnabledFor.Creepers", false);
+        this.ghastsEnabled = section.getBoolean("EnabledFor.Ghasts", false);
+        this.withersEnabled = section.getBoolean("EnabledFor.Minecarts", false);
+        this.tntMinecartsEnabled = section.getBoolean("EnabledFor.Withers", false);
     }
 
     public Material getType() {

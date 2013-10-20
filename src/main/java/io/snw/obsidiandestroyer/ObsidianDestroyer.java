@@ -3,13 +3,13 @@ package io.snw.obsidiandestroyer;
 import io.snw.obsidiandestroyer.commands.ODCommand;
 import io.snw.obsidiandestroyer.listeners.BlockListener;
 import io.snw.obsidiandestroyer.listeners.PlayerListener;
-import io.snw.obsidiandestroyer.util.GlobalVariables;
 import io.snw.obsidiandestroyer.util.Metrics;
 import io.snw.obsidiandestroyer.util.Updater;
 import io.snw.obsidiandestroyer.listeners.EntityExplodeListener;
-import io.snw.obsidiandestroyer.managers.BlockManager;
+import io.snw.obsidiandestroyer.managers.ChunkManager;
 import io.snw.obsidiandestroyer.managers.ConfigManager;
 import io.snw.obsidiandestroyer.managers.HookManager;
+import io.snw.obsidiandestroyer.managers.MaterialManager;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -32,15 +32,20 @@ public class ObsidianDestroyer extends JavaPlugin {
         instance = this;
         LOG = getLogger();
         new ConfigManager();
-        GlobalVariables.init();
         new HookManager();
-        new BlockManager();
+        new MaterialManager();
+        new ChunkManager();
         getCommand("od").setExecutor(new ODCommand(this));
         getServer().getPluginManager().registerEvents(new EntityExplodeListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         getServer().getPluginManager().registerEvents(new BlockListener(this), this);
         checkUpdate();
         //startMetrics(); //FIXME: crashes
+    }
+
+    @Override
+    public void onDisable() {
+        ChunkManager.getInstance().save();
     }
 
     protected void checkUpdate() {

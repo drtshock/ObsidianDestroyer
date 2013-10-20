@@ -101,40 +101,26 @@ public class ConfigManager {
         return instance;
     }
 
-    public int getRadius() {
-        return config.getInt("Radius");
-    }
-
-    public Map<String, DurabilityMaterial> getDurabilityBlocks() {
+    public Map<String, DurabilityMaterial> getDurabilityMaterials() {
         ConfigurationSection section = materials.getConfigurationSection("HandledMaterials");
         Map<String, DurabilityMaterial> durabilityBlocks = new HashMap<String, DurabilityMaterial>();
         for (String durabilityMaterial : section.getKeys(false)) {
-            ConfigurationSection s = section.getConfigurationSection(durabilityMaterial);
+            ConfigurationSection materialSection = section.getConfigurationSection(durabilityMaterial);
             ObsidianDestroyer.LOG.info("Apply Durability to " + durabilityMaterial);
             Material material = Material.getMaterial(durabilityMaterial);
             if (material == null) {
                 ObsidianDestroyer.LOG.log(Level.SEVERE, "Unable to load material from config: " + durabilityMaterial);
                 continue;
             }
-            // derp constructor!
-            DurabilityMaterial durablock = new DurabilityMaterial(material,
-                    s.getInt("Durability.Amount"), 
-                    s.getBoolean("Durability.Enabled"),
-                    s.getDouble("ChanceToDrop"),
-                    s.getBoolean("Durability.ResetEnabled", false),
-                    s.getLong("Durability.ResetAfter", 10000L),
-                    s.getBoolean("EnabledFor.TNT", true),
-                    s.getBoolean("EnabledFor.Cannons", false),
-                    s.getBoolean("EnabledFor.Creepers", false),
-                    s.getBoolean("EnabledFor.Ghasts", false),
-                    s.getBoolean("EnabledFor.Minecarts", false),
-                    s.getBoolean("EnabledFor.Withers", false));
-
+            DurabilityMaterial durablock = new DurabilityMaterial(material, materialSection);
             durabilityBlocks.put(material.name(), durablock);
         }
 
-        // Clear the blocks list then add all from config file
         return durabilityBlocks;
+    }
+
+    public int getRadius() {
+        return config.getInt("Radius");
     }
 
     public boolean getExplodeInLiquids() {
@@ -144,7 +130,7 @@ public class ConfigManager {
     public boolean getWaterProtection() {
         return config.getBoolean("Explosions.BypassAllFluidProtection", false);
     }
-    
+
     public boolean getProtectTNTCannons() {
         return config.getBoolean("Explosions.TNTCannonsProtected", true);
     }
