@@ -1,5 +1,7 @@
 package io.snw.obsidiandestroyer.commands;
 
+import java.util.logging.Level;
+
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.managers.ChunkManager;
 import io.snw.obsidiandestroyer.managers.ConfigManager;
@@ -81,9 +83,15 @@ public class ODCommand implements CommandExecutor {
 
     private void reloadPlugin(CommandSender sender) {
         long time = System.currentTimeMillis();
-        new ConfigManager();
-        MaterialManager.getInstance().load();
-        ChunkManager.getInstance().loadDisabledWorlds();
+        try {
+            ConfigManager.getInstance().backup(false);
+            new ConfigManager(false);
+            MaterialManager.getInstance().load();
+            ChunkManager.getInstance().loadDisabledWorlds();
+        } catch (Exception e) {
+            new ConfigManager(true).backup(true);
+            ObsidianDestroyer.LOG.log(Level.SEVERE, "The config has encountered an error on load. Recovered a backup from memory...");
+        }
         sender.sendMessage(ChatColor.GREEN + "Reloading ObsidianDestroyer config complete in " + (System.currentTimeMillis() - time) + " ms!");
     }
 

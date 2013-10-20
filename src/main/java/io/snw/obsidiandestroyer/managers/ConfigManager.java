@@ -24,24 +24,32 @@ public class ConfigManager {
     private static ConfigManager instance;
     private YamlConfiguration config;
     private YamlConfiguration materials;
+    private static YamlConfiguration tc;
+    private static YamlConfiguration tm;
     private boolean loaded;
 
-    public ConfigManager() {
+    public ConfigManager(boolean isLoading) {
         instance = this;
-        final YamlConfiguration tc = config;
-        final YamlConfiguration tm = materials;
-        try {
-            loadFile(false);
-        } catch (Exception e) {
-            config = tc;
-            materials = tm;
-            e.printStackTrace();
-            ObsidianDestroyer.LOG.log(Level.SEVERE, "The config has encountered an error on load. Recovered from a backup from memory...");
-            ObsidianDestroyer.getInstance().getPluginLoader().disablePlugin(ObsidianDestroyer.getInstance());
+        if (!isLoading) {
+            try {
+                loadFile(false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private void loadFile(boolean update) throws Exception {
+    public void backup(boolean apply) {
+        if (!apply) {
+            tc = config;
+            tm = materials;
+        } else {
+            config = tc;
+            materials = tm;
+        }
+    }
+
+    private void loadFile(boolean update) {
         loaded = true;
         File folder = ObsidianDestroyer.getInstance().getDataFolder();
         if (!folder.isDirectory()) {
@@ -198,5 +206,20 @@ public class ConfigManager {
 
     public String getObsidianDurability() {
         return config.getString("HandledMaterials.OBSIDIAN.Durability.Amount", "N/A");
+    }
+
+    public boolean getEffectsEnabled() {
+        return config.getBoolean("Effects.Enabled", true);
+    }
+
+    public double getEffectsChance() {
+        double value = config.getDouble("Effects.Chance", 0.12);
+        if (value > 0.6) {
+            value = 0.6;
+        }
+        if (value <= 0) {
+            value = 0.01;
+        }
+        return value;
     }
 }

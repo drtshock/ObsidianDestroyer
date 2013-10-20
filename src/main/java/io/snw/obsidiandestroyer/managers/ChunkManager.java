@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 
 import org.bukkit.Chunk;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -178,6 +179,12 @@ public class ChunkManager {
 
         if (MaterialManager.getInstance().getDurabilityEnabled(block.getType().name()) && MaterialManager.getInstance().getDurability(block.getType().name()) > 1) {
             TimerState state = checkDurabilityActive(block.getLocation());
+            if (ConfigManager.getInstance().getEffectsEnabled()) {
+                final double random = Math.random();
+                if (random <= ConfigManager.getInstance().getEffectsChance()) {
+                    block.getWorld().playEffect(at, Effect.MOBSPAWNER_FLAMES, 0);
+                }
+            }
             if (state == TimerState.RUN || state == TimerState.INACTIVE) {
                 int currentDurability = getWrapper(block.getChunk()).getDurability(block.getLocation());
                 currentDurability++;

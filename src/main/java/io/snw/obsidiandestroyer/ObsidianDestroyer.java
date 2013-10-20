@@ -29,7 +29,7 @@ public class ObsidianDestroyer extends JavaPlugin {
     public void onEnable() {
         instance = this;
         LOG = getLogger();
-        new ConfigManager();
+        new ConfigManager(false);
         new HookManager();
         new MaterialManager();
         new ChunkManager();

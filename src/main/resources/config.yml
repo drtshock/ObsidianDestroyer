@@ -32,6 +32,11 @@ IgnoreCancel: false
 # Example Timing Adjustment: 'OBSIDIAN.Durability.ResetAfter: 60000' for obsidian to regenerate 1 durability every minute
 DurabilityRegeneratesOverTime : false
 
+# Effects that are displayed when materials take damage
+Effects:
+  Enabled: true
+  Chance: 0.12
+
 # False means that water and lava won't protect industructable materials from explosions.
 # Only applies if the material is enabled in materials.yml
 # This is a fix for the handling of blocks like obsidian that are not normally destroyable,
@@ -47,9 +52,9 @@ Explosions:
   # Protects "TNT cannons" from being destroyed when used. 
   # This doesn't do anything unless the above option is true.
   TNTCannonsProtected: true
-  
+
 # List of worlds that the plugin will not interact with.
 # Example: DisabledOnWorlds: [world_survival, world_creative]
 DisabledOnWorlds: []
-  
+
 # Thats it :3
