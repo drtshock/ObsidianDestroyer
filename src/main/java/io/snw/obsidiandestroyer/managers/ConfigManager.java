@@ -28,17 +28,28 @@ public class ConfigManager {
     private static YamlConfiguration tm;
     private boolean loaded;
 
-    public ConfigManager(boolean isLoading) {
+    /**
+     * Initializes a new config manager
+     * 
+     * @param loaded is the manager loaded
+     */
+    public ConfigManager(boolean loaded) {
         instance = this;
-        if (!isLoading) {
+        this.loaded = false;
+        if (!loaded) {
             try {
-                loadFile(false);
+                loadFiles(false);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
+    /**
+     * Create a copy of the files in memory
+     * 
+     * @param apply the copy in memory to the current instance
+     */
     public void backup(boolean apply) {
         if (!apply) {
             tc = config;
@@ -49,8 +60,12 @@ public class ConfigManager {
         }
     }
 
-    private void loadFile(boolean update) {
-        loaded = true;
+    /**
+     * Loads config and material file
+     * 
+     * @param update for recursive check
+     */
+    private void loadFiles(boolean update) {
         File folder = ObsidianDestroyer.getInstance().getDataFolder();
         if (!folder.isDirectory()) {
             folder.mkdirs();
@@ -78,7 +93,8 @@ public class ConfigManager {
                 e.printStackTrace();
             }
             configFile.delete();
-            loadFile(true);
+            loadFiles(true);
+            return;
         }
 
         File structuresFile = new File(ObsidianDestroyer.getInstance().getDataFolder(), "materials.yml");
@@ -89,8 +105,15 @@ public class ConfigManager {
             ObsidianDestroyer.LOG.info("Loading materials File...");
         }
         materials = YamlConfiguration.loadConfiguration(structuresFile);
+        loaded = true;
     }
 
+    /**
+     * Create a file from a resource
+     * 
+     * @param file the file to be created
+     * @param resource the resource to be used
+     */
     private void createFile(File file, String resource) {
         file.getParentFile().mkdirs();
 
@@ -133,14 +156,33 @@ public class ConfigManager {
         }
     }
 
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    /**
+     * Gets the current instance of the config manager
+     * 
+     * @return class instance
+     */
     public static ConfigManager getInstance() {
         return instance;
     }
 
+    /**
+     * Gets the list of disabled worlds from the config
+     * 
+     * @return list of world names
+     */
     public List<String> getDisabledWorlds() {
         return (ArrayList<String>) config.getStringList("DisabledOnWorlds");
     }
 
+    /**
+     * Translates the materials.yml from memory into a map for quick access
+     * 
+     * @return map of materials keys and material durability data
+     */
     public Map<String, DurabilityMaterial> getDurabilityMaterials() {
         ConfigurationSection section = materials.getConfigurationSection("HandledMaterials");
         Map<String, DurabilityMaterial> durabilityMaterials = new HashMap<String, DurabilityMaterial>();
@@ -190,10 +232,6 @@ public class ConfigManager {
 
     public boolean getIgnoreCancel() {
         return config.getBoolean("IgnoreCancel", false);
-    }
-
-    public boolean isLoaded() {
-        return loaded;
     }
 
     public boolean getCheckUpdate() {

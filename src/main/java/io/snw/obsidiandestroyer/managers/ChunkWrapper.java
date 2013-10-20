@@ -25,6 +25,12 @@ public class ChunkWrapper {
     private final String world;
     private final File durabilitiesDir;
 
+    /**
+     * Wraps a chunk with a ChunkWrapper
+     * 
+     * @param chunk the chunk to wrap
+     * @param durabilitiesDir the directory to store this wrapper in
+     */
     ChunkWrapper(Chunk chunk, File durabilitiesDir) {
         this.chunkX = chunk.getX();
         this.chunkZ = chunk.getZ();
@@ -145,6 +151,9 @@ public class ChunkWrapper {
         durabilities.remove(representation);
     }
 
+    /**
+     * Clear the durabilities loaded in the chunk
+     */
     public void removeKeys() {
         durabilities.clear();
     }
@@ -211,6 +220,11 @@ public class ChunkWrapper {
         }
     }
 
+    /**
+     * Gets a list of durability keys that are not worth saving
+     * 
+     * @return list of expired durability keys
+     */
     private List<Integer> expiredDurabilities() {
         List<Integer> expiredDurabilities = new ArrayList<Integer>();
         for(Key key : durabilities.values()) {

@@ -17,6 +17,12 @@ public class DurabilityMaterial {
     private boolean withersEnabled;
     private boolean tntMinecartsEnabled;
 
+    /**
+     * Storage for a tracked material from the config
+     * 
+     * @param type the type of material
+     * @param section the configuration section to load
+     */
     public DurabilityMaterial(Material type, ConfigurationSection section) {
         this.type = type;
         this.dura = section.getInt("Durability.Amount", 5);
