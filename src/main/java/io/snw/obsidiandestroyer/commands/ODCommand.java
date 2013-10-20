@@ -72,7 +72,7 @@ public class ODCommand implements CommandExecutor {
         long time = System.currentTimeMillis();
         ChunkManager.getInstance().save();
         ChunkManager.getInstance().load();
-        sender.sendMessage(ChatColor.GREEN + "Reloading ObsidianDestroyer database complete in " + (System.currentTimeMillis() - time) + " ms!");
+        sender.sendMessage(ChatColor.GREEN + "Reloading ObsidianDestroyer database completed in " + (System.currentTimeMillis() - time) + " ms!");
     }
 
     private void reloadPlugin(CommandSender sender) {
@@ -82,11 +82,12 @@ public class ODCommand implements CommandExecutor {
             new ConfigManager(false);
             MaterialManager.getInstance().load();
             ChunkManager.getInstance().loadDisabledWorlds();
+            sender.sendMessage(ChatColor.GREEN + "Reloading ObsidianDestroyer config completed in " + (System.currentTimeMillis() - time) + " ms!");
         } catch (Exception e) {
             new ConfigManager(true).backup(true);
             ObsidianDestroyer.LOG.log(Level.SEVERE, "The config has encountered an error on load. Recovered a backup from memory...");
+            sender.sendMessage(ChatColor.RED + "Reloading ObsidianDestroyer failed, restored from memory. See log file.  Completed in " + (System.currentTimeMillis() - time) + " ms!");
         }
-        sender.sendMessage(ChatColor.GREEN + "Reloading ObsidianDestroyer config complete in " + (System.currentTimeMillis() - time) + " ms!");
     }
 
     private void resetDurability(CommandSender sender) {
