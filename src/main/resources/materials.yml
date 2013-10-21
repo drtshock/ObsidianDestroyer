@@ -1,0 +1,395 @@
+# Make any solid material withstand blasts from settable damage amounts and types
+# Materials that are not normally destructible, can be.
+
+# List of Materials to apply a durability amount to
+HandledMaterials:
+
+  # The name of Material that will have a durability applied
+  STONE:
+
+    # Material explosion resistance settings
+    Durability:
+
+      # The amount of explosions that this material will take before it is destroyed
+      Amount: 2
+
+      # Is this material enabled?
+      Enabled: false
+
+      # The chance to drop when Amount reaches zero.
+      # Setting to anything at or above 1 will make them always drop.
+      ChanceToDrop: 0.9
+
+      # Whether the durability for this material will reset after some time
+      ResetEnabled: true
+
+      # The time it takes for this material to fully reset or regenerate
+      # Time is in milliseconds
+      ResetAfter: 900000
+
+    # Explosion types you want us to handle.
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: true
+      Cannons: true
+      Withers: true
+      Minecarts: true
+
+  OBSIDIAN:
+    Durability:
+      Amount: 13
+      Enabled: true
+      ChanceToDrop: 0.6
+      ResetEnabled: true
+      ResetAfter: 600000
+    EnabledFor:
+      TNT: true
+      Creepers: false
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  ENCHANTMENT_TABLE:
+    Durability:
+      Amount: 6
+      Enabled: true
+      ChanceToDrop: 0.6
+      ResetEnabled: true
+      ResetAfter: 600000
+    EnabledFor:
+      TNT: true
+      Creepers: false
+      Ghasts: false
+      Cannons: false
+      Withers: false
+      Minecarts: false
+  ENDER_CHEST:
+    Durability:
+      Amount: 4
+      Enabled: true
+      ChanceToDrop: 0.6
+      ResetEnabled: true
+      ResetAfter: 900000
+    EnabledFor:
+      TNT: true
+      Creepers: false
+      Ghasts: false
+      Cannons: false
+      Withers: false
+      Minecarts: false
+  ANVIL:
+    Durability:
+      Amount: 3
+      Enabled: true
+      ChanceToDrop: 0.6
+      ResetEnabled: true
+      ResetAfter: 900000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: false
+      Withers: false
+      Minecarts: false
+  PORTAL:
+    Durability:
+      Amount: 20
+      Enabled: true
+      ChanceToDrop: 0.0
+      ResetEnabled: true
+      ResetAfter: 600000
+    EnabledFor:
+      TNT: true
+      Creepers: false
+      Ghasts: true
+      Cannons: false
+      Withers: false
+      Minecarts: false
+  ENDER_PORTAL_FRAME:
+    Durability:
+      Amount: 20
+      Enabled: true
+      ChanceToDrop: 0.0
+      ResetEnabled: true
+      ResetAfter: 600000
+    EnabledFor:
+      TNT: true
+      Creepers: false
+      Ghasts: false
+      Cannons: false
+      Withers: false
+      Minecarts: false
+  ENDER_PORTAL:
+    Durability:
+      Amount: 20
+      Enabled: true
+      ChanceToDrop: 0.0
+      ResetEnabled: true
+      ResetAfter: 600000
+    EnabledFor:
+      TNT: true
+      Creepers: false
+      Ghasts: false
+      Cannons: false
+      Withers: false
+      Minecarts: false
+  BEDROCK:
+    Durability:
+      Amount: 100
+      Enabled: false
+      ChanceToDrop: 0.0
+      ResetEnabled: true
+      ResetAfter: 1800000
+    EnabledFor:
+      TNT: true
+      Creepers: false
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+
+  # MOAR MATERIALS!!  set 'Enabled: true', to activate...
+  COBBLESTONE:
+    Durability:
+      Amount: 2
+      Enabled: false
+      ChanceToDrop: 0.8
+      ResetEnabled: true
+      ResetAfter: 1800000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: true
+      Cannons: true
+      Withers: true
+      Minecarts: true
+  SMOOTH_BRICK:
+    Durability:
+      Amount: 4
+      Enabled: false
+      ChanceToDrop: 0.7
+      ResetEnabled: true
+      ResetAfter: 1800000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  SMOOTH_STAIRS:
+    Durability:
+      Amount: 4
+      Enabled: false
+      ChanceToDrop: 0.7
+      ResetEnabled: true
+      ResetAfter: 1800000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  NETHER_BRICK:
+    Durability:
+      Amount: 3
+      Enabled: false
+      ChanceToDrop: 0.7
+      ResetEnabled: true
+      ResetAfter: 300000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: false
+      Withers: true
+      Minecarts: true
+  NETHER_BRICK_STAIRS:
+    Durability:
+      Amount: 3
+      Enabled: false
+      ChanceToDrop: 0.7
+      ResetEnabled: true
+      ResetAfter: 300000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: false
+      Withers: true
+      Minecarts: true
+  EMERALD_BLOCK:
+    Durability:
+      Amount: 6
+      Enabled: false
+      ChanceToDrop: 0.54
+      ResetEnabled: true
+      ResetAfter: 1800000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  DIAMOND_BLOCK:
+    Durability:
+      Amount: 5
+      Enabled: false
+      ChanceToDrop: 0.54
+      ResetEnabled: true
+      ResetAfter: 1800000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  GOLD_BLOCK:
+    Durability:
+      Amount: 3
+      Enabled: false
+      ChanceToDrop: 0.6
+      ResetEnabled: true
+      ResetAfter: 1800000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  IRON_BLOCK:
+    Durability:
+      Amount: 4
+      Enabled: false
+      ChanceToDrop: 0.64
+      ResetEnabled: true
+      ResetAfter: 1800000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  LAPIS_BLOCK:
+    Durability:
+      Amount: 4
+      Enabled: false
+      ChanceToDrop: 0.62
+      ResetEnabled: true
+      ResetAfter: 1800000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  REDSTONE_BLOCK:
+    Durability:
+      Amount: 5
+      Enabled: false
+      ChanceToDrop: 0.7
+      ResetEnabled: true
+      ResetAfter: 1800000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  QUARTZ_BLOCK:
+    Durability:
+      Amount: 5
+      Enabled: false
+      ChanceToDrop: 0.58
+      ResetEnabled: true
+      ResetAfter: 1800000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  QUARTZ_STAIRS:
+    Durability:
+      Amount: 5
+      Enabled: false
+      ChanceToDrop: 0.6
+      ResetEnabled: true
+      ResetAfter: 1800000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  CHEST:
+    Durability:
+      Amount: 3
+      Enabled: false
+      ChanceToDrop: 0.8
+      ResetEnabled: true
+      ResetAfter: 1000000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  FURNACE:
+    Durability:
+      Amount: 2
+      Enabled: false
+      ChanceToDrop: 0.7
+      ResetEnabled: true
+      ResetAfter: 1000000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  BURNING_FURNACE:
+    Durability:
+      Amount: 2
+      Enabled: false
+      ChanceToDrop: 0.7
+      ResetEnabled: true
+      ResetAfter: 1000000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  GLOWSTONE:
+    Durability:
+      Amount: 2
+      Enabled: false
+      ChanceToDrop: 0.3
+      ResetEnabled: true
+      ResetAfter: 600000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: true
+      Cannons: true
+      Withers: true
+      Minecarts: false
+
+# You can keep on adding more...
+# Copy paste one from above.  Just make sure the material name exists.
+# Get material names from http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html
+# Make sure they are all caps and include the underscores.

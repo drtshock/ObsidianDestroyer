@@ -1,12 +1,11 @@
 name: ObsidianDestroyer
-main: com.drtshock.obsidiandestroyer.ObsidianDestroyer
+main: io.snw.obsidiandestroyer.ObsidianDestroyer
 version: ${project.version}
 authors: [drtshock, squidicuz]
 softdepend: [Factions, Towny, WorldGuard]
 
 commands:
-    obsidiandestroyer:
-        description: ObisidanDestroyer
-        usage: |
-               /<command>
-        aliases: [od]
+    od:
+        description: ObsidianDestroyer command.
+        usage: /<command> <reload | reloadDB | reset | version>
+        aliases: [obsidiandestroyer]

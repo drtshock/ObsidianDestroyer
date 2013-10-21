@@ -1,11 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.pandemoneus</groupId>
     <artifactId>ObsidianDestroyer</artifactId>
-    <version>3.4.5-SNAPSHOT</version>
+    <version>4.0</version>
     <name>ObsidianDestroyer</name>
     <url>https://github.com/drtshock/ObsidianDestroyer</url>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -65,6 +66,10 @@
             <url>http://repo.bukkit.org/content/groups/public/</url>
         </repository>
         <repository>
+            <id>turt2live</id>
+            <url>http://repo.turt2live.com/</url>
+        </repository>
+        <repository>
             <id>royaldev-repo</id>
             <url>http://minor.royaldev.org:8081/nexus/content/groups/public</url>
         </repository>
@@ -75,22 +80,19 @@
     </repositories>
     <dependencies>
         <dependency>
+            <groupId>com.turt2live.lib</groupId>
+            <artifactId>Towny</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.6.2-R1.0</version>
+            <version>LATEST</version>
         </dependency>
         <dependency>
             <groupId>com.massivecraft</groupId>
             <artifactId>factions</artifactId>
             <version>1.8.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.palmergames</groupId>
-            <artifactId>towny</artifactId>
-            <version>0.83.0.0</version>
-            <optional>true</optional>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/Towny-0.83.0.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.sk89q</groupId>
@@ -103,11 +105,6 @@
             <dependency>
                 <groupId>org.bukkit</groupId>
                 <artifactId>craftbukkit</artifactId>
-                <version>LATEST</version>
-            </dependency>
-            <dependency>
-                <groupId>org.bukkit</groupId>
-                <artifactId>bukkit</artifactId>
                 <version>LATEST</version>
             </dependency>
             <dependency>
