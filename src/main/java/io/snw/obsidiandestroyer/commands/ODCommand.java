@@ -51,6 +51,8 @@ public class ODCommand implements CommandExecutor {
                 if (sender.hasPermission("obsidiandestroyer.help")) {
                     sender.sendMessage(ChatColor.DARK_PURPLE + "ObsidianDestroyer version: " + ChatColor.GRAY + ObsidianDestroyer.getInstance().getDescription().getVersion());
                 }
+            } else {
+                return false;
             }
         }
 
