@@ -28,7 +28,7 @@ IgnoreCancel: false
 # Allows the durability of materials to gradually regenerate over time.
 # Requires:  'MATERIAL.Durability.ResetEnabled: true'  in materials.yml and adjustment of timings.
 # Example Timing Adjustment: 'OBSIDIAN.Durability.ResetAfter: 60000' for obsidian to regenerate 1 durability every minute
-DurabilityRegeneratesOverTime : false
+DurabilityRegeneratesOverTime: false
 
 # Effects that are displayed when materials take damage
 Effects:
