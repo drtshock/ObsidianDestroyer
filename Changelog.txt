@@ -1,3 +1,15 @@
+Version 4.0
++ Complete rewrite.
++ Remove all timer threads.
++ Move durability settings to materials.yml.
++ Allow any block to be able to have durability set to it.
++ Durability can regenerate over time or all at once at the end of the timer.
++ Allow auto update downloading, off by default.
++ Rose works to check any block's durability and now works in creative.
++ Use instancing instead of throwing instances everywhere.
++ Save durability per block per chunk.
++ Only load durability if the chunk is loaded (thanks turt2live).
+
 Version 3.1
 + Added hooks into WorldGuard, Factions, and Towny for ExplosionsInLiquid
 + All features/fixes from 3.0.x
