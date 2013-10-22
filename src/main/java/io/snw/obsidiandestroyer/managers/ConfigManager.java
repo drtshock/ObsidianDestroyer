@@ -281,4 +281,8 @@ public class ConfigManager {
         }
         return value;
     }
+
+    public boolean getProtectBedrockBorders() {
+        return config.getBoolean("ProtectBedrockBorders", true);
+    }
 }

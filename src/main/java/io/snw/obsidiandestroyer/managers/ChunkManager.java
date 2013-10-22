@@ -4,6 +4,7 @@ import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.datatypes.LiquidExplosion;
 import io.snw.obsidiandestroyer.enumerations.TimerState;
 import org.bukkit.*;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -149,6 +150,14 @@ public class ChunkManager {
             return false;
         }
 
+        if (block.getType() == Material.BEDROCK && ConfigManager.getInstance().getProtectBedrockBorders()) {
+            if (block.getY() <= 3 && block.getWorld().getEnvironment() != Environment.THE_END) {
+                return true;
+            } else if (block.getY() >= 125 && block.getWorld().getEnvironment() == Environment.NETHER) {
+                return true;
+            }
+        }
+
         if (eventTypeRep.equals("CraftTNTPrimed") && !MaterialManager.getInstance().getTntEnabled(block.getType().name())) {
             return false;
         }
@@ -222,16 +231,17 @@ public class ChunkManager {
             return;
         }
 
+        final double random = Math.random();
         double chance = MaterialManager.getInstance().getChanceToDropBlock(b.getType().name());
 
-        if (chance > 1.0)
+        if (chance > 1.0) {
             chance = 1.0;
-        if (chance < 0.0)
+        }
+        if (chance < 0.0) {
             chance = 0.0;
+        }
 
-        final double random = Math.random();
-
-        if (chance == 1.0 || chance <= random) {
+        if (chance == 1.0 || (chance <= random && chance > 0.0)) {
             ItemStack is = new ItemStack(b.getType(), 1);
 
             if (is.getType() == Material.AIR) {

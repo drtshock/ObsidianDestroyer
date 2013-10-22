@@ -37,7 +37,7 @@ public class PlayerListener implements Listener {
                     if (player.getGameMode() == GameMode.CREATIVE) {
                         event.setCancelled(true);
                     }
-                    int amount = (Integer) ChunkManager.getInstance().getMaterialDurability(block).intValue();
+                    int amount = ChunkManager.getInstance().getMaterialDurability(block);
                     int max = mm.getDurability(block.getType().name());
                     player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this block is: " + ChatColor.WHITE + (max - amount) + "/" + max);
                 }

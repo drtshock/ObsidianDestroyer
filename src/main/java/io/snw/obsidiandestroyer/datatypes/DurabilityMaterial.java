@@ -27,7 +27,7 @@ public class DurabilityMaterial {
         this.type = type;
         this.dura = section.getInt("Durability.Amount", 5);
         this.enabled = section.getBoolean("Durability.Enabled", true);
-        this.chanceToDrop = section.getDouble("ChanceToDrop", 0.7);
+        this.chanceToDrop = section.getDouble("Durability.ChanceToDrop", 0.7);
         this.resetEnabled = section.getBoolean("Durability.ResetEnabled", false);
         this.resetTime = section.getLong("Durability.ResetAfter", 10000L);
         this.tntEnabled = section.getBoolean("EnabledFor.TNT", true);

@@ -41,6 +41,10 @@ Effects:
 #  but become destroyed in water with this disabled.
 FluidsProtectIndustructables: true
 
+# When bedrock destruction is enabled, this prevents holes into the void...
+# HOLY CRAP DON'T TURN THIS OFF
+ProtectBedrockBorders: true
+
 # Enables a bypass to allow explosions to affect ALL blocks under / next to liquids.
 # This will bypass ALL blocks. We recommend not to use both this AND 'FluidsProtectIndustructables'.
 # Destroys fluid blocks and creates a new explosion.
