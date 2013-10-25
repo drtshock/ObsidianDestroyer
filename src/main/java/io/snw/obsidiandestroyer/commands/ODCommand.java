@@ -16,41 +16,24 @@ public class ODCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0) {
+            showHelp(sender);
 
-            if (sender.hasPermission("obsidiandestroyer.help")) {
-                showHelp(sender);
-            } else {
-                sender.sendMessage(ChatColor.RED + "You are not authorized to use this command.");
-            }
         } else if (args.length == 1) {
             // commands with 0 arguments
             String command = args[0];
 
             if (command.equalsIgnoreCase("reload")) {
+                reloadPlugin(sender);
 
-                if (sender.hasPermission("obsidiandestroyer.config.reload")) {
-                    reloadPlugin(sender);
-                } else {
-                    sender.sendMessage(ChatColor.RED + "You are not authorized to use this command.");
-                }
             } else if (command.equalsIgnoreCase("reloadDB") || command.equalsIgnoreCase("reloadDataBase")) {
+                reloadDurabilites(sender);
 
-                if (sender.hasPermission("obsidiandestroyer.config.reloadDurability")) {
-                    reloadDurabilites(sender);
-                } else {
-                    sender.sendMessage(ChatColor.RED + "You are not authorized to use this command.");
-                }
             } else if (command.equalsIgnoreCase("reset")) {
+                resetDurability(sender);
 
-                if (sender.hasPermission("obsidiandestroyer.durability.reset")) {
-                    resetDurability(sender);
-                } else {
-                    sender.sendMessage(ChatColor.RED + "You are not authorized to use this command.");
-                }
             } else if (command.equalsIgnoreCase("version")) {
-                if (sender.hasPermission("obsidiandestroyer.help")) {
-                    sender.sendMessage(ChatColor.DARK_PURPLE + "ObsidianDestroyer version: " + ChatColor.GRAY + ObsidianDestroyer.getInstance().getDescription().getVersion());
-                }
+                sender.sendMessage(ChatColor.DARK_PURPLE + "ObsidianDestroyer version: " + ChatColor.GRAY + ObsidianDestroyer.getInstance().getDescription().getVersion());
+
             } else {
                 return false;
             }

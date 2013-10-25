@@ -9,3 +9,8 @@ commands:
         description: ObsidianDestroyer command.
         usage: /<command> <reload | reloadDB | reset | version>
         aliases: [obsidiandestroyer]
+        permission: obsidiandestroyer.admin
+permissions:
+    obsidiandestroyer.admin:
+      default: op
+      description: Allow you to use all admin commands for this plugin.
