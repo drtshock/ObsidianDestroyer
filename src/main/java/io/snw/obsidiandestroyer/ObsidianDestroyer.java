@@ -37,7 +37,7 @@ public class ObsidianDestroyer extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new BlockListener(), this);
         checkUpdate();
-        startMetrics();
+        //startMetrics();
     }
 
     @Override
