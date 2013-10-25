@@ -19,7 +19,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        if (ObsidianDestroyer.getInstance().getNeedsUpdate() && event.getPlayer().hasPermission("obsidiandestroyer.notify")) {
+        if (ObsidianDestroyer.getInstance().getNeedsUpdate() && event.getPlayer().hasPermission("obsidiandestroyer.admin")) {
             event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "Version " + ChatColor.GRAY + ObsidianDestroyer.getInstance().getLatestVersion() + ChatColor.DARK_PURPLE + " is available for update.");
             event.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "Download it from http://dev.bukkit.org/meatballs/obsidiandestroyer");
         }
