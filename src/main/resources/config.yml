@@ -9,21 +9,16 @@
 # The old config will be saved as 'config.yml.old'
 Version: ${project.version}
 
-# This will only check for updates by default. You can also enable this to download them for you (I don't recommend this).
+# This will only check for updates and download them by default.
 # This plugin does not break between minecraft versions so you should not have an issue updating to the most recent build.
-# For this to work you need to add your curse api key to /plugins/updater/config.yml
 checkupdate: true
-downloadupdate: false
+downloadupdate: true
 
 # The explosion radius that will be checked
 # Blocks in this radius will be affected.
 Radius: 3
 
 # DURABILITY IS NOW IN THE MATERIALS.YML FILE
-
-# Setting this to true may cause errors with other plugins. But it will make us handle all explosions
-#  no matter what other plugins try to do.  Honestly not sure what this really does...
-IgnoreCancel: false
 
 # Allows the durability of materials to gradually regenerate over time.
 # Requires:  'MATERIAL.Durability.ResetEnabled: true'  in materials.yml and adjustment of timings.

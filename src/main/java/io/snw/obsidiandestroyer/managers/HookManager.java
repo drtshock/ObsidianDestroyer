@@ -33,8 +33,10 @@ public class HookManager {
         if (plug != null) {
             String[] ver = plug.getDescription().getVersion().split("\\.");
             String version = ver[0] + "." + ver[1];
-            if (ver[0] == "2") {
+            if (ver[0].equalsIgnoreCase("2") && ConfigManager.getInstance().getBypassAllFluidProtection()) {
                 ObsidianDestroyer.LOG.info("Factions 2.x Found, but not supported at this time.");
+                ObsidianDestroyer.LOG.warning("ObsidianDestroyer and Factions have conflicting options.");
+                ObsidianDestroyer.LOG.warning("Set handleExploitTNTWaterlog to false in Factions in config.");
             } else if (version.equalsIgnoreCase("1.8")) {
                 ObsidianDestroyer.LOG.info("Factions 1.8.x Found! Enabling hook..");
                 isFactionHooked = true;

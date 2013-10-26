@@ -251,16 +251,12 @@ public class ConfigManager {
         return config.getBoolean("Explosions.TNTCannonsProtected", true);
     }
 
-    public boolean getIgnoreCancel() {
-        return config.getBoolean("IgnoreCancel", false);
-    }
-
     public boolean getCheckUpdate() {
-        return config.getBoolean("checkupdate");
+        return config.getBoolean("checkupdate", true);
     }
 
     public boolean getDownloadUpdate() {
-        return config.getBoolean("downloadupdate");
+        return config.getBoolean("downloadupdate", false);
     }
 
     public String getObsidianDurability() {

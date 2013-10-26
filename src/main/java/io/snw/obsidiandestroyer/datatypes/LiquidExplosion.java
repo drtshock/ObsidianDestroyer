@@ -113,9 +113,11 @@ public class LiquidExplosion {
                     // TODO: Check every block in the explosion for Towny..
 
                     // Hook to prevent liquids from being destroyed in Faction territory that has explosions disabled
+                    // TODO: Add more versions of Factions.
+                    // TODO: Make this actually work.
                     if (HookManager.getInstance().isHookedFactions()) {
                         Faction faction = Board.getFactionAt(event.getLocation());
-                        if (faction.getFlag(FFlag.EXPLOSIONS) == false) {
+                        if (!faction.getFlag(FFlag.EXPLOSIONS)) {
                             return;
                         }
                     }
