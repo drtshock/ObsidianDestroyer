@@ -37,7 +37,7 @@ public class ObsidianDestroyer extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new BlockListener(), this);
         checkUpdate();
-        //startMetrics();
+        startMetrics();
     }
 
     @Override
@@ -82,6 +82,7 @@ public class ObsidianDestroyer extends JavaPlugin {
                     return 1;
                 }
             });
+            metrics.start();
         } catch (IOException ex) {
             getLogger().warning("Failed to load metrics :(");
         }
