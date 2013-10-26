@@ -47,6 +47,10 @@ public class ChunkManager {
      * @param event the entity explosion event to handle
      */
     public void handleExplosion(EntityExplodeEvent event) {
+        // Debug time taken
+        final long time = System.currentTimeMillis();
+        // TODO: Move radius to each material
+        // FIXME: Damage to blocks bleed between materials with mismatched radius between materials
         final int radius = ConfigManager.getInstance().getRadius();
 
         // cancel if radius is < 0
@@ -81,8 +85,10 @@ public class ChunkManager {
                 if (hitLocs.contains(block.getLocation())) {
                     continue;
                 }
-                if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), event.getEntity().toString())) {
-                    blocksIgnored.add(block);
+                if (MaterialManager.getInstance().contains(block.getType().name())) {
+                    if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), event.getEntity().toString())) {
+                        blocksIgnored.add(block);
+                    }
                 }
             }
         }
@@ -94,10 +100,14 @@ public class ChunkManager {
             return;
         }
 
-        // Check explosion blocks
+        // Check explosion blocks and their distance from the detonation.
         for (Block block : event.blockList()) {
-            if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), event.getEntity().toString())) {
-                blocksIgnored.add(block);
+            if (MaterialManager.getInstance().contains(block.getType().name())) {
+                if (detonatorLoc.distance(block.getLocation()) > radius + 0.6) {
+                    blocksIgnored.add(block);
+                } else if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), event.getEntity().toString())) {
+                    blocksIgnored.add(block);
+                }
             }
         }
 
@@ -106,16 +116,18 @@ public class ChunkManager {
             for (int y = -radius; y <= radius; y++) {
                 for (int z = -radius; z <= radius; z++) {
                     Location targetLoc = new Location(detonator.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
+                    if (blocksIgnored.contains(targetLoc.getBlock()) || targetLoc.getBlock().getType() == Material.AIR) {
+                        continue;
+                    }
                     if (detonatorLoc.distance(targetLoc) <= radius) {
-                        if (blocksIgnored.contains(targetLoc.getBlock())) {
-                            continue;
-                        }
-                        if (!MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name()) || targetLoc.getBlock().getType() == Material.AIR) {
+                        if (!MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name())) {
                             continue;
                         }
                         if (ChunkManager.getInstance().blowBlockUp(targetLoc, event.getEntity().toString())) {
                             blocksIgnored.add(targetLoc.getBlock());
                         }
+                    } else if (event.blockList().contains(targetLoc.getBlock())) {
+                        blocksIgnored.add(targetLoc.getBlock());
                     }
                 }
             }
@@ -124,6 +136,10 @@ public class ChunkManager {
         // Remove managed blocks
         for (Block block : blocksIgnored) {
             event.blockList().remove(block);
+        }
+        // Debug time for explosion
+        if (ConfigManager.getInstance().getDebug()) {
+            ObsidianDestroyer.debug("Taken "  + (System.currentTimeMillis() - time) + " ms.  For explosion at [ " + detonatorLoc.toString() + " ]");
         }
     }
 
@@ -146,9 +162,9 @@ public class ChunkManager {
             return false;
         }
 
-        if (!MaterialManager.getInstance().contains(block.getType().name())) {
-            return false;
-        }
+        //if (!MaterialManager.getInstance().contains(block.getType().name())) {
+            //return false;
+        //}
 
         if (block.getType() == Material.BEDROCK && ConfigManager.getInstance().getProtectBedrockBorders()) {
             if (block.getY() <= 3 && block.getWorld().getEnvironment() != Environment.THE_END) {

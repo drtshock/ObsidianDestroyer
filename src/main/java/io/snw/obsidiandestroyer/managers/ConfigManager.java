@@ -217,7 +217,7 @@ public class ConfigManager {
                 }
                 DurabilityMaterial durablock = new DurabilityMaterial(material, materialSection);
                 if (durablock.getEnabled()) {
-                    if (getVerbose()) {
+                    if (getVerbose() || getDebug()) {
                         ObsidianDestroyer.LOG.info("Loaded durability of '" + durablock.getDurability() + "' for '" + durabilityMaterial + "'");
                     }
                     durabilityMaterials.put(material.name(), durablock);
