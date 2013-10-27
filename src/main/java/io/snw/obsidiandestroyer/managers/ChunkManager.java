@@ -226,12 +226,7 @@ public class ChunkManager {
                 }
             }
         } else {
-            ObsidianDestroyer.getInstance().getServer().getScheduler().runTask(ObsidianDestroyer.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    destroyBlockAndDropItem(at);
-                }
-            });
+            destroyBlockAndDropItem(at);
         }
         return true;
     }
@@ -280,12 +275,7 @@ public class ChunkManager {
      */
     private void dropBlockAndResetTime(final Location at) {
         removeLocation(at);
-        ObsidianDestroyer.getInstance().getServer().getScheduler().runTask(ObsidianDestroyer.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                destroyBlockAndDropItem(at);
-            }
-        });
+        destroyBlockAndDropItem(at);
     }
 
     /**
