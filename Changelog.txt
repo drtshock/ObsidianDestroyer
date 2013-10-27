@@ -1,3 +1,10 @@
+Version 4.1
++ Corrected Metrics
++ Corrected Radius handling, added BlastRadius to materials
++ Changed material durability check item from red_rose to potato
++ Changed permission nodes to: obsidiandestroyer.admin
++ Minor bug fixes and tweaks
+
 Version 4.0
 + Complete rewrite.
 + Remove all timer threads.
