@@ -31,7 +31,7 @@ public class PlayerListener implements Listener {
         if (player.getItemInHand().getAmount() > 0 && event.getAction() == Action.LEFT_CLICK_BLOCK) {
             Material itemInHand = player.getItemInHand().getType();
             Block block = event.getClickedBlock();
-            if (itemInHand == Material.RED_ROSE) {
+            if (itemInHand == Material.POTATO_ITEM) {
                 MaterialManager mm = MaterialManager.getInstance();
                 if (mm.getDurabilityEnabled(block.getType().name())) {
                     if (player.getGameMode() == GameMode.CREATIVE) {
