@@ -7,6 +7,11 @@ HandledMaterials:
   # The name of Material that will have a durability applied
   STONE:
 
+    # Individual blast radius for each material.
+    # Works best if less than or equal to 'Radius' from config.yml (Experiment with it)
+    # Defaults to 'Radius' from config.yml if line below is not present.
+    BlastRadius: 3
+
     # Material explosion resistance settings
     Durability:
 
@@ -37,6 +42,7 @@ HandledMaterials:
       Minecarts: true
 
   OBSIDIAN:
+    BlastRadius: 2
     Durability:
       Amount: 13
       Enabled: true
@@ -51,6 +57,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   ENCHANTMENT_TABLE:
+    BlastRadius: 6
     Durability:
       Amount: 6
       Enabled: true
@@ -65,6 +72,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   ENDER_CHEST:
+    BlastRadius: 3
     Durability:
       Amount: 4
       Enabled: true
@@ -79,6 +87,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   ANVIL:
+    BlastRadius: 3
     Durability:
       Amount: 3
       Enabled: true
@@ -93,6 +102,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   PORTAL:
+    BlastRadius: 3
     Durability:
       Amount: 20
       Enabled: true
@@ -107,6 +117,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   ENDER_PORTAL_FRAME:
+    BlastRadius: 3
     Durability:
       Amount: 20
       Enabled: true
@@ -121,6 +132,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   ENDER_PORTAL:
+    BlastRadius: 3
     Durability:
       Amount: 20
       Enabled: true
@@ -135,6 +147,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   BEDROCK:
+    BlastRadius: 2
     Durability:
       Amount: 100
       Enabled: false
@@ -151,6 +164,7 @@ HandledMaterials:
 
   # MOAR MATERIALS!!  set 'Enabled: true', to activate...
   COBBLESTONE:
+    BlastRadius: 3
     Durability:
       Amount: 2
       Enabled: false
@@ -165,6 +179,7 @@ HandledMaterials:
       Withers: true
       Minecarts: true
   SMOOTH_BRICK:
+    BlastRadius: 3
     Durability:
       Amount: 4
       Enabled: false
@@ -179,6 +194,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   SMOOTH_STAIRS:
+    BlastRadius: 3
     Durability:
       Amount: 4
       Enabled: false
@@ -193,6 +209,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   NETHER_BRICK:
+    BlastRadius: 3
     Durability:
       Amount: 3
       Enabled: false
@@ -207,6 +224,7 @@ HandledMaterials:
       Withers: true
       Minecarts: true
   NETHER_BRICK_STAIRS:
+    BlastRadius: 3
     Durability:
       Amount: 3
       Enabled: false
@@ -221,6 +239,7 @@ HandledMaterials:
       Withers: true
       Minecarts: true
   EMERALD_BLOCK:
+    BlastRadius: 3
     Durability:
       Amount: 6
       Enabled: false
@@ -235,6 +254,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   DIAMOND_BLOCK:
+    BlastRadius: 3
     Durability:
       Amount: 5
       Enabled: false
@@ -249,6 +269,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   GOLD_BLOCK:
+    BlastRadius: 3
     Durability:
       Amount: 3
       Enabled: false
@@ -263,6 +284,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   IRON_BLOCK:
+    BlastRadius: 3
     Durability:
       Amount: 4
       Enabled: false
@@ -277,6 +299,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   LAPIS_BLOCK:
+    BlastRadius: 3
     Durability:
       Amount: 4
       Enabled: false
@@ -291,6 +314,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   REDSTONE_BLOCK:
+    BlastRadius: 3
     Durability:
       Amount: 5
       Enabled: false
@@ -305,6 +329,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   QUARTZ_BLOCK:
+    BlastRadius: 3
     Durability:
       Amount: 5
       Enabled: false
@@ -319,6 +344,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   QUARTZ_STAIRS:
+    BlastRadius: 3
     Durability:
       Amount: 5
       Enabled: false
@@ -333,6 +359,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   CHEST:
+    BlastRadius: 3
     Durability:
       Amount: 3
       Enabled: false
@@ -347,6 +374,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   FURNACE:
+    BlastRadius: 3
     Durability:
       Amount: 2
       Enabled: false
@@ -361,6 +389,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   BURNING_FURNACE:
+    BlastRadius: 3
     Durability:
       Amount: 2
       Enabled: false
@@ -375,6 +404,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   GLOWSTONE:
+    BlastRadius: 2
     Durability:
       Amount: 2
       Enabled: false
@@ -388,6 +418,126 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: false
+  DIRT:
+    BlastRadius: 4
+    Durability:
+      Amount: 1
+      Enabled: false
+      ChanceToDrop: 0.28
+      ResetEnabled: false
+      ResetAfter: 300000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: true
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  GRASS:
+    BlastRadius: 4
+    Durability:
+      Amount: 1
+      Enabled: false
+      ChanceToDrop: 0.22
+      ResetEnabled: false
+      ResetAfter: 300000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: true
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  SAND:
+    BlastRadius: 4
+    Durability:
+      Amount: 1
+      Enabled: false
+      ChanceToDrop: 0.23
+      ResetEnabled: false
+      ResetAfter: 300000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: true
+      Cannons: true
+      Withers: true
+      Minecarts: true
+  GRAVEL:
+    BlastRadius: 4
+    Durability:
+      Amount: 1
+      Enabled: false
+      ChanceToDrop: 0.20
+      ResetEnabled: false
+      ResetAfter: 300000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: true
+      Cannons: true
+      Withers: true
+      Minecarts: true
+  WATER:
+    BlastRadius: 4
+    Durability:
+      Amount: 1
+      Enabled: false
+      ChanceToDrop: 0.0
+      ResetEnabled: false
+      ResetAfter: 300000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: true
+      Cannons: true
+      Withers: true
+      Minecarts: true
+  STATIONARY_WATER:
+    BlastRadius: 4
+    Durability:
+      Amount: 1
+      Enabled: false
+      ChanceToDrop: 0.0
+      ResetEnabled: false
+      ResetAfter: 300000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: true
+      Cannons: true
+      Withers: true
+      Minecarts: true
+  LAVA:
+    BlastRadius: 4
+    Durability:
+      Amount: 1
+      Enabled: false
+      ChanceToDrop: 0.0
+      ResetEnabled: false
+      ResetAfter: 300000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: true
+      Minecarts: true
+  STATIONARY_LAVA:
+    BlastRadius: 4
+    Durability:
+      Amount: 1
+      Enabled: false
+      ChanceToDrop: 0.0
+      ResetEnabled: false
+      ResetAfter: 300000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: true
+      Minecarts: true
 
 # You can keep on adding more...
 # Copy paste one from above.  Just make sure the material name exists.

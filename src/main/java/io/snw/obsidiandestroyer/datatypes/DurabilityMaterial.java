@@ -6,6 +6,7 @@ import org.bukkit.configuration.ConfigurationSection;
 public class DurabilityMaterial {
     private Material type;
     private int dura;
+    private int blastRadius;
     private boolean enabled;
     private double chanceToDrop;
     private boolean resetEnabled;
@@ -25,6 +26,7 @@ public class DurabilityMaterial {
      */
     public DurabilityMaterial(Material type, ConfigurationSection section) {
         this.type = type;
+        this.blastRadius = section.getInt("BlastRadius", 0);
         this.dura = section.getInt("Durability.Amount", 5);
         this.enabled = section.getBoolean("Durability.Enabled", true);
         this.chanceToDrop = section.getDouble("Durability.ChanceToDrop", 0.7);
@@ -84,5 +86,9 @@ public class DurabilityMaterial {
 
     public boolean getTntMinecartsEnabled() {
         return this.tntMinecartsEnabled;
+    }
+
+    public int getRadius() {
+        return this.blastRadius;
     }
 }

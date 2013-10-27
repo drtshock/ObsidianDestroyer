@@ -1,5 +1,7 @@
 package io.snw.obsidiandestroyer.util;
 
+import io.snw.obsidiandestroyer.managers.MaterialManager;
+
 import org.bukkit.Material;
 
 public class Util {
@@ -178,5 +180,13 @@ public class Util {
                 break;
         }
         return true;
+    }
+
+    public static int getMaxDistance(String material, int defaultRadius) {
+        int dist = MaterialManager.getInstance().getBlastRadius(material);
+        if (dist <= 0) {
+            dist = defaultRadius;
+        }
+        return dist;
     }
 }

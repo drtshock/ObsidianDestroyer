@@ -3,6 +3,8 @@ package io.snw.obsidiandestroyer.managers;
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.datatypes.LiquidExplosion;
 import io.snw.obsidiandestroyer.enumerations.TimerState;
+import io.snw.obsidiandestroyer.util.Util;
+
 import org.bukkit.*;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
@@ -49,13 +51,14 @@ public class ChunkManager {
     public void handleExplosion(EntityExplodeEvent event) {
         // Debug time taken
         final long time = System.currentTimeMillis();
-        // TODO: Move radius to each material
-        // FIXME: Damage to blocks bleed between materials with mismatched radius between materials
         final int radius = ConfigManager.getInstance().getRadius();
 
-        // cancel if radius is < 0
+        // cancel if radius is < 0 or > 10
         if (radius < 0) {
             ObsidianDestroyer.LOG.warning("Explosion radius is less than zero. Current value: " + radius);
+            return;
+        } else if (radius > 10) {
+            ObsidianDestroyer.LOG.warning("Explosion radius is greater than 10. Current value: " + radius);
             return;
         }
 
@@ -103,7 +106,7 @@ public class ChunkManager {
         // Check explosion blocks and their distance from the detonation.
         for (Block block : event.blockList()) {
             if (MaterialManager.getInstance().contains(block.getType().name())) {
-                if (detonatorLoc.distance(block.getLocation()) > radius + 0.6) {
+                if (detonatorLoc.distance(block.getLocation()) > Util.getMaxDistance(block.getType().name(), radius) + 0.6) {
                     blocksIgnored.add(block);
                 } else if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), event.getEntity().toString())) {
                     blocksIgnored.add(block);
@@ -113,16 +116,17 @@ public class ChunkManager {
 
         // For materials that are not normally destructible.
         for (int x = -radius; x <= radius; x++) {
-            for (int y = -radius; y <= radius; y++) {
+            for (int y = radius; y >= -radius; y--) {
                 for (int z = -radius; z <= radius; z++) {
                     Location targetLoc = new Location(detonator.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
                     if (blocksIgnored.contains(targetLoc.getBlock()) || targetLoc.getBlock().getType() == Material.AIR) {
                         continue;
                     }
-                    if (detonatorLoc.distance(targetLoc) <= radius) {
-                        if (!MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name())) {
-                            continue;
-                        }
+                    if (!MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name())) {
+                        continue;
+                    }
+                    // FIXME: Damage to blocks bleed between materials with mismatched blast radius
+                    if (detonatorLoc.distance(targetLoc) <= Math.min(radius, Util.getMaxDistance(targetLoc.getBlock().getType().name(), radius))) {
                         if (ChunkManager.getInstance().blowBlockUp(targetLoc, event.getEntity().toString())) {
                             blocksIgnored.add(targetLoc.getBlock());
                         }
@@ -161,10 +165,6 @@ public class ChunkManager {
         if (block.getType() == Material.AIR) {
             return false;
         }
-
-        //if (!MaterialManager.getInstance().contains(block.getType().name())) {
-            //return false;
-        //}
 
         if (block.getType() == Material.BEDROCK && ConfigManager.getInstance().getProtectBedrockBorders()) {
             if (block.getY() <= 3 && block.getWorld().getEnvironment() != Environment.THE_END) {
@@ -226,7 +226,12 @@ public class ChunkManager {
                 }
             }
         } else {
-            destroyBlockAndDropItem(at);
+            ObsidianDestroyer.getInstance().getServer().getScheduler().runTask(ObsidianDestroyer.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    destroyBlockAndDropItem(at);
+                }
+            });
         }
         return true;
     }
@@ -236,7 +241,7 @@ public class ChunkManager {
      *
      * @param at the location to destroy and drop
      */
-    private void destroyBlockAndDropItem(final Location at) {
+    private final void destroyBlockAndDropItem(final Location at) {
         if (at == null) {
             return;
         }
@@ -247,29 +252,21 @@ public class ChunkManager {
             return;
         }
 
+        final ItemStack is = new ItemStack(b.getType(), 1);
+        if (is.getType() == Material.AIR) {
+            return;
+        }
+
         final double random = Math.random();
-        double chance = MaterialManager.getInstance().getChanceToDropBlock(b.getType().name());
-
-        if (chance > 1.0) {
-            chance = 1.0;
-        }
-        if (chance < 0.0) {
-            chance = 0.0;
-        }
-
-        if (chance == 1.0 || (chance <= random && chance > 0.0)) {
-            ItemStack is = new ItemStack(b.getType(), 1);
-
-            if (is.getType() == Material.AIR) {
-                return;
-            }
-
-            // drop item
-            at.getWorld().dropItemNaturally(at, is);
-        }
+        final double chance = MaterialManager.getInstance().getChanceToDropBlock(b.getType().name());
 
         // changes original block to Air block
         b.setType(Material.AIR);
+
+        if (chance >= 1.0 || (chance <= random && chance > 0.0)) {
+            // drop item
+            at.getWorld().dropItemNaturally(at, is);
+        }
     }
 
     private boolean checkIfMax(int value, String id) {
@@ -281,9 +278,14 @@ public class ChunkManager {
      *
      * @param at the location the drop the block at
      */
-    private void dropBlockAndResetTime(Location at) {
+    private void dropBlockAndResetTime(final Location at) {
         removeLocation(at);
-        destroyBlockAndDropItem(at);
+        ObsidianDestroyer.getInstance().getServer().getScheduler().runTask(ObsidianDestroyer.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                destroyBlockAndDropItem(at);
+            }
+        });
     }
 
     /**
