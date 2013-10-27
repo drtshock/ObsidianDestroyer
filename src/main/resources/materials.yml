@@ -57,7 +57,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   ENCHANTMENT_TABLE:
-    BlastRadius: 6
+    BlastRadius: 3
     Durability:
       Amount: 6
       Enabled: true
