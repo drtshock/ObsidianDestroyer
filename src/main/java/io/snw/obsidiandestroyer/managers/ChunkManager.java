@@ -263,7 +263,7 @@ public class ChunkManager {
         // changes original block to Air block
         b.setType(Material.AIR);
 
-        if (chance >= 1.0 || (chance <= random && chance > 0.0)) {
+        if (chance >= 1.0 || (chance >= random && chance > 0.0)) {
             // drop item
             at.getWorld().dropItemNaturally(at, is);
         }

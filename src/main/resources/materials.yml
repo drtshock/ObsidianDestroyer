@@ -404,7 +404,7 @@ HandledMaterials:
       Withers: false
       Minecarts: false
   GLOWSTONE:
-    BlastRadius: 2
+    BlastRadius: 4
     Durability:
       Amount: 2
       Enabled: false
@@ -415,6 +415,36 @@ HandledMaterials:
       TNT: true
       Creepers: true
       Ghasts: true
+      Cannons: true
+      Withers: true
+      Minecarts: false
+  REDSTONE_LAMP_OFF:
+    BlastRadius: 3
+    Durability:
+      Amount: 3
+      Enabled: false
+      ChanceToDrop: 0.3
+      ResetEnabled: true
+      ResetAfter: 900000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: true
+      Minecarts: false
+  REDSTONE_LAMP_ON:
+    BlastRadius: 3
+    Durability:
+      Amount: 3
+      Enabled: false
+      ChanceToDrop: 0.3
+      ResetEnabled: true
+      ResetAfter: 900000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
       Cannons: true
       Withers: true
       Minecarts: false
@@ -454,6 +484,21 @@ HandledMaterials:
       Amount: 1
       Enabled: false
       ChanceToDrop: 0.23
+      ResetEnabled: false
+      ResetAfter: 300000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: true
+      Cannons: true
+      Withers: true
+      Minecarts: true
+  GLASS:
+    BlastRadius: 4
+    Durability:
+      Amount: 1
+      Enabled: false
+      ChanceToDrop: 0.10
       ResetEnabled: false
       ResetAfter: 300000
     EnabledFor:
