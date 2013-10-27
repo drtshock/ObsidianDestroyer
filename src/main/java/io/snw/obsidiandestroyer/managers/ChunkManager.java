@@ -204,7 +204,7 @@ public class ChunkManager {
             if (state == TimerState.RUN || state == TimerState.INACTIVE) {
                 int currentDurability = getMaterialDurability(block);
                 currentDurability++;
-                if (checkIfMax(currentDurability, block.getType().name())) {
+                if (Util.checkIfMax(currentDurability, block.getType().name())) {
                     // counter has reached max durability, remove and drop an item
                     dropBlockAndResetTime(at);
                 } else {
@@ -221,7 +221,7 @@ public class ChunkManager {
                 } else {
                     startNewTimer(block, 1, state);
                 }
-                if (checkIfMax(1, block.getType().name())) {
+                if (Util.checkIfMax(1, block.getType().name())) {
                     dropBlockAndResetTime(at);
                 }
             }
@@ -262,10 +262,6 @@ public class ChunkManager {
             // drop item
             at.getWorld().dropItemNaturally(at, is);
         }
-    }
-
-    private boolean checkIfMax(int value, String id) {
-        return value == MaterialManager.getInstance().getDurability(id);
     }
 
     /**
