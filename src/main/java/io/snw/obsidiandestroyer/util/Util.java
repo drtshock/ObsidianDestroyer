@@ -189,4 +189,8 @@ public class Util {
         }
         return dist;
     }
+
+    public static boolean checkIfMax(int value, String id) {
+        return value >= MaterialManager.getInstance().getDurability(id);
+    }
 }

@@ -204,7 +204,7 @@ public class ChunkManager {
             if (state == TimerState.RUN || state == TimerState.INACTIVE) {
                 int currentDurability = getMaterialDurability(block);
                 currentDurability++;
-                if (checkIfMax(currentDurability, block.getType().name())) {
+                if (Util.checkIfMax(currentDurability, block.getType().name())) {
                     // counter has reached max durability, remove and drop an item
                     dropBlockAndResetTime(at);
                 } else {
@@ -221,17 +221,12 @@ public class ChunkManager {
                 } else {
                     startNewTimer(block, 1, state);
                 }
-                if (checkIfMax(1, block.getType().name())) {
+                if (Util.checkIfMax(1, block.getType().name())) {
                     dropBlockAndResetTime(at);
                 }
             }
         } else {
-            ObsidianDestroyer.getInstance().getServer().getScheduler().runTask(ObsidianDestroyer.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    destroyBlockAndDropItem(at);
-                }
-            });
+            destroyBlockAndDropItem(at);
         }
         return true;
     }
@@ -269,10 +264,6 @@ public class ChunkManager {
         }
     }
 
-    private boolean checkIfMax(int value, String id) {
-        return value == MaterialManager.getInstance().getDurability(id);
-    }
-
     /**
      * Drops at block at a location
      *
@@ -280,12 +271,7 @@ public class ChunkManager {
      */
     private void dropBlockAndResetTime(final Location at) {
         removeLocation(at);
-        ObsidianDestroyer.getInstance().getServer().getScheduler().runTask(ObsidianDestroyer.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                destroyBlockAndDropItem(at);
-            }
-        });
+        destroyBlockAndDropItem(at);
     }
 
     /**
