@@ -259,10 +259,6 @@ public class ConfigManager {
         return config.getBoolean("downloadupdate", false);
     }
 
-    public String getObsidianDurability() {
-        return config.getString("HandledMaterials.OBSIDIAN.Durability.Amount", "N/A");
-    }
-
     public boolean getEffectsEnabled() {
         return config.getBoolean("Effects.Enabled", true);
     }

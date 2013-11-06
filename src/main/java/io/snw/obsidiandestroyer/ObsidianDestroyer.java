@@ -74,7 +74,8 @@ public class ObsidianDestroyer extends JavaPlugin {
             graph.addPlotter(new Metrics.Plotter() {
                 @Override
                 public String getColumnName() {
-                    return ConfigManager.getInstance().getObsidianDurability();
+                    int amt = MaterialManager.getInstance().getDurability("OBSIDIAN");
+                    return amt > 0 ? "" + amt : "N/A";
                 }
 
                 @Override
