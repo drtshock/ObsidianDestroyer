@@ -29,7 +29,7 @@ public class LiquidExplosion {
      * Cancels the explosion, removes any nearby liquids found, and creates a new explosion in the cleared location.
      * Hooks and checks explosion settings in: WorldGuard, Factions, and Towny
      *
-     * @param event  EntityExplodeEvent
+     * @param event EntityExplodeEvent
      */
     public static void Handle(EntityExplodeEvent event) {
 

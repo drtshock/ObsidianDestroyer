@@ -170,7 +170,7 @@ public class ConfigManager {
 
     /**
      * Gets verbose mode enabled
-     * 
+     *
      * @return verbose mode enabled
      */
     public boolean getVerbose() {
@@ -179,7 +179,7 @@ public class ConfigManager {
 
     /**
      * Get debug mode enabled
-     * 
+     *
      * @return debug mode enabled
      */
     public boolean getDebug() {

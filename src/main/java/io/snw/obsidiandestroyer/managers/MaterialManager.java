@@ -184,7 +184,7 @@ public class MaterialManager {
 
     /**
      * Returns the blast radius for a specific material
-     * 
+     *
      * @param material the name of the material to lookup
      * @return Blast Radius or 0
      */
