@@ -256,7 +256,7 @@ public class ChunkWrapper {
         }
         String[] fileParts = file.getName().split("\\.");
         if (fileParts.length < 3) {
-            ObsidianDestroyer.LOG.log(Level.SEVERE, "Failed loading chunk durabilites! " + chunkX + " " + chunkZ);
+            ObsidianDestroyer.LOG.log(Level.SEVERE, "Failed loading chunk durabilites! {0} {1}", new Object[]{chunkX, chunkZ});
             return;
         }
         String w = fileParts[2]; // To see if world == file name world

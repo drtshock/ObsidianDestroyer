@@ -55,10 +55,10 @@ public class ChunkManager {
 
         // cancel if radius is < 0 or > 10
         if (radius < 0) {
-            ObsidianDestroyer.LOG.warning("Explosion radius is less than zero. Current value: " + radius);
+            ObsidianDestroyer.LOG.log(Level.WARNING, "Explosion radius is less than zero. Current value: {0}", radius);
             return;
         } else if (radius > 10) {
-            ObsidianDestroyer.LOG.warning("Explosion radius is greater than 10. Current value: " + radius);
+            ObsidianDestroyer.LOG.log(Level.WARNING, "Explosion radius is greater than 10. Current value: {0}", radius);
             return;
         }
 
@@ -236,7 +236,7 @@ public class ChunkManager {
      *
      * @param at the location to destroy and drop
      */
-    private final void destroyBlockAndDropItem(final Location at) {
+    private void destroyBlockAndDropItem(final Location at) {
         if (at == null) {
             return;
         }
@@ -284,7 +284,7 @@ public class ChunkManager {
         for (File odr : durabilityDir.listFiles()) {
             if (odr.getName().endsWith(".odr")) {
                 if (!odr.delete()) {
-                    ObsidianDestroyer.LOG.log(Level.WARNING, "Failed to remove file " + odr.getName());
+                    ObsidianDestroyer.LOG.log(Level.WARNING, "Failed to remove file {0}", odr.getName());
                 }
             }
         }
