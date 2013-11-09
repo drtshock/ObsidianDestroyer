@@ -1,3 +1,8 @@
+Version 4.1.1
++ Corrected custom metric
++ Added mossycobblestone and sandstone to default materials
++ Correct handling of explosion types not handled. Option for override.
+
 Version 4.1
 + Corrected Metrics
 + Corrected Radius handling, added BlastRadius to materials

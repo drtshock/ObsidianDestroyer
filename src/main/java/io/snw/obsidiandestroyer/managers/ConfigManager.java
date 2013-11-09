@@ -277,4 +277,8 @@ public class ConfigManager {
     public boolean getProtectBedrockBorders() {
         return config.getBoolean("ProtectBedrockBorders", true);
     }
+
+    public boolean getIgnoreUnhandledExplosionTypes() {
+        return config.getBoolean("Explosions.IgnoreUnhandledTypes", false);
+    }
 }

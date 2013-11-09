@@ -70,6 +70,18 @@ public class ChunkManager {
             return;
         }
 
+        // Check for handled explosion types, with option to ignore
+        String eventType = detonator.toString();
+        if (!ConfigManager.getInstance().getIgnoreUnhandledExplosionTypes()
+                && !(eventType.equals("CraftTNTPrimed")
+                || eventType.equals("CraftMinecartTNT")
+                || eventType.equals("CraftSnowball")
+                || eventType.equals("CraftCreeper")
+                || eventType.equals("CraftWither")
+                || eventType.equals("CraftGhast"))) {
+            return;
+        }
+
         final Location detonatorLoc = detonator.getLocation();
         final String eventTypeRep = event.getEntity().toString();
         //ObsidianDestroyer.debug("EventTypeRep: " + eventTypeRep);
@@ -89,7 +101,7 @@ public class ChunkManager {
                     continue;
                 }
                 if (MaterialManager.getInstance().contains(block.getType().name())) {
-                    if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), event.getEntity().toString())) {
+                    if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), eventType)) {
                         blocksIgnored.add(block);
                     }
                 }
@@ -108,7 +120,7 @@ public class ChunkManager {
             if (MaterialManager.getInstance().contains(block.getType().name())) {
                 if (detonatorLoc.distance(block.getLocation()) > Util.getMaxDistance(block.getType().name(), radius) + 0.6) {
                     blocksIgnored.add(block);
-                } else if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), event.getEntity().toString())) {
+                } else if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), eventType)) {
                     blocksIgnored.add(block);
                 }
             }
@@ -127,7 +139,7 @@ public class ChunkManager {
                     }
                     // FIXME: Damage to blocks bleed between materials with mismatched blast radius
                     if (detonatorLoc.distance(targetLoc) <= Math.min(radius, Util.getMaxDistance(targetLoc.getBlock().getType().name(), radius))) {
-                        if (ChunkManager.getInstance().blowBlockUp(targetLoc, event.getEntity().toString())) {
+                        if (ChunkManager.getInstance().blowBlockUp(targetLoc, eventType)) {
                             blocksIgnored.add(targetLoc.getBlock());
                         }
                     } else if (event.blockList().contains(targetLoc.getBlock())) {
