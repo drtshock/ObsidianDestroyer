@@ -178,6 +178,21 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: true
+  MOSSY_COBBLESTONE:
+    BlastRadius: 2
+    Durability:
+      Amount: 3
+      Enabled: false
+      ChanceToDrop: 0.5
+      ResetEnabled: true
+      ResetAfter: 300000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: true
+      Cannons: true
+      Withers: true
+      Minecarts: true
   SMOOTH_BRICK:
     BlastRadius: 3
     Durability:
@@ -236,6 +251,21 @@ HandledMaterials:
       Creepers: true
       Ghasts: false
       Cannons: false
+      Withers: true
+      Minecarts: true
+  SANDSTONE:
+    BlastRadius: 3
+    Durability:
+      Amount: 2
+      Enabled: false
+      ChanceToDrop: 0.64
+      ResetEnabled: true
+      ResetAfter: 3600000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: true
+      Cannons: true
       Withers: true
       Minecarts: true
   EMERALD_BLOCK:
