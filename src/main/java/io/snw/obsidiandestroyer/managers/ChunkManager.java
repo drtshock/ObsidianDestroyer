@@ -4,11 +4,11 @@ import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.datatypes.LiquidExplosion;
 import io.snw.obsidiandestroyer.enumerations.TimerState;
 import io.snw.obsidiandestroyer.util.Util;
-
 import org.bukkit.*;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -55,10 +55,10 @@ public class ChunkManager {
 
         // cancel if radius is < 0 or > 10
         if (radius < 0) {
-            ObsidianDestroyer.LOG.warning("Explosion radius is less than zero. Current value: " + radius);
+            ObsidianDestroyer.LOG.log(Level.WARNING, "Explosion radius is less than zero. Current value: {0}", radius);
             return;
         } else if (radius > 10) {
-            ObsidianDestroyer.LOG.warning("Explosion radius is greater than 10. Current value: " + radius);
+            ObsidianDestroyer.LOG.log(Level.WARNING, "Explosion radius is greater than 10. Current value: {0}", radius);
             return;
         }
 
@@ -71,27 +71,25 @@ public class ChunkManager {
         }
 
         // Check for handled explosion types, with option to ignore
-        String eventType = detonator.toString();
+        final EntityType eventTypeRep = detonator.getType();
         if (!ConfigManager.getInstance().getIgnoreUnhandledExplosionTypes()
-                && !(eventType.equals("CraftTNTPrimed")
-                || eventType.equals("CraftMinecartTNT")
-                || eventType.equals("CraftSnowball")
-                || eventType.equals("CraftCreeper")
-                || eventType.equals("CraftWither")
-                || eventType.equals("CraftGhast"))) {
+                && !(eventTypeRep.equals(EntityType.PRIMED_TNT)
+                || eventTypeRep.equals(EntityType.MINECART_TNT)
+                || eventTypeRep.equals(EntityType.SNOWBALL)
+                || eventTypeRep.equals(EntityType.CREEPER)
+                || eventTypeRep.equals(EntityType.WITHER)
+                || eventTypeRep.equals(EntityType.GHAST))) {
             return;
         }
 
+        // Detonation location of the explosion
         final Location detonatorLoc = detonator.getLocation();
-        final String eventTypeRep = event.getEntity().toString();
-        //ObsidianDestroyer.debug("EventTypeRep: " + eventTypeRep);
-
         // List of blocks that will be removed from the blocklist
         List<Block> blocksIgnored = new ArrayList<Block>();
 
         // Hook into cannons... (somehow)
         // TODO: Hook into cannons again.
-        if (eventTypeRep.equals("CraftSnowball")) {
+        if (eventTypeRep.equals(EntityType.SNOWBALL)) {
             List<Location> hitLocs = new ArrayList<Location>();
             Iterator<Block> iter = event.blockList().iterator();
             while (iter.hasNext()) {
@@ -101,7 +99,7 @@ public class ChunkManager {
                     continue;
                 }
                 if (MaterialManager.getInstance().contains(block.getType().name())) {
-                    if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), eventType)) {
+                    if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), eventTypeRep)) {
                         blocksIgnored.add(block);
                     }
                 }
@@ -120,7 +118,7 @@ public class ChunkManager {
             if (MaterialManager.getInstance().contains(block.getType().name())) {
                 if (detonatorLoc.distance(block.getLocation()) > Util.getMaxDistance(block.getType().name(), radius) + 0.6) {
                     blocksIgnored.add(block);
-                } else if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), eventType)) {
+                } else if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), eventTypeRep)) {
                     blocksIgnored.add(block);
                 }
             }
@@ -139,7 +137,7 @@ public class ChunkManager {
                     }
                     // FIXME: Damage to blocks bleed between materials with mismatched blast radius
                     if (detonatorLoc.distance(targetLoc) <= Math.min(radius, Util.getMaxDistance(targetLoc.getBlock().getType().name(), radius))) {
-                        if (ChunkManager.getInstance().blowBlockUp(targetLoc, eventType)) {
+                        if (ChunkManager.getInstance().blowBlockUp(targetLoc, eventTypeRep)) {
                             blocksIgnored.add(targetLoc.getBlock());
                         }
                     } else if (event.blockList().contains(targetLoc.getBlock())) {
@@ -155,7 +153,7 @@ public class ChunkManager {
         }
         // Debug time for explosion
         if (ConfigManager.getInstance().getDebug()) {
-            ObsidianDestroyer.debug("Taken "  + (System.currentTimeMillis() - time) + " ms.  For explosion at [ " + detonatorLoc.toString() + " ]");
+            ObsidianDestroyer.debug("Taken " + (System.currentTimeMillis() - time) + " ms.  For explosion at [ " + detonatorLoc.toString() + " ]");
         }
     }
 
@@ -166,7 +164,7 @@ public class ChunkManager {
      * @param eventTypeRep the entity that triggered the event
      * @return true if the blow is handled by the plugin
      */
-    private boolean blowBlockUp(final Location at, String eventTypeRep) {
+    private boolean blowBlockUp(final Location at, EntityType eventTypeRep) {
         if (at == null) {
             return false;
         }
@@ -186,22 +184,22 @@ public class ChunkManager {
             }
         }
 
-        if (eventTypeRep.equals("CraftTNTPrimed") && !MaterialManager.getInstance().getTntEnabled(block.getType().name())) {
+        if (eventTypeRep.equals(EntityType.PRIMED_TNT) && !MaterialManager.getInstance().getTntEnabled(block.getType().name())) {
             return false;
         }
-        if (eventTypeRep.equals("CraftSnowball") && !MaterialManager.getInstance().getCannonsEnabled(block.getType().name())) {
+        if (eventTypeRep.equals(EntityType.SNOWBALL) && !MaterialManager.getInstance().getCannonsEnabled(block.getType().name())) {
             return false;
         }
-        if (eventTypeRep.equals("CraftCreeper") && !MaterialManager.getInstance().getCreepersEnabled(block.getType().name())) {
+        if (eventTypeRep.equals(EntityType.CREEPER) && !MaterialManager.getInstance().getCreepersEnabled(block.getType().name())) {
             return false;
         }
-        if (eventTypeRep.equals("CraftWither") && !MaterialManager.getInstance().getWithersEnabled(block.getType().name())) {
+        if (eventTypeRep.equals(EntityType.WITHER) || eventTypeRep.equals(EntityType.WITHER_SKULL) && !MaterialManager.getInstance().getWithersEnabled(block.getType().name())) {
             return false;
         }
-        if (eventTypeRep.equals("CraftMinecartTNT") && !MaterialManager.getInstance().getTntMinecartsEnabled(block.getType().name())) {
+        if (eventTypeRep.equals(EntityType.MINECART_TNT) && !MaterialManager.getInstance().getTntMinecartsEnabled(block.getType().name())) {
             return false;
         }
-        if ((eventTypeRep.equals("CraftFireball") || eventTypeRep.equals("CraftGhast")) && !MaterialManager.getInstance().getGhastsEnabled(block.getType().name())) {
+        if ((eventTypeRep.equals(EntityType.FIREBALL) || eventTypeRep.equals(EntityType.SMALL_FIREBALL) || eventTypeRep.equals(EntityType.GHAST)) && !MaterialManager.getInstance().getGhastsEnabled(block.getType().name())) {
             return false;
         }
 
@@ -248,7 +246,7 @@ public class ChunkManager {
      *
      * @param at the location to destroy and drop
      */
-    private final void destroyBlockAndDropItem(final Location at) {
+    private void destroyBlockAndDropItem(final Location at) {
         if (at == null) {
             return;
         }
@@ -292,11 +290,11 @@ public class ChunkManager {
      * @return time taken in milliseconds
      */
     public long resetAllDurabilities() {
-        long time = System.currentTimeMillis();
+        final long time = System.currentTimeMillis();
         for (File odr : durabilityDir.listFiles()) {
             if (odr.getName().endsWith(".odr")) {
                 if (!odr.delete()) {
-                    ObsidianDestroyer.LOG.log(Level.WARNING, "Failed to remove file " + odr.getName());
+                    ObsidianDestroyer.LOG.log(Level.WARNING, "Failed to remove file {0}", odr.getName());
                 }
             }
         }
@@ -333,14 +331,14 @@ public class ChunkManager {
         if (!MaterialManager.getInstance().getDurabilityResetTimerEnabled(location.getBlock().getType().name())) {
             return TimerState.INACTIVE;
         }
-        long currentTime = System.currentTimeMillis();
-        long time = getWrapper(location.getChunk()).getDurabilityTime(location);
+        final long currentTime = System.currentTimeMillis();
+        final long time = getWrapper(location.getChunk()).getDurabilityTime(location);
         if (currentTime > time) {
             if (ConfigManager.getInstance().getMaterialsRegenerateOverTime()) {
                 int currentDurability = getWrapper(location.getChunk()).getDurability(location);
-                long regenTime = MaterialManager.getInstance().getDurabilityResetTime(location.getBlock().getType().name());
-                long result = currentTime - time;
-                int amount = Math.max(1, Math.round((float) result / regenTime));
+                final long regenTime = MaterialManager.getInstance().getDurabilityResetTime(location.getBlock().getType().name());
+                final long result = currentTime - time;
+                final int amount = Math.max(1, Math.round((float) result / regenTime));
                 currentDurability -= amount;
                 if (currentDurability <= 0) {
                     getWrapper(location.getChunk()).removeKey(location);

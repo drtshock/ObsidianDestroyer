@@ -91,7 +91,7 @@ public class ConfigManager {
             configFile.delete();
             loadFiles(true);
             return;
-        } else if (config.getString("Version", "null") == "null") {
+        } else if ("null".equals(config.getString("Version", "null"))) {
             loaded = false;
             return;
         }
@@ -119,7 +119,7 @@ public class ConfigManager {
         InputStream inputStream = ObsidianDestroyer.getInstance().getResource(resource);
 
         if (inputStream == null) {
-            ObsidianDestroyer.LOG.severe("Missing resource file: '" + resource + "'");
+            ObsidianDestroyer.LOG.log(Level.SEVERE, "Missing resource file: ''{0}''", resource);
             return;
         }
 
@@ -170,7 +170,7 @@ public class ConfigManager {
 
     /**
      * Gets verbose mode enabled
-     * 
+     *
      * @return verbose mode enabled
      */
     public boolean getVerbose() {
@@ -179,7 +179,7 @@ public class ConfigManager {
 
     /**
      * Get debug mode enabled
-     * 
+     *
      * @return debug mode enabled
      */
     public boolean getDebug() {
@@ -208,24 +208,24 @@ public class ConfigManager {
                 ConfigurationSection materialSection = section.getConfigurationSection(durabilityMaterial);
                 Material material = Material.getMaterial(durabilityMaterial);
                 if (material == null) {
-                    ObsidianDestroyer.LOG.log(Level.SEVERE, "Invalid Material Type: Unable to load '" + durabilityMaterial + "'");
+                    ObsidianDestroyer.LOG.log(Level.SEVERE, "Invalid Material Type: Unable to load ''{0}''", durabilityMaterial);
                     continue;
                 }
                 if (!Util.isSolid(material)) {
-                    ObsidianDestroyer.LOG.log(Level.WARNING, "Non-Solid Material Type: Did not load '" + durabilityMaterial + "'");
+                    ObsidianDestroyer.LOG.log(Level.WARNING, "Non-Solid Material Type: Did not load ''{0}''", durabilityMaterial);
                     continue;
                 }
                 DurabilityMaterial durablock = new DurabilityMaterial(material, materialSection);
                 if (durablock.getEnabled()) {
                     if (getVerbose() || getDebug()) {
-                        ObsidianDestroyer.LOG.info("Loaded durability of '" + durablock.getDurability() + "' for '" + durabilityMaterial + "'");
+                        ObsidianDestroyer.LOG.log(Level.INFO, "Loaded durability of ''{0}'' for ''{1}''", new Object[]{durablock.getDurability(), durabilityMaterial});
                     }
                     durabilityMaterials.put(material.name(), durablock);
                 } else if (getDebug()) {
                     ObsidianDestroyer.debug("Disabled durability of '" + durablock.getDurability() + "' for '" + durabilityMaterial + "'");
                 }
             } catch (Exception e) {
-                ObsidianDestroyer.LOG.log(Level.SEVERE, "Failed loading material '" + durabilityMaterial + "'");
+                ObsidianDestroyer.LOG.log(Level.SEVERE, "Failed loading material ''{0}''", durabilityMaterial);
             }
         }
         return durabilityMaterials;
