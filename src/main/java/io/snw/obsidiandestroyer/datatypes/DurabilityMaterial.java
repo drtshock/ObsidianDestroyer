@@ -17,6 +17,12 @@ public class DurabilityMaterial {
     private boolean ghastsEnabled;
     private boolean withersEnabled;
     private boolean tntMinecartsEnabled;
+    private int tntDamage;
+    private int cannondDamage;
+    private int creeperDamage;
+    private int ghastDamage;
+    private int witherDamage;
+    private int tntMinecartDamage;
 
     /**
      * Storage for a tracked material from the config
@@ -38,6 +44,12 @@ public class DurabilityMaterial {
         this.ghastsEnabled = section.getBoolean("EnabledFor.Ghasts", false);
         this.withersEnabled = section.getBoolean("EnabledFor.Minecarts", false);
         this.tntMinecartsEnabled = section.getBoolean("EnabledFor.Withers", false);
+        this.tntDamage = section.getInt("Damage.TNT", 1);
+        this.cannondDamage = section.getInt("Damage.Cannons", 1);
+        this.creeperDamage = section.getInt("Damage.Creepers", 1);
+        this.ghastDamage = section.getInt("Damage.Ghasts", 1);
+        this.witherDamage = section.getInt("Damage.Minecarts", 1);
+        this.tntMinecartDamage = section.getInt("Damage.Withers", 1);
     }
 
     public Material getType() {
@@ -90,5 +102,29 @@ public class DurabilityMaterial {
 
     public int getRadius() {
         return this.blastRadius;
+    }
+
+    public int getTntDamage() {
+        return tntDamage;
+    }
+
+    public int getCannonsDamage() {
+        return cannondDamage;
+    }
+
+    public int getCreepersDamage() {
+        return creeperDamage;
+    }
+
+    public int getGhastsDamage() {
+        return ghastDamage;
+    }
+
+    public int getWithersDamage() {
+        return witherDamage;
+    }
+
+    public int getTntMinecartsDamage() {
+        return tntMinecartDamage;
     }
 }

@@ -5,6 +5,8 @@ import io.snw.obsidiandestroyer.datatypes.DurabilityMaterial;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.entity.EntityType;
+
 public class MaterialManager {
     private static MaterialManager instance;
     private Map<String, DurabilityMaterial> durabilityMaterials = new HashMap<String, DurabilityMaterial>();
@@ -193,5 +195,37 @@ public class MaterialManager {
             return durabilityMaterials.get(material).getRadius();
         }
         return 0;
+    }
+
+    /**
+     * Returns the amount of damage done to the material by a damage type
+     * 
+     * @param eventTypeRep the event type
+     * @param material the name of the material to lookup
+     * @return amount of damage done
+     */
+    public int getDamageTypeAmount(EntityType eventTypeRep, String material) {
+        if (durabilityMaterials.containsKey(material)) {
+            switch(eventTypeRep) {
+                case PRIMED_TNT:
+                    return durabilityMaterials.get(material).getTntDamage();
+                case SNOWBALL:
+                    return durabilityMaterials.get(material).getCannonsDamage();
+                case CREEPER:
+                    return durabilityMaterials.get(material).getCreepersDamage();
+                case WITHER:
+                case WITHER_SKULL:
+                    return durabilityMaterials.get(material).getWithersDamage();
+                case MINECART_TNT:
+                    return durabilityMaterials.get(material).getTntMinecartsDamage();
+                case FIREBALL:
+                case SMALL_FIREBALL:
+                case GHAST:
+                    return durabilityMaterials.get(material).getGhastsDamage();
+                default:
+                    break;
+            }
+        }
+        return 1;
     }
 }

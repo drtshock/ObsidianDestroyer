@@ -203,7 +203,8 @@ public class ChunkManager {
             return false;
         }
 
-        if (MaterialManager.getInstance().getDurabilityEnabled(block.getType().name()) && MaterialManager.getInstance().getDurability(block.getType().name()) > 1) {
+        MaterialManager mM = MaterialManager.getInstance();
+        if (mM.getDurabilityEnabled(block.getType().name()) && mM.getDurability(block.getType().name()) > 1) {
             TimerState state = checkDurabilityActive(block.getLocation());
             if (ConfigManager.getInstance().getEffectsEnabled()) {
                 final double random = Math.random();
@@ -213,25 +214,25 @@ public class ChunkManager {
             }
             if (state == TimerState.RUN || state == TimerState.INACTIVE) {
                 int currentDurability = getMaterialDurability(block);
-                currentDurability++;
+                currentDurability += mM.getDamageTypeAmount(eventTypeRep, block.getType().name());
                 if (Util.checkIfMax(currentDurability, block.getType().name())) {
                     // counter has reached max durability, remove and drop an item
                     dropBlockAndResetTime(at);
                 } else {
                     // counter has not reached max durability damage yet
-                    if (!MaterialManager.getInstance().getDurabilityResetTimerEnabled(block.getType().name())) {
+                    if (!mM.getDurabilityResetTimerEnabled(block.getType().name())) {
                         addBlock(block, currentDurability);
                     } else {
                         startNewTimer(block, currentDurability, state);
                     }
                 }
             } else {
-                if (!MaterialManager.getInstance().getDurabilityResetTimerEnabled(block.getType().name())) {
-                    addBlock(block, 1);
+                if (!mM.getDurabilityResetTimerEnabled(block.getType().name())) {
+                    addBlock(block, mM.getDamageTypeAmount(eventTypeRep, block.getType().name()));
                 } else {
-                    startNewTimer(block, 1, state);
+                    startNewTimer(block, mM.getDamageTypeAmount(eventTypeRep, block.getType().name()), state);
                 }
-                if (Util.checkIfMax(1, block.getType().name())) {
+                if (Util.checkIfMax(mM.getDamageTypeAmount(eventTypeRep, block.getType().name()), block.getType().name())) {
                     dropBlockAndResetTime(at);
                 }
             }
