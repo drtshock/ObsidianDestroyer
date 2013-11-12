@@ -20,6 +20,7 @@ public class DurabilityMaterial {
     private int tntDamage;
     private int cannondDamage;
     private int creeperDamage;
+    private int poweredCreeperDamage;
     private int ghastDamage;
     private int witherDamage;
     private int tntMinecartDamage;
@@ -47,6 +48,7 @@ public class DurabilityMaterial {
         this.tntDamage = section.getInt("Damage.TNT", 1);
         this.cannondDamage = section.getInt("Damage.Cannons", 1);
         this.creeperDamage = section.getInt("Damage.Creepers", 1);
+        this.poweredCreeperDamage = section.getInt("Damage.PoweredCreepers", 1);
         this.ghastDamage = section.getInt("Damage.Ghasts", 1);
         this.witherDamage = section.getInt("Damage.Minecarts", 1);
         this.tntMinecartDamage = section.getInt("Damage.Withers", 1);
@@ -114,6 +116,10 @@ public class DurabilityMaterial {
 
     public int getCreepersDamage() {
         return creeperDamage;
+    }
+
+    public int getPoweredCreeperDamage() {
+        return poweredCreeperDamage;
     }
 
     public int getGhastsDamage() {

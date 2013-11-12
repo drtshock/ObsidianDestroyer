@@ -46,6 +46,7 @@ HandledMaterials:
     Damage:
       TNT: 1
       Creepers: 1
+      PoweredCreepers: 1
       Ghasts: 1
       Cannons: 1
       Withers: 1

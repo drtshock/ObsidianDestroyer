@@ -99,7 +99,7 @@ public class ChunkManager {
                     continue;
                 }
                 if (MaterialManager.getInstance().contains(block.getType().name())) {
-                    if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), eventTypeRep)) {
+                    if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), detonator)) {
                         blocksIgnored.add(block);
                     }
                 }
@@ -118,7 +118,7 @@ public class ChunkManager {
             if (MaterialManager.getInstance().contains(block.getType().name())) {
                 if (detonatorLoc.distance(block.getLocation()) > Util.getMaxDistance(block.getType().name(), radius) + 0.6) {
                     blocksIgnored.add(block);
-                } else if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), eventTypeRep)) {
+                } else if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), detonator)) {
                     blocksIgnored.add(block);
                 }
             }
@@ -137,7 +137,7 @@ public class ChunkManager {
                     }
                     // FIXME: Damage to blocks bleed between materials with mismatched blast radius
                     if (detonatorLoc.distance(targetLoc) <= Math.min(radius, Util.getMaxDistance(targetLoc.getBlock().getType().name(), radius))) {
-                        if (ChunkManager.getInstance().blowBlockUp(targetLoc, eventTypeRep)) {
+                        if (ChunkManager.getInstance().blowBlockUp(targetLoc, detonator)) {
                             blocksIgnored.add(targetLoc.getBlock());
                         }
                     } else if (event.blockList().contains(targetLoc.getBlock())) {
@@ -161,10 +161,11 @@ public class ChunkManager {
      * Handles a block on an EntityExplodeEvent
      *
      * @param at           the location of the block
-     * @param eventTypeRep the entity that triggered the event
+     * @param entity the entity that triggered the event
      * @return true if the blow is handled by the plugin
      */
-    private boolean blowBlockUp(final Location at, EntityType eventTypeRep) {
+    private boolean blowBlockUp(final Location at, Entity entity) {
+        EntityType eventTypeRep = entity.getType();
         if (at == null) {
             return false;
         }
@@ -219,7 +220,7 @@ public class ChunkManager {
             }
             if (state == TimerState.RUN || state == TimerState.INACTIVE) {
                 int currentDurability = getMaterialDurability(block);
-                currentDurability += mM.getDamageTypeAmount(eventTypeRep, block.getType().name());
+                currentDurability += mM.getDamageTypeAmount(entity, block.getType().name());
                 if (Util.checkIfMax(currentDurability, block.getType().name())) {
                     // counter has reached max durability, remove and drop an item
                     dropBlockAndResetTime(at);
@@ -233,11 +234,11 @@ public class ChunkManager {
                 }
             } else {
                 if (!mM.getDurabilityResetTimerEnabled(block.getType().name())) {
-                    addBlock(block, mM.getDamageTypeAmount(eventTypeRep, block.getType().name()));
+                    addBlock(block, mM.getDamageTypeAmount(entity, block.getType().name()));
                 } else {
-                    startNewTimer(block, mM.getDamageTypeAmount(eventTypeRep, block.getType().name()), state);
+                    startNewTimer(block, mM.getDamageTypeAmount(entity, block.getType().name()), state);
                 }
-                if (Util.checkIfMax(mM.getDamageTypeAmount(eventTypeRep, block.getType().name()), block.getType().name())) {
+                if (Util.checkIfMax(mM.getDamageTypeAmount(entity, block.getType().name()), block.getType().name())) {
                     dropBlockAndResetTime(at);
                 }
             }
