@@ -42,11 +42,12 @@ HandledMaterials:
       Minecarts: true
 
     # The amount of damage each explosion type will do
-    # Defaults to 1 if not present. Only used if 'EnabledFor' above is true
+    # Only used if 'EnabledFor' above is true
+    # You'll have to add this below each material if you want to use it. Otherwise they all default to 1.
     Damage:
       TNT: 1
       Creepers: 1
-      PoweredCreepers: 1
+      ChargedCreepers: 1
       Ghasts: 1
       Cannons: 1
       Withers: 1

@@ -216,7 +216,7 @@ public class MaterialManager {
                     return durabilityMaterials.get(material).getCannonsDamage();
                 case CREEPER:
                     Creeper creeper = (Creeper) entity;
-                    return creeper.isPowered() ? durabilityMaterials.get(material).getPoweredCreeperDamage() : durabilityMaterials.get(material).getCreepersDamage();
+                    return creeper.isPowered() ? durabilityMaterials.get(material).getChargedCreeperDamage() : durabilityMaterials.get(material).getCreepersDamage();
                 case WITHER:
                 case WITHER_SKULL:
                     return durabilityMaterials.get(material).getWithersDamage();
