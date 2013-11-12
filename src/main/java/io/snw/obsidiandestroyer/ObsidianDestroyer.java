@@ -43,7 +43,6 @@ public class ObsidianDestroyer extends JavaPlugin {
     @Override
     public void onDisable() {
         ChunkManager.getInstance().save();
-        saveConfig();
     }
 
     protected void checkUpdate() {
