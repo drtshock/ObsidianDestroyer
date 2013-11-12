@@ -1,15 +1,15 @@
 package io.snw.obsidiandestroyer.managers;
 
 import io.snw.obsidiandestroyer.datatypes.DurabilityMaterial;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MaterialManager {
+
     private static MaterialManager instance;
     private Map<String, DurabilityMaterial> durabilityMaterials = new HashMap<String, DurabilityMaterial>();
 
@@ -200,16 +200,16 @@ public class MaterialManager {
     }
 
     /**
-     * Returns the amount of damage done to the material by a damage type
-     * 
-     * @param entity the entity
+     * Returns the amount of damage done to the material by an entity
+     *
+     * @param entity   the entity that is involved in damaging
      * @param material the name of the material to lookup
      * @return amount of damage done
      */
     public int getDamageTypeAmount(Entity entity, String material) {
         if (durabilityMaterials.containsKey(material)) {
             EntityType eventTypeRep = entity.getType();
-            switch(eventTypeRep) {
+            switch (eventTypeRep) {
                 case PRIMED_TNT:
                     return durabilityMaterials.get(material).getTntDamage();
                 case SNOWBALL:

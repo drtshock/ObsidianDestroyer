@@ -5,6 +5,7 @@ import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import org.bukkit.plugin.Plugin;
 
 public class HookManager {
+
     private static HookManager instance;
     private boolean isFactionHooked = false;
     private boolean isTownyHooked = false;

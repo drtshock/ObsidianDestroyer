@@ -20,6 +20,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import java.util.ArrayList;
 
 public class LiquidExplosion {
+
     private static int RADIUS = 1;
     private static int CANNON_RADIUS = 2;
     private static ArrayList<Material> FLUID_MATERIALS = new ArrayList<Material>();
@@ -32,7 +33,6 @@ public class LiquidExplosion {
      * @param event EntityExplodeEvent
      */
     public static void Handle(EntityExplodeEvent event) {
-
         FLUID_MATERIALS.add(Material.WATER);
         FLUID_MATERIALS.add(Material.STATIONARY_WATER);
         FLUID_MATERIALS.add(Material.LAVA);

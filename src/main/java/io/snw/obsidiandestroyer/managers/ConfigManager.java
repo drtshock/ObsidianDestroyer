@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class ConfigManager {
+
     private static ConfigManager instance;
     private YamlConfiguration config;
     private YamlConfiguration materials;

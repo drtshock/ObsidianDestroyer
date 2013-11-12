@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class DurabilityMaterial {
+
     private Material type;
     private int dura;
     private int blastRadius;

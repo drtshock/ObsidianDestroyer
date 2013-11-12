@@ -21,8 +21,8 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 
 public class ChunkManager {
-    private static ChunkManager instance;
 
+    private static ChunkManager instance;
     private final File durabilityDir;
     private ConcurrentMap<String, ChunkWrapper> chunks = new ConcurrentHashMap<String, ChunkWrapper>();
     private boolean doneSave = false;
@@ -160,7 +160,7 @@ public class ChunkManager {
     /**
      * Handles a block on an EntityExplodeEvent
      *
-     * @param at           the location of the block
+     * @param at     the location of the block
      * @param entity the entity that triggered the event
      * @return true if the blow is handled by the plugin
      */
