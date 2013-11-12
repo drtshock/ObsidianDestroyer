@@ -41,6 +41,16 @@ HandledMaterials:
       Withers: true
       Minecarts: true
 
+    # The amount of damage each explosion type will do
+    # Defaults to 1 if not present. Only used if 'EnabledFor' above is true
+    Damage:
+      TNT: 1
+      Creepers: 1
+      Ghasts: 1
+      Cannons: 1
+      Withers: 1
+      Minecarts: 1
+
   OBSIDIAN:
     BlastRadius: 2
     Durability:
