@@ -204,7 +204,12 @@ public class ChunkManager {
         }
 
         MaterialManager mM = MaterialManager.getInstance();
-        if (mM.getDurabilityEnabled(block.getType().name()) && mM.getDurability(block.getType().name()) > 1) {
+        // Just in case the material is in the list and not enabled...
+        if (!mM.getDurabilityEnabled(block.getType().name())) {
+            return false;
+        }
+        // Handle block if the materials durability is greater than one, else destroy the block
+        if (mM.getDurability(block.getType().name()) > 1) {
             TimerState state = checkDurabilityActive(block.getLocation());
             if (ConfigManager.getInstance().getEffectsEnabled()) {
                 final double random = Math.random();
