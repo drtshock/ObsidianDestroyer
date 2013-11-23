@@ -78,7 +78,9 @@ public class ChunkManager {
                 || eventTypeRep.equals(EntityType.SNOWBALL)
                 || eventTypeRep.equals(EntityType.CREEPER)
                 || eventTypeRep.equals(EntityType.WITHER)
-                || eventTypeRep.equals(EntityType.GHAST))) {
+                || eventTypeRep.equals(EntityType.GHAST)
+                || eventTypeRep.equals(EntityType.FIREBALL)
+                || eventTypeRep.equals(EntityType.SMALL_FIREBALL))) {
             return;
         }
 
