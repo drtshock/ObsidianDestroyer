@@ -14,6 +14,9 @@ public class BlockListener implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
+        if (block == null) {
+            return;
+        }
         if (ChunkManager.getInstance().contains(block)) {
             ChunkManager.getInstance().removeBlock(block);
         }

@@ -49,6 +49,10 @@ public class ChunkManager {
      * @param event the entity explosion event to handle
      */
     public void handleExplosion(EntityExplodeEvent event) {
+        if (event == null) {
+            return;
+        }
+
         // Debug time taken
         final long time = System.currentTimeMillis();
         final int radius = ConfigManager.getInstance().getRadius();
@@ -167,10 +171,11 @@ public class ChunkManager {
      * @return true if the blow is handled by the plugin
      */
     private boolean blowBlockUp(final Location at, Entity entity) {
-        EntityType eventTypeRep = entity.getType();
-        if (at == null) {
+        if (at == null || entity == null) {
             return false;
         }
+
+        EntityType eventTypeRep = entity.getType();
         Block block = at.getBlock();
         if (block == null) {
             return false;
@@ -289,6 +294,10 @@ public class ChunkManager {
      * @param at the location the drop the block at
      */
     private void dropBlockAndResetTime(final Location at) {
+        if (at == null) {
+            return;
+        }
+
         removeLocation(at);
         destroyBlockAndDropItem(at);
     }
@@ -320,6 +329,10 @@ public class ChunkManager {
      * @param damage the damage done to the block
      */
     private void startNewTimer(Block block, int damage, TimerState state) {
+        if (block == null || state == null) {
+            return;
+        }
+
         if (state == TimerState.RUN) {
             removeBlock(block);
         }
@@ -334,6 +347,10 @@ public class ChunkManager {
      * @return the state of the durability timer object
      */
     public TimerState checkDurabilityActive(Location location) {
+        if (location == null) {
+            return TimerState.DEAD;
+        }
+
         if (!contains(location)) {
             return TimerState.DEAD;
         }
@@ -371,6 +388,10 @@ public class ChunkManager {
      * @return the durabiltiy value
      */
     public Integer getMaterialDurability(Block block) {
+        if (block == null) {
+            return 0;
+        }
+
         return getMaterialDurability(block.getLocation());
     }
 
@@ -381,6 +402,10 @@ public class ChunkManager {
      * @return the durability value
      */
     public Integer getMaterialDurability(Location location) {
+        if (location == null) {
+            return 0;
+        }
+
         if (checkDurabilityActive(location) != TimerState.RUN && !contains(location)) {
             return 0;
         } else {
@@ -431,6 +456,10 @@ public class ChunkManager {
      * @param chunk the chunk to load
      */
     public void loadChunk(Chunk chunk) {
+        if (chunk == null) {
+            return;
+        }
+
         String str = chunkToString(chunk);
         ChunkWrapper wrapper = new ChunkWrapper(chunk, durabilityDir);
         wrapper.load();
@@ -443,6 +472,10 @@ public class ChunkManager {
      * @param chunk the chunk to unload
      */
     public void unloadChunk(Chunk chunk) {
+        if (chunk == null) {
+            return;
+        }
+
         String key = chunkToString(chunk);
         ChunkWrapper wrapper = chunks.get(key);
         if (wrapper != null) {
@@ -452,6 +485,10 @@ public class ChunkManager {
     }
 
     private String chunkToString(Chunk chunk) {
+        if (chunk == null) {
+            return "";
+        }
+
         return chunk.getX() + "." + chunk.getZ() + "." + chunk.getWorld().getName();
     }
 
@@ -462,6 +499,10 @@ public class ChunkManager {
      * @param damage the damage value of the block
      */
     public void addBlock(Block block, int damage) {
+        if (block == null) {
+            return;
+        }
+
         String c = chunkToString(block.getChunk());
         if (!chunks.containsKey(c)) {
             loadChunk(block.getChunk());
@@ -478,6 +519,10 @@ public class ChunkManager {
      * @param time   the time value of the block
      */
     public void addBlock(Block block, int damage, long time) {
+        if (block == null) {
+            return;
+        }
+
         String c = chunkToString(block.getChunk());
         if (!chunks.containsKey(c)) {
             loadChunk(block.getChunk());
@@ -493,6 +538,10 @@ public class ChunkManager {
      * @param block the block to be removed
      */
     public void removeBlock(Block block) {
+        if (block == null) {
+            return;
+        }
+
         removeLocation(block.getLocation());
     }
 
@@ -502,6 +551,10 @@ public class ChunkManager {
      * @param location the location to be removed
      */
     public void removeLocation(Location location) {
+        if (location == null) {
+            return;
+        }
+
         String c = chunkToString(location.getChunk());
         ChunkWrapper chunk = chunks.get(c);
         chunk.removeKey(location);
@@ -514,6 +567,10 @@ public class ChunkManager {
      * @return true if block found within chunk
      */
     public boolean contains(Block block) {
+        if (block == null) {
+            return false;
+        }
+
         return contains(block.getLocation());
     }
 
@@ -524,6 +581,9 @@ public class ChunkManager {
      * @return true if location found within chunk
      */
     public boolean contains(Location location) {
+        if (location == null) {
+            return false;
+        }
         String c = chunkToString(location.getChunk());
         ChunkWrapper chunk = chunks.get(c);
         return chunk.contains(location);
@@ -533,7 +593,7 @@ public class ChunkManager {
      * Gets the chunk wrapper from a chunk
      *
      * @param chunk the chunk to get a wrapper from
-     * @return the ChunkWrapper that belongs to the chunk
+     * @return the ChunkWrapper that belongs to the chunk.
      */
     private ChunkWrapper getWrapper(Chunk chunk) {
         String c = chunkToString(chunk);
