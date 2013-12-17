@@ -105,7 +105,7 @@ public class ChunkManager {
                     continue;
                 }
                 if (MaterialManager.getInstance().contains(block.getType().name())) {
-                    if (ChunkManager.getInstance().blowBlockUp(block.getLocation(), detonator)) {
+                    if (blowBlockUp(block.getLocation(), detonator)) {
                         blocksIgnored.add(block);
                     }
                 }
@@ -143,7 +143,7 @@ public class ChunkManager {
                     }
                     // FIXME: Damage to blocks bleed between materials with mismatched blast radius
                     if (detonatorLoc.distance(targetLoc) <= Math.min(radius, Util.getMaxDistance(targetLoc.getBlock().getType().name(), radius))) {
-                        if (ChunkManager.getInstance().blowBlockUp(targetLoc, detonator)) {
+                        if (blowBlockUp(targetLoc, detonator)) {
                             blocksIgnored.add(targetLoc.getBlock());
                         }
                     } else if (event.blockList().contains(targetLoc.getBlock())) {
@@ -185,9 +185,9 @@ public class ChunkManager {
         }
 
         if (block.getType() == Material.BEDROCK && ConfigManager.getInstance().getProtectBedrockBorders()) {
-            if (block.getY() <= 3 && block.getWorld().getEnvironment() != Environment.THE_END) {
+            if (block.getY() <= 5 && block.getWorld().getEnvironment() != Environment.THE_END) {
                 return true;
-            } else if (block.getY() >= 125 && block.getWorld().getEnvironment() == Environment.NETHER) {
+            } else if (block.getY() >= 123 && block.getWorld().getEnvironment() == Environment.NETHER) {
                 return true;
             }
         }
