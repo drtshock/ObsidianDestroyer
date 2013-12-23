@@ -26,9 +26,9 @@ public class LiquidExplosion {
     private static ArrayList<Material> FLUID_MATERIALS = new ArrayList<Material>();
 
     /**
-     * Handles an explosion if it occurs from within a liquid.
-     * Cancels the explosion, removes any nearby liquids found, and creates a new explosion in the cleared location.
-     * Hooks and checks explosion settings in: WorldGuard, Factions, and Towny
+     * Handles an explosion if it occurs from within a liquid. Cancels the explosion, removes any nearby liquids found,
+     * and creates a new explosion in the cleared location. Hooks and checks explosion settings in: WorldGuard,
+     * Factions, and Towny
      *
      * @param event EntityExplodeEvent
      */
@@ -42,8 +42,7 @@ public class LiquidExplosion {
     }
 
     /**
-     * Creates a custom explosion in the liquid.
-     * Checks with other plugins to see if it has to cancel the event.
+     * Creates a custom explosion in the liquid. Checks with other plugins to see if it has to cancel the event.
      *
      * @param event EntityExplodeEvent
      */

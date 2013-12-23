@@ -166,7 +166,7 @@ public class ChunkManager {
     /**
      * Handles a block on an EntityExplodeEvent
      *
-     * @param at     the location of the block
+     * @param at the location of the block
      * @param entity the entity that triggered the event
      * @return true if the blow is handled by the plugin
      */
@@ -325,7 +325,7 @@ public class ChunkManager {
     /**
      * Starts a new timer for a block
      *
-     * @param block  the block to start a durability timer for
+     * @param block the block to start a durability timer for
      * @param damage the damage done to the block
      */
     private void startNewTimer(Block block, int damage, TimerState state) {
@@ -495,7 +495,7 @@ public class ChunkManager {
     /**
      * Adds a block to the chunk
      *
-     * @param block  the block to be added
+     * @param block the block to be added
      * @param damage the damage value of the block
      */
     public void addBlock(Block block, int damage) {
@@ -514,9 +514,9 @@ public class ChunkManager {
     /**
      * Adds a block to the chunk
      *
-     * @param block  the block to be added
+     * @param block the block to be added
      * @param damage the damage value of the block
-     * @param time   the time value of the block
+     * @param time the time value of the block
      */
     public void addBlock(Block block, int damage, long time) {
         if (block == null) {

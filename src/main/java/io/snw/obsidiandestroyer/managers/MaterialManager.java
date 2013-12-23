@@ -202,7 +202,7 @@ public class MaterialManager {
     /**
      * Returns the amount of damage done to the material by an entity
      *
-     * @param entity   the entity that is involved in damaging
+     * @param entity the entity that is involved in damaging
      * @param material the name of the material to lookup
      * @return amount of damage done
      */

@@ -111,7 +111,7 @@ public class ConfigManager {
     /**
      * Create a file from a resource
      *
-     * @param file     the file to be created
+     * @param file the file to be created
      * @param resource the resource to be used
      */
     private void createFile(File file, String resource) {

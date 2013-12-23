@@ -27,7 +27,7 @@ public class ChunkWrapper {
     /**
      * Wraps a chunk with a ChunkWrapper
      *
-     * @param chunk           the chunk to wrap
+     * @param chunk the chunk to wrap
      * @param durabilitiesDir the directory to store this wrapper in
      */
     ChunkWrapper(Chunk chunk, File durabilitiesDir) {
@@ -103,7 +103,7 @@ public class ChunkWrapper {
      * Adds a block to the chunk
      *
      * @param durability the damage done to the block
-     * @param block      the block to add
+     * @param block the block to add
      */
     public void addBlock(int durability, Block block) {
         Key key = new Key(block.getLocation(), durability);
@@ -114,8 +114,8 @@ public class ChunkWrapper {
      * Adds a block with a timer to the chunk
      *
      * @param durability the damage done to the block
-     * @param time       the time value of the block
-     * @param block      the block to be added
+     * @param time the time value of the block
+     * @param block the block to be added
      */
     public void addBlockTimer(int durability, long time, Block block) {
         Key key = new Key(block.getLocation(), durability, time);
@@ -183,7 +183,7 @@ public class ChunkWrapper {
     /**
      * Saves the chunk information
      *
-     * @param load  set to true to load data after saving
+     * @param load set to true to load data after saving
      * @param clear set to true to clear self after saving
      */
     public void save(boolean load, boolean clear) {

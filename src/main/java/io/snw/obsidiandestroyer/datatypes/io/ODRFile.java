@@ -26,7 +26,7 @@ public class ODRFile {
     /**
      * Prepares the file for read or write
      *
-     * @param file  the file to prepare
+     * @param file the file to prepare
      * @param write true to write to the file, false otherwise
      * @throws FileNotFoundException thrown if the file is missing
      */
@@ -44,7 +44,7 @@ public class ODRFile {
     /**
      * Writes a block to file
      *
-     * @param location   the location of the block
+     * @param location the location of the block
      * @param duraAmount material durability amount
      * @throws IOException thrown if something happens
      */
@@ -55,11 +55,11 @@ public class ODRFile {
     /**
      * Writes a block location to file
      *
-     * @param x          the x location
-     * @param y          the y location
-     * @param z          the z location
+     * @param x the x location
+     * @param y the y location
+     * @param z the z location
      * @param duraAmount material durability amount
-     * @param duraTime   material durability reset time
+     * @param duraTime material durability reset time
      * @throws IOException thrown if something happens
      */
     public void write(int x, int y, int z, int duraAmount, long duraTime) throws IOException {
