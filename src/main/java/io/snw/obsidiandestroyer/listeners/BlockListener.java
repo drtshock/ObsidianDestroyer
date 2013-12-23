@@ -11,7 +11,7 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 
 public class BlockListener implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
         if (block == null) {
@@ -22,12 +22,12 @@ public class BlockListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChunkLoad(ChunkLoadEvent event) {
         ChunkManager.getInstance().loadChunk(event.getChunk());
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChunkUnload(ChunkUnloadEvent event) {
         ChunkManager.getInstance().unloadChunk(event.getChunk());
     }
