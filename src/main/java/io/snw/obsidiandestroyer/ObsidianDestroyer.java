@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.plugin.PluginManager;
 
 public class ObsidianDestroyer extends JavaPlugin {
 
@@ -33,9 +34,10 @@ public class ObsidianDestroyer extends JavaPlugin {
         new MaterialManager();
         new ChunkManager();
         getCommand("od").setExecutor(new ODCommand());
-        getServer().getPluginManager().registerEvents(new EntityExplodeListener(), this);
-        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
-        getServer().getPluginManager().registerEvents(new BlockListener(), this);
+        PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(new EntityExplodeListener(), this);
+        pm.registerEvents(new PlayerListener(), this);
+        pm.registerEvents(new BlockListener(), this);
         checkUpdate();
         startMetrics();
     }
