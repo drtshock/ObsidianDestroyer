@@ -282,4 +282,8 @@ public class ConfigManager {
     public boolean getIgnoreUnhandledExplosionTypes() {
         return config.getBoolean("Explosions.IgnoreUnhandledTypes", false);
     }
+
+    public Material getDurabilityCheckItem() {
+        return Material.matchMaterial(config.getString("DurabilityCheckItem", "POTATO_ITEM"));
+    }
 }

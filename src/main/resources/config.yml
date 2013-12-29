@@ -26,6 +26,10 @@ Radius: 3
 # Example Timing Adjustment: 'OBSIDIAN.Durability.ResetAfter: 60000' for obsidian to regenerate 1 durability every minute
 DurabilityRegeneratesOverTime: false
 
+# The item used to check the durability of blocks
+# Permission node: 'obsidiandestroyer.check'
+DurabilityCheckItem: POTATO_ITEM
+
 # Effects that are displayed when materials take damage
 Effects:
   Enabled: true

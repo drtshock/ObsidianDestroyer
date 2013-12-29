@@ -14,3 +14,6 @@ permissions:
     obsidiandestroyer.admin:
       default: op
       description: Allow you to use all admin commands for this plugin.
+    obsidiandestroyer.check:
+      default: true
+      description: Allow you to check the durability of a block with an item.

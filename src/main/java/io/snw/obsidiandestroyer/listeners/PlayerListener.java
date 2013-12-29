@@ -2,6 +2,7 @@ package io.snw.obsidiandestroyer.listeners;
 
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.managers.ChunkManager;
+import io.snw.obsidiandestroyer.managers.ConfigManager;
 import io.snw.obsidiandestroyer.managers.MaterialManager;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -31,7 +32,7 @@ public class PlayerListener implements Listener {
         if (player.getItemInHand().getAmount() > 0 && event.getAction() == Action.LEFT_CLICK_BLOCK) {
             Material itemInHand = player.getItemInHand().getType();
             Block block = event.getClickedBlock();
-            if (itemInHand == Material.POTATO_ITEM) {
+            if (ConfigManager.getInstance().getDurabilityCheckItem().equals(itemInHand) && player.hasPermission("obsidiandestroyer.check")) {
                 MaterialManager mm = MaterialManager.getInstance();
                 if (mm.getDurabilityEnabled(block.getType().name())) {
                     if (player.getGameMode() == GameMode.CREATIVE) {
