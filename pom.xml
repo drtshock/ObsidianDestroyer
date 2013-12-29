@@ -81,6 +81,11 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>com.turt2live.lib</groupId>
+            <artifactId>Cannons</artifactId>
+            <version>2.1R1</version>
+        </dependency>
+        <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>1.7.2-R0.1-SNAPSHOT</version>

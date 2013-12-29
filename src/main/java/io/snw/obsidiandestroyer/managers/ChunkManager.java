@@ -12,6 +12,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
 
+import at.pavlov.cannons.event.ProjectilePiercingEvent;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -93,9 +95,10 @@ public class ChunkManager {
         // List of blocks that will be removed from the blocklist
         List<Block> blocksIgnored = new ArrayList<Block>();
 
+        ObsidianDestroyer.LOG.info("proj: " + detonator.getType().name());
         // Hook into cannons... (somehow)
         // TODO: Hook into cannons again.
-        if (eventTypeRep.equals(EntityType.SNOWBALL)) {
+        /*if (eventTypeRep.equals(EntityType.SNOWBALL)) {
             List<Location> hitLocs = new ArrayList<Location>();
             Iterator<Block> iter = event.blockList().iterator();
             while (iter.hasNext()) {
@@ -110,7 +113,7 @@ public class ChunkManager {
                     }
                 }
             }
-        }
+        }*/
 
         // Liquid overrides
         if (ConfigManager.getInstance().getBypassAllFluidProtection()) {
@@ -164,6 +167,103 @@ public class ChunkManager {
     }
 
     /**
+     * Handles the cannons projectile event
+     *
+     * @param event the ProjectilePiercingEvent to handle
+     */
+    public void handleExplosion(ProjectilePiercingEvent event) {
+        ObsidianDestroyer.LOG.info("proj: " + event.getProjectile().getItemName() + "  " + event.getProjectile().getPenetrationDamage());
+        // List of blocks that will be removed from the blocklist
+        List<Block> blocksIgnored = new ArrayList<Block>();
+
+        Iterator<Block> iter = event.getBlockList().iterator();
+        while (iter.hasNext()) {
+            Block block = iter.next();
+            if (MaterialManager.getInstance().contains(block.getType().name())) {
+                if (blowBlockUp(block.getLocation())) {
+                    blocksIgnored.add(block);
+                }
+            }
+        }
+        // Remove managed blocks
+        for (Block block : blocksIgnored) {
+            event.getBlockList().remove(block);
+        }
+    }
+
+    /**
+     * Handles a block on an ProjectilePiercingEvent
+     *
+     * @param at the location of the block
+     * @return true if the blow is handled by the plugin
+     */
+    private boolean blowBlockUp(final Location at) {
+        if (at == null) {
+            return false;
+        }
+        Block block = at.getBlock();
+        if (block == null) {
+            return false;
+        }
+        if (block.getType() == Material.AIR) {
+            return false;
+        }
+
+        if (block.getType() == Material.BEDROCK && ConfigManager.getInstance().getProtectBedrockBorders()) {
+            if (block.getY() <= 5 && block.getWorld().getEnvironment() != Environment.THE_END) {
+                return true;
+            } else if (block.getY() >= 123 && block.getWorld().getEnvironment() == Environment.NETHER) {
+                return true;
+            }
+        }
+        if (!MaterialManager.getInstance().getCannonsEnabled(block.getType().name())) {
+            return false;
+        }
+        MaterialManager mM = MaterialManager.getInstance();
+        // Just in case the material is in the list and not enabled...
+        if (!mM.getDurabilityEnabled(block.getType().name())) {
+            return false;
+        }
+        // Handle block if the materials durability is greater than one, else destroy the block
+        if (mM.getDurability(block.getType().name()) > 1) {
+            TimerState state = checkDurabilityActive(block.getLocation());
+            if (ConfigManager.getInstance().getEffectsEnabled()) {
+                final double random = Math.random();
+                if (random <= ConfigManager.getInstance().getEffectsChance()) {
+                    block.getWorld().playEffect(at, Effect.MOBSPAWNER_FLAMES, 0);
+                }
+            }
+            if (state == TimerState.RUN || state == TimerState.INACTIVE) {
+                int currentDurability = getMaterialDurability(block);
+                currentDurability += mM.getDamageTypeCannonsAmount(block.getType().name());
+                if (Util.checkIfMax(currentDurability, block.getType().name())) {
+                    // counter has reached max durability, remove and drop an item
+                    dropBlockAndResetTime(at);
+                } else {
+                    // counter has not reached max durability damage yet
+                    if (!mM.getDurabilityResetTimerEnabled(block.getType().name())) {
+                        addBlock(block, currentDurability);
+                    } else {
+                        startNewTimer(block, currentDurability, state);
+                    }
+                }
+            } else {
+                if (!mM.getDurabilityResetTimerEnabled(block.getType().name())) {
+                    addBlock(block, mM.getDamageTypeCannonsAmount(block.getType().name()));
+                } else {
+                    startNewTimer(block, mM.getDamageTypeCannonsAmount(block.getType().name()), state);
+                }
+                if (Util.checkIfMax(mM.getDamageTypeCannonsAmount(block.getType().name()), block.getType().name())) {
+                    dropBlockAndResetTime(at);
+                }
+            }
+        } else {
+            destroyBlockAndDropItem(at);
+        }
+        return true;
+    }
+
+    /**
      * Handles a block on an EntityExplodeEvent
      *
      * @param at the location of the block
@@ -193,9 +293,6 @@ public class ChunkManager {
         }
 
         if (eventTypeRep.equals(EntityType.PRIMED_TNT) && !MaterialManager.getInstance().getTntEnabled(block.getType().name())) {
-            return false;
-        }
-        if (eventTypeRep.equals(EntityType.SNOWBALL) && !MaterialManager.getInstance().getCannonsEnabled(block.getType().name())) {
             return false;
         }
         if (eventTypeRep.equals(EntityType.CREEPER) && !MaterialManager.getInstance().getCreepersEnabled(block.getType().name())) {

@@ -213,7 +213,7 @@ public class MaterialManager {
                 case PRIMED_TNT:
                     return durabilityMaterials.get(material).getTntDamage();
                 case SNOWBALL:
-                    return durabilityMaterials.get(material).getCannonsDamage();
+                    return 0;
                 case CREEPER:
                     Creeper creeper = (Creeper) entity;
                     return creeper.isPowered() ? durabilityMaterials.get(material).getChargedCreeperDamage() : durabilityMaterials.get(material).getCreepersDamage();
@@ -229,6 +229,19 @@ public class MaterialManager {
                 default:
                     break;
             }
+        }
+        return 1;
+    }
+
+    /**
+     * Returns the amount of damage done to the material by a cannon projectile
+     *
+     * @param material the name of the material to lookup
+     * @return amount of damage done
+     */
+    public int getDamageTypeCannonsAmount(String material) {
+        if (durabilityMaterials.containsKey(material)) {
+            return durabilityMaterials.get(material).getCannonsDamage();
         }
         return 1;
     }
