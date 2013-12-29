@@ -358,16 +358,23 @@ public class ChunkManager {
             return TimerState.INACTIVE;
         }
         final long currentTime = System.currentTimeMillis();
-        final long time = getWrapper(location.getChunk()).getDurabilityTime(location);
+        final ChunkWrapper chunk = getWrapper(location.getChunk());
+        if (chunk == null) {
+            if (ConfigManager.getInstance().getVerbose() || ConfigManager.getInstance().getDebug()) {
+                ObsidianDestroyer.LOG.severe("The requested chunk appears to be null  D:");
+            }
+            return TimerState.DEAD;
+        }
+        final long time = chunk.getDurabilityTime(location);
         if (currentTime > time) {
             if (ConfigManager.getInstance().getMaterialsRegenerateOverTime()) {
-                int currentDurability = getWrapper(location.getChunk()).getDurability(location);
+                int currentDurability = chunk.getDurability(location);
                 final long regenTime = MaterialManager.getInstance().getDurabilityResetTime(location.getBlock().getType().name());
                 final long result = currentTime - time;
                 final int amount = Math.max(1, Math.round((float) result / regenTime));
                 currentDurability -= amount;
                 if (currentDurability <= 0) {
-                    getWrapper(location.getChunk()).removeKey(location);
+                    chunk.removeKey(location);
                     return TimerState.END;
                 } else {
                     startNewTimer(location.getBlock(), currentDurability, TimerState.RUN);
@@ -409,7 +416,7 @@ public class ChunkManager {
         if (checkDurabilityActive(location) != TimerState.RUN && !contains(location)) {
             return 0;
         } else {
-            return getWrapper(location.getChunk()).getDurability(location);
+            return getWrapper(location.getChunk()) != null ? getWrapper(location.getChunk()).getDurability(location) : 0;
         }
     }
 
@@ -586,6 +593,9 @@ public class ChunkManager {
         }
         String c = chunkToString(location.getChunk());
         ChunkWrapper chunk = chunks.get(c);
+        if (chunk == null) {
+            return false;
+        }
         return chunk.contains(location);
     }
 
@@ -596,7 +606,13 @@ public class ChunkManager {
      * @return the ChunkWrapper that belongs to the chunk.
      */
     private ChunkWrapper getWrapper(Chunk chunk) {
+        if (chunk == null) {
+            return null;
+        }
         String c = chunkToString(chunk);
+        if (!chunks.containsKey(c)) {
+            loadChunk(chunk);
+        }
         ChunkWrapper wrapper = chunks.get(c);
         return wrapper;
     }
