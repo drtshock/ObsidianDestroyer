@@ -12,6 +12,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
 
+import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
 
 import java.io.File;
@@ -95,25 +96,7 @@ public class ChunkManager {
         // List of blocks that will be removed from the blocklist
         List<Block> blocksIgnored = new ArrayList<Block>();
 
-        ObsidianDestroyer.LOG.info("proj: " + detonator.getType().name());
-        // Hook into cannons... (somehow)
-        // TODO: Hook into cannons again.
-        /*if (eventTypeRep.equals(EntityType.SNOWBALL)) {
-            List<Location> hitLocs = new ArrayList<Location>();
-            Iterator<Block> iter = event.blockList().iterator();
-            while (iter.hasNext()) {
-                Block block = iter.next();
-                hitLocs.add(block.getLocation());
-                if (hitLocs.contains(block.getLocation())) {
-                    continue;
-                }
-                if (MaterialManager.getInstance().contains(block.getType().name())) {
-                    if (blowBlockUp(block.getLocation(), detonator)) {
-                        blocksIgnored.add(block);
-                    }
-                }
-            }
-        }*/
+        ObsidianDestroyer.LOG.info("explosion: " + detonator.getType().name());
 
         // Liquid overrides
         if (ConfigManager.getInstance().getBypassAllFluidProtection()) {
@@ -167,15 +150,16 @@ public class ChunkManager {
     }
 
     /**
-     * Handles the cannons projectile event
+     * Handles the cannons superbreaker projectile event
      *
      * @param event the ProjectilePiercingEvent to handle
      */
-    public void handleExplosion(ProjectilePiercingEvent event) {
-        ObsidianDestroyer.LOG.info("proj: " + event.getProjectile().getItemName() + "  " + event.getProjectile().getPenetrationDamage());
+    public void handlePiercing(ProjectilePiercingEvent event) {
+        ObsidianDestroyer.LOG.info("proj: " + event.getProjectile().getItemName());
         // List of blocks that will be removed from the blocklist
         List<Block> blocksIgnored = new ArrayList<Block>();
 
+        // Handle blocks that can only be broken with superbreaker
         Iterator<Block> iter = event.getBlockList().iterator();
         while (iter.hasNext()) {
             Block block = iter.next();
@@ -185,10 +169,49 @@ public class ChunkManager {
                 }
             }
         }
-        // Remove managed blocks
+        // Remove blocks from event blocklist
         for (Block block : blocksIgnored) {
             event.getBlockList().remove(block);
         }
+    }
+
+    /**
+     * Handles the cannons projectile event
+     *
+     * @param event the ProjectileImpactEvent to handle
+     */
+    public void handleImpact(ProjectileImpactEvent event) {
+        ObsidianDestroyer.LOG.info("proj: " + event.getProjectile().getItemName());
+        // Cancel the event for now
+        event.setCancelled(true);
+
+        /*
+        // List of blocks that will be removed from the blocklist
+        List<Block> blocksIgnored = new ArrayList<Block>();
+
+        // FIXME: get the blocklist from event...
+        // Ignore blocks that can only be broken with superbreaker
+        Iterator<Block> iter = event.getBlockList().iterator();
+        while (iter.hasNext()) {
+            Block block = iter.next();
+            MaterialManager mM = MaterialManager.getInstance();
+            if (mM.contains(block.getType().name())) {
+                if (mM.getDurabilityEnabled(block.getType().name())) {
+                    blocksIgnored.add(block);
+                    if (ConfigManager.getInstance().getEffectsEnabled()) {
+                        final double random = Math.random();
+                        if (random <= ConfigManager.getInstance().getEffectsChance()) {
+                            block.getWorld().playEffect(block.getLocation(), Effect.EXTINGUISH, 0);
+                        }
+                    }
+                }
+            }
+        }
+        // Remove blocks from event blocklist
+        for (Block block : blocksIgnored) {
+            event.getBlockList().remove(block);
+        }
+        */
     }
 
     /**

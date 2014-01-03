@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
+import at.pavlov.cannons.event.ProjectileImpactEvent;
 
 public class EntityExplodeListener implements Listener {
 
@@ -24,6 +25,15 @@ public class EntityExplodeListener implements Listener {
             return; // do not do anything in case explosions get cancelled
         }
 
-        ChunkManager.getInstance().handleExplosion(event);
+        ChunkManager.getInstance().handlePiercing(event);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onProjectileImpact(ProjectileImpactEvent event) {
+        if (event == null || ChunkManager.getInstance().getDisabledWorlds().contains(event.getImpactLocation().getWorld().getName())) {
+            return; // do not do anything in case explosions get cancelled
+        }
+
+        ChunkManager.getInstance().handleImpact(event);
     }
 }
