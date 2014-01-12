@@ -96,7 +96,7 @@ public class ChunkManager {
         // List of blocks that will be removed from the blocklist
         List<Block> blocksIgnored = new ArrayList<Block>();
 
-        ObsidianDestroyer.LOG.info("explosion: " + detonator.getType().name());
+        //ObsidianDestroyer.LOG.info("EntityExplodeEvent: " + detonator.getType().name());
 
         // Liquid overrides
         if (ConfigManager.getInstance().getBypassAllFluidProtection()) {
@@ -155,7 +155,6 @@ public class ChunkManager {
      * @param event the ProjectilePiercingEvent to handle
      */
     public void handlePiercing(ProjectilePiercingEvent event) {
-        ObsidianDestroyer.LOG.info("proj: " + event.getProjectile().getItemName());
         // List of blocks that will be removed from the blocklist
         List<Block> blocksIgnored = new ArrayList<Block>();
 
@@ -163,7 +162,7 @@ public class ChunkManager {
         Iterator<Block> iter = event.getBlockList().iterator();
         while (iter.hasNext()) {
             Block block = iter.next();
-            if (MaterialManager.getInstance().contains(block.getType().name())) {
+            if (MaterialManager.getInstance().contains(block.getType().name()) && !block.getType().equals(Material.AIR)) {
                 if (blowBlockUp(block.getLocation())) {
                     blocksIgnored.add(block);
                 }
@@ -181,37 +180,9 @@ public class ChunkManager {
      * @param event the ProjectileImpactEvent to handle
      */
     public void handleImpact(ProjectileImpactEvent event) {
-        ObsidianDestroyer.LOG.info("proj: " + event.getProjectile().getItemName());
-        // Cancel the event for now
-        event.setCancelled(true);
-
-        /*
-        // List of blocks that will be removed from the blocklist
-        List<Block> blocksIgnored = new ArrayList<Block>();
-
-        // FIXME: get the blocklist from event...
-        // Ignore blocks that can only be broken with superbreaker
-        Iterator<Block> iter = event.getBlockList().iterator();
-        while (iter.hasNext()) {
-            Block block = iter.next();
-            MaterialManager mM = MaterialManager.getInstance();
-            if (mM.contains(block.getType().name())) {
-                if (mM.getDurabilityEnabled(block.getType().name())) {
-                    blocksIgnored.add(block);
-                    if (ConfigManager.getInstance().getEffectsEnabled()) {
-                        final double random = Math.random();
-                        if (random <= ConfigManager.getInstance().getEffectsChance()) {
-                            block.getWorld().playEffect(block.getLocation(), Effect.EXTINGUISH, 0);
-                        }
-                    }
-                }
-            }
+        if (ConfigManager.getInstance().getEffectsEnabled()) {
+            event.getImpactLocation().getWorld().playEffect(event.getImpactLocation(), Effect.MOBSPAWNER_FLAMES, 0);
         }
-        // Remove blocks from event blocklist
-        for (Block block : blocksIgnored) {
-            event.getBlockList().remove(block);
-        }
-        */
     }
 
     /**

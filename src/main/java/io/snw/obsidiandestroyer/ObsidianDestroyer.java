@@ -3,6 +3,7 @@ package io.snw.obsidiandestroyer;
 import io.snw.obsidiandestroyer.commands.ODCommand;
 import io.snw.obsidiandestroyer.listeners.BlockListener;
 import io.snw.obsidiandestroyer.listeners.EntityExplodeListener;
+import io.snw.obsidiandestroyer.listeners.EntityImpactListener;
 import io.snw.obsidiandestroyer.listeners.PlayerListener;
 import io.snw.obsidiandestroyer.managers.ChunkManager;
 import io.snw.obsidiandestroyer.managers.ConfigManager;
@@ -36,6 +37,9 @@ public class ObsidianDestroyer extends JavaPlugin {
         getCommand("od").setExecutor(new ODCommand());
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new EntityExplodeListener(), this);
+        if (HookManager.getInstance().isHookedCannons()) {
+            pm.registerEvents(new EntityImpactListener(), this);
+        }
         pm.registerEvents(new PlayerListener(), this);
         pm.registerEvents(new BlockListener(), this);
         checkUpdate();
