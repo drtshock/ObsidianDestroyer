@@ -155,9 +155,15 @@ public class ChunkManager {
      * @param event the ProjectilePiercingEvent to handle
      */
     public void handlePiercing(ProjectilePiercingEvent event) {
+        ObsidianDestroyer.debug("ProjectilePiercingEvent: " + event.getProjectile().getItemName());
+
+        // Display effects on impact location
+        if (ConfigManager.getInstance().getEffectsEnabled()) {
+            event.getImpactLocation().getWorld().playEffect(event.getImpactLocation(), Effect.MOBSPAWNER_FLAMES, 0);
+        }
+
         // List of blocks that will be removed from the blocklist
         List<Block> blocksIgnored = new ArrayList<Block>();
-
         // Handle blocks that can only be broken with superbreaker
         Iterator<Block> iter = event.getBlockList().iterator();
         while (iter.hasNext()) {
@@ -180,8 +186,18 @@ public class ChunkManager {
      * @param event the ProjectileImpactEvent to handle
      */
     public void handleImpact(ProjectileImpactEvent event) {
+        ObsidianDestroyer.debug("ProjectileImpactEvent: " + event.getProjectile().getItemName());
+
+        // Display effects on impact location
         if (ConfigManager.getInstance().getEffectsEnabled()) {
             event.getImpactLocation().getWorld().playEffect(event.getImpactLocation(), Effect.MOBSPAWNER_FLAMES, 0);
+        }
+
+        // Cancel the event
+        event.setCancelled(true);
+        // Damage the location hit
+        if (event.getProjectile().getPenetrationDamage()) {
+            blowBlockUp(event.getImpactLocation());
         }
     }
 
