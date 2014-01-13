@@ -171,7 +171,7 @@ public class ChunkManager {
 
         // Remove and destroy needed blocks
         for (Block block : explosionEvent.blockList()) {
-            if (contains(block.getLocation())) {
+            if (contains(block.getLocation()) || MaterialManager.getInstance().getDurability(block.getType().name()) == 1) {
                 dropBlockAndResetDurability(block.getLocation());
             } else if (block.isLiquid() && event.getEntity().hasMetadata("LiquidEntity")) {
                 block.setType(Material.AIR);
