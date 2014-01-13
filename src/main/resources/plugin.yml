@@ -2,7 +2,6 @@ name: ObsidianDestroyer
 main: io.snw.obsidiandestroyer.ObsidianDestroyer
 version: ${project.version}
 authors: [drtshock, squidicuz]
-softdepend: [Factions, Towny, WorldGuard]
 
 commands:
     od:
