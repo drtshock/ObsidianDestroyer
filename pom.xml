@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.snw</groupId>
     <artifactId>ObsidianDestroyer</artifactId>
-    <version>4.1.4-SNAPSHOT</version>
+    <version>4.2-SNAPSHOT</version>
     <name>ObsidianDestroyer</name>
     <url>https://github.com/drtshock/ObsidianDestroyer</url>
 
@@ -69,17 +69,8 @@
             <id>royaldev-repo</id>
             <url>http://minor.royaldev.org:8081/nexus/content/groups/public</url>
         </repository>
-        <repository>
-            <id>sk89q</id>
-            <url>http://maven.sk89q.com/repo/</url>
-        </repository>
     </repositories>
     <dependencies>
-        <dependency>
-            <groupId>com.turt2live.lib</groupId>
-            <artifactId>Towny</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
         <dependency>
             <groupId>com.turt2live.lib</groupId>
             <artifactId>Cannons</artifactId>
@@ -89,16 +80,6 @@
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>1.7.2-R0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.massivecraft</groupId>
-            <artifactId>factions</artifactId>
-            <version>1.8.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sk89q</groupId>
-            <artifactId>worldguard</artifactId>
-            <version>5.7.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

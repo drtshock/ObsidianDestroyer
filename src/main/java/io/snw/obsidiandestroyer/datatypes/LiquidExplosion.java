@@ -1,23 +1,17 @@
 package io.snw.obsidiandestroyer.datatypes;
 
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.struct.FFlag;
-import com.palmergames.bukkit.towny.object.Coord;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyUniverse;
-import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.war.flagwar.TownyWarConfig;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.managers.RegionManager;
+import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.managers.ConfigManager;
-import io.snw.obsidiandestroyer.managers.HookManager;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class LiquidExplosion {
 
@@ -31,59 +25,31 @@ public class LiquidExplosion {
      * Factions, and Towny
      *
      * @param event EntityExplodeEvent
+     * @param blocklist list of blocks handled
      */
-    public static void Handle(EntityExplodeEvent event) {
+    public static void Handle(EntityExplodeEvent event, LinkedList<Block> blocklist) {
         FLUID_MATERIALS.add(Material.WATER);
         FLUID_MATERIALS.add(Material.STATIONARY_WATER);
         FLUID_MATERIALS.add(Material.LAVA);
         FLUID_MATERIALS.add(Material.STATIONARY_LAVA);
 
-        explosionInLiquid(event);
+        explosionInLiquid(event, blocklist);
     }
 
     /**
      * Creates a custom explosion in the liquid. Checks with other plugins to see if it has to cancel the event.
      *
      * @param event EntityExplodeEvent
+     * @param blocklist list of blocks handled
      */
-    private static void explosionInLiquid(EntityExplodeEvent event) {
+    private static void explosionInLiquid(EntityExplodeEvent event, List<Block> blocklist) {
         if (RADIUS <= 0 || event.isCancelled()) {
             return;
         }
 
         Entity entity = event.getEntity();
-        boolean secondaryExplosion = false;
+        boolean removeLiquids = false;
         int redstoneCount = 0;
-
-        // Hook to prevent liquids from being destroyed if Towny has explosions disabled
-        if (HookManager.getInstance().isHookedTowny()) {
-            TownyWorld townyWorld;
-            try {
-                townyWorld = TownyUniverse.getDataSource().getWorld(event.getLocation().getWorld().getName());
-
-                if (!townyWorld.isUsingTowny()) {
-                    return;
-                }
-            } catch (Exception e) {
-                // failed to get world so abort
-                return;
-            }
-            try {
-                TownBlock townBlock = townyWorld.getTownBlock(Coord.parseCoord(event.getLocation()));
-                if (!townBlock.getPermissions().explosion && !townyWorld.isForceExpl()) {
-                    return;
-                }
-                if (townyWorld.isWarZone(Coord.parseCoord(event.getLocation())) && !TownyWarConfig.explosionsBreakBlocksInWarZone()) {
-                    return;
-                }
-            } catch (Exception e) {
-                // Block not registered so continue
-            }
-
-            if (!townyWorld.isExpl()) {
-                return;
-            }
-        }
 
         // Protects TNT cannons from exploding themselves
         if (ConfigManager.getInstance().getProtectTNTCannons()) {
@@ -92,10 +58,11 @@ public class LiquidExplosion {
                     for (int z = -CANNON_RADIUS; z <= CANNON_RADIUS; z++) {
                         Location targetLoc = new Location(entity.getWorld(), entity.getLocation().getX() + x, entity.getLocation().getY() + y, entity.getLocation().getZ() + z);
 
-                        if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_ON) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_OFF))
+                        if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_ON) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_OFF)) {
                             if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_ON) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_OFF)) {
                                 redstoneCount++;
                             }
+                        }
                     }
                 }
             }
@@ -109,48 +76,31 @@ public class LiquidExplosion {
             for (int y = -RADIUS; y <= RADIUS; y++) {
                 for (int z = -RADIUS; z <= RADIUS; z++) {
                     Location targetLoc = new Location(entity.getWorld(), entity.getLocation().getX() + x, entity.getLocation().getY() + y, entity.getLocation().getZ() + z);
-                    // TODO: Check every block in the explosion for Towny..
-
-                    // Hook to prevent liquids from being destroyed in Faction territory that has explosions disabled
-                    // TODO: Add more versions of Factions.
-                    // TODO: Make this actually work.
-                    if (HookManager.getInstance().isHookedFactions()) {
-                        Faction faction = Board.getFactionAt(event.getLocation());
-                        if (!faction.getFlag(FFlag.EXPLOSIONS)) {
-                            return;
-                        }
-                    }
-
-                    // Hook to prevent liquids from being destroyed in protected worldguard regions
-                    if (HookManager.getInstance().isHookedWorldGuard()) {
-                        try {
-                            RegionManager regionManager = HookManager.getInstance().getWorldGuard().getRegionManager(targetLoc.getWorld());
-                            ApplicableRegionSet set = regionManager.getApplicableRegions(targetLoc);
-                            if (!set.allows(com.sk89q.worldguard.protection.flags.DefaultFlag.TNT)) {
-                                return;
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
 
                     // Replace any liquid blocks with air.
                     if (FLUID_MATERIALS.contains(targetLoc.getBlock().getType()) && targetLoc.getBlock().isLiquid()) {
-                        targetLoc.getBlock().setType(Material.AIR);
-                        if (!secondaryExplosion) {
-                            secondaryExplosion = true;
+                        if (!removeLiquids) {
+                            removeLiquids = true;
+                        }
+                        event.blockList().add(targetLoc.getBlock());
+                    } else if (entity.getLocation().getBlock().isLiquid()) {
+                        if (!removeLiquids) {
+                            removeLiquids = true;
+                        }
+                        if (!event.blockList().contains(targetLoc)) {
+                            event.blockList().add(targetLoc.getBlock());
+                            blocklist.add(targetLoc.getBlock());
                         }
                     }
                 }
             }
         }
 
-        // Creates a new explosion at the cleared location
-        if (secondaryExplosion) {
-            event.setCancelled(true);
-            event.getLocation().getBlock().setType(Material.AIR);
-            Float f = Float.valueOf(3);
-            entity.getWorld().createExplosion(event.getLocation(), f);
+        // Adds to events blocklist and sets metadata flag
+        if (removeLiquids) {
+            event.blockList().add(event.getLocation().getBlock());
+            blocklist.add(event.getLocation().getBlock());
+            event.getEntity().setMetadata("LiquidEntity", new FixedMetadataValue(ObsidianDestroyer.getInstance(), new EntityData(event.getEntityType())));
         }
     }
 }
