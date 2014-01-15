@@ -98,7 +98,7 @@ public class ChunkManager {
 
         // Liquid overrides
         if (ConfigManager.getInstance().getBypassAllFluidProtection()) {
-            LiquidExplosion.Handle(event, blocklist);
+            LiquidExplosion.handle(event, blocklist);
         } else if ((detonatorLoc.getBlock().isLiquid()) && (ConfigManager.getInstance().getFluidsProtectIndustructables())) {
             return;
         }
@@ -171,8 +171,10 @@ public class ChunkManager {
 
         // Remove and destroy needed blocks
         for (Block block : explosionEvent.blockList()) {
-            if (contains(block.getLocation()) || MaterialManager.getInstance().getDurability(block.getType().name()) == 1) {
+            if (contains(block.getLocation())) {
                 dropBlockAndResetDurability(block.getLocation());
+            } else if (MaterialManager.getInstance().contains(block.getType().name()) && MaterialManager.getInstance().getDurability(block.getType().name()) <= 1){ 
+                destroyBlockAndDropItem(block.getLocation());
             } else if (block.isLiquid() && event.getEntity().hasMetadata("LiquidEntity")) {
                 block.setType(Material.AIR);
             }

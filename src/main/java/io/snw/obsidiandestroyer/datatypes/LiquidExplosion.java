@@ -5,44 +5,27 @@ import io.snw.obsidiandestroyer.managers.ConfigManager;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class LiquidExplosion {
 
-    private static int RADIUS = 1;
+    private static int RADIUS = (int) Math.round(ConfigManager.getInstance().getRadius() * 0.51);
     private static int CANNON_RADIUS = 2;
-    private static ArrayList<Material> FLUID_MATERIALS = new ArrayList<Material>();
 
     /**
-     * Handles an explosion if it occurs from within a liquid. Cancels the explosion, removes any nearby liquids found,
-     * and creates a new explosion in the cleared location. Hooks and checks explosion settings in: WorldGuard,
-     * Factions, and Towny
+     * Handles an explosion if it occurs from within or around a liquid.
+     * Adds liquids to the event blocklist
+     * Adds blocks near liquids to the event blocklist
      *
      * @param event EntityExplodeEvent
      * @param blocklist list of blocks handled
      */
-    public static void Handle(EntityExplodeEvent event, LinkedList<Block> blocklist) {
-        FLUID_MATERIALS.add(Material.WATER);
-        FLUID_MATERIALS.add(Material.STATIONARY_WATER);
-        FLUID_MATERIALS.add(Material.LAVA);
-        FLUID_MATERIALS.add(Material.STATIONARY_LAVA);
-
-        explosionInLiquid(event, blocklist);
-    }
-
-    /**
-     * Creates a custom explosion in the liquid. Checks with other plugins to see if it has to cancel the event.
-     *
-     * @param event EntityExplodeEvent
-     * @param blocklist list of blocks handled
-     */
-    private static void explosionInLiquid(EntityExplodeEvent event, List<Block> blocklist) {
+    public static void handle(EntityExplodeEvent event, List<Block> blocklist) {
         if (RADIUS <= 0 || event.isCancelled()) {
             return;
         }
@@ -71,19 +54,12 @@ public class LiquidExplosion {
             }
         }
 
-        // Creates air where water used to be and sets up the boom if the explosion is from within a liquid
+        // Adds liquids and blocks near them to the event listings
         for (int x = -RADIUS; x <= RADIUS; x++) {
             for (int y = -RADIUS; y <= RADIUS; y++) {
                 for (int z = -RADIUS; z <= RADIUS; z++) {
                     Location targetLoc = new Location(entity.getWorld(), entity.getLocation().getX() + x, entity.getLocation().getY() + y, entity.getLocation().getZ() + z);
-
-                    // Replace any liquid blocks with air.
-                    if (FLUID_MATERIALS.contains(targetLoc.getBlock().getType()) && targetLoc.getBlock().isLiquid()) {
-                        if (!removeLiquids) {
-                            removeLiquids = true;
-                        }
-                        event.blockList().add(targetLoc.getBlock());
-                    } else if (entity.getLocation().getBlock().isLiquid()) {
+                    if (isNearLiquid(targetLoc)) {
                         if (!removeLiquids) {
                             removeLiquids = true;
                         }
@@ -96,11 +72,30 @@ public class LiquidExplosion {
             }
         }
 
-        // Adds to events blocklist and sets metadata flag
+        // Sets metadata flag
         if (removeLiquids) {
-            event.blockList().add(event.getLocation().getBlock());
-            blocklist.add(event.getLocation().getBlock());
             event.getEntity().setMetadata("LiquidEntity", new FixedMetadataValue(ObsidianDestroyer.getInstance(), new EntityData(event.getEntityType())));
         }
+    }
+
+    private static final boolean isNearLiquid(Location location) {
+        for (BlockFace face : BlockFace.values()) {
+            switch (face) {
+                case NORTH:
+                case EAST:
+                case SOUTH:
+                case WEST:
+                case UP:
+                case DOWN:
+                case SELF:
+                    if (location.getBlock().getRelative(face) != null && location.getBlock().getRelative(face).isLiquid()) {
+                        return true;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        return false;
     }
 }
