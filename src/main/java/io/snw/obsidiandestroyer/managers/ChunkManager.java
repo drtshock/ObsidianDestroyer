@@ -177,6 +177,8 @@ public class ChunkManager {
                 destroyBlockAndDropItem(block.getLocation());
             } else if (block.isLiquid() && event.getEntity().hasMetadata("LiquidEntity")) {
                 block.setType(Material.AIR);
+            } else {
+                block.breakNaturally();
             }
         }
 
