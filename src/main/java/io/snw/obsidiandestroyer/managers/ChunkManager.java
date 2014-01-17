@@ -1,9 +1,8 @@
 package io.snw.obsidiandestroyer.managers;
 
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
-import io.snw.obsidiandestroyer.datatypes.DamageResult;
 import io.snw.obsidiandestroyer.datatypes.EntityData;
-import io.snw.obsidiandestroyer.datatypes.LiquidExplosion;
+import io.snw.obsidiandestroyer.enumerations.DamageResult;
 import io.snw.obsidiandestroyer.enumerations.TimerState;
 import io.snw.obsidiandestroyer.util.Util;
 import org.bukkit.*;
@@ -98,7 +97,28 @@ public class ChunkManager {
 
         // Liquid overrides
         if (ConfigManager.getInstance().getBypassAllFluidProtection()) {
-            LiquidExplosion.handle(event, blocklist);
+            int redstoneCount = 0;
+            final int cannon_radius = 2;
+
+            // Protects TNT cannons from exploding themselves
+            if (ConfigManager.getInstance().getProtectTNTCannons()) {
+                for (int x = -cannon_radius; x <= cannon_radius; x++) {
+                    for (int y = -cannon_radius; y <= cannon_radius; y++) {
+                        for (int z = -cannon_radius; z <= cannon_radius; z++) {
+                            Location targetLoc = new Location(detonator.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
+                            if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_ON) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_OFF)) {
+                                if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_ON) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_OFF)) {
+                                    redstoneCount++;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (redstoneCount >= 6) {
+                    return;
+                }
+            }
+            detonator.setMetadata("ObbyLiquidEntity", new FixedMetadataValue(ObsidianDestroyer.getInstance(), new EntityData(event.getEntityType())));
         } else if ((detonatorLoc.getBlock().isLiquid()) && (ConfigManager.getInstance().getFluidsProtectIndustructables())) {
             return;
         }
@@ -106,22 +126,25 @@ public class ChunkManager {
         // Check explosion blocks and their distance from the detonation.
         for (Block block : event.blockList()) {
             if (MaterialManager.getInstance().contains(block.getType().name())) {
-                if (detonatorLoc.distance(block.getLocation()) > Util.getMaxDistance(block.getType().name(), radius) + 0.6) {
+                if (detonatorLoc.distance(block.getLocation()) + 0.4 > Util.getMaxDistance(block.getType().name(), radius)) {
                     blocksIgnored.add(block);
                 } else {
-                    DamageResult result = blowBlockUp(block.getLocation(), detonator);
-                    if (result.isDestroyed()) {
+                    DamageResult result = damageBlock(block.getLocation(), detonator);
+                    if (result == DamageResult.DESTROY) {
                         blocklist.add(block);
                         continue;
                     }
-                    if (result.isDamage()) {
+                    if (result == DamageResult.DAMAGE) {
                         blocksIgnored.add(block);
                     }
                 }
             }
         }
 
+        final boolean enabledBedrock = MaterialManager.getInstance().contains(Material.BEDROCK.name());
+
         // For materials that are not normally destructible.
+        // FIXME: Damage to blocks bleeds between materials
         for (int x = -radius; x <= radius; x++) {
             for (int y = radius; y >= -radius; y--) {
                 for (int z = -radius; z <= radius; z++) {
@@ -129,17 +152,52 @@ public class ChunkManager {
                     if (blocksIgnored.contains(targetLoc.getBlock()) || targetLoc.getBlock().getType() == Material.AIR) {
                         continue;
                     }
+                    if (targetLoc.getBlock().getType() == Material.BEDROCK && !enabledBedrock) {
+                        continue;
+                    }
+                    final int radiuz = Math.min(radius, Util.getMaxDistance(targetLoc.getBlock().getType().name(), radius));
+                    final double distance = detonatorLoc.distance(targetLoc);
+                    // Liquid overrides
+                    if (ConfigManager.getInstance().getBypassAllFluidProtection()) {
+                        if (distance < radiuz - 0.1 && Util.isNearLiquid(targetLoc)) {
+                            if (!event.blockList().contains(targetLoc)) {
+                                if (distance > radiuz - 0.6 && Math.random() <= 0.4) {
+                                    blocksIgnored.add(targetLoc.getBlock());
+                                    continue;
+                                }
+                                if (MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name())) {
+                                    DamageResult result = damageBlock(targetLoc.getBlock().getLocation(), detonator);
+                                    if (result == DamageResult.DESTROY) {
+                                        blocklist.add(targetLoc.getBlock());
+                                        continue;
+                                    }
+                                    if (result == DamageResult.DAMAGE) {
+                                        blocksIgnored.add(targetLoc.getBlock());
+                                    }
+                                } else {
+                                    blocklist.add(targetLoc.getBlock());
+                                }
+                            }
+                        }
+                        if (blocksIgnored.contains(targetLoc.getBlock()) || blocklist.contains(targetLoc.getBlock())) {
+                            continue;
+                        }
+                    }
                     if (!MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name())) {
                         continue;
                     }
-                    // FIXME: Damage to blocks bleed between materials with mismatched blast radius
-                    if (detonatorLoc.distance(targetLoc) <= Math.min(radius, Util.getMaxDistance(targetLoc.getBlock().getType().name(), radius))) {
-                        DamageResult result = blowBlockUp(targetLoc.getBlock().getLocation(), detonator);
-                        if (result.isDestroyed()) {
+                    // Block damage
+                    if (distance <= radiuz) {
+                        if (distance > radiuz - 0.4 && Math.random() <= 0.2) {
+                            blocksIgnored.add(targetLoc.getBlock());
+                            continue;
+                        }
+                        DamageResult result = damageBlock(targetLoc.getBlock().getLocation(), detonator);
+                        if (result == DamageResult.DESTROY) {
                             blocklist.add(targetLoc.getBlock());
                             continue;
                         }
-                        if (result.isDamage()) {
+                        if (result == DamageResult.DAMAGE) {
                             blocksIgnored.add(targetLoc.getBlock());
                         }
                     } else if (event.blockList().contains(targetLoc.getBlock())) {
@@ -165,7 +223,7 @@ public class ChunkManager {
         ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(explosionEvent);
 
         if (explosionEvent.isCancelled()) {
-            ObsidianDestroyer.debug("OD explosionEvent Canceled");
+            ObsidianDestroyer.debug("ExplosionEvent Canceled");
             return;
         }
 
@@ -175,8 +233,10 @@ public class ChunkManager {
                 dropBlockAndResetDurability(block.getLocation());
             } else if (MaterialManager.getInstance().contains(block.getType().name()) && MaterialManager.getInstance().getDurability(block.getType().name()) <= 1){ 
                 destroyBlockAndDropItem(block.getLocation());
-            } else if (block.isLiquid() && event.getEntity().hasMetadata("LiquidEntity")) {
+            } else if (block.isLiquid() && event.getEntity().hasMetadata("ObbyLiquidEntity")) {
                 block.setType(Material.AIR);
+            } else if (block.getType() == Material.TNT) {
+                continue;
             } else {
                 block.breakNaturally();
             }
@@ -193,52 +253,51 @@ public class ChunkManager {
      *
      * @param at the location of the block
      * @param entity the entity that triggered the event
-     * @return true if the blow is handled by the plugin
+     * @return DamageResult result of damageBlock attempt
      */
-    private DamageResult blowBlockUp(final Location at, Entity entity) {
+    private DamageResult damageBlock(final Location at, Entity entity) {
         if (at == null || entity == null) {
-            return new DamageResult(false, false);
+            return DamageResult.NONE;
         }
 
         EntityType eventTypeRep = entity.getType();
         Block block = at.getBlock();
         if (block == null) {
-            return new DamageResult(false, false);
+            return DamageResult.NONE;
         }
         if (block.getType() == Material.AIR) {
-            return new DamageResult(false, false);
+            return DamageResult.NONE;
         }
 
         if (block.getType() == Material.BEDROCK && ConfigManager.getInstance().getProtectBedrockBorders()) {
             if (block.getY() <= 5 && block.getWorld().getEnvironment() != Environment.THE_END) {
-                return new DamageResult(true, false);
+                return DamageResult.NONE;
             } else if (block.getY() >= 123 && block.getWorld().getEnvironment() == Environment.NETHER) {
-                return new DamageResult(true, false);
+                return DamageResult.NONE;
             }
         }
 
         if (eventTypeRep.equals(EntityType.PRIMED_TNT) && !MaterialManager.getInstance().getTntEnabled(block.getType().name())) {
-            return new DamageResult(false, false);
+            return DamageResult.NONE;
         }
         if (eventTypeRep.equals(EntityType.CREEPER) && !MaterialManager.getInstance().getCreepersEnabled(block.getType().name())) {
-            return new DamageResult(false, false);
+            return DamageResult.NONE;
         }
         if (eventTypeRep.equals(EntityType.WITHER) || eventTypeRep.equals(EntityType.WITHER_SKULL) && !MaterialManager.getInstance().getWithersEnabled(block.getType().name())) {
-            return new DamageResult(false, false);
+            return DamageResult.NONE;
         }
         if (eventTypeRep.equals(EntityType.MINECART_TNT) && !MaterialManager.getInstance().getTntMinecartsEnabled(block.getType().name())) {
-            return new DamageResult(false, false);
+            return DamageResult.NONE;
         }
         if ((eventTypeRep.equals(EntityType.FIREBALL) || eventTypeRep.equals(EntityType.SMALL_FIREBALL) || eventTypeRep.equals(EntityType.GHAST)) && !MaterialManager.getInstance().getGhastsEnabled(block.getType().name())) {
-            return new DamageResult(false, false);
+            return DamageResult.NONE;
         }
 
         MaterialManager materials = MaterialManager.getInstance();
         // Just in case the material is in the list and not enabled...
         if (!materials.getDurabilityEnabled(block.getType().name())) {
-            return new DamageResult(false, false);
+            return DamageResult.NONE;
         }
-        boolean destroy = false;
         // Handle block if the materials durability is greater than one, else destroy the block
         if (materials.getDurability(block.getType().name()) > 1) {
             TimerState state = checkDurabilityActive(block.getLocation());
@@ -253,7 +312,7 @@ public class ChunkManager {
                 currentDurability += materials.getDamageTypeAmount(entity, block.getType().name());
                 if (Util.checkIfMax(currentDurability, block.getType().name())) {
                     // counter has reached max durability, remove and drop an item
-                    destroy = true;
+                    return DamageResult.DESTROY;
                 } else {
                     // counter has not reached max durability damage yet
                     if (!materials.getDurabilityResetTimerEnabled(block.getType().name())) {
@@ -269,13 +328,13 @@ public class ChunkManager {
                     startNewTimer(block, materials.getDamageTypeAmount(entity, block.getType().name()), state);
                 }
                 if (Util.checkIfMax(materials.getDamageTypeAmount(entity, block.getType().name()), block.getType().name())) {
-                    destroy = true;
+                    return DamageResult.DESTROY;
                 }
             }
         } else {
-            destroy = true;
+            return DamageResult.DESTROY;
         }
-        return new DamageResult(true, destroy);
+        return DamageResult.DAMAGE;
     }
 
     /**
@@ -316,7 +375,7 @@ public class ChunkManager {
         while (iter.hasNext()) {
             Block block = iter.next();
             if (MaterialManager.getInstance().contains(block.getType().name()) && !block.getType().equals(Material.AIR)) {
-                if (blowBlockUp(block.getLocation())) {
+                if (damageBlock(block.getLocation()) != DamageResult.NONE) {
                     blocksIgnored.add(block);
                 }
             }
@@ -361,7 +420,7 @@ public class ChunkManager {
                         continue;
                     }
                     if (location.distance(targetLoc) <= Math.min(radius, Util.getMaxDistance(targetLoc.getBlock().getType().name(), radius))) {
-                        if (blowBlockUp(targetLoc.getBlock().getLocation())) {
+                        if (damageBlock(targetLoc.getBlock().getLocation()) != DamageResult.NONE) {
                             if (ConfigManager.getInstance().getEffectsEnabled()) {
                                 final double random = Math.random();
                                 if (random <= ConfigManager.getInstance().getEffectsChance()) {
@@ -383,34 +442,34 @@ public class ChunkManager {
      * Handles a block on an ProjectilePiercingEvent
      *
      * @param at the location of the block
-     * @return true if the blow is handled by the plugin
+     * @return DamageResult result of damageBlock attempt
      */
-    private boolean blowBlockUp(final Location at) {
+    private DamageResult damageBlock(final Location at) {
         if (at == null) {
-            return false;
+            return DamageResult.NONE;
         }
         Block block = at.getBlock();
         if (block == null) {
-            return false;
+            return DamageResult.NONE;
         }
         if (block.getType() == Material.AIR) {
-            return false;
+            return DamageResult.NONE;
         }
 
         if (block.getType() == Material.BEDROCK && ConfigManager.getInstance().getProtectBedrockBorders()) {
             if (block.getY() <= 5 && block.getWorld().getEnvironment() != Environment.THE_END) {
-                return true;
+                return DamageResult.NONE;
             } else if (block.getY() >= 123 && block.getWorld().getEnvironment() == Environment.NETHER) {
-                return true;
+                return DamageResult.NONE;
             }
         }
         MaterialManager materials = MaterialManager.getInstance();
         // Just in case the material is in the list and not enabled...
         if (!materials.getDurabilityEnabled(block.getType().name())) {
-            return false;
+            return DamageResult.NONE;
         }
         if (!materials.getCannonsEnabled(block.getType().name())) {
-            return false;
+            return DamageResult.NONE;
         }
         // Handle block if the materials durability is greater than one, else destroy the block
         if (materials.getDurability(block.getType().name()) > 1) {
@@ -427,6 +486,7 @@ public class ChunkManager {
                 if (Util.checkIfMax(currentDurability, block.getType().name())) {
                     // counter has reached max durability, remove and drop an item
                     dropBlockAndResetDurability(at);
+                    return DamageResult.DESTROY;
                 } else {
                     // counter has not reached max durability damage yet
                     if (!materials.getDurabilityResetTimerEnabled(block.getType().name())) {
@@ -443,12 +503,14 @@ public class ChunkManager {
                 }
                 if (Util.checkIfMax(materials.getDamageTypeCannonsAmount(block.getType().name()), block.getType().name())) {
                     dropBlockAndResetDurability(at);
+                    return DamageResult.DESTROY;
                 }
             }
         } else {
             destroyBlockAndDropItem(at);
+            return DamageResult.DESTROY;
         }
-        return true;
+        return DamageResult.DAMAGE;
     }
 
     /**

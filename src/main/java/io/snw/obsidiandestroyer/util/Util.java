@@ -1,7 +1,10 @@
 package io.snw.obsidiandestroyer.util;
 
 import io.snw.obsidiandestroyer.managers.MaterialManager;
+
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 
 public class Util {
 
@@ -191,5 +194,26 @@ public class Util {
 
     public static boolean checkIfMax(int value, String id) {
         return value >= MaterialManager.getInstance().getDurability(id);
+    }
+
+    public static final boolean isNearLiquid(Location location) {
+        for (BlockFace face : BlockFace.values()) {
+            switch (face) {
+                case NORTH:
+                case EAST:
+                case SOUTH:
+                case WEST:
+                case UP:
+                case DOWN:
+                case SELF:
+                    if (location.getBlock().getRelative(face) != null && location.getBlock().getRelative(face).isLiquid()) {
+                        return true;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        return false;
     }
 }
