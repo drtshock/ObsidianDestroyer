@@ -2,6 +2,8 @@ package io.snw.obsidiandestroyer.datatypes;
 
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.managers.ConfigManager;
+import io.snw.obsidiandestroyer.managers.MaterialManager;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -54,11 +56,16 @@ public class LiquidExplosion {
             }
         }
 
+        final boolean enabledBedrock = MaterialManager.getInstance().contains(Material.BEDROCK.name());
+
         // Adds liquids and blocks near them to the event listings
         for (int x = -RADIUS; x <= RADIUS; x++) {
             for (int y = -RADIUS; y <= RADIUS; y++) {
                 for (int z = -RADIUS; z <= RADIUS; z++) {
                     Location targetLoc = new Location(entity.getWorld(), entity.getLocation().getX() + x, entity.getLocation().getY() + y, entity.getLocation().getZ() + z);
+                    if (targetLoc.getBlock().getType() == Material.BEDROCK && !enabledBedrock) {
+                        continue;
+                    }
                     if (isNearLiquid(targetLoc)) {
                         if (!removeLiquids) {
                             removeLiquids = true;
