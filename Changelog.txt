@@ -2,6 +2,11 @@ Version 4.2
 + Correct Cannons Implementation
 + Improve explosion event handling
 + Fixes for interactions with other plugins
++ Improved liquid explosion override
+
+Version 4.1.4
++ Made durability check item configurable
++ Correct rare NPE with null chunks
 
 Version 4.1.3
 + Add null checks for better things.
