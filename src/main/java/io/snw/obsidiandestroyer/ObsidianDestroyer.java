@@ -11,13 +11,13 @@ import io.snw.obsidiandestroyer.managers.HookManager;
 import io.snw.obsidiandestroyer.managers.MaterialManager;
 import io.snw.obsidiandestroyer.util.Metrics;
 import io.snw.obsidiandestroyer.util.Updater;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.bukkit.plugin.PluginManager;
 
 public class ObsidianDestroyer extends JavaPlugin {
 

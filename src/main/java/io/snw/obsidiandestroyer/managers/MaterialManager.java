@@ -39,6 +39,7 @@ public class MaterialManager {
      * Checks if the managed blocks contains an item
      *
      * @param material to compare against
+     *
      * @return true if item equals managed block
      */
     public boolean contains(String material) {
@@ -112,6 +113,7 @@ public class MaterialManager {
      * Returns if Fireball damage is enabled for block
      *
      * @param material key
+     *
      * @return Fireball damage is enabled for block
      */
     public boolean getGhastsEnabled(String material) {
@@ -125,6 +127,7 @@ public class MaterialManager {
      * Returns if Creeper damage is enabled for block
      *
      * @param material key
+     *
      * @return Creeper damage is enabled for block
      */
     public boolean getCreepersEnabled(String material) {
@@ -138,6 +141,7 @@ public class MaterialManager {
      * Returns if Cannon damage is enabled for block
      *
      * @param material key
+     *
      * @return Cannon damage is enabled for block
      */
     public boolean getCannonsEnabled(String material) {
@@ -151,6 +155,7 @@ public class MaterialManager {
      * Returns if TNT damage is enabled for block
      *
      * @param material key
+     *
      * @return TNT damage is enabled for block
      */
     public boolean getTntEnabled(String material) {
@@ -164,6 +169,7 @@ public class MaterialManager {
      * Returns if TNT minecart damage is enabled for block
      *
      * @param material key
+     *
      * @return TNT minecart damage is enabled for block
      */
     public boolean getTntMinecartsEnabled(String material) {
@@ -177,6 +183,7 @@ public class MaterialManager {
      * Returns if Wither damage is enabled for block
      *
      * @param material key
+     *
      * @return Wither damage is enabled for block
      */
     public boolean getWithersEnabled(String material) {
@@ -190,6 +197,7 @@ public class MaterialManager {
      * Returns the blast radius for a specific material
      *
      * @param material the name of the material to lookup
+     *
      * @return Blast Radius or 0
      */
     public int getBlastRadius(String material) {
@@ -204,6 +212,7 @@ public class MaterialManager {
      *
      * @param entity the entity that is involved in damaging
      * @param material the name of the material to lookup
+     *
      * @return amount of damage done
      */
     public int getDamageTypeAmount(Entity entity, String material) {
@@ -237,6 +246,7 @@ public class MaterialManager {
      * Returns the amount of damage done to the material by a cannon projectile
      *
      * @param material the name of the material to lookup
+     *
      * @return amount of damage done
      */
     public int getDamageTypeCannonsAmount(String material) {

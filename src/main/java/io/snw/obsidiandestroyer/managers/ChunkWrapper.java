@@ -50,6 +50,7 @@ public class ChunkWrapper {
      * Gets the Key of the location
      *
      * @param location the location to get the key from
+     *
      * @return the key from the location
      */
     public Key getKey(Location location) {
@@ -63,6 +64,7 @@ public class ChunkWrapper {
      * Gets the durability of a hash representation
      *
      * @param representation the hash representation to check
+     *
      * @return the durability of the hash representation
      */
     public int getDurability(int representation) {
@@ -73,6 +75,7 @@ public class ChunkWrapper {
      * Gets the durability time of a hash representation
      *
      * @param representation the hash representation to check
+     *
      * @return the durability time of the hash representation
      */
     public long getDurabilityTime(int representation) {
@@ -83,6 +86,7 @@ public class ChunkWrapper {
      * Gets the durability time of the location
      *
      * @param location the location to check
+     *
      * @return the durability of the location
      */
     public int getDurability(Location location) {
@@ -93,6 +97,7 @@ public class ChunkWrapper {
      * Gets the durability time of the location
      *
      * @param location the location to check
+     *
      * @return the durability time of the location
      */
     public long getDurabilityTime(Location location) {
@@ -161,6 +166,7 @@ public class ChunkWrapper {
      * Does the chunk contains this location key
      *
      * @param location the location to check the chunk for
+     *
      * @return true if the location is found within the chunk
      */
     public boolean contains(Location location) {
@@ -174,6 +180,7 @@ public class ChunkWrapper {
      * Does the chunk contains this location key
      *
      * @param representation the hash representation to check the chunk for
+     *
      * @return true if the hash representation is found within the chunk
      */
     public boolean contains(int representation) {

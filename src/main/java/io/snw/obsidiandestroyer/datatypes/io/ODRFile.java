@@ -28,6 +28,7 @@ public class ODRFile {
      *
      * @param file the file to prepare
      * @param write true to write to the file, false otherwise
+     *
      * @throws FileNotFoundException thrown if the file is missing
      */
     public void prepare(File file, boolean write) throws FileNotFoundException {
@@ -46,6 +47,7 @@ public class ODRFile {
      *
      * @param location the location of the block
      * @param duraAmount material durability amount
+     *
      * @throws IOException thrown if something happens
      */
     public void write(Location location, int duraAmount) throws IOException {
@@ -60,6 +62,7 @@ public class ODRFile {
      * @param z the z location
      * @param duraAmount material durability amount
      * @param duraTime material durability reset time
+     *
      * @throws IOException thrown if something happens
      */
     public void write(int x, int y, int z, int duraAmount, long duraTime) throws IOException {
@@ -79,6 +82,7 @@ public class ODRFile {
      * @param location the location of the entity
      * @param duraTime material durability reset time
      * @param duraTime material durability reset time
+     *
      * @throws IOException thrown if something happens
      */
     public void write(Location location, int duraAmount, long duraTime) throws IOException {
@@ -89,7 +93,9 @@ public class ODRFile {
      * Gets the next block in the file
      *
      * @param world the world for location creation/reading
+     *
      * @return the entry (a block) or null if EOF has been reached / nothing was read
+     *
      * @throws IOException thrown if something happens
      */
     public Key getNext(World world) throws IOException {

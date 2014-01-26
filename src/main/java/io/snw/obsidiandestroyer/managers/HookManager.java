@@ -45,7 +45,7 @@ public class HookManager {
                 String[] vr = ver[1].split("\\-");
                 //ObsidianDestroyer.LOG.info(vr[0] + " - " + (vr.length > 1 ? vr[1] : ""));
                 sv = Integer.parseInt(vr[0]);
-                if (vr.length >1) {
+                if (vr.length > 1) {
                     r = vr[1];
                 }
             }

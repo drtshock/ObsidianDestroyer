@@ -1,5 +1,7 @@
 package io.snw.obsidiandestroyer.managers;
 
+import at.pavlov.cannons.event.ProjectileImpactEvent;
+import at.pavlov.cannons.event.ProjectilePiercingEvent;
 import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.datatypes.EntityData;
 import io.snw.obsidiandestroyer.enumerations.DamageResult;
@@ -13,9 +15,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
-
-import at.pavlov.cannons.event.ProjectileImpactEvent;
-import at.pavlov.cannons.event.ProjectilePiercingEvent;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -229,7 +228,7 @@ public class ChunkManager {
         for (Block block : explosionEvent.blockList()) {
             if (contains(block.getLocation())) {
                 dropBlockAndResetDurability(block.getLocation());
-            } else if (MaterialManager.getInstance().contains(block.getType().name()) && MaterialManager.getInstance().getDurability(block.getType().name()) <= 1){ 
+            } else if (MaterialManager.getInstance().contains(block.getType().name()) && MaterialManager.getInstance().getDurability(block.getType().name()) <= 1) {
                 destroyBlockAndDropItem(block.getLocation());
             } else if (block.isLiquid() && event.getEntity().hasMetadata("ObbyLiquidEntity")) {
                 block.setType(Material.AIR);
@@ -251,6 +250,7 @@ public class ChunkManager {
      *
      * @param at the location of the block
      * @param entity the entity that triggered the event
+     *
      * @return DamageResult result of damageBlock attempt
      */
     private DamageResult damageBlock(final Location at, Entity entity) {
@@ -440,6 +440,7 @@ public class ChunkManager {
      * Handles a block on an ProjectilePiercingEvent
      *
      * @param at the location of the block
+     *
      * @return DamageResult result of damageBlock attempt
      */
     private DamageResult damageBlock(final Location at) {
@@ -600,6 +601,7 @@ public class ChunkManager {
      * Check if there is an active durability reset
      *
      * @param location the location to check
+     *
      * @return the state of the durability timer object
      */
     public TimerState checkDurabilityActive(Location location) {
@@ -648,6 +650,7 @@ public class ChunkManager {
      * Gets the Material durability from a location
      *
      * @param block the block to the checks durability
+     *
      * @return the durabiltiy value
      */
     public Integer getMaterialDurability(Block block) {
@@ -662,6 +665,7 @@ public class ChunkManager {
      * Gets the Material durability from a location
      *
      * @param location the location to checks durability
+     *
      * @return the durability value
      */
     public Integer getMaterialDurability(Location location) {
@@ -829,6 +833,7 @@ public class ChunkManager {
      * Does the chunk contain this block
      *
      * @param block the block to check the chunk for
+     *
      * @return true if block found within chunk
      */
     public boolean contains(Block block) {
@@ -843,6 +848,7 @@ public class ChunkManager {
      * Does the chunk contain this location
      *
      * @param location the location to check the chunk for
+     *
      * @return true if location found within chunk
      */
     public boolean contains(Location location) {
@@ -861,6 +867,7 @@ public class ChunkManager {
      * Gets the chunk wrapper from a chunk
      *
      * @param chunk the chunk to get a wrapper from
+     *
      * @return the ChunkWrapper that belongs to the chunk.
      */
     private ChunkWrapper getWrapper(Chunk chunk) {

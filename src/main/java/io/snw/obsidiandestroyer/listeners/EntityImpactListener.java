@@ -1,12 +1,10 @@
 package io.snw.obsidiandestroyer.listeners;
 
-import io.snw.obsidiandestroyer.managers.ChunkManager;
-
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-
 import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
+import io.snw.obsidiandestroyer.managers.ChunkManager;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
 public class EntityImpactListener implements Listener {
 

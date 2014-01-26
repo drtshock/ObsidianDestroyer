@@ -1,7 +1,6 @@
 package io.snw.obsidiandestroyer.util;
 
 import io.snw.obsidiandestroyer.managers.MaterialManager;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;

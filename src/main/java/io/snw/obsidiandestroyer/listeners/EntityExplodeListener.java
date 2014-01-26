@@ -1,7 +1,6 @@
 package io.snw.obsidiandestroyer.listeners;
 
 import io.snw.obsidiandestroyer.managers.ChunkManager;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
