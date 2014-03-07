@@ -59,4 +59,21 @@ Explosions:
 # Example: DisabledOnWorlds: [world_survival, world_creative]
 DisabledOnWorlds: []
 
+# Works directly with Factions for extended event processing; adds the ability
+#  for durability multipliers based on the online status of a faction.
+# Works with Factions 2.x only.
+Factions:
+  # Toggles explosion features between ObsidianDestroyer and Factions.
+  HandleExplosions: true
+  # Toggle to manage an offline faction. (Override & Multiplier)
+  # Enables an override that will allow [managed] blocks to be destroyed for a protected offline faction.
+  HandleOffline: false
+  # Multiplier to use for changing the durability of an offline faction.
+  OfflineDurabilityMultiplier: 1.0
+  # Toggle to manage an online faction. (Multiplier)
+  HandleOnline: false
+  # Multiplier to use for changing the durability of an online faction.
+  OnlineDurabilityMultiplier: 1.0
+
+
 # Thats it :3

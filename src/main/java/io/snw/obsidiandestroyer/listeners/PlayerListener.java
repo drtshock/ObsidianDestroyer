@@ -4,6 +4,8 @@ import io.snw.obsidiandestroyer.ObsidianDestroyer;
 import io.snw.obsidiandestroyer.managers.ChunkManager;
 import io.snw.obsidiandestroyer.managers.ConfigManager;
 import io.snw.obsidiandestroyer.managers.MaterialManager;
+import io.snw.obsidiandestroyer.util.Util;
+
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -39,7 +41,7 @@ public class PlayerListener implements Listener {
                         event.setCancelled(true);
                     }
                     int amount = ChunkManager.getInstance().getMaterialDurability(block);
-                    int max = mm.getDurability(block.getType().name());
+                    int max = (int) Math.round(mm.getDurability(block.getType().name()) * Util.getMultiplier(block.getLocation()));
                     player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this block is: " + ChatColor.WHITE + (max - amount) + "/" + max);
                 }
             }

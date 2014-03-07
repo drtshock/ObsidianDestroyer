@@ -286,4 +286,25 @@ public class ConfigManager {
     public Material getDurabilityCheckItem() {
         return Material.matchMaterial(config.getString("DurabilityCheckItem", "POTATO_ITEM"));
     }
+
+    public boolean getHandleFactions() {
+        return config.getBoolean("Factions.HandleExplosions", true);
+    }
+
+    public boolean getHandleOfflineFactions() {
+        return config.getBoolean("Factions.HandleOffline", false);
+    }
+
+    public boolean getHandleOnlineFactions() {
+        return config.getBoolean("Factions.HandleOnline", false);
+    }
+
+    public double getOfflineFactionsDurabilityMultiplier() {
+        return config.getDouble("Factions.OfflineDurabilityMultiplier", 1.0);
+    }
+
+    public double getOnlineFactionsDurabilityMultiplier () {
+        return config.getDouble("Factions.OnlineDurabilityMultiplier", 1.0);
+    }
+
 }

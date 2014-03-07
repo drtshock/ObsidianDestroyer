@@ -16,6 +16,11 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import com.massivecraft.factions.FFlag;
+import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.mcore.ps.PS;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -96,11 +101,10 @@ public class ChunkManager {
 
         // Liquid overrides
         if (ConfigManager.getInstance().getBypassAllFluidProtection()) {
-            int redstoneCount = 0;
-            final int cannon_radius = 2;
-
             // Protects TNT cannons from exploding themselves
             if (ConfigManager.getInstance().getProtectTNTCannons()) {
+                int redstoneCount = 0;
+                final int cannon_radius = 2;
                 for (int x = -cannon_radius; x <= cannon_radius; x++) {
                     for (int y = -cannon_radius; y <= cannon_radius; y++) {
                         for (int z = -cannon_radius; z <= cannon_radius; z++) {
@@ -115,6 +119,7 @@ public class ChunkManager {
                     return;
                 }
             }
+
             detonator.setMetadata("ObbyLiquidEntity", new FixedMetadataValue(ObsidianDestroyer.getInstance(), new EntityData(event.getEntityType())));
         } else if ((detonatorLoc.getBlock().isLiquid()) && (ConfigManager.getInstance().getFluidsProtectIndustructables())) {
             return;
@@ -204,9 +209,21 @@ public class ChunkManager {
             }
         }
 
+        // Bypass list for special handlings
+        final List<Block> bypassBlockList = new ArrayList<Block>();
         // Remove managed blocks
         for (Block block : blocklist) {
             event.blockList().remove(block);
+
+            // Factions bypasses
+            if (HookManager.getInstance().isHookedFactions()) {
+                if (ConfigManager.getInstance().getHandleFactions() && ConfigManager.getInstance().getHandleOfflineFactions()) {
+                    Faction faction = BoardColls.get().getFactionAt(PS.valueOf(block.getLocation()));
+                    if (faction.isFactionConsideredOffline()) {
+                        bypassBlockList.add(block);
+                    }
+                }
+            }
         }
         for (Block block : blocksIgnored) {
             event.blockList().remove(block);
@@ -219,9 +236,17 @@ public class ChunkManager {
         EntityExplodeEvent explosionEvent = new EntityExplodeEvent(detonator, detonator.getLocation(), blocklist, 3.0f);
         ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(explosionEvent);
 
+        // Repopulate the events blocklist with blocks through the bypass
+        if (bypassBlockList.size() > 0) {
+            explosionEvent.blockList().addAll(bypassBlockList);
+        }
         if (explosionEvent.isCancelled()) {
-            ObsidianDestroyer.debug("ExplosionEvent Canceled");
-            return;
+            if (bypassBlockList.size() == 0) {
+                ObsidianDestroyer.debug("Explosion Event Canceled");
+                return;
+            } else {
+                ObsidianDestroyer.debug("Explosion Event Cancelation Bypassed");
+            }
         }
 
         // Remove and destroy needed blocks
@@ -266,6 +291,7 @@ public class ChunkManager {
         if (block.getType() == Material.AIR) {
             return DamageResult.NONE;
         }
+        String blockTypeName = block.getType().name();
 
         if (block.getType() == Material.BEDROCK && ConfigManager.getInstance().getProtectBedrockBorders()) {
             if (block.getY() <= 5 && block.getWorld().getEnvironment() != Environment.THE_END) {
@@ -275,29 +301,45 @@ public class ChunkManager {
             }
         }
 
-        if (eventTypeRep.equals(EntityType.PRIMED_TNT) && !MaterialManager.getInstance().getTntEnabled(block.getType().name())) {
+        if (eventTypeRep.equals(EntityType.PRIMED_TNT) && !MaterialManager.getInstance().getTntEnabled(blockTypeName)) {
             return DamageResult.NONE;
         }
-        if (eventTypeRep.equals(EntityType.CREEPER) && !MaterialManager.getInstance().getCreepersEnabled(block.getType().name())) {
+        if (eventTypeRep.equals(EntityType.CREEPER) && !MaterialManager.getInstance().getCreepersEnabled(blockTypeName)) {
             return DamageResult.NONE;
         }
-        if (eventTypeRep.equals(EntityType.WITHER) || eventTypeRep.equals(EntityType.WITHER_SKULL) && !MaterialManager.getInstance().getWithersEnabled(block.getType().name())) {
+        if (eventTypeRep.equals(EntityType.WITHER) || eventTypeRep.equals(EntityType.WITHER_SKULL) && !MaterialManager.getInstance().getWithersEnabled(blockTypeName)) {
             return DamageResult.NONE;
         }
-        if (eventTypeRep.equals(EntityType.MINECART_TNT) && !MaterialManager.getInstance().getTntMinecartsEnabled(block.getType().name())) {
+        if (eventTypeRep.equals(EntityType.MINECART_TNT) && !MaterialManager.getInstance().getTntMinecartsEnabled(blockTypeName)) {
             return DamageResult.NONE;
         }
-        if ((eventTypeRep.equals(EntityType.FIREBALL) || eventTypeRep.equals(EntityType.SMALL_FIREBALL) || eventTypeRep.equals(EntityType.GHAST)) && !MaterialManager.getInstance().getGhastsEnabled(block.getType().name())) {
+        if ((eventTypeRep.equals(EntityType.FIREBALL) || eventTypeRep.equals(EntityType.SMALL_FIREBALL) || eventTypeRep.equals(EntityType.GHAST)) && !MaterialManager.getInstance().getGhastsEnabled(blockTypeName)) {
             return DamageResult.NONE;
         }
 
         MaterialManager materials = MaterialManager.getInstance();
         // Just in case the material is in the list and not enabled...
-        if (!materials.getDurabilityEnabled(block.getType().name())) {
+        if (!materials.getDurabilityEnabled(blockTypeName)) {
             return DamageResult.NONE;
         }
+        // Durability multiplier hook for Factions
+        double durabilityMultiplier = 1D;
+        if (HookManager.getInstance().isHookedFactions()) {
+            if (ConfigManager.getInstance().getHandleFactions()) {
+                Faction faction = BoardColls.get().getFactionAt(PS.valueOf(at));
+                if (!faction.getFlag(FFlag.EXPLOSIONS)) {
+                    return DamageResult.NONE;
+                }
+                if (!ConfigManager.getInstance().getHandleOfflineFactions()) {
+                    if (faction.isFactionConsideredOffline()) {
+                        return DamageResult.NONE;
+                    }
+                }
+                durabilityMultiplier = Util.getMultiplier(faction);
+            }
+        }
         // Handle block if the materials durability is greater than one, else destroy the block
-        if (materials.getDurability(block.getType().name()) > 1) {
+        if ((materials.getDurability(blockTypeName) * durabilityMultiplier) >= 2) {
             TimerState state = checkDurabilityActive(block.getLocation());
             if (ConfigManager.getInstance().getEffectsEnabled()) {
                 final double random = Math.random();
@@ -307,25 +349,29 @@ public class ChunkManager {
             }
             if (state == TimerState.RUN || state == TimerState.INACTIVE) {
                 int currentDurability = getMaterialDurability(block);
-                currentDurability += materials.getDamageTypeAmount(entity, block.getType().name());
-                if (Util.checkIfMax(currentDurability, block.getType().name())) {
+                if (Util.checkIfOverMax(currentDurability, blockTypeName, durabilityMultiplier)) {
+                    currentDurability = (int)Math.round(materials.getDurability(blockTypeName) * 0.50);
+                } else {
+                    currentDurability += materials.getDamageTypeAmount(entity, blockTypeName);
+                }
+                if (Util.checkIfMax(currentDurability, blockTypeName, durabilityMultiplier)) {
                     // counter has reached max durability, remove and drop an item
                     return DamageResult.DESTROY;
                 } else {
                     // counter has not reached max durability damage yet
-                    if (!materials.getDurabilityResetTimerEnabled(block.getType().name())) {
+                    if (!materials.getDurabilityResetTimerEnabled(blockTypeName)) {
                         addBlock(block, currentDurability);
                     } else {
                         startNewTimer(block, currentDurability, state);
                     }
                 }
             } else {
-                if (!materials.getDurabilityResetTimerEnabled(block.getType().name())) {
-                    addBlock(block, materials.getDamageTypeAmount(entity, block.getType().name()));
+                if (!materials.getDurabilityResetTimerEnabled(blockTypeName)) {
+                    addBlock(block, materials.getDamageTypeAmount(entity, blockTypeName));
                 } else {
-                    startNewTimer(block, materials.getDamageTypeAmount(entity, block.getType().name()), state);
+                    startNewTimer(block, materials.getDamageTypeAmount(entity, blockTypeName), state);
                 }
-                if (Util.checkIfMax(materials.getDamageTypeAmount(entity, block.getType().name()), block.getType().name())) {
+                if (Util.checkIfMax(materials.getDamageTypeAmount(entity, blockTypeName), blockTypeName, durabilityMultiplier)) {
                     return DamageResult.DESTROY;
                 }
             }
@@ -350,10 +396,21 @@ public class ChunkManager {
 
         LinkedList<Block> blocklist = new LinkedList<Block>();
         Iterator<Block> iter = event.getBlockList().iterator();
+        // Bypass list for special handlings
+        final List<Block> bypassBlockList = new ArrayList<Block>();
         while (iter.hasNext()) {
             Block block = iter.next();
             if (MaterialManager.getInstance().contains(block.getType().name()) && !blocklist.contains(block)) {
                 blocklist.add(block);
+            }
+            // Factions bypasses
+            if (HookManager.getInstance().isHookedFactions()) {
+                if (ConfigManager.getInstance().getHandleFactions() && ConfigManager.getInstance().getHandleOfflineFactions()) {
+                    Faction faction = BoardColls.get().getFactionAt(PS.valueOf(block.getLocation()));
+                    if (faction.isFactionConsideredOffline()) {
+                        bypassBlockList.add(block);
+                    }
+                }
             }
         }
 
@@ -362,8 +419,17 @@ public class ChunkManager {
         EntityExplodeEvent explosionEvent = new EntityExplodeEvent(null, event.getImpactLocation(), blocklist, 0.0f);
         ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(explosionEvent);
 
+        // Repopulate the events blocklist with blocks through the bypass
+        if (bypassBlockList.size() > 0) {
+            explosionEvent.blockList().addAll(bypassBlockList);
+        }
         if (explosionEvent.isCancelled()) {
-            return;
+            if (bypassBlockList.size() == 0) {
+                ObsidianDestroyer.debug("Cannons Explosion Event Canceled");
+                return;
+            } else {
+                ObsidianDestroyer.debug("Cannons Explosion Event Cancelation Bypassed");
+            }
         }
 
         // List of blocks that will be removed from the blocklist
@@ -470,8 +536,24 @@ public class ChunkManager {
         if (!materials.getCannonsEnabled(block.getType().name())) {
             return DamageResult.NONE;
         }
+        // Durability multiplier hook for Factions
+        double durabilityMultiplier = 1D;
+        if (HookManager.getInstance().isHookedFactions()) {
+            if (ConfigManager.getInstance().getHandleFactions()) {
+                Faction faction = BoardColls.get().getFactionAt(PS.valueOf(at));
+                if (!faction.getFlag(FFlag.EXPLOSIONS)) {
+                    return DamageResult.NONE;
+                }
+                if (!ConfigManager.getInstance().getHandleOfflineFactions()) {
+                    if (faction.isFactionConsideredOffline()) {
+                        return DamageResult.NONE;
+                    }
+                }
+                durabilityMultiplier = Util.getMultiplier(faction);
+            }
+        }
         // Handle block if the materials durability is greater than one, else destroy the block
-        if (materials.getDurability(block.getType().name()) > 1) {
+        if (materials.getDurability(block.getType().name()) * durabilityMultiplier >= 2) {
             TimerState state = checkDurabilityActive(block.getLocation());
             if (ConfigManager.getInstance().getEffectsEnabled()) {
                 final double random = Math.random();
@@ -481,8 +563,12 @@ public class ChunkManager {
             }
             if (state == TimerState.RUN || state == TimerState.INACTIVE) {
                 int currentDurability = getMaterialDurability(block);
-                currentDurability += materials.getDamageTypeCannonsAmount(block.getType().name());
-                if (Util.checkIfMax(currentDurability, block.getType().name())) {
+                if (Util.checkIfOverMax(currentDurability, block.getType().name(), durabilityMultiplier)) {
+                    currentDurability = (int)Math.round(materials.getDurability(block.getType().name()) * 0.50);
+                } else {
+                    currentDurability += materials.getDamageTypeCannonsAmount(block.getType().name());
+                }
+                if (Util.checkIfMax(currentDurability, block.getType().name(), durabilityMultiplier)) {
                     // counter has reached max durability, remove and drop an item
                     dropBlockAndResetDurability(at);
                     return DamageResult.DESTROY;
@@ -500,7 +586,7 @@ public class ChunkManager {
                 } else {
                     startNewTimer(block, materials.getDamageTypeCannonsAmount(block.getType().name()), state);
                 }
-                if (Util.checkIfMax(materials.getDamageTypeCannonsAmount(block.getType().name()), block.getType().name())) {
+                if (Util.checkIfMax(materials.getDamageTypeCannonsAmount(block.getType().name()), block.getType().name(), durabilityMultiplier)) {
                     dropBlockAndResetDurability(at);
                     return DamageResult.DESTROY;
                 }

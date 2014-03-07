@@ -1,9 +1,16 @@
 package io.snw.obsidiandestroyer.util;
 
+import io.snw.obsidiandestroyer.managers.ConfigManager;
+import io.snw.obsidiandestroyer.managers.HookManager;
 import io.snw.obsidiandestroyer.managers.MaterialManager;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+
+import com.massivecraft.factions.FFlag;
+import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.mcore.ps.PS;
 
 public class Util {
 
@@ -191,8 +198,18 @@ public class Util {
         return dist;
     }
 
+    @Deprecated
     public static boolean checkIfMax(int value, String id) {
         return value >= MaterialManager.getInstance().getDurability(id);
+    }
+
+    public static boolean checkIfMax(int value, String id, double multi) {
+        return value >= Math.round(MaterialManager.getInstance().getDurability(id) * multi);
+    }
+
+    public static boolean checkIfOverMax(int value, String id, double multi) {
+        final int du = MaterialManager.getInstance().getDurability(id);
+        return value > Math.round((du * multi) + (du * 0.18));
     }
 
     public static final boolean isNearLiquid(Location location) {
@@ -214,5 +231,39 @@ public class Util {
             }
         }
         return false;
+    }
+
+    public static double getMultiplier(Location location) {
+        if (HookManager.getInstance().isHookedFactions()) {
+            if (ConfigManager.getInstance().getHandleFactions()) {
+                Faction faction = BoardColls.get().getFactionAt(PS.valueOf(location));
+                return getMultiplier(faction);
+            }
+        }
+        return 1D;
+    }
+
+    public static double getMultiplier(Faction faction) {
+        double value = 1D;
+        if (!ConfigManager.getInstance().getHandleFactions()) {
+            return value;
+        }
+        if (ConfigManager.getInstance().getHandleOfflineFactions()) {
+            if (faction.isFactionConsideredOffline()) {
+                value = ConfigManager.getInstance().getOfflineFactionsDurabilityMultiplier();
+            }
+        }
+        if (ConfigManager.getInstance().getHandleOnlineFactions()) {
+            if (faction.isFactionConsideredOnline()) {
+                value = ConfigManager.getInstance().getOnlineFactionsDurabilityMultiplier();
+            }
+        }
+        if (!faction.getFlag(FFlag.EXPLOSIONS)) {
+            value = 1D;
+        }
+        if (value <= 0) {
+            value = 1D;
+        }
+        return value;
     }
 }
