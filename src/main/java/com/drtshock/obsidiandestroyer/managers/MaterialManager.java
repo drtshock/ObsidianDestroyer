@@ -1,6 +1,6 @@
-package io.snw.obsidiandestroyer.managers;
+package com.drtshock.obsidiandestroyer.managers;
 
-import io.snw.obsidiandestroyer.datatypes.DurabilityMaterial;
+import com.drtshock.obsidiandestroyer.datatypes.DurabilityMaterial;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;

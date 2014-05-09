@@ -1,6 +1,6 @@
-package io.snw.obsidiandestroyer.datatypes.io;
+package com.drtshock.obsidiandestroyer.datatypes.io;
 
-import io.snw.obsidiandestroyer.datatypes.Key;
+import com.drtshock.obsidiandestroyer.datatypes.Key;
 import org.bukkit.Location;
 import org.bukkit.World;
 

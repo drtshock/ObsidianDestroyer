@@ -1,16 +1,15 @@
-package io.snw.obsidiandestroyer.util;
+package com.drtshock.obsidiandestroyer.util;
 
-import io.snw.obsidiandestroyer.managers.ConfigManager;
-import io.snw.obsidiandestroyer.managers.HookManager;
-import io.snw.obsidiandestroyer.managers.MaterialManager;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
-
+import com.drtshock.obsidiandestroyer.managers.ConfigManager;
+import com.drtshock.obsidiandestroyer.managers.HookManager;
+import com.drtshock.obsidiandestroyer.managers.MaterialManager;
 import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.mcore.ps.PS;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 
 public class Util {
 

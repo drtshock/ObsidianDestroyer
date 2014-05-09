@@ -1,8 +1,8 @@
-package io.snw.obsidiandestroyer.managers;
+package com.drtshock.obsidiandestroyer.managers;
 
-import io.snw.obsidiandestroyer.ObsidianDestroyer;
-import io.snw.obsidiandestroyer.datatypes.DurabilityMaterial;
-import io.snw.obsidiandestroyer.util.Util;
+import com.drtshock.obsidiandestroyer.ObsidianDestroyer;
+import com.drtshock.obsidiandestroyer.datatypes.DurabilityMaterial;
+import com.drtshock.obsidiandestroyer.util.Util;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -303,7 +303,7 @@ public class ConfigManager {
         return config.getDouble("Factions.OfflineDurabilityMultiplier", 1.0);
     }
 
-    public double getOnlineFactionsDurabilityMultiplier () {
+    public double getOnlineFactionsDurabilityMultiplier() {
         return config.getDouble("Factions.OnlineDurabilityMultiplier", 1.0);
     }
 

@@ -1,16 +1,16 @@
-package io.snw.obsidiandestroyer;
+package com.drtshock.obsidiandestroyer;
 
-import io.snw.obsidiandestroyer.commands.ODCommand;
-import io.snw.obsidiandestroyer.listeners.BlockListener;
-import io.snw.obsidiandestroyer.listeners.EntityExplodeListener;
-import io.snw.obsidiandestroyer.listeners.EntityImpactListener;
-import io.snw.obsidiandestroyer.listeners.PlayerListener;
-import io.snw.obsidiandestroyer.managers.ChunkManager;
-import io.snw.obsidiandestroyer.managers.ConfigManager;
-import io.snw.obsidiandestroyer.managers.HookManager;
-import io.snw.obsidiandestroyer.managers.MaterialManager;
-import io.snw.obsidiandestroyer.util.Metrics;
-import io.snw.obsidiandestroyer.util.Updater;
+import com.drtshock.obsidiandestroyer.commands.ODCommand;
+import com.drtshock.obsidiandestroyer.listeners.BlockListener;
+import com.drtshock.obsidiandestroyer.listeners.EntityExplodeListener;
+import com.drtshock.obsidiandestroyer.listeners.EntityImpactListener;
+import com.drtshock.obsidiandestroyer.listeners.PlayerListener;
+import com.drtshock.obsidiandestroyer.managers.ChunkManager;
+import com.drtshock.obsidiandestroyer.managers.ConfigManager;
+import com.drtshock.obsidiandestroyer.managers.HookManager;
+import com.drtshock.obsidiandestroyer.managers.MaterialManager;
+import com.drtshock.obsidiandestroyer.util.Metrics;
+import com.drtshock.obsidiandestroyer.util.Updater;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 

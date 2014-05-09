@@ -1,4 +1,4 @@
-package io.snw.obsidiandestroyer.enumerations;
+package com.drtshock.obsidiandestroyer.enumerations;
 
 public enum DamageResult {
     DAMAGE,

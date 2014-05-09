@@ -1,6 +1,6 @@
-package io.snw.obsidiandestroyer.managers;
+package com.drtshock.obsidiandestroyer.managers;
 
-import io.snw.obsidiandestroyer.ObsidianDestroyer;
+import com.drtshock.obsidiandestroyer.ObsidianDestroyer;
 import org.bukkit.plugin.Plugin;
 
 public class HookManager {

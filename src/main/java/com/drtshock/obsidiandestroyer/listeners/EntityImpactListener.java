@@ -1,8 +1,8 @@
-package io.snw.obsidiandestroyer.listeners;
+package com.drtshock.obsidiandestroyer.listeners;
 
 import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
-import io.snw.obsidiandestroyer.managers.ChunkManager;
+import com.drtshock.obsidiandestroyer.managers.ChunkManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 

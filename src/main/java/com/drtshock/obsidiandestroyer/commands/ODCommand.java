@@ -1,9 +1,9 @@
-package io.snw.obsidiandestroyer.commands;
+package com.drtshock.obsidiandestroyer.commands;
 
-import io.snw.obsidiandestroyer.ObsidianDestroyer;
-import io.snw.obsidiandestroyer.managers.ChunkManager;
-import io.snw.obsidiandestroyer.managers.ConfigManager;
-import io.snw.obsidiandestroyer.managers.MaterialManager;
+import com.drtshock.obsidiandestroyer.ObsidianDestroyer;
+import com.drtshock.obsidiandestroyer.managers.ChunkManager;
+import com.drtshock.obsidiandestroyer.managers.ConfigManager;
+import com.drtshock.obsidiandestroyer.managers.MaterialManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

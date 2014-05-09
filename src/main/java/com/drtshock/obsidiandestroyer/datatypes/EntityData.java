@@ -1,4 +1,4 @@
-package io.snw.obsidiandestroyer.datatypes;
+package com.drtshock.obsidiandestroyer.datatypes;
 
 import org.bukkit.entity.EntityType;
 

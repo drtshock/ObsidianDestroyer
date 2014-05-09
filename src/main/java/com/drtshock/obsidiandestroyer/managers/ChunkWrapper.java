@@ -1,8 +1,8 @@
-package io.snw.obsidiandestroyer.managers;
+package com.drtshock.obsidiandestroyer.managers;
 
-import io.snw.obsidiandestroyer.ObsidianDestroyer;
-import io.snw.obsidiandestroyer.datatypes.Key;
-import io.snw.obsidiandestroyer.datatypes.io.ODRFile;
+import com.drtshock.obsidiandestroyer.ObsidianDestroyer;
+import com.drtshock.obsidiandestroyer.datatypes.Key;
+import com.drtshock.obsidiandestroyer.datatypes.io.ODRFile;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;

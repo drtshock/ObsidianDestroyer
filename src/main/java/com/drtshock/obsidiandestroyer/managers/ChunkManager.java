@@ -1,12 +1,16 @@
-package io.snw.obsidiandestroyer.managers;
+package com.drtshock.obsidiandestroyer.managers;
 
 import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
-import io.snw.obsidiandestroyer.ObsidianDestroyer;
-import io.snw.obsidiandestroyer.datatypes.EntityData;
-import io.snw.obsidiandestroyer.enumerations.DamageResult;
-import io.snw.obsidiandestroyer.enumerations.TimerState;
-import io.snw.obsidiandestroyer.util.Util;
+import com.drtshock.obsidiandestroyer.ObsidianDestroyer;
+import com.drtshock.obsidiandestroyer.datatypes.EntityData;
+import com.drtshock.obsidiandestroyer.enumerations.DamageResult;
+import com.drtshock.obsidiandestroyer.enumerations.TimerState;
+import com.drtshock.obsidiandestroyer.util.Util;
+import com.massivecraft.factions.FFlag;
+import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.mcore.ps.PS;
 import org.bukkit.*;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
@@ -15,11 +19,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
-
-import com.massivecraft.factions.FFlag;
-import com.massivecraft.factions.entity.BoardColls;
-import com.massivecraft.factions.entity.Faction;
-import com.massivecraft.mcore.ps.PS;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -350,7 +349,7 @@ public class ChunkManager {
             if (state == TimerState.RUN || state == TimerState.INACTIVE) {
                 int currentDurability = getMaterialDurability(block);
                 if (Util.checkIfOverMax(currentDurability, blockTypeName, durabilityMultiplier)) {
-                    currentDurability = (int)Math.round(materials.getDurability(blockTypeName) * 0.50);
+                    currentDurability = (int) Math.round(materials.getDurability(blockTypeName) * 0.50);
                 } else {
                     currentDurability += materials.getDamageTypeAmount(entity, blockTypeName);
                 }
@@ -564,7 +563,7 @@ public class ChunkManager {
             if (state == TimerState.RUN || state == TimerState.INACTIVE) {
                 int currentDurability = getMaterialDurability(block);
                 if (Util.checkIfOverMax(currentDurability, block.getType().name(), durabilityMultiplier)) {
-                    currentDurability = (int)Math.round(materials.getDurability(block.getType().name()) * 0.50);
+                    currentDurability = (int) Math.round(materials.getDurability(block.getType().name()) * 0.50);
                 } else {
                     currentDurability += materials.getDamageTypeCannonsAmount(block.getType().name());
                 }
