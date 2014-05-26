@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.drtshock</groupId>
     <artifactId>ObsidianDestroyer</artifactId>
-    <version>4.2.2</version>
+    <version>4.2.3-SNAPSHOT</version>
     <name>ObsidianDestroyer</name>
     <url>https://github.com/drtshock/ObsidianDestroyer</url>
 
@@ -89,7 +89,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.7.2-R0.1-SNAPSHOT</version>
+            <version>LATEST</version>
         </dependency>
     </dependencies>
 </project>

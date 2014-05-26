@@ -30,7 +30,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (player.getItemInHand().getAmount() > 0 && event.getAction() == Action.LEFT_CLICK_BLOCK) {
+        if (player.getItemInHand().getAmount() > 0 && event.getAction() == Action.LEFT_CLICK_BLOCK && event.hasBlock()) {
             Material itemInHand = player.getItemInHand().getType();
             Block block = event.getClickedBlock();
             if (ConfigManager.getInstance().getDurabilityCheckItem().equals(itemInHand) && player.hasPermission("obsidiandestroyer.check")) {
