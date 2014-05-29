@@ -48,7 +48,9 @@ public class ObsidianDestroyer extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        ChunkManager.getInstance().save();
+        if (ChunkManager.getInstance() != null) {
+            ChunkManager.getInstance().save();
+        }
     }
 
     protected void checkUpdate() {
