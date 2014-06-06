@@ -215,7 +215,7 @@ public class ChunkManager {
             event.blockList().remove(block);
 
             // Factions bypasses
-            if (HookManager.getInstance().isHookedFactions()) {
+            if (HookManager.getInstance().isFactionsFound()) {
                 if (ConfigManager.getInstance().getHandleFactions() && ConfigManager.getInstance().getHandleOfflineFactions()) {
                     Faction faction = BoardColls.get().getFactionAt(PS.valueOf(block.getLocation()));
                     if (faction.isFactionConsideredOffline()) {
@@ -323,7 +323,7 @@ public class ChunkManager {
         }
         // Durability multiplier hook for Factions
         double durabilityMultiplier = 1D;
-        if (HookManager.getInstance().isHookedFactions()) {
+        if (HookManager.getInstance().isFactionsFound()) {
             if (ConfigManager.getInstance().getHandleFactions()) {
                 Faction faction = BoardColls.get().getFactionAt(PS.valueOf(at));
                 if (!faction.getFlag(FFlag.EXPLOSIONS)) {
@@ -403,7 +403,7 @@ public class ChunkManager {
                 blocklist.add(block);
             }
             // Factions bypasses
-            if (HookManager.getInstance().isHookedFactions()) {
+            if (HookManager.getInstance().isFactionsFound()) {
                 if (ConfigManager.getInstance().getHandleFactions() && ConfigManager.getInstance().getHandleOfflineFactions()) {
                     Faction faction = BoardColls.get().getFactionAt(PS.valueOf(block.getLocation()));
                     if (faction.isFactionConsideredOffline()) {
@@ -537,7 +537,7 @@ public class ChunkManager {
         }
         // Durability multiplier hook for Factions
         double durabilityMultiplier = 1D;
-        if (HookManager.getInstance().isHookedFactions()) {
+        if (HookManager.getInstance().isFactionsFound()) {
             if (ConfigManager.getInstance().getHandleFactions()) {
                 Faction faction = BoardColls.get().getFactionAt(PS.valueOf(at));
                 if (!faction.getFlag(FFlag.EXPLOSIONS)) {

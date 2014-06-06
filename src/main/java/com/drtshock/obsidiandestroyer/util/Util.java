@@ -7,6 +7,8 @@ import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.mcore.ps.PS;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -233,7 +235,7 @@ public class Util {
     }
 
     public static double getMultiplier(Location location) {
-        if (HookManager.getInstance().isHookedFactions()) {
+        if (HookManager.getInstance().isFactionsFound()) {
             if (ConfigManager.getInstance().getHandleFactions()) {
                 Faction faction = BoardColls.get().getFactionAt(PS.valueOf(location));
                 return getMultiplier(faction);
@@ -264,5 +266,9 @@ public class Util {
             value = 1D;
         }
         return value;
+    }
+
+    public static String header() {
+        return ChatColor.DARK_AQUA + "[" + ChatColor.AQUA + "ObsidianDestroyer" + ChatColor.DARK_AQUA + "] " + ChatColor.RESET;
     }
 }

@@ -1,13 +1,18 @@
 package com.drtshock.obsidiandestroyer.managers;
 
 import com.drtshock.obsidiandestroyer.ObsidianDestroyer;
+import com.drtshock.obsidiandestroyer.util.Util;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.Plugin;
 
 public class HookManager {
 
     private static HookManager instance;
     private boolean isCannonsHooked = false;
-    private boolean isFactionsHooked = false;
+    private boolean isFactionFound = false;
+    private boolean isMCoreFound = false;
 
     /**
      * Manages the hooks into other plugins
@@ -15,7 +20,7 @@ public class HookManager {
     public HookManager() {
         instance = this;
         checkCannonsHook();
-        checkFactionsHook();
+        checkFactions();
     }
 
     public static HookManager getInstance() {
@@ -65,18 +70,24 @@ public class HookManager {
      *
      * @return Factions hook state
      */
-    public boolean isHookedFactions() {
-        return isFactionsHooked;
+    public boolean isFactionsFound() {
+        return isFactionFound && isMCoreFound;
     }
 
     /**
      * Checks to see if the Factions plugin is active.
      */
-    private void checkFactionsHook() {
-        Plugin plug = ObsidianDestroyer.getInstance().getServer().getPluginManager().getPlugin("Factions");
+    private void checkFactions() {
+        Plugin mcore = ObsidianDestroyer.getInstance().getServer().getPluginManager().getPlugin("mcore");
+        Plugin factions = ObsidianDestroyer.getInstance().getServer().getPluginManager().getPlugin("Factions");
+        ConsoleCommandSender console = ObsidianDestroyer.getInstance().getServer().getConsoleSender();
 
-        if (plug != null) {
-            String[] ver = plug.getDescription().getVersion().split("\\.");
+        if (mcore != null && mcore.isEnabled()) {
+            console.sendMessage(Util.header() + "mcore Found! Version: " + mcore.getDescription().getVersion());
+            isMCoreFound = true;
+        }
+        if (factions != null && factions.isEnabled()) {
+            String[] ver = factions.getDescription().getVersion().split("\\.");
             int v = Integer.parseInt(ver[0]);
             int sv = 0;
             int svr = 0;
@@ -87,11 +98,16 @@ public class HookManager {
                 svr = Integer.parseInt(ver[2]);
             }
             if (v == 2) {
-                ObsidianDestroyer.LOG.info("Factions " + v + "." + sv + "." + svr + " Found, Enabling features.");
-                isFactionsHooked = true;
+                console.sendMessage(Util.header() + "Factions Found! Version: " + factions.getDescription().getVersion());
+                isFactionFound = true;
             } else {
-                ObsidianDestroyer.LOG.info("Factions found, but version " + v + "." + sv + "." + svr + " is not supported! :(");
+                console.sendMessage(Util.header() + "Factions found, but version " + v + "." + sv + "." + svr + " is not supported! " + ChatColor.RED + ":(");
             }
+        }
+        if (isFactionFound && isMCoreFound) {
+            console.sendMessage(Util.header() + ChatColor.GREEN + "Factions - MCore link established.");
+        } else {
+            console.sendMessage(Util.header() + ChatColor.RED + "Factions - MCore link failed!");
         }
     }
 
