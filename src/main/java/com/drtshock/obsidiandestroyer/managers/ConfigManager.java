@@ -308,7 +308,7 @@ public class ConfigManager {
     }
 
     public int getBorderToProtectNormal() {
-        return config.getInt("BorderToProtect.Normal", 5);
+        return config.getInt("BorderToProtect.World", 5);
     }
 
     public int getBorderToProtectNether() {
