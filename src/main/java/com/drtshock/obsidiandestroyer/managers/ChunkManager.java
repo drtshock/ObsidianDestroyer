@@ -244,7 +244,7 @@ public class ChunkManager {
                 ObsidianDestroyer.debug("Explosion Event Canceled");
                 return;
             } else {
-                ObsidianDestroyer.debug("Explosion Event Cancelation Bypassed");
+                ObsidianDestroyer.debug("Explosion Event Cancellation Bypassed");
             }
         }
 
@@ -293,9 +293,9 @@ public class ChunkManager {
         String blockTypeName = block.getType().name();
 
         if (block.getType() == Material.BEDROCK && ConfigManager.getInstance().getProtectBedrockBorders()) {
-            if (block.getY() <= 5 && block.getWorld().getEnvironment() != Environment.THE_END) {
+            if (block.getY() <= ConfigManager.getInstance().getBorderToProtectNormal() && block.getWorld().getEnvironment() != Environment.THE_END) {
                 return DamageResult.NONE;
-            } else if (block.getY() >= 123 && block.getWorld().getEnvironment() == Environment.NETHER) {
+            } else if (block.getY() >= ConfigManager.getInstance().getBorderToProtectNether() && block.getWorld().getEnvironment() == Environment.NETHER) {
                 return DamageResult.NONE;
             }
         }
@@ -427,7 +427,7 @@ public class ChunkManager {
                 ObsidianDestroyer.debug("Cannons Explosion Event Canceled");
                 return;
             } else {
-                ObsidianDestroyer.debug("Cannons Explosion Event Cancelation Bypassed");
+                ObsidianDestroyer.debug("Cannons Explosion Event Cancellation Bypassed");
             }
         }
 
@@ -736,7 +736,7 @@ public class ChunkManager {
      *
      * @param block the block to the checks durability
      *
-     * @return the durabiltiy value
+     * @return the durability value
      */
     public Integer getMaterialDurability(Block block) {
         if (block == null) {

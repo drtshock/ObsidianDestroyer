@@ -68,10 +68,10 @@ public class ConfigManager {
         }
         File configFile = new File(ObsidianDestroyer.getInstance().getDataFolder(), "config.yml");
         if (!configFile.exists()) {
-            //ObsidianDestroyer.LOG.info("Creating config File...");
+            ObsidianDestroyer.debug("Creating config File...");
             createFile(configFile, "config.yml");
         } else {
-            //ObsidianDestroyer.LOG.info("Loading config File...");
+            ObsidianDestroyer.debug("Loading config File...");
         }
         config = YamlConfiguration.loadConfiguration(configFile);
 
@@ -193,7 +193,7 @@ public class ConfigManager {
      * @return list of world names
      */
     public List<String> getDisabledWorlds() {
-        return (ArrayList<String>) config.getStringList("DisabledOnWorlds");
+        return config.getStringList("DisabledOnWorlds");
     }
 
     /**
@@ -305,6 +305,14 @@ public class ConfigManager {
 
     public double getOnlineFactionsDurabilityMultiplier() {
         return config.getDouble("Factions.OnlineDurabilityMultiplier", 1.0);
+    }
+
+    public int getBorderToProtectNormal() {
+        return config.getInt("BorderToProtect.Normal", 5);
+    }
+
+    public int getBorderToProtectNether() {
+        return config.getInt("BorderToProtect.Nether", 123);
     }
 
 }

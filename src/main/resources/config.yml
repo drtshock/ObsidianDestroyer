@@ -41,9 +41,20 @@ Effects:
 #  but become destroyed in water with this disabled.
 FluidsProtectIndustructables: true
 
-# When bedrock destruction is enabled, this prevents holes into the void...
+# When bedrock destruction is enabled, this prevents holes into the void and top of the nether.
 # HOLY CRAP DON'T TURN THIS OFF
 ProtectBedrockBorders: true
+
+# Levels to protect bedrock.
+# If you have the above value set to true, this is important because people will be able to
+# blow up bedrock ABOVE/BELOW this Y level. Don't blame us if you set it too low and people start
+# falling through your world or blowing holes in the top of your nether.
+BorderToProtect:
+
+  # Regular world type. Default is 5.
+  World: 5
+  # Should be obvious. Default is 123.
+  Nether: 123
 
 # Enables a bypass to allow explosions to affect ALL blocks under / next to liquids.
 # This will bypass ALL blocks. We recommend not to use both this AND 'FluidsProtectIndustructables'.
