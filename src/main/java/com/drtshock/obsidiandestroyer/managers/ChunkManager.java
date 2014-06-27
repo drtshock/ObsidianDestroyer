@@ -159,7 +159,7 @@ public class ChunkManager {
                         continue;
                     }
                     // Radius of effect of the handled explosion that is recreated
-                    final int radiuz = Math.min(radius, Util.getMaxDistance(targetLoc.getBlock().getType().name(), radius));\
+                    final int radiuz = Math.min(radius, Util.getMaxDistance(targetLoc.getBlock().getType().name(), radius));
                     // Distance of detonator to this blocks location
                     final double distance = detonatorLoc.distance(targetLoc);
                     // Liquid overrides
@@ -364,7 +364,7 @@ public class ChunkManager {
             // If timer is running or not active...
             if (state == TimerState.RUN || state == TimerState.INACTIVE) {
                 // Check if current is over the max
-                int currentDurablity = getMaterialDurability(block);
+                int currentDurability = getMaterialDurability(block);
                 if (Util.checkIfOverMax(currentDurability, blockTypeName, durabilityMultiplier)) {
                     currentDurability = (int) Math.round(materials.getDurability(blockTypeName) * 0.50);
                 } else {
