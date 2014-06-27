@@ -53,6 +53,15 @@ public class ChunkManager {
     }
 
     /**
+     * Gets the instance
+     *
+     * @return instance
+     */
+    public static ChunkManager getInstance() {
+        return instance;
+    }
+
+    /**
      * Handles the entity explosion event
      *
      * @param event the entity explosion event to handle
@@ -284,9 +293,8 @@ public class ChunkManager {
     /**
      * Handles a block on an EntityExplodeEvent
      *
-     * @param at the location of the block
+     * @param at     the location of the block
      * @param entity the entity that triggered the event
-     *
      * @return DamageResult result of damageBlock attempt
      */
     private DamageResult damageBlock(final Location at, Entity entity) {
@@ -523,7 +531,6 @@ public class ChunkManager {
      * Handles a block on an ProjectilePiercingEvent
      *
      * @param at the location of the block
-     *
      * @return DamageResult result of damageBlock attempt
      */
     private DamageResult damageBlock(final Location at) {
@@ -685,7 +692,7 @@ public class ChunkManager {
     /**
      * Starts a new timer for a block
      *
-     * @param block the block to start a durability timer for
+     * @param block  the block to start a durability timer for
      * @param damage the damage done to the block
      */
     private void startNewTimer(Block block, int damage, TimerState state) {
@@ -704,7 +711,6 @@ public class ChunkManager {
      * Check if there is an active durability reset
      *
      * @param location the location to check
-     *
      * @return the state of the durability timer object
      */
     public TimerState checkDurabilityActive(Location location) {
@@ -753,7 +759,6 @@ public class ChunkManager {
      * Gets the Material durability from a location
      *
      * @param block the block to the checks durability
-     *
      * @return the durability value
      */
     public Integer getMaterialDurability(Block block) {
@@ -768,7 +773,6 @@ public class ChunkManager {
      * Gets the Material durability from a location
      *
      * @param location the location to checks durability
-     *
      * @return the durability value
      */
     public Integer getMaterialDurability(Location location) {
@@ -865,7 +869,7 @@ public class ChunkManager {
     /**
      * Adds a block to the chunk
      *
-     * @param block the block to be added
+     * @param block  the block to be added
      * @param damage the damage value of the block
      */
     public void addBlock(Block block, int damage) {
@@ -884,9 +888,9 @@ public class ChunkManager {
     /**
      * Adds a block to the chunk
      *
-     * @param block the block to be added
+     * @param block  the block to be added
      * @param damage the damage value of the block
-     * @param time the time value of the block
+     * @param time   the time value of the block
      */
     public void addBlock(Block block, int damage, long time) {
         if (block == null) {
@@ -936,7 +940,6 @@ public class ChunkManager {
      * Does the chunk contain this block
      *
      * @param block the block to check the chunk for
-     *
      * @return true if block found within chunk
      */
     public boolean contains(Block block) {
@@ -951,7 +954,6 @@ public class ChunkManager {
      * Does the chunk contain this location
      *
      * @param location the location to check the chunk for
-     *
      * @return true if location found within chunk
      */
     public boolean contains(Location location) {
@@ -970,7 +972,6 @@ public class ChunkManager {
      * Gets the chunk wrapper from a chunk
      *
      * @param chunk the chunk to get a wrapper from
-     *
      * @return the ChunkWrapper that belongs to the chunk.
      */
     private ChunkWrapper getWrapper(Chunk chunk) {
@@ -1013,14 +1014,5 @@ public class ChunkManager {
      */
     public List<String> getDisabledWorlds() {
         return disabledWorlds;
-    }
-
-    /**
-     * Gets the instance
-     *
-     * @return instance
-     */
-    public static ChunkManager getInstance() {
-        return instance;
     }
 }

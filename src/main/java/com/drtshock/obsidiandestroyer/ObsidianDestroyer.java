@@ -21,10 +21,20 @@ import java.util.logging.Logger;
 
 public class ObsidianDestroyer extends JavaPlugin {
 
-    private static ObsidianDestroyer instance;
     public static Logger LOG;
+    private static ObsidianDestroyer instance;
     private boolean update = false;
     private String name = "";
+
+    public static ObsidianDestroyer getInstance() {
+        return instance;
+    }
+
+    public static void debug(String debug) {
+        if (ConfigManager.getInstance() == null || ConfigManager.getInstance().getDebug()) {
+            LOG.info(debug);
+        }
+    }
 
     @Override
     public void onEnable() {
@@ -115,15 +125,5 @@ public class ObsidianDestroyer extends JavaPlugin {
 
     public boolean getNeedsUpdate() {
         return update;
-    }
-
-    public static ObsidianDestroyer getInstance() {
-        return instance;
-    }
-
-    public static void debug(String debug) {
-        if (ConfigManager.getInstance() == null || ConfigManager.getInstance().getDebug()) {
-            LOG.info(debug);
-        }
     }
 }

@@ -26,9 +26,8 @@ public class ODRFile {
     /**
      * Prepares the file for read or write
      *
-     * @param file the file to prepare
+     * @param file  the file to prepare
      * @param write true to write to the file, false otherwise
-     *
      * @throws FileNotFoundException thrown if the file is missing
      */
     public void prepare(File file, boolean write) throws FileNotFoundException {
@@ -45,9 +44,8 @@ public class ODRFile {
     /**
      * Writes a block to file
      *
-     * @param location the location of the block
+     * @param location   the location of the block
      * @param duraAmount material durability amount
-     *
      * @throws IOException thrown if something happens
      */
     public void write(Location location, int duraAmount) throws IOException {
@@ -57,12 +55,11 @@ public class ODRFile {
     /**
      * Writes a block location to file
      *
-     * @param x the x location
-     * @param y the y location
-     * @param z the z location
+     * @param x          the x location
+     * @param y          the y location
+     * @param z          the z location
      * @param duraAmount material durability amount
-     * @param duraTime material durability reset time
-     *
+     * @param duraTime   material durability reset time
      * @throws IOException thrown if something happens
      */
     public void write(int x, int y, int z, int duraAmount, long duraTime) throws IOException {
@@ -82,7 +79,6 @@ public class ODRFile {
      * @param location the location of the entity
      * @param duraTime material durability reset time
      * @param duraTime material durability reset time
-     *
      * @throws IOException thrown if something happens
      */
     public void write(Location location, int duraAmount, long duraTime) throws IOException {
@@ -93,9 +89,7 @@ public class ODRFile {
      * Gets the next block in the file
      *
      * @param world the world for location creation/reading
-     *
      * @return the entry (a block) or null if EOF has been reached / nothing was read
-     *
      * @throws IOException thrown if something happens
      */
     public Key getNext(World world) throws IOException {

@@ -29,7 +29,7 @@ public class DurabilityMaterial {
     /**
      * Storage for a tracked material from the config
      *
-     * @param type the type of material
+     * @param type    the type of material
      * @param section the configuration section to load
      */
     public DurabilityMaterial(Material type, ConfigurationSection section) {

@@ -8,7 +8,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,10 +16,10 @@ import java.util.logging.Level;
 public class ConfigManager {
 
     private static ConfigManager instance;
-    private YamlConfiguration config;
-    private YamlConfiguration materials;
     private static YamlConfiguration tc;
     private static YamlConfiguration tm;
+    private YamlConfiguration config;
+    private YamlConfiguration materials;
     private boolean loaded;
 
     /**
@@ -34,6 +33,15 @@ public class ConfigManager {
         if (!loaded) {
             loadFiles(false);
         }
+    }
+
+    /**
+     * Gets the current instance of the config manager
+     *
+     * @return class instance
+     */
+    public static ConfigManager getInstance() {
+        return instance;
     }
 
     public void reload() {
@@ -111,7 +119,7 @@ public class ConfigManager {
     /**
      * Create a file from a resource
      *
-     * @param file the file to be created
+     * @param file     the file to be created
      * @param resource the resource to be used
      */
     private void createFile(File file, String resource) {
@@ -161,15 +169,6 @@ public class ConfigManager {
     }
 
     /**
-     * Gets the current instance of the config manager
-     *
-     * @return class instance
-     */
-    public static ConfigManager getInstance() {
-        return instance;
-    }
-
-    /**
      * Gets verbose mode enabled
      *
      * @return verbose mode enabled
@@ -184,6 +183,9 @@ public class ConfigManager {
      * @return debug mode enabled
      */
     public boolean getDebug() {
+        if (config == null) {
+            return true;
+        }
         return config.getBoolean("Debug", false);
     }
 

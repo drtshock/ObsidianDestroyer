@@ -19,15 +19,15 @@ import java.util.logging.Level;
 
 public class ChunkWrapper {
 
-    private ConcurrentMap<Integer, Key> durabilities = new ConcurrentHashMap<Integer, Key>();
     private final int chunkX, chunkZ;
     private final String world;
     private final File durabilitiesDir;
+    private ConcurrentMap<Integer, Key> durabilities = new ConcurrentHashMap<Integer, Key>();
 
     /**
      * Wraps a chunk with a ChunkWrapper
      *
-     * @param chunk the chunk to wrap
+     * @param chunk           the chunk to wrap
      * @param durabilitiesDir the directory to store this wrapper in
      */
     ChunkWrapper(Chunk chunk, File durabilitiesDir) {
@@ -50,7 +50,6 @@ public class ChunkWrapper {
      * Gets the Key of the location
      *
      * @param location the location to get the key from
-     *
      * @return the key from the location
      */
     public Key getKey(Location location) {
@@ -64,7 +63,6 @@ public class ChunkWrapper {
      * Gets the durability of a hash representation
      *
      * @param representation the hash representation to check
-     *
      * @return the durability of the hash representation
      */
     public int getDurability(int representation) {
@@ -75,7 +73,6 @@ public class ChunkWrapper {
      * Gets the durability time of a hash representation
      *
      * @param representation the hash representation to check
-     *
      * @return the durability time of the hash representation
      */
     public long getDurabilityTime(int representation) {
@@ -86,7 +83,6 @@ public class ChunkWrapper {
      * Gets the durability time of the location
      *
      * @param location the location to check
-     *
      * @return the durability of the location
      */
     public int getDurability(Location location) {
@@ -97,7 +93,6 @@ public class ChunkWrapper {
      * Gets the durability time of the location
      *
      * @param location the location to check
-     *
      * @return the durability time of the location
      */
     public long getDurabilityTime(Location location) {
@@ -108,7 +103,7 @@ public class ChunkWrapper {
      * Adds a block to the chunk
      *
      * @param durability the damage done to the block
-     * @param block the block to add
+     * @param block      the block to add
      */
     public void addBlock(int durability, Block block) {
         Key key = new Key(block.getLocation(), durability);
@@ -119,8 +114,8 @@ public class ChunkWrapper {
      * Adds a block with a timer to the chunk
      *
      * @param durability the damage done to the block
-     * @param time the time value of the block
-     * @param block the block to be added
+     * @param time       the time value of the block
+     * @param block      the block to be added
      */
     public void addBlockTimer(int durability, long time, Block block) {
         Key key = new Key(block.getLocation(), durability, time);
@@ -166,7 +161,6 @@ public class ChunkWrapper {
      * Does the chunk contains this location key
      *
      * @param location the location to check the chunk for
-     *
      * @return true if the location is found within the chunk
      */
     public boolean contains(Location location) {
@@ -180,7 +174,6 @@ public class ChunkWrapper {
      * Does the chunk contains this location key
      *
      * @param representation the hash representation to check the chunk for
-     *
      * @return true if the hash representation is found within the chunk
      */
     public boolean contains(int representation) {
@@ -190,7 +183,7 @@ public class ChunkWrapper {
     /**
      * Saves the chunk information
      *
-     * @param load set to true to load data after saving
+     * @param load  set to true to load data after saving
      * @param clear set to true to clear self after saving
      */
     public void save(boolean load, boolean clear) {
