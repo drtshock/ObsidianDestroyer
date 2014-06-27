@@ -110,7 +110,7 @@ public class ObsidianDestroyer extends JavaPlugin {
     }
 
     public static void debug(String debug) {
-        if (ConfigManager.getInstance().getDebug()) {
+        if (ConfigManager.getInstance() == null || ConfigManager.getInstance().getDebug()) {
             LOG.info(debug);
         }
     }
