@@ -30,24 +30,36 @@ public class ObsidianDestroyer extends JavaPlugin {
     public void onEnable() {
         instance = this;
         LOG = getLogger();
+
+        // Things..
         new ConfigManager(false);
         new HookManager();
         new MaterialManager();
         new ChunkManager();
+
+        // Set command executor
         getCommand("od").setExecutor(new ODCommand());
+
+        // Register Event listeners
         PluginManager pm = getServer().getPluginManager();
+
         pm.registerEvents(new EntityExplodeListener(), this);
         if (HookManager.getInstance().isHookedCannons()) {
             pm.registerEvents(new EntityImpactListener(), this);
         }
         pm.registerEvents(new PlayerListener(), this);
         pm.registerEvents(new BlockListener(), this);
+
+        // Check for updates
         checkUpdate();
+
+        // Initialize metrics
         startMetrics();
     }
 
     @Override
     public void onDisable() {
+        // Save persistant data
         if (ChunkManager.getInstance() != null) {
             ChunkManager.getInstance().save();
         }

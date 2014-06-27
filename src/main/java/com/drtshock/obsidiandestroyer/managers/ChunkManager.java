@@ -75,6 +75,7 @@ public class ChunkManager {
             return;
         }
 
+        // Detonator
         final Entity detonator = event.getEntity();
 
         // Check for handled explosion types, with option to ignore
@@ -130,18 +131,18 @@ public class ChunkManager {
                 if (detonatorLoc.distance(block.getLocation()) + 0.4 > Util.getMaxDistance(block.getType().name(), radius)) {
                     blocksIgnored.add(block);
                 } else {
+                    // Apply damage to block material
                     DamageResult result = damageBlock(block.getLocation(), detonator);
                     if (result == DamageResult.DESTROY) {
                         blocklist.add(block);
-                        continue;
-                    }
-                    if (result == DamageResult.DAMAGE) {
+                    } else if (result == DamageResult.DAMAGE) {
                         blocksIgnored.add(block);
                     }
                 }
             }
         }
 
+        // Bedrock override bypass
         final boolean enabledBedrock = MaterialManager.getInstance().contains(Material.BEDROCK.name());
 
         // For materials that are not normally destructible.
@@ -149,6 +150,7 @@ public class ChunkManager {
         for (int x = -radius; x <= radius; x++) {
             for (int y = radius; y >= -radius; y--) {
                 for (int z = -radius; z <= radius; z++) {
+                    // Target location around the detonator
                     Location targetLoc = new Location(detonator.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
                     if (blocksIgnored.contains(targetLoc.getBlock()) || targetLoc.getBlock().getType() == Material.AIR) {
                         continue;
@@ -156,10 +158,15 @@ public class ChunkManager {
                     if (targetLoc.getBlock().getType() == Material.BEDROCK && !enabledBedrock) {
                         continue;
                     }
-                    final int radiuz = Math.min(radius, Util.getMaxDistance(targetLoc.getBlock().getType().name(), radius));
+                    // Radius of effect of the handled explosion that is recreated
+                    final int radiuz = Math.min(radius, Util.getMaxDistance(targetLoc.getBlock().getType().name(), radius));\
+                    // Distance of detonator to this blocks location
                     final double distance = detonatorLoc.distance(targetLoc);
                     // Liquid overrides
                     if (ConfigManager.getInstance().getBypassAllFluidProtection()) {
+                        if (blocksIgnored.contains(targetLoc.getBlock()) || blocklist.contains(targetLoc.getBlock())) {
+                            continue;
+                        }
                         if (distance < radiuz - 0.1 && Util.isNearLiquid(targetLoc)) {
                             if (!event.blockList().contains(targetLoc)) {
                                 if (distance > radiuz - 0.6 && Math.random() <= 0.4) {
@@ -167,21 +174,20 @@ public class ChunkManager {
                                     continue;
                                 }
                                 if (MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name())) {
+                                    // Apply damage to block material
                                     DamageResult result = damageBlock(targetLoc.getBlock().getLocation(), detonator);
                                     if (result == DamageResult.DESTROY) {
                                         blocklist.add(targetLoc.getBlock());
                                         continue;
-                                    }
-                                    if (result == DamageResult.DAMAGE) {
+                                    } else if (result == DamageResult.DAMAGE) {
                                         blocksIgnored.add(targetLoc.getBlock());
+                                        continue;
                                     }
                                 } else {
                                     blocklist.add(targetLoc.getBlock());
+                                    continue;
                                 }
                             }
-                        }
-                        if (blocksIgnored.contains(targetLoc.getBlock()) || blocklist.contains(targetLoc.getBlock())) {
-                            continue;
                         }
                     }
                     if (!MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name())) {
@@ -193,16 +199,18 @@ public class ChunkManager {
                             blocksIgnored.add(targetLoc.getBlock());
                             continue;
                         }
+                        // Apply damage to block material
                         DamageResult result = damageBlock(targetLoc.getBlock().getLocation(), detonator);
                         if (result == DamageResult.DESTROY) {
                             blocklist.add(targetLoc.getBlock());
                             continue;
-                        }
-                        if (result == DamageResult.DAMAGE) {
+                        } else if (result == DamageResult.DAMAGE) {
                             blocksIgnored.add(targetLoc.getBlock());
+                            continue;
                         }
                     } else if (event.blockList().contains(targetLoc.getBlock())) {
                         blocksIgnored.add(targetLoc.getBlock());
+                        continue;
                     }
                 }
             }
@@ -210,6 +218,7 @@ public class ChunkManager {
 
         // Bypass list for special handlings
         final List<Block> bypassBlockList = new ArrayList<Block>();
+
         // Remove managed blocks
         for (Block block : blocklist) {
             event.blockList().remove(block);
@@ -224,6 +233,7 @@ public class ChunkManager {
                 }
             }
         }
+        // Remove ignored blocks
         for (Block block : blocksIgnored) {
             event.blockList().remove(block);
             blocklist.remove(block);
@@ -239,11 +249,13 @@ public class ChunkManager {
         if (bypassBlockList.size() > 0) {
             explosionEvent.blockList().addAll(bypassBlockList);
         }
+        // Ignore if event is canceled and not bypassed.
         if (explosionEvent.isCancelled()) {
             if (bypassBlockList.size() == 0) {
                 ObsidianDestroyer.debug("Explosion Event Canceled");
                 return;
             } else {
+                // Bypass through factions cancel
                 ObsidianDestroyer.debug("Explosion Event Cancellation Bypassed");
             }
         }
@@ -282,6 +294,7 @@ public class ChunkManager {
             return DamageResult.NONE;
         }
 
+        // Null and Air checks
         EntityType eventTypeRep = entity.getType();
         Block block = at.getBlock();
         if (block == null) {
@@ -292,6 +305,7 @@ public class ChunkManager {
         }
         String blockTypeName = block.getType().name();
 
+        // Check bedrock and env
         if (block.getType() == Material.BEDROCK && ConfigManager.getInstance().getProtectBedrockBorders()) {
             if (block.getY() <= ConfigManager.getInstance().getBorderToProtectNormal() && block.getWorld().getEnvironment() != Environment.THE_END) {
                 return DamageResult.NONE;
@@ -300,6 +314,7 @@ public class ChunkManager {
             }
         }
 
+        // Check explosion types
         if (eventTypeRep.equals(EntityType.PRIMED_TNT) && !MaterialManager.getInstance().getTntEnabled(blockTypeName)) {
             return DamageResult.NONE;
         }
@@ -346,8 +361,10 @@ public class ChunkManager {
                     block.getWorld().playEffect(at, Effect.MOBSPAWNER_FLAMES, 0);
                 }
             }
+            // If timer is running or not active...
             if (state == TimerState.RUN || state == TimerState.INACTIVE) {
-                int currentDurability = getMaterialDurability(block);
+                // Check if current is over the max
+                int currentDurablity = getMaterialDurability(block);
                 if (Util.checkIfOverMax(currentDurability, blockTypeName, durabilityMultiplier)) {
                     currentDurability = (int) Math.round(materials.getDurability(blockTypeName) * 0.50);
                 } else {
@@ -377,6 +394,7 @@ public class ChunkManager {
         } else {
             return DamageResult.DESTROY;
         }
+        // Return damage delt
         return DamageResult.DAMAGE;
     }
 
