@@ -44,15 +44,15 @@ public class DurabilityMaterial {
         this.cannonsEnabled = section.getBoolean("EnabledFor.Cannons", false);
         this.creepersEnabled = section.getBoolean("EnabledFor.Creepers", false);
         this.ghastsEnabled = section.getBoolean("EnabledFor.Ghasts", false);
-        this.withersEnabled = section.getBoolean("EnabledFor.Minecarts", false);
-        this.tntMinecartsEnabled = section.getBoolean("EnabledFor.Withers", false);
+        this.withersEnabled = section.getBoolean("EnabledFor.Withers", false);
+        this.tntMinecartsEnabled = section.getBoolean("EnabledFor.Minecarts", false);
         this.tntDamage = section.getInt("Damage.TNT", 1);
         this.cannondDamage = section.getInt("Damage.Cannons", 1);
         this.creeperDamage = section.getInt("Damage.Creepers", 1);
         this.chargedCreeperDamage = section.getInt("Damage.ChargedCreepers", 1);
         this.ghastDamage = section.getInt("Damage.Ghasts", 1);
-        this.witherDamage = section.getInt("Damage.Minecarts", 1);
-        this.tntMinecartDamage = section.getInt("Damage.Withers", 1);
+        this.witherDamage = section.getInt("Damage.Withers", 1);
+        this.tntMinecartDamage = section.getInt("Damage.Minecarts", 1);
     }
 
     public Material getType() {
