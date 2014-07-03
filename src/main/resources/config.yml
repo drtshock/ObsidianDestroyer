@@ -74,6 +74,8 @@ DisabledOnWorlds: []
 #  for durability multipliers based on the online status of a faction.
 # Works with Factions 2.x only.
 Factions:
+  # Enable Hooking - disabling will prevent obsidian destroyer from passing interactions directly to factions.
+  Enabled: true
   # Toggles explosion features between ObsidianDestroyer and Factions.
   HandleExplosions: true
   # Toggle to manage an offline faction. (Override & Multiplier)

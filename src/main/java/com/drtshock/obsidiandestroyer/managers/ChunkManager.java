@@ -177,11 +177,13 @@ public class ChunkManager {
                             continue;
                         }
                         if (distance < radiuz - 0.1 && Util.isNearLiquid(targetLoc)) {
+                            // the event does not contain this block already...
                             if (!event.blockList().contains(targetLoc)) {
                                 if (distance > radiuz - 0.6 && Math.random() <= 0.4) {
                                     blocksIgnored.add(targetLoc.getBlock());
                                     continue;
                                 }
+                                // the material is being handled
                                 if (MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name())) {
                                     // Apply damage to block material
                                     DamageResult result = damageBlock(targetLoc.getBlock().getLocation(), detonator);
@@ -227,18 +229,18 @@ public class ChunkManager {
 
         // Bypass list for special handlings
         final List<Block> bypassBlockList = new ArrayList<Block>();
+        // Apply effects with factions
+        final boolean factionsApplied = HookManager.getInstance().isFactionsFound() && ConfigManager.getInstance().getHandleFactions() && ConfigManager.getInstance().getHandleOfflineFactions();
 
         // Remove managed blocks
         for (Block block : blocklist) {
             event.blockList().remove(block);
 
             // Factions bypasses
-            if (HookManager.getInstance().isFactionsFound()) {
-                if (ConfigManager.getInstance().getHandleFactions() && ConfigManager.getInstance().getHandleOfflineFactions()) {
-                    Faction faction = BoardColls.get().getFactionAt(PS.valueOf(block.getLocation()));
-                    if (faction.isFactionConsideredOffline()) {
-                        bypassBlockList.add(block);
-                    }
+            if (factionsApplied) {
+                Faction faction = BoardColls.get().getFactionAt(PS.valueOf(block.getLocation()));
+                if (faction.isFactionConsideredOffline()) {
+                    bypassBlockList.add(block);
                 }
             }
         }
@@ -346,7 +348,7 @@ public class ChunkManager {
         }
         // Durability multiplier hook for Factions
         double durabilityMultiplier = 1D;
-        if (HookManager.getInstance().isFactionsFound()) {
+        if (HookManager.getInstance().isFactionsFound() && ConfigManager.getInstance().getFactionHookEnabled()) {
             if (ConfigManager.getInstance().getHandleFactions()) {
                 Faction faction = BoardColls.get().getFactionAt(PS.valueOf(at));
                 if (!faction.getFlag(FFlag.EXPLOSIONS)) {
@@ -419,22 +421,30 @@ public class ChunkManager {
             event.getImpactLocation().getWorld().playEffect(event.getImpactLocation(), Effect.MOBSPAWNER_FLAMES, 0);
         }
 
+        // List of blocks being handled
         LinkedList<Block> blocklist = new LinkedList<Block>();
-        Iterator<Block> iter = event.getBlockList().iterator();
         // Bypass list for special handlings
         final List<Block> bypassBlockList = new ArrayList<Block>();
+        final boolean useFactions = HookManager.getInstance().isFactionsFound() && ConfigManager.getInstance().getFactionHookEnabled();
+        final boolean applyFactions;
+        if (useFactions) {
+            applyFactions = ConfigManager.getInstance().getHandleFactions() && ConfigManager.getInstance().getHandleOfflineFactions();
+        } else {
+            applyFactions = false;
+        }
+        // Iterator through the events blocks
+        Iterator<Block> iter = event.getBlockList().iterator();
         while (iter.hasNext()) {
             Block block = iter.next();
+            // Check if handled and not already checked
             if (MaterialManager.getInstance().contains(block.getType().name()) && !blocklist.contains(block)) {
                 blocklist.add(block);
             }
             // Factions bypasses
-            if (HookManager.getInstance().isFactionsFound()) {
-                if (ConfigManager.getInstance().getHandleFactions() && ConfigManager.getInstance().getHandleOfflineFactions()) {
-                    Faction faction = BoardColls.get().getFactionAt(PS.valueOf(block.getLocation()));
-                    if (faction.isFactionConsideredOffline()) {
-                        bypassBlockList.add(block);
-                    }
+            if (useFactions && applyFactions) {
+                Faction faction = BoardColls.get().getFactionAt(PS.valueOf(block.getLocation()));
+                if (faction.isFactionConsideredOffline()) {
+                    bypassBlockList.add(block);
                 }
             }
         }
@@ -445,11 +455,13 @@ public class ChunkManager {
         ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(explosionEvent);
 
         // Repopulate the events blocklist with blocks through the bypass
-        if (bypassBlockList.size() > 0) {
+        if (applyFactions && bypassBlockList.size() > 0) {
             explosionEvent.blockList().addAll(bypassBlockList);
         }
+
+        // Do nothing if the event is canceled (and not bypassed...)
         if (explosionEvent.isCancelled()) {
-            if (bypassBlockList.size() == 0) {
+            if (!applyFactions || bypassBlockList.size() == 0) {
                 ObsidianDestroyer.debug("Cannons Explosion Event Canceled");
                 return;
             } else {
@@ -562,7 +574,7 @@ public class ChunkManager {
         }
         // Durability multiplier hook for Factions
         double durabilityMultiplier = 1D;
-        if (HookManager.getInstance().isFactionsFound()) {
+        if (HookManager.getInstance().isFactionsFound() && ConfigManager.getInstance().getFactionHookEnabled()) {
             if (ConfigManager.getInstance().getHandleFactions()) {
                 Faction faction = BoardColls.get().getFactionAt(PS.valueOf(at));
                 if (!faction.getFlag(FFlag.EXPLOSIONS)) {

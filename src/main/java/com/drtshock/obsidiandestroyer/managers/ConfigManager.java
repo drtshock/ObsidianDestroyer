@@ -289,6 +289,10 @@ public class ConfigManager {
         return Material.matchMaterial(config.getString("DurabilityCheckItem", "POTATO_ITEM"));
     }
 
+    public boolean getFactionHookEnabled() {
+        return config.getBoolean("Factions.Enabled", true);
+    }
+
     public boolean getHandleFactions() {
         return config.getBoolean("Factions.HandleExplosions", true);
     }
