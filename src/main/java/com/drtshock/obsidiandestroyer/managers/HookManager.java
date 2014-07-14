@@ -50,7 +50,11 @@ public class HookManager {
             if (ver.length > 1) {
                 String[] vr = ver[1].split("\\-");
                 //ObsidianDestroyer.LOG.info(vr[0] + " - " + (vr.length > 1 ? vr[1] : ""));
-                sv = Integer.parseInt(vr[0]);
+                try {
+                    sv = Integer.parseInt(vr[0]);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
                 if (vr.length > 1) {
                     r = vr[1];
                 }
@@ -87,20 +91,33 @@ public class HookManager {
         }
         if (factions != null && factions.isEnabled()) {
             String[] ver = factions.getDescription().getVersion().split("\\.");
-            int v = Integer.parseInt(ver[0]);
+            int v = 0;
+            try {
+                v = Integer.parseInt(ver[0]);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
             int sv = 0;
             int svr = 0;
             if (ver.length > 1) {
-                sv = Integer.parseInt(ver[1]);
+                try {
+                    sv = Integer.parseInt(ver[1]);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
             }
             if (ver.length > 2) {
-                svr = Integer.parseInt(ver[2]);
+                try {
+                    svr = Integer.parseInt(ver[2]);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
             }
             if (v == 2) {
                 console.sendMessage(Util.header() + "Factions Found! Version: " + factions.getDescription().getVersion());
                 isFactionFound = true;
             } else {
-                console.sendMessage(Util.header() + "Factions found, but version " + v + "." + sv + "." + svr + " is not supported! " + ChatColor.RED + ":(");
+                console.sendMessage(Util.header() + "Factions found, but version " + factions.getDescription().getVersion() + " is not supported! " + ChatColor.RED + ":(");
             }
         }
         if (isFactionFound && isMCoreFound) {
