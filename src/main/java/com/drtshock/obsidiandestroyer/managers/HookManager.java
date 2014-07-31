@@ -1,5 +1,7 @@
 package com.drtshock.obsidiandestroyer.managers;
 
+import java.util.logging.Level;
+
 import com.drtshock.obsidiandestroyer.ObsidianDestroyer;
 import com.drtshock.obsidiandestroyer.util.Util;
 import org.bukkit.ChatColor;
@@ -53,7 +55,7 @@ public class HookManager {
                 try {
                     sv = Integer.parseInt(vr[0]);
                 } catch (NumberFormatException e) {
-                    e.printStackTrace();
+                    ObsidianDestroyer.LOG.log(Level.SEVERE, e.getMessage());
                 }
                 if (vr.length > 1) {
                     r = vr[1];
@@ -95,9 +97,9 @@ public class HookManager {
             try {
                 v = Integer.parseInt(ver[0]);
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                ObsidianDestroyer.LOG.log(Level.SEVERE, e.getMessage());
             }
-            int sv = 0;
+            /*int sv = 0;
             int svr = 0;
             if (ver.length > 1) {
                 try {
@@ -112,7 +114,7 @@ public class HookManager {
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
             if (v == 2) {
                 console.sendMessage(Util.header() + "Factions Found! Version: " + factions.getDescription().getVersion());
                 isFactionFound = true;

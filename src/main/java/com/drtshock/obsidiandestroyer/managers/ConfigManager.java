@@ -290,7 +290,7 @@ public class ConfigManager {
     }
 
     public boolean getFactionHookEnabled() {
-        return config.getBoolean("Factions.Enabled", true);
+        return config.getBoolean("Factions.Enabled", false);
     }
 
     public boolean getHandleFactions() {
