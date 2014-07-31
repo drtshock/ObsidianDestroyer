@@ -64,7 +64,9 @@ public class ObsidianDestroyer extends JavaPlugin {
         checkUpdate();
 
         // Initialize metrics
-        startMetrics();
+        if(ConfigManager.getInstance().useMetrics()) {
+            startMetrics();
+        }
     }
 
     @Override
