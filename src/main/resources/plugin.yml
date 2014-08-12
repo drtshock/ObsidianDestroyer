@@ -2,7 +2,7 @@ name: ObsidianDestroyer
 main: com.drtshock.obsidiandestroyer.ObsidianDestroyer
 version: ${project.version}
 authors: [drtshock, squidicuz]
-softdepend: [mcore, Factions]
+softdepend: [mcore, MassiveCore, Factions]
 
 commands:
     od:

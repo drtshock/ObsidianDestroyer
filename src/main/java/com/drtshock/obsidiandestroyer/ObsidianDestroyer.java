@@ -41,7 +41,7 @@ public class ObsidianDestroyer extends JavaPlugin {
         instance = this;
         LOG = getLogger();
 
-        // Things..
+        // Initialize managers
         new ConfigManager(false);
         new HookManager();
         new MaterialManager();
@@ -71,7 +71,7 @@ public class ObsidianDestroyer extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Save persistant data
+        // Save persistent data
         if (ChunkManager.getInstance() != null) {
             ChunkManager.getInstance().save();
         }
@@ -89,9 +89,9 @@ public class ObsidianDestroyer extends JavaPlugin {
                     update = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
                     name = updater.getLatestName();
                     if (updater.getResult() == Updater.UpdateResult.SUCCESS) {
-                        getLogger().log(Level.INFO, "Successfully updated ObsidianDestroyer to version {0} for next restart!", updater.getLatestName());
+                        LOG.log(Level.INFO, "Successfully updated ObsidianDestroyer to version {0} for next restart!", updater.getLatestName());
                     } else if (updater.getResult() == Updater.UpdateResult.NO_UPDATE) {
-                        getLogger().log(Level.INFO, "We didn't find an update!");
+                        LOG.log(Level.INFO, "We didn't find an update!");
                     }
                 }
             });
@@ -117,7 +117,7 @@ public class ObsidianDestroyer extends JavaPlugin {
             });
             metrics.start();
         } catch (IOException ex) {
-            getLogger().warning("Failed to load metrics :(");
+            LOG.warning("Failed to load metrics :(");
         }
     }
 

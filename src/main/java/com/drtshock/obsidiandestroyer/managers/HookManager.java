@@ -13,7 +13,7 @@ public class HookManager {
     private static HookManager instance;
     private boolean isCannonsHooked = false;
     private boolean isFactionFound = false;
-    private boolean isMCoreFound = false;
+    private boolean isMassiveCoreFound = false;
 
     /**
      * Manages the hooks into other plugins
@@ -76,21 +76,26 @@ public class HookManager {
      * @return Factions hook state
      */
     public boolean isFactionsFound() {
-        return isFactionFound && isMCoreFound;
+        return isFactionFound && isMassiveCoreFound;
     }
 
     /**
      * Checks to see if the Factions plugin is active.
      */
     private void checkFactions() {
+        Plugin massivecore = ObsidianDestroyer.getInstance().getServer().getPluginManager().getPlugin("MassiveCore");
         Plugin mcore = ObsidianDestroyer.getInstance().getServer().getPluginManager().getPlugin("mcore");
         Plugin factions = ObsidianDestroyer.getInstance().getServer().getPluginManager().getPlugin("Factions");
         ConsoleCommandSender console = ObsidianDestroyer.getInstance().getServer().getConsoleSender();
 
-        if (mcore != null && mcore.isEnabled()) {
+        if (massivecore != null && massivecore.isEnabled()) {
+            console.sendMessage(Util.header() + "MassiveCore Found! Version: " + massivecore.getDescription().getVersion());
+            isMassiveCoreFound = true;
+        } else if (mcore != null && mcore.isEnabled()) {
             console.sendMessage(Util.header() + "mcore Found! Version: " + mcore.getDescription().getVersion());
-            isMCoreFound = true;
+            isMassiveCoreFound = true;
         }
+
         if (factions != null && factions.isEnabled()) {
             String[] ver = factions.getDescription().getVersion().split("\\.");
             int v = 0;
@@ -99,22 +104,6 @@ public class HookManager {
             } catch (NumberFormatException e) {
                 ObsidianDestroyer.LOG.log(Level.SEVERE, e.getMessage());
             }
-            /*int sv = 0;
-            int svr = 0;
-            if (ver.length > 1) {
-                try {
-                    sv = Integer.parseInt(ver[1]);
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (ver.length > 2) {
-                try {
-                    svr = Integer.parseInt(ver[2]);
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
-            }*/
             if (v == 2) {
                 console.sendMessage(Util.header() + "Factions Found! Version: " + factions.getDescription().getVersion());
                 isFactionFound = true;
@@ -122,10 +111,11 @@ public class HookManager {
                 console.sendMessage(Util.header() + "Factions found, but version " + factions.getDescription().getVersion() + " is not supported! " + ChatColor.RED + ":(");
             }
         }
-        if (isFactionFound && isMCoreFound) {
-            console.sendMessage(Util.header() + ChatColor.GREEN + "Factions - MCore link established.");
+
+        if (isFactionFound && isMassiveCoreFound) {
+            console.sendMessage(Util.header() + ChatColor.GREEN + "Factions - MassiveCore link established.");
         } else {
-            console.sendMessage(Util.header() + ChatColor.RED + "Factions - MCore link failed!");
+            console.sendMessage(Util.header() + ChatColor.RED + "Factions - MassiveCore link failed!");
         }
     }
 
