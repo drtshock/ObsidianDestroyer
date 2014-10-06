@@ -321,8 +321,4 @@ public class ConfigManager {
         return config.getInt("BorderToProtect.Nether", 123);
     }
 
-    public boolean useMetrics() {
-        return config.getBoolean("metrics", true);
-    }
-
 }

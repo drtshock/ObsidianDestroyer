@@ -9,7 +9,6 @@ import com.drtshock.obsidiandestroyer.managers.ChunkManager;
 import com.drtshock.obsidiandestroyer.managers.ConfigManager;
 import com.drtshock.obsidiandestroyer.managers.HookManager;
 import com.drtshock.obsidiandestroyer.managers.MaterialManager;
-import com.drtshock.obsidiandestroyer.util.Metrics;
 import com.drtshock.obsidiandestroyer.util.Updater;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -62,11 +61,6 @@ public class ObsidianDestroyer extends JavaPlugin {
 
         // Check for updates
         checkUpdate();
-
-        // Initialize metrics
-        if(ConfigManager.getInstance().useMetrics()) {
-            startMetrics();
-        }
     }
 
     @Override
@@ -95,29 +89,6 @@ public class ObsidianDestroyer extends JavaPlugin {
                     }
                 }
             });
-        }
-    }
-
-    private void startMetrics() {
-        try {
-            Metrics metrics = new Metrics(this);
-
-            Metrics.Graph graph = metrics.createGraph("Durability");
-            graph.addPlotter(new Metrics.Plotter() {
-                @Override
-                public String getColumnName() {
-                    int amt = MaterialManager.getInstance().getDurability("OBSIDIAN");
-                    return amt > 0 ? "" + amt : "N/A";
-                }
-
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
-            metrics.start();
-        } catch (IOException ex) {
-            LOG.warning("Failed to load metrics :(");
         }
     }
 
