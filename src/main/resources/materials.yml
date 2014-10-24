@@ -32,6 +32,10 @@ HandledMaterials:
       # Time is in milliseconds
       ResetAfter: 900000
 
+      # The chance that a fluid will absorb the explosion to the material
+      # Only used if fluid explosion override enabled
+      FluidDamper: 0.01
+
     # Explosion types you want us to handle.
     EnabledFor:
       TNT: true
@@ -53,10 +57,13 @@ HandledMaterials:
       Withers: 1
       Minecarts: 1
 
+
+  # OBSIDIAN - Default enabled with 13 durability
   OBSIDIAN:
     BlastRadius: 2
     Durability:
       Amount: 13
+      FluidDamper: 0.07
       Enabled: true
       ChanceToDrop: 0.6
       ResetEnabled: true

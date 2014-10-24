@@ -42,10 +42,7 @@ public class MaterialManager {
      * @return true if item equals managed block
      */
     public boolean contains(String material) {
-        if (durabilityMaterials.containsKey(material)) {
-            return true;
-        }
-        return false;
+        return durabilityMaterials.containsKey(material);
     }
 
     /**
@@ -54,10 +51,7 @@ public class MaterialManager {
      * @return whether durability for block is enabled
      */
     public boolean getDurabilityEnabled(String material) {
-        if (durabilityMaterials.containsKey(material)) {
-            return durabilityMaterials.get(material).getEnabled();
-        }
-        return false;
+        return durabilityMaterials.containsKey(material) && durabilityMaterials.get(material).getEnabled();
     }
 
     /**
@@ -78,10 +72,7 @@ public class MaterialManager {
      * @return whether durability timer for block is enabled
      */
     public boolean getDurabilityResetTimerEnabled(String material) {
-        if (durabilityMaterials.containsKey(material)) {
-            return durabilityMaterials.get(material).getResetEnabled();
-        }
-        return false;
+        return durabilityMaterials.containsKey(material) && durabilityMaterials.get(material).getResetEnabled();
     }
 
     /**
@@ -115,10 +106,7 @@ public class MaterialManager {
      * @return Fireball damage is enabled for block
      */
     public boolean getGhastsEnabled(String material) {
-        if (durabilityMaterials.containsKey(material)) {
-            return durabilityMaterials.get(material).getGhastsEnabled();
-        }
-        return false;
+        return durabilityMaterials.containsKey(material) && durabilityMaterials.get(material).getGhastsEnabled();
     }
 
     /**
@@ -128,10 +116,7 @@ public class MaterialManager {
      * @return Creeper damage is enabled for block
      */
     public boolean getCreepersEnabled(String material) {
-        if (durabilityMaterials.containsKey(material)) {
-            return durabilityMaterials.get(material).getCreepersEnabled();
-        }
-        return false;
+        return durabilityMaterials.containsKey(material) && durabilityMaterials.get(material).getCreepersEnabled();
     }
 
     /**
@@ -141,10 +126,7 @@ public class MaterialManager {
      * @return Cannon damage is enabled for block
      */
     public boolean getCannonsEnabled(String material) {
-        if (durabilityMaterials.containsKey(material)) {
-            return durabilityMaterials.get(material).getCannonsEnabled();
-        }
-        return false;
+        return durabilityMaterials.containsKey(material) && durabilityMaterials.get(material).getCannonsEnabled();
     }
 
     /**
@@ -154,10 +136,7 @@ public class MaterialManager {
      * @return TNT damage is enabled for block
      */
     public boolean getTntEnabled(String material) {
-        if (durabilityMaterials.containsKey(material)) {
-            return durabilityMaterials.get(material).getTntEnabled();
-        }
-        return false;
+        return durabilityMaterials.containsKey(material) && durabilityMaterials.get(material).getTntEnabled();
     }
 
     /**
@@ -167,10 +146,7 @@ public class MaterialManager {
      * @return TNT minecart damage is enabled for block
      */
     public boolean getTntMinecartsEnabled(String material) {
-        if (durabilityMaterials.containsKey(material)) {
-            return durabilityMaterials.get(material).getTntMinecartsEnabled();
-        }
-        return false;
+        return durabilityMaterials.containsKey(material) && durabilityMaterials.get(material).getTntMinecartsEnabled();
     }
 
     /**
@@ -180,10 +156,7 @@ public class MaterialManager {
      * @return Wither damage is enabled for block
      */
     public boolean getWithersEnabled(String material) {
-        if (durabilityMaterials.containsKey(material)) {
-            return durabilityMaterials.get(material).getWithersEnabled();
-        }
-        return false;
+        return durabilityMaterials.containsKey(material) && durabilityMaterials.get(material).getWithersEnabled();
     }
 
     /**
@@ -196,7 +169,7 @@ public class MaterialManager {
         if (durabilityMaterials.containsKey(material)) {
             return durabilityMaterials.get(material).getRadius();
         }
-        return 0;
+        return 1;
     }
 
     /**
@@ -244,6 +217,13 @@ public class MaterialManager {
             return durabilityMaterials.get(material).getCannonsDamage();
         }
         return 1;
+    }
+
+    public double getFluidDamperAmount(String material) {
+        if (durabilityMaterials.containsKey(material)) {
+            return durabilityMaterials.get(material).getFluidDamper();
+        }
+        return 0;
     }
 
 }

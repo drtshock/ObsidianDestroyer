@@ -31,7 +31,6 @@ public class ChunkManager {
     private final File durabilityDir;
     private ConcurrentMap<String, ChunkWrapper> chunks = new ConcurrentHashMap<String, ChunkWrapper>();
     private boolean doneSave = false;
-    private int percent = 0;
     private List<String> disabledWorlds;
 
     /**
@@ -181,6 +180,12 @@ public class ChunkManager {
                                 }
                                 // the material is being handled
                                 if (MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name())) {
+                                    if (MaterialManager.getInstance().getFluidDamperAmount(targetLoc.getBlock().getType().name()) >= Math.random()) {
+                                        // Ignore the block if the explosion has been absorbed
+                                        ObsidianDestroyer.debug("Nearby Fluid Absorbed Explosion Damage to Block! " + targetLoc.toString());
+                                        blocksIgnored.add(targetLoc.getBlock());
+                                        continue;
+                                    }
                                     // Apply damage to block material
                                     DamageResult result = damageBlock(targetLoc.getBlock().getLocation(), detonator);
                                     if (result == DamageResult.DESTROY) {
@@ -191,8 +196,15 @@ public class ChunkManager {
                                         continue;
                                     }
                                 } else {
-                                    blocklist.add(targetLoc.getBlock());
-                                    continue;
+                                    if (MaterialManager.getInstance().getFluidDamperAmount(targetLoc.getBlock().getType().name()) >= Math.random()) {
+                                        // Ignore the block if the explosion has been absorbed
+                                        ObsidianDestroyer.debug("Nearby Fluid Absorbed Explosion Damage to Block! " + targetLoc.toString());
+                                        blocksIgnored.add(targetLoc.getBlock());
+                                        continue;
+                                    } else {
+                                        blocklist.add(targetLoc.getBlock());
+                                        continue;
+                                    }
                                 }
                             }
                         }
@@ -812,7 +824,7 @@ public class ChunkManager {
             ChunkWrapper w = chunks.get(key);
             w.save(false, true);
             done++;
-            this.percent = ((Double) (done / max)).intValue();
+            //this.percent = ((Double) (done / max)).intValue();
         }
         chunks.clear();
         doneSave = true;
