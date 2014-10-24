@@ -31,9 +31,12 @@ public class PlayerListener implements Listener {
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (player.getItemInHand().getAmount() > 0 && event.getAction() == Action.LEFT_CLICK_BLOCK && event.hasBlock()) {
+            if (!player.hasPermission("obsidiandestroyer.check")) {
+                return;
+            }
             Material itemInHand = player.getItemInHand().getType();
             Block block = event.getClickedBlock();
-            if (ConfigManager.getInstance().getDurabilityCheckItem().equals(itemInHand) && player.hasPermission("obsidiandestroyer.check")) {
+            if (itemInHand != null && ConfigManager.getInstance().getDurabilityCheckItem().equals(itemInHand)) {
                 MaterialManager mm = MaterialManager.getInstance();
                 if (mm.getDurabilityEnabled(block.getType().name())) {
                     if (player.getGameMode() == GameMode.CREATIVE) {
