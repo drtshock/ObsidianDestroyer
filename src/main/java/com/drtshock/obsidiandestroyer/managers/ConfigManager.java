@@ -322,4 +322,8 @@ public class ConfigManager {
         return config.getInt("BorderToProtect.Nether", 123);
     }
 
+    public boolean getDurabilityDamageEventEnabled() {
+        return config.getBoolean("Events.DurabilityDamageEventEnabled", false);
+    }
+
 }

@@ -8,6 +8,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 
+import java.util.Random;
+
 public class Util {
 
     public static boolean isSolid(Material material) {
@@ -260,5 +262,12 @@ public class Util {
 
     public static String header() {
         return ChatColor.DARK_AQUA + "[" + ChatColor.AQUA + "ObsidianDestroyer" + ChatColor.DARK_AQUA + "] " + ChatColor.RESET;
+    }
+
+    public static int getRandomNumberFrom(int min, int max) {
+        Random foo = new Random();
+        int randomNumber = foo.nextInt((max + 1) - min) + min;
+
+        return randomNumber;
     }
 }

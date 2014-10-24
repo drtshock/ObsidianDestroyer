@@ -88,5 +88,10 @@ Factions:
   # Multiplier to use for changing the durability of an online faction.
   OnlineDurabilityMultiplier: 1.0
 
+# Extra events for other plugins?
+Events:
+  # Through an event for each block that takes a durability hit (Experimental)
+  DurabilityDamageEventEnabled: false
+
 
 # Thats it :3

@@ -169,7 +169,7 @@ public class MaterialManager {
         if (durabilityMaterials.containsKey(material)) {
             return durabilityMaterials.get(material).getRadius();
         }
-        return 1;
+        return 0;
     }
 
     /**

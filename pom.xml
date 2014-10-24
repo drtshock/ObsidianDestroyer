@@ -1,9 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.drtshock</groupId>
     <artifactId>ObsidianDestroyer</artifactId>
-    <version>4.3.1-SNAPSHOT</version>
+    <version>4.3.2-SNAPSHOT</version>
     <name>ObsidianDestroyer</name>
     <url>https://github.com/drtshock/ObsidianDestroyer</url>
 
@@ -71,7 +71,7 @@
             <url>http://repo.turt2live.com/</url>
         </repository>
         <repository>
-        <id>royaldev-repo</id>
+            <id>royaldev-repo</id>
             <url>http://minor.royaldev.org:8081/nexus/content/groups/public</url>
         </repository>
     </repositories>
