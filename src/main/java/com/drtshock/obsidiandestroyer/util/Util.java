@@ -3,10 +3,6 @@ package com.drtshock.obsidiandestroyer.util;
 import com.drtshock.obsidiandestroyer.managers.ConfigManager;
 import com.drtshock.obsidiandestroyer.managers.HookManager;
 import com.drtshock.obsidiandestroyer.managers.MaterialManager;
-import com.massivecraft.factions.FFlag;
-import com.massivecraft.factions.entity.BoardColls;
-import com.massivecraft.factions.entity.Faction;
-import com.massivecraft.mcore.ps.PS;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -212,7 +208,7 @@ public class Util {
         return value > Math.round((du * multi) + (du * 0.18));
     }
 
-    public static final boolean isNearLiquid(Location location) {
+    public static boolean isNearLiquid(Location location) {
         for (BlockFace face : BlockFace.values()) {
             switch (face) {
                 case NORTH:
@@ -234,36 +230,31 @@ public class Util {
     }
 
     public static double getMultiplier(Location location) {
-        if (HookManager.getInstance().isFactionsFound()) {
-            if (ConfigManager.getInstance().getHandleFactions()) {
-                Faction faction = BoardColls.get().getFactionAt(PS.valueOf(location));
-                return getMultiplier(faction);
-            }
+        if (!HookManager.getInstance().isFactionsFound()) {
+            return 1D;
         }
-        return 1D;
-    }
 
-    public static double getMultiplier(Faction faction) {
         double value = 1D;
         if (!ConfigManager.getInstance().getHandleFactions()) {
             return value;
         }
+        if (HookManager.getInstance().getFactionsManager().getFactions().isExplosionsEnabled(location)) {
+            value = 1D;
+        }
         if (ConfigManager.getInstance().getHandleOfflineFactions()) {
-            if (faction.isFactionConsideredOffline()) {
+            if (HookManager.getInstance().getFactionsManager().getFactions().isFactionOffline(location)) {
                 value = ConfigManager.getInstance().getOfflineFactionsDurabilityMultiplier();
             }
         }
         if (ConfigManager.getInstance().getHandleOnlineFactions()) {
-            if (faction.isFactionConsideredOnline()) {
+            if (!HookManager.getInstance().getFactionsManager().getFactions().isFactionOffline(location)) {
                 value = ConfigManager.getInstance().getOnlineFactionsDurabilityMultiplier();
             }
-        }
-        if (!faction.getFlag(FFlag.EXPLOSIONS)) {
-            value = 1D;
         }
         if (value <= 0) {
             value = 1D;
         }
+
         return value;
     }
 

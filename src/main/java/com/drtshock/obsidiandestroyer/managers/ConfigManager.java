@@ -100,7 +100,7 @@ public class ConfigManager {
             configFile.delete();
             loadFiles(true);
             return;
-        } else if ("null".equals(config.getString("Version", "null"))) {
+        } else if (config != null && "null".equals(config.getString("Version", "null"))) {
             loaded = false;
             return;
         }
@@ -183,10 +183,7 @@ public class ConfigManager {
      * @return debug mode enabled
      */
     public boolean getDebug() {
-        if (config == null) {
-            return true;
-        }
-        return config.getBoolean("Debug", false);
+        return config == null || config.getBoolean("Debug", false);
     }
 
     /**
@@ -299,6 +296,10 @@ public class ConfigManager {
 
     public boolean getHandleOfflineFactions() {
         return config.getBoolean("Factions.HandleOffline", false);
+    }
+
+    public boolean getUsingFactions() {
+        return getHandleFactions() && getFactionHookEnabled() && HookManager.getInstance().isUsingFactions();
     }
 
     public boolean getHandleOnlineFactions() {

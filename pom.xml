@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.drtshock</groupId>
     <artifactId>ObsidianDestroyer</artifactId>
-    <version>4.3.0</version>
+    <version>4.3.1-SNAPSHOT</version>
     <name>ObsidianDestroyer</name>
     <url>https://github.com/drtshock/ObsidianDestroyer</url>
 
@@ -24,6 +24,7 @@
                 <directory>${basedir}/src/main/resources/</directory>
                 <includes>
                     <include>*.yml</include>
+                    <include>factions.txt</include>
                 </includes>
             </resource>
         </resources>
@@ -66,7 +67,11 @@
             <url>http://repo.turt2live.com/</url>
         </repository>
         <repository>
-            <id>royaldev-repo</id>
+            <id>massivecraft</id>
+            <url>http://repo.turt2live.com/</url>
+        </repository>
+        <repository>
+        <id>royaldev-repo</id>
             <url>http://minor.royaldev.org:8081/nexus/content/groups/public</url>
         </repository>
     </repositories>
@@ -78,13 +83,28 @@
         </dependency>
         <dependency>
             <groupId>com.turt2live.lib</groupId>
-            <artifactId>Factions</artifactId>
-            <version>2.2.1</version>
+            <artifactId>Factions-1.8.2</artifactId>
+            <version>1.8.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.turt2live.lib</groupId>
+            <artifactId>Factions-1.6.9.4</artifactId>
+            <version>1.6.9.4</version>
         </dependency>
         <dependency>
             <groupId>com.turt2live.lib</groupId>
             <artifactId>MCore</artifactId>
             <version>6.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.massivecraft</groupId>
+            <artifactId>Factions</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.massivecraft</groupId>
+            <artifactId>MassiveCore</artifactId>
+            <version>7.4.0</version>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>

@@ -1,19 +1,18 @@
 package com.drtshock.obsidiandestroyer.managers;
 
-import java.util.logging.Level;
-
 import com.drtshock.obsidiandestroyer.ObsidianDestroyer;
-import com.drtshock.obsidiandestroyer.util.Util;
-import org.bukkit.ChatColor;
-import org.bukkit.command.ConsoleCommandSender;
+import com.drtshock.obsidiandestroyer.managers.factions.FactionsManager;
 import org.bukkit.plugin.Plugin;
+
+import java.util.logging.Level;
 
 public class HookManager {
 
     private static HookManager instance;
     private boolean isCannonsHooked = false;
     private boolean isFactionFound = false;
-    private boolean isMassiveCoreFound = false;
+
+    private FactionsManager factions;
 
     /**
      * Manages the hooks into other plugins
@@ -76,47 +75,45 @@ public class HookManager {
      * @return Factions hook state
      */
     public boolean isFactionsFound() {
-        return isFactionFound && isMassiveCoreFound;
+        return isFactionFound;
+    }
+
+    /**
+     * Check if the plugin should use factions.
+     *
+     * @return true if config is set to true and the factions manager is not null. Otherwise false.
+     */
+    public boolean isUsingFactions() {
+        return ConfigManager.getInstance().getFactionHookEnabled() && factions != null && factions.getFactions() != null;
     }
 
     /**
      * Checks to see if the Factions plugin is active.
      */
     private void checkFactions() {
-        Plugin massivecore = ObsidianDestroyer.getInstance().getServer().getPluginManager().getPlugin("MassiveCore");
-        Plugin mcore = ObsidianDestroyer.getInstance().getServer().getPluginManager().getPlugin("mcore");
-        Plugin factions = ObsidianDestroyer.getInstance().getServer().getPluginManager().getPlugin("Factions");
-        ConsoleCommandSender console = ObsidianDestroyer.getInstance().getServer().getConsoleSender();
-
-        if (massivecore != null && massivecore.isEnabled()) {
-            console.sendMessage(Util.header() + "MassiveCore Found! Version: " + massivecore.getDescription().getVersion());
-            isMassiveCoreFound = true;
-        } else if (mcore != null && mcore.isEnabled()) {
-            console.sendMessage(Util.header() + "mcore Found! Version: " + mcore.getDescription().getVersion());
-            isMassiveCoreFound = true;
-        }
-
-        if (factions != null && factions.isEnabled()) {
-            String[] ver = factions.getDescription().getVersion().split("\\.");
-            int v = 0;
-            try {
-                v = Integer.parseInt(ver[0]);
-            } catch (NumberFormatException e) {
-                ObsidianDestroyer.LOG.log(Level.SEVERE, e.getMessage());
-            }
-            if (v == 2) {
-                console.sendMessage(Util.header() + "Factions Found! Version: " + factions.getDescription().getVersion());
-                isFactionFound = true;
+        if (ConfigManager.getInstance().getFactionHookEnabled()) {
+            Plugin factions = ObsidianDestroyer.getInstance().getServer().getPluginManager().getPlugin("Factions");
+            if (factions != null) {
+                this.factions = new FactionsManager(ObsidianDestroyer.getInstance(), factions); // Loads the hooks internally, if nothing is found that's fine.
+                if (this.factions.getFactions() == null) {
+                    ObsidianDestroyer.LOG.info("Factions was found, but the version you have is not supported.");
+                } else {
+                    isFactionFound = true;
+                    ObsidianDestroyer.LOG.info("Factions hook for version " + this.factions.getFactions().getVersion() + " has been loaded!");
+                }
             } else {
-                console.sendMessage(Util.header() + "Factions found, but version " + factions.getDescription().getVersion() + " is not supported! " + ChatColor.RED + ":(");
+                ObsidianDestroyer.LOG.info("Factions hook enabled, but Factions wasn't found. What were you thinking O_o");
             }
         }
+    }
 
-        if (isFactionFound && isMassiveCoreFound) {
-            console.sendMessage(Util.header() + ChatColor.GREEN + "Factions - MassiveCore link established.");
-        } else {
-            console.sendMessage(Util.header() + ChatColor.RED + "Factions - MassiveCore link failed!");
-        }
+    /**
+     * Gets the Factions Manager.
+     *
+     * @return the FactionsManager.
+     */
+    public FactionsManager getFactionsManager() {
+        return factions;
     }
 
 }

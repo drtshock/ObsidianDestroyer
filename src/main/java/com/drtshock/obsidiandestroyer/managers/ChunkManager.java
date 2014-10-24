@@ -7,10 +7,6 @@ import com.drtshock.obsidiandestroyer.datatypes.EntityData;
 import com.drtshock.obsidiandestroyer.enumerations.DamageResult;
 import com.drtshock.obsidiandestroyer.enumerations.TimerState;
 import com.drtshock.obsidiandestroyer.util.Util;
-import com.massivecraft.factions.FFlag;
-import com.massivecraft.factions.entity.BoardColls;
-import com.massivecraft.factions.entity.Faction;
-import com.massivecraft.mcore.ps.PS;
 import org.bukkit.*;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
@@ -178,7 +174,7 @@ public class ChunkManager {
                         }
                         if (distance < radiuz - 0.1 && Util.isNearLiquid(targetLoc)) {
                             // the event does not contain this block already...
-                            if (!event.blockList().contains(targetLoc)) {
+                            if (!event.blockList().contains(targetLoc.getBlock())) {
                                 if (distance > radiuz - 0.6 && Math.random() <= 0.4) {
                                     blocksIgnored.add(targetLoc.getBlock());
                                     continue;
@@ -214,14 +210,11 @@ public class ChunkManager {
                         DamageResult result = damageBlock(targetLoc.getBlock().getLocation(), detonator);
                         if (result == DamageResult.DESTROY) {
                             blocklist.add(targetLoc.getBlock());
-                            continue;
                         } else if (result == DamageResult.DAMAGE) {
                             blocksIgnored.add(targetLoc.getBlock());
-                            continue;
                         }
                     } else if (event.blockList().contains(targetLoc.getBlock())) {
                         blocksIgnored.add(targetLoc.getBlock());
-                        continue;
                     }
                 }
             }
@@ -238,8 +231,7 @@ public class ChunkManager {
 
             // Factions bypasses
             if (factionsApplied) {
-                Faction faction = BoardColls.get().getFactionAt(PS.valueOf(block.getLocation()));
-                if (faction.isFactionConsideredOffline()) {
+                if (HookManager.getInstance().getFactionsManager().getFactions().isFactionOffline(block.getLocation())) {
                     bypassBlockList.add(block);
                 }
             }
@@ -279,8 +271,6 @@ public class ChunkManager {
                 destroyBlockAndDropItem(block.getLocation());
             } else if (block.isLiquid() && event.getEntity().hasMetadata("ObbyLiquidEntity")) {
                 block.setType(Material.AIR);
-            } else if (block.getType() == Material.TNT) {
-                continue;
             } else {
                 block.breakNaturally();
             }
@@ -350,16 +340,15 @@ public class ChunkManager {
         double durabilityMultiplier = 1D;
         if (HookManager.getInstance().isFactionsFound() && ConfigManager.getInstance().getFactionHookEnabled()) {
             if (ConfigManager.getInstance().getHandleFactions()) {
-                Faction faction = BoardColls.get().getFactionAt(PS.valueOf(at));
-                if (!faction.getFlag(FFlag.EXPLOSIONS)) {
+                if (!HookManager.getInstance().getFactionsManager().getFactions().isExplosionsEnabled(at)) {
                     return DamageResult.NONE;
                 }
                 if (!ConfigManager.getInstance().getHandleOfflineFactions()) {
-                    if (faction.isFactionConsideredOffline()) {
+                    if (HookManager.getInstance().getFactionsManager().getFactions().isFactionOffline(block.getLocation())) {
                         return DamageResult.NONE;
                     }
                 }
-                durabilityMultiplier = Util.getMultiplier(faction);
+                durabilityMultiplier = Util.getMultiplier(at);
             }
         }
         // Handle block if the materials durability is greater than one, else destroy the block
@@ -426,12 +415,7 @@ public class ChunkManager {
         // Bypass list for special handlings
         final List<Block> bypassBlockList = new ArrayList<Block>();
         final boolean useFactions = HookManager.getInstance().isFactionsFound() && ConfigManager.getInstance().getFactionHookEnabled();
-        final boolean applyFactions;
-        if (useFactions) {
-            applyFactions = ConfigManager.getInstance().getHandleFactions() && ConfigManager.getInstance().getHandleOfflineFactions();
-        } else {
-            applyFactions = false;
-        }
+        final boolean applyFactions = useFactions && ConfigManager.getInstance().getHandleFactions() && ConfigManager.getInstance().getHandleOfflineFactions();
         // Iterator through the events blocks
         Iterator<Block> iter = event.getBlockList().iterator();
         while (iter.hasNext()) {
@@ -442,8 +426,7 @@ public class ChunkManager {
             }
             // Factions bypasses
             if (useFactions && applyFactions) {
-                Faction faction = BoardColls.get().getFactionAt(PS.valueOf(block.getLocation()));
-                if (faction.isFactionConsideredOffline()) {
+                if (HookManager.getInstance().getFactionsManager().getFactions().isFactionOffline(block.getLocation())) {
                     bypassBlockList.add(block);
                 }
             }
@@ -576,16 +559,15 @@ public class ChunkManager {
         double durabilityMultiplier = 1D;
         if (HookManager.getInstance().isFactionsFound() && ConfigManager.getInstance().getFactionHookEnabled()) {
             if (ConfigManager.getInstance().getHandleFactions()) {
-                Faction faction = BoardColls.get().getFactionAt(PS.valueOf(at));
-                if (!faction.getFlag(FFlag.EXPLOSIONS)) {
+                if (!HookManager.getInstance().getFactionsManager().getFactions().isExplosionsEnabled(at)) {
                     return DamageResult.NONE;
                 }
                 if (!ConfigManager.getInstance().getHandleOfflineFactions()) {
-                    if (faction.isFactionConsideredOffline()) {
+                    if (HookManager.getInstance().getFactionsManager().getFactions().isFactionOffline(block.getLocation())) {
                         return DamageResult.NONE;
                     }
                 }
-                durabilityMultiplier = Util.getMultiplier(faction);
+                durabilityMultiplier = Util.getMultiplier(at);
             }
         }
         // Handle block if the materials durability is greater than one, else destroy the block
@@ -955,11 +937,7 @@ public class ChunkManager {
      * @return true if block found within chunk
      */
     public boolean contains(Block block) {
-        if (block == null) {
-            return false;
-        }
-
-        return contains(block.getLocation());
+        return block != null && contains(block.getLocation());
     }
 
     /**
@@ -974,10 +952,8 @@ public class ChunkManager {
         }
         String c = chunkToString(location.getChunk());
         ChunkWrapper chunk = chunks.get(c);
-        if (chunk == null) {
-            return false;
-        }
-        return chunk.contains(location);
+
+        return chunk != null && chunk.contains(location);
     }
 
     /**
@@ -994,20 +970,7 @@ public class ChunkManager {
         if (!chunks.containsKey(c)) {
             loadChunk(chunk);
         }
-        ChunkWrapper wrapper = chunks.get(c);
-        return wrapper;
-    }
-
-    /**
-     * Gets the percentage of the save done
-     *
-     * @return the percentage done
-     */
-    public int percentSaveDone() {
-        if (isSaveDone()) {
-            return 100;
-        }
-        return percent;
+        return chunks.get(c);
     }
 
     /**

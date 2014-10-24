@@ -3,6 +3,7 @@ package com.drtshock.obsidiandestroyer.commands;
 import com.drtshock.obsidiandestroyer.ObsidianDestroyer;
 import com.drtshock.obsidiandestroyer.managers.ChunkManager;
 import com.drtshock.obsidiandestroyer.managers.ConfigManager;
+import com.drtshock.obsidiandestroyer.managers.HookManager;
 import com.drtshock.obsidiandestroyer.managers.MaterialManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -75,6 +76,7 @@ public class ODCommand implements CommandExecutor {
             e.printStackTrace();
         }
         new ConfigManager(true).backup(true);
+        new HookManager();
         MaterialManager.getInstance().load();
         ChunkManager.getInstance().loadDisabledWorlds();
         ObsidianDestroyer.LOG.log(Level.SEVERE, "The config has encountered an error on load. Recovered a backup from memory...");

@@ -75,7 +75,7 @@ DisabledOnWorlds: []
 # Works with Factions 2.x only.
 Factions:
   # Enable Hooking - enabling will allow obsidian destroyer to pass interactions directly to factions.
-  Enabled: false
+  Enabled: true
   # Toggles explosion features between ObsidianDestroyer and Factions.
   HandleExplosions: true
   # Toggle to manage an offline faction. (Override & Multiplier)
