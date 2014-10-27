@@ -1,4 +1,4 @@
-package com.drtshock.obsidiandestroyer.xEvents;
+package com.drtshock.obsidiandestroyer.events;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
