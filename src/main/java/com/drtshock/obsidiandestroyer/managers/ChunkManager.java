@@ -2,12 +2,12 @@ package com.drtshock.obsidiandestroyer.managers;
 
 import at.pavlov.cannons.event.ProjectileImpactEvent;
 import at.pavlov.cannons.event.ProjectilePiercingEvent;
-import com.drtshock.obsidiandestroyer.Events.DurabilityDamageEvent;
-import com.drtshock.obsidiandestroyer.Events.xEntityExplodeEvent;
 import com.drtshock.obsidiandestroyer.ObsidianDestroyer;
 import com.drtshock.obsidiandestroyer.datatypes.EntityData;
 import com.drtshock.obsidiandestroyer.enumerations.DamageResult;
 import com.drtshock.obsidiandestroyer.enumerations.TimerState;
+import com.drtshock.obsidiandestroyer.events.DurabilityDamageEvent;
+import com.drtshock.obsidiandestroyer.events.xEntityExplodeEvent;
 import com.drtshock.obsidiandestroyer.util.Util;
 import org.bukkit.*;
 import org.bukkit.World.Environment;

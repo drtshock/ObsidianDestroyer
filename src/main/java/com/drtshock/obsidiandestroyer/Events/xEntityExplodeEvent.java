@@ -1,4 +1,4 @@
-package com.drtshock.obsidiandestroyer.Events;
+package com.drtshock.obsidiandestroyer.events;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;

@@ -1,4 +1,4 @@
-package com.drtshock.obsidiandestroyer.Events;
+package com.drtshock.obsidiandestroyer.events;
 
 import com.drtshock.obsidiandestroyer.enumerations.DamageResult;
 import org.bukkit.entity.EntityType;
