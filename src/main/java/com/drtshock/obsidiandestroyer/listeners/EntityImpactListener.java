@@ -14,7 +14,7 @@ public class EntityImpactListener implements Listener {
             return; // do not do anything in case explosions get cancelled
         }
 
-        ChunkManager.getInstance().handlePiercing(event);
+        ChunkManager.getInstance().handleCannonPiercing(event);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -23,6 +23,6 @@ public class EntityImpactListener implements Listener {
             return; // do not do anything in case explosions get cancelled
         }
 
-        ChunkManager.getInstance().handleImpact(event);
+        ChunkManager.getInstance().handleCannonImpact(event);
     }
 }

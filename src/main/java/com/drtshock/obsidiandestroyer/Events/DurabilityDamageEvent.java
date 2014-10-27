@@ -21,6 +21,12 @@ public class DurabilityDamageEvent extends ObsidianDestroyerEvent implements Can
         this.entityType = entityType;
     }
 
+    public DurabilityDamageEvent(String blockType) {
+        super();
+        this.blockType = blockType;
+        this.entityType = null;
+    }
+
     public EntityType getEntityType() {
         return entityType;
     }

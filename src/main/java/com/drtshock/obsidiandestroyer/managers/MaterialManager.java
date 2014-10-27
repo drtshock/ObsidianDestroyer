@@ -13,6 +13,9 @@ public class MaterialManager {
     private static MaterialManager instance;
     private Map<String, DurabilityMaterial> durabilityMaterials = new HashMap<String, DurabilityMaterial>();
 
+    /**
+     * Stores materials that have durability enabled to track
+     */
     public MaterialManager() {
         instance = this;
         load();
