@@ -9,11 +9,6 @@
 # The old config will be saved as 'config.yml.old'
 Version: ${project.version}
 
-# This will only check for updates and download them by default.
-# This plugin does not break between minecraft versions so you should not have an issue updating to the most recent build.
-checkupdate: true
-downloadupdate: true
-
 # The explosion radius that will be checked. Blocks in this radius will be affected.
 # Must be greater than zero and not above ten. Will create lag with high radius
 # See 'MATERIAL.BlastRadius' in materials.yml for custom distance.
