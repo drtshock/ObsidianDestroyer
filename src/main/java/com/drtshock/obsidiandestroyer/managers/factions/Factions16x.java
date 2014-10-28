@@ -4,7 +4,6 @@ import com.drtshock.obsidiandestroyer.managers.ConfigManager;
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.Faction;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
 public class Factions16x implements FactionsHook {
@@ -13,9 +12,7 @@ public class Factions16x implements FactionsHook {
     public boolean isFactionOffline(Location loc) {
         if (ConfigManager.getInstance().getUsingFactions()) {
             Faction faction = Board.getFactionAt(new FLocation(loc));
-            if (ChatColor.stripColor(faction.getTag()).equalsIgnoreCase("wilderness") ||
-                    ChatColor.stripColor(faction.getTag()).equalsIgnoreCase("safezone") ||
-                    ChatColor.stripColor(faction.getTag()).equalsIgnoreCase("warzone")) {
+            if (!faction.isNormal()) { // Checks if faction isn't safezone, warzone, or wilderness.
                 //ObsidianDestroyer.debug("Factions16x.isFactionOffline: false");
                 return false;
             }
@@ -32,17 +29,8 @@ public class Factions16x implements FactionsHook {
             return true;
         }
         Faction faction = Board.getFactionAt(new FLocation(loc));
-        if (ChatColor.stripColor(faction.getTag()).equalsIgnoreCase("wilderness")) {
-            //ObsidianDestroyer.debug("Factions16x.isExplosionsEnabled: true");
-            return true;
-        }
-        if (/*Conf.safeZoneBlockTNT && */ChatColor.stripColor(faction.getTag()).equalsIgnoreCase("safezone")) {
-            //ObsidianDestroyer.debug("Factions16x.isExplosionsEnabled: false");
-            return false;
-        }
-        if (/*Conf.warZoneBlockTNT && */ChatColor.stripColor(faction.getTag()).equalsIgnoreCase("warzone")) {
-            //ObsidianDestroyer.debug("Factions16x.isExplosionsEnabled: false");
-            return false;
+        if(!faction.isNormal()) {
+            return faction.getId().equalsIgnoreCase("0"); // Checks if faction is wilderness.
         }
         //ObsidianDestroyer.debug("Factions16x.isExplosionsEnabled: " + !faction.noExplosionsInTerritory());
         return !faction.noExplosionsInTerritory();
