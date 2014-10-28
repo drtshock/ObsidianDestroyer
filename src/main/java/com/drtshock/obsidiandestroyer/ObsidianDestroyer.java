@@ -9,7 +9,6 @@ import com.drtshock.obsidiandestroyer.managers.ChunkManager;
 import com.drtshock.obsidiandestroyer.managers.ConfigManager;
 import com.drtshock.obsidiandestroyer.managers.HookManager;
 import com.drtshock.obsidiandestroyer.managers.MaterialManager;
-import com.drtshock.obsidiandestroyer.util.Updater;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,8 +20,6 @@ public class ObsidianDestroyer extends JavaPlugin {
 
     public static Logger LOG;
     private static ObsidianDestroyer instance;
-    private boolean update = false;
-    private String name = "";
 
     public static ObsidianDestroyer getInstance() {
         return instance;
@@ -57,9 +54,6 @@ public class ObsidianDestroyer extends JavaPlugin {
         }
         pm.registerEvents(new PlayerListener(), this);
         pm.registerEvents(new BlockListener(), this);
-
-        // Check for updates
-        checkUpdate();
     }
 
     @Override
@@ -68,35 +62,6 @@ public class ObsidianDestroyer extends JavaPlugin {
         if (ChunkManager.getInstance() != null) {
             ChunkManager.getInstance().save();
         }
-    }
-
-    protected void checkUpdate() {
-        if (ConfigManager.getInstance().getCheckUpdate()) {
-            final ObsidianDestroyer plugin = this;
-            final File file = this.getFile();
-            final Updater.UpdateType updateType = (ConfigManager.getInstance().getDownloadUpdate() ? Updater.UpdateType.DEFAULT : Updater.UpdateType.NO_DOWNLOAD);
-            getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
-                @Override
-                public void run() {
-                    Updater updater = new Updater(plugin, 43718, file, updateType, false);
-                    update = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE;
-                    name = updater.getLatestName();
-                    if (updater.getResult() == Updater.UpdateResult.SUCCESS) {
-                        LOG.log(Level.INFO, "Successfully updated ObsidianDestroyer to version {0} for next restart!", updater.getLatestName());
-                    } else if (updater.getResult() == Updater.UpdateResult.NO_UPDATE) {
-                        LOG.log(Level.INFO, "We didn't find an update!");
-                    }
-                }
-            });
-        }
-    }
-
-    public String getLatestVersion() {
-        return name;
-    }
-
-    public boolean getNeedsUpdate() {
-        return update;
     }
 
 }
