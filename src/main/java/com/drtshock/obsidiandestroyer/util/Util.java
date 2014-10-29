@@ -6,7 +6,9 @@ import com.drtshock.obsidiandestroyer.managers.MaterialManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.util.BlockIterator;
 
 import java.util.Random;
 
@@ -231,6 +233,39 @@ public class Util {
         return false;
     }
 
+    public static boolean isTargetsPathBlocked(Location tLoc, Location dLoc) {
+        // Create a vector trace from the detonator location to damaged block's location
+        BlockIterator blocksInPath = new BlockIterator(tLoc.getWorld(), dLoc.toVector(), tLoc.toVector().subtract(dLoc.toVector()).normalize(), 0, (int) dLoc.distance(tLoc));
+
+        if (blocksInPath == null) {
+            return false;
+        }
+
+        // iterate through the blocks in the path
+        while (blocksInPath.hasNext()) {
+            // the next block
+            final Block block = blocksInPath.next();
+            if (block == null) {
+                continue;
+            }
+
+            // check if next block is the target block
+            if (tLoc.getWorld().getName().equals(block.getWorld().getName()) &&
+                    tLoc.getBlockX() == block.getX() &&
+                    tLoc.getBlockY() == block.getY() &&
+                    tLoc.getBlockZ() == block.getZ()) {
+                // ignore target block
+                continue;
+            }
+
+            // check if the block is a solid
+            if (!isNonSolid(block.getType())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static double getMultiplier(Location location) {
         if (!HookManager.getInstance().isFactionsFound()) {
             return 1D;
@@ -269,5 +304,31 @@ public class Util {
         int randomNumber = foo.nextInt((max + 1) - min) + min;
 
         return randomNumber;
+    }
+
+    public static boolean isNonSolid(Material type) {
+        switch (type) {
+            case AIR:
+            case LONG_GRASS:
+            case DEAD_BUSH:
+            case THIN_GLASS:
+            case YELLOW_FLOWER:
+            case RED_ROSE:
+            case BROWN_MUSHROOM:
+            case RED_MUSHROOM:
+            case SNOW:
+            case WEB:
+            case STRING:
+            case VINE:
+            case DOUBLE_PLANT:
+            case FIRE:
+            case TORCH:
+            case REDSTONE_TORCH_ON:
+            case REDSTONE_TORCH_OFF:
+            case REDSTONE:
+                return true;
+            default:
+                return false;
+        }
     }
 }

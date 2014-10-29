@@ -158,9 +158,12 @@ public class ChunkManager {
         // Bedrock override bypass
         final boolean enabledBedrock = MaterialManager.getInstance().contains(Material.BEDROCK.name());
 
+        // Bleeding Damage blocked blocks
+        List<Location> blockedBlockLocations = new ArrayList<Location>();
+
         // =================================================
-        // For materials that are not normally destructible.
-        // FIXME: Damage to blocks bleeds between materials
+        // Material Explosion radius check for all materials
+        // Loop through all blocks within the applied radius
         for (int x = -radius; x <= radius; x++) {
             for (int y = radius; y >= -radius; y--) {
                 for (int z = -radius; z <= radius; z++) {
@@ -233,6 +236,20 @@ public class ChunkManager {
                             blocksIgnored.add(targetLoc.getBlock());
                             continue;
                         }
+
+                        // Damage bleeding fix
+                        if (ConfigManager.getInstance().getDisableDamageBleeding()) {
+                            // Radial hitscan check for blocking blocks
+                            if (Util.isTargetsPathBlocked(targetLoc, detonatorLoc)) {
+                                // add block to list of blocked location
+                                blockedBlockLocations.add(targetLoc);
+                                // add block to ignore list
+                                blocksIgnored.add(targetLoc.getBlock());
+                                //ObsidianDestroyer.debug("Blocked Bleeding Damage!! " + targetLoc.toString());
+                                continue;
+                            }
+                        }
+
                         // Apply damage to block material
                         DamageResult result = damageBlock(targetLoc.getBlock().getLocation(), detonator);
                         if (result == DamageResult.DESTROY) {
@@ -279,7 +296,7 @@ public class ChunkManager {
 
         // ==========================
         // Create a new explosion event from the custom block lists
-        xEntityExplodeEvent explosionEvent = new xEntityExplodeEvent(detonator, detonator.getLocation(), blocklist, bypassBlockList, yield);
+        xEntityExplodeEvent explosionEvent = new xEntityExplodeEvent(detonator, detonator.getLocation(), blocklist, bypassBlockList, blockedBlockLocations, yield);
         // Call the new explosion event
         ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(explosionEvent);
 
@@ -316,6 +333,21 @@ public class ChunkManager {
             } else {
                 // break the block naturally
                 block.breakNaturally();
+            }
+        }
+
+        // Damage bleeding fix
+        if (ConfigManager.getInstance().getDisableDamageBleeding()) {
+            // Iterate through the blocks that had an explosion blocked to check if the path was cleared by a current explosion
+            for (Location location : explosionEvent.blockedLocationList()) {
+                if (Math.random() < ConfigManager.getInstance().getNextLayerDamageChance() && !Util.isTargetsPathBlocked(location, explosionEvent.getLocation())) {
+                    // Apply damage to block material
+                    DamageResult result = damageBlock(location.getBlock().getLocation(), explosionEvent.getEntity());
+                    if (result == DamageResult.DESTROY) {
+                        // Destroy the block
+                        destroyBlockAndDropItem(location);
+                    }
+                }
             }
         }
 

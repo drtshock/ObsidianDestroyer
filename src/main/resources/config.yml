@@ -61,6 +61,12 @@ Explosions:
   # This doesn't do anything unless the above option is true.
   TNTCannonsProtected: true
 
+  # Fixes explosion interactions between layered blocks of various strength
+  # Blocks the damage to the blocks behind a block damaged
+  DisableDamageBleeding: true
+  # Adjust the chance of the next block to take damage on the blocking blocks destruction (0 none, 1.0 always)
+  NextLevelDamageChance: 0.5
+
 # List of worlds that the plugin will not interact with.
 # Example: DisabledOnWorlds: [world_survival, world_creative]
 DisabledOnWorlds: []

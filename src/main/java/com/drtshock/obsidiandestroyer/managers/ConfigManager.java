@@ -326,4 +326,11 @@ public class ConfigManager {
         return config.getBoolean("Events.DurabilityDamageEventEnabled", false);
     }
 
+    public boolean getDisableDamageBleeding() {
+        return config.getBoolean("Explosions.DisableDamageBleeding", true);
+    }
+
+    public double getNextLayerDamageChance() {
+        return config.getDouble("Explosions.NextLevelDamageChance", 0.5);
+    }
 }
