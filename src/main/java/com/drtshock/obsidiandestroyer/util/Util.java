@@ -240,6 +240,10 @@ public class Util {
         Location _tLoc = tLoc.clone();
         _tLoc.setY(tLoc.getY() + 0.5);
 
+        if (_dLoc.distance(_tLoc) <= 1.8) {
+            return false;
+        }
+
         // Create a vector block trace from the detonator location to damaged block's location
         BlockIterator blocksInPath = new BlockIterator(_tLoc.getWorld(), _dLoc.toVector(), _tLoc.toVector().subtract(_dLoc.toVector()).normalize(), 0, (int) _dLoc.distance(_tLoc));
 
