@@ -12,8 +12,6 @@ import com.drtshock.obsidiandestroyer.managers.MaterialManager;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ObsidianDestroyer extends JavaPlugin {

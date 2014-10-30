@@ -29,7 +29,7 @@ public class Factions16x implements FactionsHook {
             return true;
         }
         Faction faction = Board.getFactionAt(new FLocation(loc));
-        if(!faction.isNormal()) {
+        if (!faction.isNormal()) {
             return faction.getId().equalsIgnoreCase("0"); // Checks if faction is wilderness.
         }
         //ObsidianDestroyer.debug("Factions16x.isExplosionsEnabled: " + !faction.noExplosionsInTerritory());

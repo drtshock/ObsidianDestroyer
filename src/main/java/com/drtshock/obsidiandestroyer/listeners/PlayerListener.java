@@ -1,6 +1,5 @@
 package com.drtshock.obsidiandestroyer.listeners;
 
-import com.drtshock.obsidiandestroyer.ObsidianDestroyer;
 import com.drtshock.obsidiandestroyer.managers.ChunkManager;
 import com.drtshock.obsidiandestroyer.managers.ConfigManager;
 import com.drtshock.obsidiandestroyer.managers.MaterialManager;
@@ -15,7 +14,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerListener implements Listener {
 
