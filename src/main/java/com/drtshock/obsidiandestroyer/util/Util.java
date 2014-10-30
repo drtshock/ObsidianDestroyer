@@ -236,10 +236,11 @@ public class Util {
     public static boolean isTargetsPathBlocked(Location tLoc, Location dLoc, boolean useOnlyMaterialListing) {
         // Target and Detonator location height offsets...
         Location _dLoc = dLoc.clone();
-        _dLoc.setY(dLoc.getY() + 0.5);
+        _dLoc.setY(dLoc.getBlockY() + 0.5);
         Location _tLoc = tLoc.clone();
-        _tLoc.setY(tLoc.getY() + 0.5);
+        _tLoc.setY(tLoc.getBlockY() + 0.5);
 
+        // if the distance is too close... the path is not blocked ;)
         if (_dLoc.distance(_tLoc) <= 1.8) {
             return false;
         }

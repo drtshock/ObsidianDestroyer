@@ -20,10 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
@@ -141,6 +138,7 @@ public class ChunkManager {
         // Check explosion blocks and their distance from the detonation.
         for (Block block : event.blockList()) {
             final double dist = detonatorLoc.distance(block.getLocation());
+
             // Damage bleeding fix
             if (ConfigManager.getInstance().getDisableDamageBleeding()) {
                 // Attempt to prevent bleeding of damage to materials behind blocks not destroyed
@@ -170,7 +168,6 @@ public class ChunkManager {
                     if (Util.isTargetsPathBlocked(block.getLocation(), detonatorLoc, true) && !Util.isNonSolid(block.getType())) {
                         // Add to blocked locations and ignore damage
                         blockedBlockLocations.add(block.getLocation());
-                        blocksIgnored.add(block);
                     }
                 }
             } else if (MaterialManager.getInstance().contains(block.getType().name())) {
@@ -314,7 +311,7 @@ public class ChunkManager {
         // Apply effects with factions
         final boolean factionsApplied = HookManager.getInstance().isFactionsFound() && ConfigManager.getInstance().getHandleFactions() && ConfigManager.getInstance().getHandleOfflineFactions();
 
-        // Bypass list for special handlings
+        // Bypass list for special handling's
         final List<Block> bypassBlockList = new ArrayList<Block>();
 
         // Remove managed blocks
@@ -349,10 +346,10 @@ public class ChunkManager {
         ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(explosionEvent);
 
         // ==========================
-        // Ignore if event is canceled and not bypassed.
+        // Ignore if event is cancelled and not bypassed.
         if (explosionEvent.isCancelled()) {
             if (explosionEvent.bypassBlockList().size() == 0) {
-                ObsidianDestroyer.debug("Explosion Event Canceled");
+                ObsidianDestroyer.debug("Explosion Event Cancelled");
                 return;
             } else {
                 // Bypass through factions cancel
@@ -392,11 +389,11 @@ public class ChunkManager {
                 if (Math.random() < ConfigManager.getInstance().getNextLayerDamageChance() && !Util.isTargetsPathBlocked(location, explosionEvent.getLocation(), false)) {
 
                     // Apply damage to block material
-                    DamageResult result = ChunkManager.getInstance().damageBlock(location.getBlock().getLocation(), explosionEvent.getEntity());
+                    DamageResult result = damageBlock(location, explosionEvent.getEntity());
                     ObsidianDestroyer.debug("Blocking Damage passed!! " + location.toString() + "  DamageResult: " + result.name());
                     if (result == DamageResult.DESTROY) {
                         // Destroy the block
-                        ChunkManager.getInstance().destroyBlockAndDropItem(location);
+                        destroyBlockAndDropItem(location);
                     } else if (result == DamageResult.DISABLED) {
                         // Break block naturally
                         location.getBlock().breakNaturally();
@@ -846,6 +843,9 @@ public class ChunkManager {
             return;
         }
 
+        // block drops
+        final Collection<ItemStack> bd = at.getBlock().getDrops();
+
         final double random = Math.random();
         final double chance = MaterialManager.getInstance().getChanceToDropBlock(b.getType().name());
 
@@ -853,8 +853,15 @@ public class ChunkManager {
         b.setType(Material.AIR);
 
         if (chance >= 1.0 || (chance >= random && chance > 0.0)) {
-            // drop item
-            at.getWorld().dropItemNaturally(at, is);
+            if (bd.size() > 0) {
+                // drop the blocks item drops
+                for (ItemStack itemStack : bd) {
+                    at.getWorld().dropItemNaturally(at, itemStack);
+                }
+            } else {
+                // drop block as item
+                at.getWorld().dropItemNaturally(at, is);
+            }
         }
     }
 
