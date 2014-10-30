@@ -3,5 +3,7 @@ package com.drtshock.obsidiandestroyer.enumerations;
 public enum DamageResult {
     DAMAGE,
     DESTROY,
-    NONE;
+    NONE,
+    DISABLED,
+    CANCELLED
 }

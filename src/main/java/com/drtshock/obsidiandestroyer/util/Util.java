@@ -233,13 +233,15 @@ public class Util {
         return false;
     }
 
-    public static boolean isTargetsPathBlocked(Location tLoc, Location dLoc) {
-        // Create a vector trace from the detonator location to damaged block's location
-        BlockIterator blocksInPath = new BlockIterator(tLoc.getWorld(), dLoc.toVector(), tLoc.toVector().subtract(dLoc.toVector()).normalize(), 0, (int) dLoc.distance(tLoc));
+    public static boolean isTargetsPathBlocked(Location tLoc, Location dLoc, boolean useOnlyMaterialListing) {
+        // Target and Detonator location height offsets...
+        Location _dLoc = dLoc.clone();
+        _dLoc.setY(dLoc.getY() + 0.5);
+        Location _tLoc = tLoc.clone();
+        _tLoc.setY(tLoc.getY() + 0.5);
 
-        if (blocksInPath == null) {
-            return false;
-        }
+        // Create a vector block trace from the detonator location to damaged block's location
+        BlockIterator blocksInPath = new BlockIterator(_tLoc.getWorld(), _dLoc.toVector(), _tLoc.toVector().subtract(_dLoc.toVector()).normalize(), 0, (int) _dLoc.distance(_tLoc));
 
         // iterate through the blocks in the path
         while (blocksInPath.hasNext()) {
@@ -248,7 +250,6 @@ public class Util {
             if (block == null) {
                 continue;
             }
-
             // check if next block is the target block
             if (tLoc.getWorld().getName().equals(block.getWorld().getName()) &&
                     tLoc.getBlockX() == block.getX() &&
@@ -258,7 +259,16 @@ public class Util {
                 continue;
             }
 
-            // check if the block is a solid
+            // check if the block material is being handled
+            if (useOnlyMaterialListing) {
+                // only handle for certain case as to not interfere with all explosions
+                if (MaterialManager.getInstance().contains(block.getType().name())) {
+                    return true;
+                } else {
+                    continue;
+                }
+            }
+            // check if the block material is a solid
             if (!isNonSolid(block.getType())) {
                 return true;
             }
@@ -301,9 +311,7 @@ public class Util {
 
     public static int getRandomNumberFrom(int min, int max) {
         Random foo = new Random();
-        int randomNumber = foo.nextInt((max + 1) - min) + min;
-
-        return randomNumber;
+        return foo.nextInt((max + 1) - min) + min;
     }
 
     public static boolean isNonSolid(Material type) {
