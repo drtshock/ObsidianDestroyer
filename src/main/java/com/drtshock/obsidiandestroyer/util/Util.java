@@ -10,6 +10,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.util.BlockIterator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Util {
@@ -234,19 +236,14 @@ public class Util {
     }
 
     public static boolean isTargetsPathBlocked(Location tLoc, Location dLoc, boolean useOnlyMaterialListing) {
-        // Target and Detonator location height offsets...
-        Location _dLoc = dLoc.clone();
-        _dLoc.setY(dLoc.getBlockY() + 0.5);
-        Location _tLoc = tLoc.clone();
-        _tLoc.setY(tLoc.getBlockY() + 0.5);
 
         // if the distance is too close... the path is not blocked ;)
-        if (_dLoc.distance(_tLoc) <= 1.8) {
+        if (dLoc.distance(tLoc) <= 0.9) {
             return false;
         }
 
         // Create a vector block trace from the detonator location to damaged block's location
-        BlockIterator blocksInPath = new BlockIterator(_tLoc.getWorld(), _dLoc.toVector(), _tLoc.toVector().subtract(_dLoc.toVector()).normalize(), 0, (int) _dLoc.distance(_tLoc));
+        BlockIterator blocksInPath = new BlockIterator(tLoc.getWorld(), dLoc.toVector(), tLoc.toVector().subtract(dLoc.toVector()).normalize(), 0, (int) dLoc.distance(tLoc));
 
         // iterate through the blocks in the path
         while (blocksInPath.hasNext()) {
@@ -279,6 +276,52 @@ public class Util {
             }
         }
         return false;
+    }
+
+    public static List<Location> getTargetsPathBlocked(Location tLoc, Location dLoc, boolean useOnlyMaterialListing) {
+        ArrayList<Location> tagetsInPath = new ArrayList<Location>();
+
+        // if the distance is too close... the path is not blocked ;)
+        if (dLoc.distance(tLoc) <= 0.9) {
+            return tagetsInPath;
+        }
+
+        // Create a vector block trace from the detonator location to damaged block's location
+        BlockIterator blocksInPath = new BlockIterator(tLoc.getWorld(), dLoc.toVector(), tLoc.toVector().subtract(dLoc.toVector()).normalize(), 0, (int) dLoc.distance(tLoc));
+
+        // iterate through the blocks in the path
+        while (blocksInPath.hasNext()) {
+            // the next block
+            final Block block = blocksInPath.next();
+            if (block == null) {
+                continue;
+            }
+            // check if next block is the target block
+            if (tLoc.getWorld().getName().equals(block.getWorld().getName()) &&
+                    tLoc.getBlockX() == block.getX() &&
+                    tLoc.getBlockY() == block.getY() &&
+                    tLoc.getBlockZ() == block.getZ()) {
+                // ignore target block
+                continue;
+            }
+
+            // check if the block material is being handled
+            if (useOnlyMaterialListing) {
+                // only handle for certain case as to not interfere with all explosions
+                if (MaterialManager.getInstance().contains(block.getType().name())) {
+                    tagetsInPath.add(block.getLocation());
+                    break;
+                } else {
+                    continue;
+                }
+            }
+            // check if the block material is a solid
+            if (!isNonSolid(block.getType())) {
+                tagetsInPath.add(block.getLocation());
+                break;
+            }
+        }
+        return tagetsInPath;
     }
 
     public static double getMultiplier(Location location) {
@@ -343,5 +386,33 @@ public class Util {
             default:
                 return false;
         }
+    }
+
+    public static boolean matchBlocksToLocations(List<Location> list1, List<Block> list2) {
+        for (Location location : list1) {
+            if (list2.contains(location.getBlock())) {
+                return true;
+            }
+        }
+        for (Block block : list2) {
+            if (list1.contains(block.getLocation())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean matchLocationsToLocations(List<Location> list1, List<Location> list2) {
+        for (Location location : list1) {
+            if (list2.contains(location)) {
+                return true;
+            }
+        }
+        for (Location location : list2) {
+            if (list1.contains(location)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

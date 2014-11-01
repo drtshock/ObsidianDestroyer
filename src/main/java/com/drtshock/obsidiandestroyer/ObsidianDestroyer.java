@@ -29,6 +29,12 @@ public class ObsidianDestroyer extends JavaPlugin {
         }
     }
 
+    public static void vdebug(String debug) {
+        if (ConfigManager.getInstance() == null || (ConfigManager.getInstance().getDebug() && ConfigManager.getInstance().getVerbose())) {
+            LOG.info(debug);
+        }
+    }
+
     @Override
     public void onEnable() {
         instance = this;
