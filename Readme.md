@@ -4,7 +4,7 @@ By drtshock, squidicuz and a little bit from turt2live :3
 
 Usage
 ===
-For complete info on how to use the plugin please visit http://dev.bukkit.org/chocolatecake/obsidiandestroyer/
+For complete info on how to use the plugin please visit http://www.spigotmc.org/resources/obsidiandestroyer.1625/
 
 Issues
 ===
