@@ -290,7 +290,13 @@ public class Util {
         BlockIterator blocksInPath = new BlockIterator(tLoc.getWorld(), dLoc.toVector(), tLoc.toVector().subtract(dLoc.toVector()).normalize(), 0, (int) dLoc.distance(tLoc));
 
         // iterate through the blocks in the path
+        int i = ConfigManager.getInstance().getRadius() + 1;
         while (blocksInPath.hasNext()) {
+            if (i > 0) {
+                i--;
+            } else {
+                break;
+            }
             // the next block
             final Block block = blocksInPath.next();
             if (block == null) {
