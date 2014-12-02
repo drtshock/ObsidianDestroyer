@@ -38,7 +38,7 @@ public class Factions25x implements FactionsHook {
 
     @Override
     public String getVersion() {
-        return "2.5.X";
+        return "2.X.X";
     }
 
 }
