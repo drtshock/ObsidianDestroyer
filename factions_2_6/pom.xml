@@ -13,11 +13,18 @@
         <version>parent</version>
     </parent>
 
+    <repositories>
+        <repository>
+            <id>com.massivecraft</id>
+            <url>http://repo.turt2live.com/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
-            <groupId>com.massivecraft</groupId>
-            <artifactId>Factions</artifactId>
-            <version>2.6.0</version>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>LATEST</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -27,9 +34,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>LATEST</version>
+            <groupId>com.massivecraft</groupId>
+            <artifactId>Factions</artifactId>
+            <version>2.6.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

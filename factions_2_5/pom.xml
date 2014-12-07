@@ -13,11 +13,18 @@
         <version>parent</version>
     </parent>
 
+    <repositories>
+        <repository>
+            <id>com.turt2live.lib</id>
+            <url>http://repo.turt2live.com/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
-            <groupId>com.turt2live.lib</groupId>
-            <artifactId>Factions</artifactId>
-            <version>2.2.1</version>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>LATEST</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -27,10 +34,10 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>LATEST</version>
+            <groupId>com.turt2live.lib</groupId>
+            <artifactId>Factions-2.2.1</artifactId>
             <scope>provided</scope>
+            <version>2.2.1</version>
         </dependency>
         <dependency>
             <groupId>com.drtshock</groupId>

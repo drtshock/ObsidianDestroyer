@@ -13,17 +13,24 @@
         <version>parent</version>
     </parent>
 
+    <repositories>
+        <repository>
+            <id>com.turt2live.lib</id>
+            <url>http://repo.turt2live.com/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
-        <dependency>
-            <groupId>com.turt2live.lib</groupId>
-            <artifactId>Factions-1.6.9.4</artifactId>
-            <version>1.6.9.4</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>LATEST</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.turt2live.lib</groupId>
+            <artifactId>Factions-1.6.9.4</artifactId>
+            <version>1.6.9.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
