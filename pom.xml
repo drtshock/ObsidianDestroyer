@@ -2,114 +2,30 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.drtshock</groupId>
-    <artifactId>ObsidianDestroyer</artifactId>
-    <version>4.3.4</version>
-    <name>ObsidianDestroyer</name>
-    <url>https://github.com/drtshock/ObsidianDestroyer</url>
-
+    <artifactId>ObsidianDestroyer-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>parent</version>
+    <name>ObsidianDestroyer Parent</name>
+    <url>https://github.com/puzlinc/ObsidianDestroyer</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <issueManagement>
-        <system>GitHub</system>
-        <url>https://github.com/drtshock/ObsidianDestroyer/issues</url>
-    </issueManagement>
-    <build>
-        <finalName>ObsidianDestroyer</finalName>
-        <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
-        <resources>
-            <resource>
-                <targetPath>.</targetPath>
-                <filtering>true</filtering>
-                <directory>${basedir}/src/main/resources/</directory>
-                <includes>
-                    <include>*.yml</include>
-                    <include>factions.txt</include>
-                </includes>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/package.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>build</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+
+    <modules>
+        <module>factions_integration</module>
+        <module>factions_1_6_9</module>
+        <module>factions_1_6_9_UU</module>
+        <module>factions_1_8</module>
+        <module>factions_2_5</module>
+        <module>factions_2_6</module>
+        <module>obsidiandestroyer</module>
+    </modules>
+
     <repositories>
         <repository>
             <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>turt2live</id>
-            <url>http://repo.turt2live.com/</url>
-        </repository>
-        <repository>
-            <id>massivecraft</id>
-            <url>http://repo.turt2live.com/</url>
-        </repository>
-        <repository>
-            <id>royaldev-repo</id>
-            <url>http://minor.royaldev.org:8081/nexus/content/groups/public</url>
+            <url>http://repo.bukkit.org/content/groups/public</url>
         </repository>
     </repositories>
-    <dependencies>
-        <dependency>
-            <groupId>com.turt2live.lib</groupId>
-            <artifactId>Cannons</artifactId>
-            <version>2.1R1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.turt2live.lib</groupId>
-            <artifactId>Factions-1.8.2</artifactId>
-            <version>1.8.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.turt2live.lib</groupId>
-            <artifactId>Factions-1.6.9.4</artifactId>
-            <version>1.6.9.4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.turt2live.lib</groupId>
-            <artifactId>MCore</artifactId>
-            <version>6.8.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.massivecraft</groupId>
-            <artifactId>Factions</artifactId>
-            <version>2.6.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.massivecraft</groupId>
-            <artifactId>MassiveCore</artifactId>
-            <version>7.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>LATEST</version>
-        </dependency>
-    </dependencies>
+
 </project>

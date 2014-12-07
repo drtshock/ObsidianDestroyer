@@ -1,0 +1,42 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.drtshock</groupId>
+    <artifactId>ObsidianDestroyer-Factions-v2_6_x</artifactId>
+    <packaging>jar</packaging>
+    <name>ObsidianDestroyer Factions v2_6_x</name>
+    <version>v2_6_x</version>
+
+    <parent>
+        <groupId>com.drtshock</groupId>
+        <artifactId>ObsidianDestroyer</artifactId>
+        <version>parent</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.massivecraft</groupId>
+            <artifactId>Factions</artifactId>
+            <version>2.6.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.massivecraft</groupId>
+            <artifactId>MassiveCore</artifactId>
+            <version>7.4.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>LATEST</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.drtshock</groupId>
+            <artifactId>ObsidianDestroyer-Factions-Integration</artifactId>
+            <version>integration</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+</project>

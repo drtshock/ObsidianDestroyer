@@ -1,0 +1,37 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.drtshock</groupId>
+    <artifactId>ObsidianDestroyer-Factions-v1_6_9_UU</artifactId>
+    <packaging>jar</packaging>
+    <name>ObsidianDestroyer Factions v1_6_9_UU</name>
+    <version>v1_6_9_UU</version>
+
+    <parent>
+        <groupId>com.drtshock</groupId>
+        <artifactId>ObsidianDestroyer</artifactId>
+        <version>parent</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>Factions</groupId>
+            <artifactId>Factions</artifactId>
+            <version>1.6.9.5-U0.1.12</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/Factions_1.6.9.5-U0.1.12.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>LATEST</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.drtshock</groupId>
+            <artifactId>ObsidianDestroyer-Factions-Integration</artifactId>
+            <version>integration</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+</project>
