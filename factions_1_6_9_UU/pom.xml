@@ -19,7 +19,7 @@
             <artifactId>Factions</artifactId>
             <version>1.6.9.5-U0.1.12</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/Factions_1.6.9.5-U0.1.12.jar</systemPath>
+            <systemPath>${project.basedir}/../lib/Factions_1.6.9.5-U0.1.12.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
