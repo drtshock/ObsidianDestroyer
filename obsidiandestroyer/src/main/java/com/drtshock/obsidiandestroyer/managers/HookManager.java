@@ -96,10 +96,10 @@ public class HookManager {
             if (factions != null) {
                 this.factions = new FactionsManager(ObsidianDestroyer.getInstance(), factions); // Loads the hooks internally, if nothing is found that's fine.
                 if (this.factions.getFactions() == null) {
-                    ObsidianDestroyer.LOG.info("Factions was found, but the version " + this.factions.getFactions().getVersion() + " you have is not supported.");
+                    ObsidianDestroyer.LOG.info("Factions was found, but the version " + factions.getDescription().getVersion() + " you have is not supported.");
                 } else {
                     isFactionFound = true;
-                    ObsidianDestroyer.LOG.info("Factions hook for version " + this.factions.getFactions().getVersion() + " has been loaded!");
+                    ObsidianDestroyer.LOG.info("Factions hook for version " + factions.getDescription().getVersion() + " has been loaded!");
                 }
             } else {
                 ObsidianDestroyer.LOG.info("Factions hook enabled, but Factions wasn't found. What were you thinking O_o");
