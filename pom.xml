@@ -6,7 +6,7 @@
     <packaging>pom</packaging>
     <version>parent</version>
     <name>ObsidianDestroyer Parent</name>
-    <url>https://github.com/puzlinc/ObsidianDestroyer</url>
+    <url>https://github.com/drtshock/ObsidianDestroyer</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
