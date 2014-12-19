@@ -12,7 +12,7 @@ public class Factions18x implements FactionsHook {
     @Override
     public boolean isFactionOffline(Location loc) {
         Faction faction = Board.getFactionAt(new FLocation(loc));
-        if (ChatColor.stripColor(faction.getTag()).equalsIgnoreCase("wilderness")) {
+        if (faction.isNone()) {
             return false;
         } else if ((ChatColor.stripColor(faction.getTag()).equalsIgnoreCase("wilderness") ||
                 ChatColor.stripColor(faction.getTag()).equalsIgnoreCase("safezone") ||

@@ -12,14 +12,14 @@ public class Factions25x implements FactionsHook {
     @Override
     public boolean isFactionOffline(Location loc) {
         Faction faction = BoardColls.get().getFactionAt(PS.valueOf(loc));
-        if ((ChatColor.stripColor(faction.getName())).equalsIgnoreCase("wilderness") ||
+        if (faction.isNone() ||
                 ChatColor.stripColor(faction.getName()).equalsIgnoreCase("safezone") ||
                 ChatColor.stripColor(faction.getName()).equalsIgnoreCase("warzone")) {
             //ObsidianDestroyer.debug("Factions25x.isFactionOffline: false");
             return false;
         }
         //ObsidianDestroyer.debug("Factions25x.isFactionOffline: " + faction.isFactionConsideredOffline());
-        return faction.isFactionConsideredOffline();
+        return faction.isFactionConsideredOffline() && faction.getFlag(FFlag.OFFLINE_EXPLOSIONS);
     }
 
     @Override
