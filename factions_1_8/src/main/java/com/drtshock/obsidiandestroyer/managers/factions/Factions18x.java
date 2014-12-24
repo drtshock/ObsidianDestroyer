@@ -33,7 +33,7 @@ public class Factions18x implements FactionsHook {
             return false;
         }
         //ObsidianDestroyer.debug("Factions18x.isExplosionsEnabled: " + faction.getFlag(FFlag.EXPLOSIONS));
-        return !faction.getFlag(FFlag.EXPLOSIONS);
+        return faction.getFlag(FFlag.EXPLOSIONS);
     }
 
     @Override
