@@ -286,10 +286,6 @@ public class ConfigManager {
         return Material.matchMaterial(config.getString("DurabilityCheckItem", "POTATO_ITEM"));
     }
 
-    public boolean getFactionHookEnabled() {
-        return config.getBoolean("Factions.Enabled", false);
-    }
-
     public boolean getHandleFactions() {
         return config.getBoolean("Factions.HandleExplosions", true);
     }
@@ -299,7 +295,7 @@ public class ConfigManager {
     }
 
     public boolean getUsingFactions() {
-        return getHandleFactions() && getFactionHookEnabled() && HookManager.getInstance().isUsingFactions();
+        return getHandleFactions() && HookManager.getInstance().isUsingFactions();
     }
 
     public boolean getHandleOnlineFactions() {
@@ -320,10 +316,6 @@ public class ConfigManager {
 
     public int getBorderToProtectNether() {
         return config.getInt("BorderToProtect.Nether", 123);
-    }
-
-    public boolean getDurabilityDamageEventEnabled() {
-        return config.getBoolean("Events.DurabilityDamageEventEnabled", false);
     }
 
     public boolean getDisableDamageBleeding() {

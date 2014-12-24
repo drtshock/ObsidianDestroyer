@@ -12,6 +12,10 @@ HandledMaterials:
     # Defaults to 'Radius' from config.yml if line below is not present.
     BlastRadius: 3
 
+    # Toggle if this material is destructible by explosions. Set to false to disable explosion damage to the material
+    # Defaults to true if this flag is not present
+    Destructible: true
+
     # Material explosion resistance settings
     Durability:
 

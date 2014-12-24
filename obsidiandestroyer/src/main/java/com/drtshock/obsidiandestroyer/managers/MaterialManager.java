@@ -229,4 +229,11 @@ public class MaterialManager {
         return 0;
     }
 
+    public boolean isDestructible(String material) {
+        if (durabilityMaterials.containsKey(material)) {
+            return durabilityMaterials.get(material).isDestructible();
+        }
+        return true;
+    }
+
 }

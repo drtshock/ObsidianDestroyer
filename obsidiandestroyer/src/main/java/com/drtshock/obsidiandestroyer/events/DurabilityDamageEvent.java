@@ -16,13 +16,11 @@ public class DurabilityDamageEvent extends ObsidianDestroyerEvent implements Can
     private DamageResult damageResult = DamageResult.NONE;
 
     public DurabilityDamageEvent(String blockType, EntityType entityType) {
-        super();
         this.blockType = blockType;
         this.entityType = entityType;
     }
 
     public DurabilityDamageEvent(String blockType) {
-        super();
         this.blockType = blockType;
         this.entityType = null;
     }

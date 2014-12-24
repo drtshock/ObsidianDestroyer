@@ -26,6 +26,7 @@ public class DurabilityMaterial {
     private int witherDamage;
     private int tntMinecartDamage;
     private double fluidDamper;
+    private boolean destructible;
 
     /**
      * Storage for a tracked material from the config
@@ -36,6 +37,7 @@ public class DurabilityMaterial {
     public DurabilityMaterial(Material type, ConfigurationSection section) {
         this.type = type;
         this.blastRadius = section.getInt("BlastRadius", 0);
+        this.destructible = section.getBoolean("Destructible", true);
         this.dura = section.getInt("Durability.Amount", 5);
         this.fluidDamper = section.getDouble("Durability.FluidDamper", 0);
         this.enabled = section.getBoolean("Durability.Enabled", true);
@@ -183,6 +185,10 @@ public class DurabilityMaterial {
 
     public double getFluidDamper() {
         return fluidDamper;
+    }
+
+    public boolean isDestructible() {
+        return destructible;
     }
 
     @Override

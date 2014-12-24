@@ -183,7 +183,7 @@ public class ChunkManager {
                     DamageResult result = damageBlock(blockLocation, detonator);
                     if (result == DamageResult.DESTROY) {
                         blocksDestroyed.add(block);
-                    } else if (result == DamageResult.DAMAGE) {
+                    } else if (result == DamageResult.DAMAGE || result == DamageResult.CANCELLED) {
                         blocksIgnored.add(block);
                     }
                     ObsidianDestroyer.vdebug("Event Block Damage!! " + blockLocation.toString() + " -dist " + dist);
@@ -209,7 +209,7 @@ public class ChunkManager {
                     if (result == DamageResult.DESTROY) {
                         // Destroy the block
                         blocksDestroyed.add(block);
-                    } else if (result == DamageResult.DAMAGE) {
+                    } else if (result == DamageResult.DAMAGE || result == DamageResult.CANCELLED) {
                         // Don't destroy
                         blocksIgnored.add(block);
                     }
@@ -289,7 +289,7 @@ public class ChunkManager {
                                     // Add block to list to destroy
                                     blocksDestroyed.add(targetLoc.getBlock());
                                     continue;
-                                } else if (result == DamageResult.DAMAGE) {
+                                } else if (result == DamageResult.DAMAGE || result == DamageResult.CANCELLED || result == DamageResult.NONE) {
                                     // Add block to ignore list to not destroy
                                     blocksIgnored.add(targetLoc.getBlock());
                                     continue;
@@ -345,7 +345,7 @@ public class ChunkManager {
                         if (result == DamageResult.DESTROY) {
                             // Add block to list to destroy
                             blocksDestroyed.add(targetLoc.getBlock());
-                        } else if (result == DamageResult.DAMAGE) {
+                        } else if (result == DamageResult.DAMAGE || result == DamageResult.CANCELLED || result == DamageResult.NONE) {
                             // Add block to ignore list to not destroy
                             blocksIgnored.add(targetLoc.getBlock());
                         } else if (result == DamageResult.DISABLED) {
@@ -362,7 +362,7 @@ public class ChunkManager {
         }
 
         // Apply effects with factions
-        final boolean factionsApplied = HookManager.getInstance().isFactionsFound() && ConfigManager.getInstance().getHandleFactions() && ConfigManager.getInstance().getHandleOfflineFactions();
+        final boolean factionsApplied = FactionsIntegration.isUsing() && ConfigManager.getInstance().getHandleOfflineFactions();
 
         // Bypass list for special handling's
         final List<Block> bypassBlockList = new ArrayList<Block>();
@@ -482,24 +482,23 @@ public class ChunkManager {
         if (block.getType() == Material.AIR) {
             return DamageResult.NONE;
         }
+
         String blockTypeName = block.getType().name();
 
-        if (ConfigManager.getInstance().getDurabilityDamageEventEnabled()) {
-            // ==========================
-            // Create a new Durability Damage Event
-            DurabilityDamageEvent durabilityDamageEvent = new DurabilityDamageEvent(blockTypeName, eventTypeRep);
-            // Call event on blocks material durability damage
-            ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(durabilityDamageEvent);
+        // ==========================
+        // Create a new Durability Damage Event
+        DurabilityDamageEvent durabilityDamageEvent = new DurabilityDamageEvent(blockTypeName, eventTypeRep);
+        // Call event on blocks material durability damage
+        ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(durabilityDamageEvent);
 
-            // ==========================
-            if (durabilityDamageEvent.isDisposed()) {
-                // Return a new damage result if set
-                return durabilityDamageEvent.getDamageResult();
-            }
-            if (durabilityDamageEvent.isCancelled()) {
-                // Return no damage if even is canceled.
-                return DamageResult.CANCELLED;
-            }
+        // ==========================
+        if (durabilityDamageEvent.isDisposed()) {
+            // Return a new damage result if set
+            return durabilityDamageEvent.getDamageResult();
+        }
+        if (durabilityDamageEvent.isCancelled()) {
+            // Return no damage if even is cancelled.
+            return DamageResult.CANCELLED;
         }
 
         // Check bedrock and env
@@ -517,6 +516,10 @@ public class ChunkManager {
         // Just in case the material is in the list and not enabled...
         if (!materials.getDurabilityEnabled(blockTypeName)) {
             return DamageResult.DISABLED;
+        }
+
+        if (!materials.isDestructible(blockTypeName)) {
+            return DamageResult.NONE;
         }
 
         // Check explosion types
@@ -538,18 +541,16 @@ public class ChunkManager {
 
         // Durability multiplier hook for Factions
         double durabilityMultiplier = 1D;
-        if (HookManager.getInstance().isFactionsFound() && ConfigManager.getInstance().getFactionHookEnabled()) {
-            if (ConfigManager.getInstance().getHandleFactions() && FactionsIntegration.isUsing()) {
-                if (!FactionsIntegration.get().isExplosionsEnabled(at)) {
+        if (FactionsIntegration.isUsing()) {
+            if (!FactionsIntegration.get().isExplosionsEnabled(at)) {
+                return DamageResult.NONE;
+            }
+            if (!ConfigManager.getInstance().getHandleOfflineFactions()) {
+                if (FactionsIntegration.get().isFactionOffline(block.getLocation())) {
                     return DamageResult.NONE;
                 }
-                if (!ConfigManager.getInstance().getHandleOfflineFactions()) {
-                    if (FactionsIntegration.get().isFactionOffline(block.getLocation())) {
-                        return DamageResult.NONE;
-                    }
-                }
-                durabilityMultiplier = Util.getMultiplier(at);
             }
+            durabilityMultiplier = Util.getMultiplier(at);
         }
 
         // Handle block if the materials durability is greater than one, else destroy the block
@@ -624,8 +625,8 @@ public class ChunkManager {
         LinkedList<Block> blocklist = new LinkedList<Block>();
         // Bypass list for special handlings
         final List<Block> bypassBlockList = new ArrayList<Block>();
-        final boolean useFactions = HookManager.getInstance().isFactionsFound() && ConfigManager.getInstance().getFactionHookEnabled();
-        final boolean applyFactions = useFactions && ConfigManager.getInstance().getHandleFactions() && ConfigManager.getInstance().getHandleOfflineFactions();
+        final boolean useFactions = FactionsIntegration.isUsing();
+        final boolean applyFactions = useFactions && ConfigManager.getInstance().getHandleOfflineFactions();
         // Iterator through the events blocks
         Iterator<Block> iter = event.getBlockList().iterator();
         while (iter.hasNext()) {
@@ -652,10 +653,10 @@ public class ChunkManager {
             explosionEvent.blockList().addAll(bypassBlockList);
         }
 
-        // Do nothing if the event is canceled (and not bypassed...)
+        // Do nothing if the event is cancelled (and not bypassed...)
         if (explosionEvent.isCancelled()) {
             if (!applyFactions || bypassBlockList.size() == 0) {
-                ObsidianDestroyer.debug("Cannons Explosion Event Canceled");
+                ObsidianDestroyer.debug("Cannons Explosion Event Cancelled");
                 return;
             } else {
                 ObsidianDestroyer.debug("Cannons Explosion Event Cancellation Bypassed");
@@ -669,7 +670,8 @@ public class ChunkManager {
         while (iter.hasNext()) {
             Block block = iter.next();
             if (MaterialManager.getInstance().contains(block.getType().name()) && !block.getType().equals(Material.AIR)) {
-                if (damageBlock(block.getLocation()) != DamageResult.NONE) {
+                DamageResult result = damageBlock(block.getLocation());
+                if (result != DamageResult.NONE && result != DamageResult.CANCELLED) {
                     blocksIgnored.add(block);
                 }
             }
@@ -714,7 +716,8 @@ public class ChunkManager {
                         continue;
                     }
                     if (location.distance(targetLoc) <= Math.min(radius, Util.getMaxDistance(targetLoc.getBlock().getType().name(), radius))) {
-                        if (damageBlock(targetLoc.getBlock().getLocation()) != DamageResult.NONE) {
+                        DamageResult result = damageBlock(targetLoc.getBlock().getLocation());
+                        if (result != DamageResult.NONE && result != DamageResult.CANCELLED) {
                             if (ConfigManager.getInstance().getEffectsEnabled()) {
                                 final double random = Math.random();
                                 if (random <= ConfigManager.getInstance().getEffectsChance()) {
@@ -751,24 +754,22 @@ public class ChunkManager {
             return DamageResult.NONE;
         }
 
-        // throw a damage event
         String blockTypeName = block.getType().name();
-        if (ConfigManager.getInstance().getDurabilityDamageEventEnabled()) {
-            // ==========================
-            // Create a new Durability Damage Event
-            DurabilityDamageEvent durabilityDamageEvent = new DurabilityDamageEvent(blockTypeName);
-            // Call event on blocks material durability damage
-            ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(durabilityDamageEvent);
 
-            // ==========================
-            if (durabilityDamageEvent.isDisposed()) {
-                // Return a new damage result if set
-                return durabilityDamageEvent.getDamageResult();
-            }
-            if (durabilityDamageEvent.isCancelled()) {
-                // Return no damage if even is canceled.
-                return DamageResult.CANCELLED;
-            }
+        // ==========================
+        // Create a new Durability Damage Event
+        DurabilityDamageEvent durabilityDamageEvent = new DurabilityDamageEvent(blockTypeName);
+        // Call event on blocks material durability damage
+        ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(durabilityDamageEvent);
+
+        // ==========================
+        if (durabilityDamageEvent.isDisposed()) {
+            // Return a new damage result if set
+            return durabilityDamageEvent.getDamageResult();
+        }
+        if (durabilityDamageEvent.isCancelled()) {
+            // Return no damage if even is cancelled.
+            return DamageResult.CANCELLED;
         }
 
         // Check bedrock and env
@@ -779,6 +780,7 @@ public class ChunkManager {
                 return DamageResult.NONE;
             }
         }
+
         MaterialManager materials = MaterialManager.getInstance();
         // Just in case the material is in the list and not enabled...
         if (!materials.getDurabilityEnabled(blockTypeName)) {
@@ -787,20 +789,22 @@ public class ChunkManager {
             return DamageResult.DISABLED;
         }
 
+        if (!materials.isDestructible(blockTypeName)) {
+            return DamageResult.NONE;
+        }
+
         // Durability multiplier hook for Factions
         double durabilityMultiplier = 1D;
-        if (HookManager.getInstance().isFactionsFound() && ConfigManager.getInstance().getFactionHookEnabled()) {
-            if (ConfigManager.getInstance().getHandleFactions() && FactionsIntegration.isUsing()) {
-                if (!FactionsIntegration.get().isExplosionsEnabled(at)) {
+        if (FactionsIntegration.isUsing()) {
+            if (!FactionsIntegration.get().isExplosionsEnabled(at)) {
+                return DamageResult.NONE;
+            }
+            if (!ConfigManager.getInstance().getHandleOfflineFactions()) {
+                if (FactionsIntegration.get().isFactionOffline(block.getLocation())) {
                     return DamageResult.NONE;
                 }
-                if (!ConfigManager.getInstance().getHandleOfflineFactions()) {
-                    if (FactionsIntegration.get().isFactionOffline(block.getLocation())) {
-                        return DamageResult.NONE;
-                    }
-                }
-                durabilityMultiplier = Util.getMultiplier(at);
             }
+            durabilityMultiplier = Util.getMultiplier(at);
         }
 
         // Handle block if the materials durability is greater than one, else destroy the block

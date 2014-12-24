@@ -340,9 +340,6 @@ public class Util {
         }
 
         double value = 1D;
-        if (!ConfigManager.getInstance().getHandleFactions()) {
-            return value;
-        }
         if (FactionsIntegration.get().isExplosionsEnabled(location)) {
             value = 1D;
         }

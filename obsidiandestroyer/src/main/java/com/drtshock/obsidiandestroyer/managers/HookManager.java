@@ -84,14 +84,14 @@ public class HookManager {
      * @return true if config is set to true and the factions manager is not null. Otherwise false.
      */
     public boolean isUsingFactions() {
-        return ConfigManager.getInstance().getFactionHookEnabled() && factions != null && factions.getFactions() != null;
+        return ConfigManager.getInstance().getHandleFactions() && factions != null && factions.getFactions() != null;
     }
 
     /**
      * Checks to see if the Factions plugin is active.
      */
     private void checkFactions() {
-        if (ConfigManager.getInstance().getFactionHookEnabled()) {
+        if (ConfigManager.getInstance().getHandleFactions()) {
             Plugin factions = ObsidianDestroyer.getInstance().getServer().getPluginManager().getPlugin("Factions");
             if (factions != null) {
                 this.factions = new FactionsManager(ObsidianDestroyer.getInstance(), factions); // Loads the hooks internally, if nothing is found that's fine.
