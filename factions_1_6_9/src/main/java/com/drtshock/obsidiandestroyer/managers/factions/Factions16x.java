@@ -16,7 +16,6 @@ public class Factions16x implements FactionsHook {
         }
         //ObsidianDestroyer.debug("Factions16x.isFactionOffline: " + (faction.getOnlinePlayers().size() == 0));
         return faction.getOnlinePlayers().size() == 0;
-
     }
 
     @Override

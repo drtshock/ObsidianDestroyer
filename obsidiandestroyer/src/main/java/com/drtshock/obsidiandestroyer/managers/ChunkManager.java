@@ -545,7 +545,7 @@ public class ChunkManager {
             if (!FactionsIntegration.get().isExplosionsEnabled(at)) {
                 return DamageResult.NONE;
             }
-            if (!ConfigManager.getInstance().getHandleOfflineFactions()) {
+            if (ConfigManager.getInstance().getHandleOfflineFactions()) {
                 if (FactionsIntegration.get().isFactionOffline(block.getLocation())) {
                     return DamageResult.NONE;
                 }
@@ -799,7 +799,7 @@ public class ChunkManager {
             if (!FactionsIntegration.get().isExplosionsEnabled(at)) {
                 return DamageResult.NONE;
             }
-            if (!ConfigManager.getInstance().getHandleOfflineFactions()) {
+            if (ConfigManager.getInstance().getHandleOfflineFactions()) {
                 if (FactionsIntegration.get().isFactionOffline(block.getLocation())) {
                     return DamageResult.NONE;
                 }
