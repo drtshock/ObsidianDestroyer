@@ -238,43 +238,53 @@ public class Util {
 
     public static boolean isTargetsPathBlocked(Location tLoc, Location dLoc, boolean useOnlyMaterialListing) {
 
+        // check world
+        if (!dLoc.getWorld().getName().equalsIgnoreCase(tLoc.getWorld().getName())) {
+            return false;
+        }
+
         // if the distance is too close... the path is not blocked ;)
         if (dLoc.distance(tLoc) <= 0.9) {
             return false;
         }
 
-        // Create a vector block trace from the detonator location to damaged block's location
-        BlockIterator blocksInPath = new BlockIterator(tLoc.getWorld(), dLoc.toVector(), tLoc.toVector().subtract(dLoc.toVector()).normalize(), 0, (int) dLoc.distance(tLoc));
+        // try to iterate through blocks between dLoc and tLoc
+        try {
+            // Create a vector block trace from the detonator location to damaged block's location
+            BlockIterator blocksInPath = new BlockIterator(tLoc.getWorld(), dLoc.toVector(), tLoc.toVector().subtract(dLoc.toVector()).normalize(), 0, (int) dLoc.distance(tLoc));
 
-        // iterate through the blocks in the path
-        while (blocksInPath.hasNext()) {
-            // the next block
-            final Block block = blocksInPath.next();
-            if (block == null) {
-                continue;
-            }
-            // check if next block is the target block
-            if (tLoc.getWorld().getName().equals(block.getWorld().getName()) &&
-                    tLoc.getBlockX() == block.getX() &&
-                    tLoc.getBlockY() == block.getY() &&
-                    tLoc.getBlockZ() == block.getZ()) {
-                // ignore target block
-                continue;
-            }
-
-            // check if the block material is being handled
-            if (useOnlyMaterialListing) {
-                // only handle for certain case as to not interfere with all explosions
-                if (MaterialManager.getInstance().contains(block.getType().name())) {
-                    return true;
-                } else {
+            // iterate through the blocks in the path
+            while (blocksInPath.hasNext()) {
+                // the next block
+                final Block block = blocksInPath.next();
+                if (block == null) {
                     continue;
                 }
+                // check if next block is the target block
+                if (tLoc.getWorld().getName().equals(block.getWorld().getName()) &&
+                        tLoc.getBlockX() == block.getX() &&
+                        tLoc.getBlockY() == block.getY() &&
+                        tLoc.getBlockZ() == block.getZ()) {
+                    // ignore target block
+                    continue;
+                }
+
+                // check if the block material is being handled
+                if (useOnlyMaterialListing) {
+                    // only handle for certain case as to not interfere with all explosions
+                    if (MaterialManager.getInstance().contains(block.getType().name())) {
+                        return true;
+                    } else {
+                        continue;
+                    }
+                }
+                // check if the block material is a solid
+                if (!isNonSolid(block.getType())) {
+                    return true;
+                }
             }
-            // check if the block material is a solid
-            if (!isNonSolid(block.getType())) {
-                return true;
-            }
+        } catch (Exception e) {
+            // ignore the error and return no targets in path
         }
         return false;
     }
@@ -282,51 +292,61 @@ public class Util {
     public static List<Location> getTargetsPathBlocked(Location tLoc, Location dLoc, boolean useOnlyMaterialListing) {
         ArrayList<Location> tagetsInPath = new ArrayList<Location>();
 
+        // check world
+        if (!dLoc.getWorld().getName().equalsIgnoreCase(tLoc.getWorld().getName())) {
+            return tagetsInPath;
+        }
+
         // if the distance is too close... the path is not blocked ;)
         if (dLoc.distance(tLoc) <= 0.9) {
             return tagetsInPath;
         }
 
-        // Create a vector block trace from the detonator location to damaged block's location
-        BlockIterator blocksInPath = new BlockIterator(tLoc.getWorld(), dLoc.toVector(), tLoc.toVector().subtract(dLoc.toVector()).normalize(), 0, (int) dLoc.distance(tLoc));
+        // try to iterate through blocks between dLoc and tLoc
+        try {
+            // Create a vector block trace from the detonator location to damaged block's location
+            BlockIterator blocksInPath = new BlockIterator(tLoc.getWorld(), dLoc.toVector(), tLoc.toVector().subtract(dLoc.toVector()).normalize(), 0, (int) dLoc.distance(tLoc));
 
-        // iterate through the blocks in the path
-        int i = ConfigManager.getInstance().getRadius() + 1;
-        while (blocksInPath.hasNext()) {
-            if (i > 0) {
-                i--;
-            } else {
-                break;
-            }
-            // the next block
-            final Block block = blocksInPath.next();
-            if (block == null) {
-                continue;
-            }
-            // check if next block is the target block
-            if (tLoc.getWorld().getName().equals(block.getWorld().getName()) &&
-                    tLoc.getBlockX() == block.getX() &&
-                    tLoc.getBlockY() == block.getY() &&
-                    tLoc.getBlockZ() == block.getZ()) {
-                // ignore target block
-                continue;
-            }
-
-            // check if the block material is being handled
-            if (useOnlyMaterialListing) {
-                // only handle for certain case as to not interfere with all explosions
-                if (MaterialManager.getInstance().contains(block.getType().name())) {
-                    tagetsInPath.add(block.getLocation());
-                    break;
+            // iterate through the blocks in the path
+            int i = ConfigManager.getInstance().getRadius() + 1;
+            while (blocksInPath.hasNext()) {
+                if (i > 0) {
+                    i--;
                 } else {
+                    break;
+                }
+                // the next block
+                final Block block = blocksInPath.next();
+                if (block == null) {
                     continue;
                 }
+                // check if next block is the target block
+                if (tLoc.getWorld().getName().equals(block.getWorld().getName()) &&
+                        tLoc.getBlockX() == block.getX() &&
+                        tLoc.getBlockY() == block.getY() &&
+                        tLoc.getBlockZ() == block.getZ()) {
+                    // ignore target block
+                    continue;
+                }
+
+                // check if the block material is being handled
+                if (useOnlyMaterialListing) {
+                    // only handle for certain case as to not interfere with all explosions
+                    if (MaterialManager.getInstance().contains(block.getType().name())) {
+                        tagetsInPath.add(block.getLocation());
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
+                // check if the block material is a solid
+                if (!isNonSolid(block.getType())) {
+                    tagetsInPath.add(block.getLocation());
+                    break;
+                }
             }
-            // check if the block material is a solid
-            if (!isNonSolid(block.getType())) {
-                tagetsInPath.add(block.getLocation());
-                break;
-            }
+        } catch (Exception e) {
+            // ignore the error and return no targets in path
         }
         return tagetsInPath;
     }
