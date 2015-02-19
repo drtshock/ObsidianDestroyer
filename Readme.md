@@ -4,7 +4,7 @@ By drtshock, squidicuz and a little bit from turt2live :3
 
 Usage
 ===
-For complete info on how to use the plugin please visit http://www.spigotmc.org/resources/obsidiandestroyer.1625/
+For complete info on how to use the plugin please visit https://github.com/drtshock/ObsidianDestroyer/wiki
 
 Issues
 ===
