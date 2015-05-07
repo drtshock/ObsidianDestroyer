@@ -5,7 +5,7 @@
     <artifactId>ObsidianDestroyer</artifactId>
     <name>ObsidianDestroyer</name>
     <url>https://github.com/puzlinc/ObsidianDestroyer</url>
-    <version>4.3.7-SNAPSHOT</version>
+    <version>4.3.8-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -47,8 +47,8 @@
     </build>
     <repositories>
         <repository>
-            <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/content/groups/public</url>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
         <repository>
             <id>com.turt2live.lib</id>
@@ -57,10 +57,10 @@
     </repositories>
     <dependencies>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
             <scope>provided</scope>
-            <version>LATEST</version>
+            <version>1.8.3-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.turt2live.lib</groupId>

@@ -63,6 +63,16 @@ public class ChunkManager {
      * @param event the entity explosion event to handle
      */
     public void handleExplosion(EntityExplodeEvent event) {
+        handleExplosion(event, event.getEntity().getLocation());
+    }
+
+    /**
+     * Handles the entity explosion event
+     *
+     * @param event the entity explosion event to handle
+     * @param detonatorLoc the location. Necessary for BlockExplodeEvents.
+     */
+    public void handleExplosion(final EntityExplodeEvent event, final Location detonatorLoc) {
         if (event == null) {
             return;
         }
@@ -82,22 +92,22 @@ public class ChunkManager {
 
         // Detonator
         final Entity detonator = event.getEntity();
-
-        // Check for handled explosion types, with option to ignore
-        final EntityType eventTypeRep = detonator.getType();
-        if (!ConfigManager.getInstance().getIgnoreUnhandledExplosionTypes()
-                && !(eventTypeRep.equals(EntityType.PRIMED_TNT)
-                || eventTypeRep.equals(EntityType.MINECART_TNT)
-                || eventTypeRep.equals(EntityType.CREEPER)
-                || eventTypeRep.equals(EntityType.WITHER)
-                || eventTypeRep.equals(EntityType.GHAST)
-                || eventTypeRep.equals(EntityType.FIREBALL)
-                || eventTypeRep.equals(EntityType.SMALL_FIREBALL))) {
-            return;
-        }
-
         // Detonation location of the explosion
-        final Location detonatorLoc = detonator.getLocation();
+
+        if(detonator != null) {
+            // Check for handled explosion types, with option to ignore
+            final EntityType eventTypeRep = detonator.getType();
+            if (!ConfigManager.getInstance().getIgnoreUnhandledExplosionTypes()
+                        && !(eventTypeRep.equals(EntityType.PRIMED_TNT)
+                                     || eventTypeRep.equals(EntityType.MINECART_TNT)
+                                     || eventTypeRep.equals(EntityType.CREEPER)
+                                     || eventTypeRep.equals(EntityType.WITHER)
+                                     || eventTypeRep.equals(EntityType.GHAST)
+                                     || eventTypeRep.equals(EntityType.FIREBALL)
+                                     || eventTypeRep.equals(EntityType.SMALL_FIREBALL))) {
+                return;
+            }
+        }
 
         // List of blocks that will be removed from the blocklist
         List<Block> blocksIgnored = new ArrayList<Block>();
@@ -325,7 +335,7 @@ public class ChunkManager {
                             if (path.size() > 0) {
                                 // the blocks protected path size is 1 or more
                                 if (!(Util.matchBlocksToLocations(path, blocksDestroyed) && !Util.matchBlocksToLocations(path, xblocksDestroyed))
-                                        || Util.matchLocationsToLocations(path, blockedBlockLocations) || Util.matchBlocksToLocations(path, blocksIgnored)) {
+                                            || Util.matchLocationsToLocations(path, blockedBlockLocations) || Util.matchBlocksToLocations(path, blocksIgnored)) {
                                     // the block is protected via its path
                                     blockedBlockLocations.add(targetLoc);
                                     blocksIgnored.add(targetLoc.getBlock());

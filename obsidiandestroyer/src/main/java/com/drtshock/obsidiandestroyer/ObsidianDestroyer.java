@@ -1,10 +1,7 @@
 package com.drtshock.obsidiandestroyer;
 
 import com.drtshock.obsidiandestroyer.commands.ODCommand;
-import com.drtshock.obsidiandestroyer.listeners.BlockListener;
-import com.drtshock.obsidiandestroyer.listeners.EntityExplodeListener;
-import com.drtshock.obsidiandestroyer.listeners.EntityImpactListener;
-import com.drtshock.obsidiandestroyer.listeners.PlayerListener;
+import com.drtshock.obsidiandestroyer.listeners.*;
 import com.drtshock.obsidiandestroyer.managers.ChunkManager;
 import com.drtshock.obsidiandestroyer.managers.ConfigManager;
 import com.drtshock.obsidiandestroyer.managers.HookManager;
@@ -12,6 +9,7 @@ import com.drtshock.obsidiandestroyer.managers.MaterialManager;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ObsidianDestroyer extends JavaPlugin {
@@ -58,6 +56,13 @@ public class ObsidianDestroyer extends JavaPlugin {
         }
         pm.registerEvents(new PlayerListener(), this);
         pm.registerEvents(new BlockListener(), this);
+        try {
+            Class.forName("org.bukkit.event.block.BlockExplodeEvent");
+            pm.registerEvents(new SpigotListener(), this);
+            LOG.log(Level.INFO, "Hooked into Spigot's gay block explode event!");
+        } catch (ClassNotFoundException e) {
+            // Nothing, just don't register Spigot listener.
+        }
     }
 
     @Override
