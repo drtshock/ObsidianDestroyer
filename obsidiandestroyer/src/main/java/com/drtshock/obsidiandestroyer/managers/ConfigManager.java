@@ -294,6 +294,10 @@ public class ConfigManager {
         return config.getBoolean("Factions.HandleOffline", false);
     }
 
+    public boolean getProtectOfflineFactions() {
+        return config.getBoolean("Factions.ProtectOffline", false);
+    }
+
     public boolean getUsingFactions() {
         return getHandleFactions() && HookManager.getInstance().isUsingFactions();
     }
