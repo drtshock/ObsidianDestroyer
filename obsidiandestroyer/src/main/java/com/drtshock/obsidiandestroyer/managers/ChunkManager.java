@@ -69,7 +69,7 @@ public class ChunkManager {
     /**
      * Handles the entity explosion event
      *
-     * @param event the entity explosion event to handle
+     * @param event        the entity explosion event to handle
      * @param detonatorLoc the location. Necessary for BlockExplodeEvents.
      */
     public void handleExplosion(final EntityExplodeEvent event, final Location detonatorLoc) {
@@ -94,17 +94,17 @@ public class ChunkManager {
         final Entity detonator = event.getEntity();
         // Detonation location of the explosion
 
-        if(detonator != null) {
+        if (detonator != null) {
             // Check for handled explosion types, with option to ignore
             final EntityType eventTypeRep = detonator.getType();
             if (!ConfigManager.getInstance().getIgnoreUnhandledExplosionTypes()
-                        && !(eventTypeRep.equals(EntityType.PRIMED_TNT)
-                                     || eventTypeRep.equals(EntityType.MINECART_TNT)
-                                     || eventTypeRep.equals(EntityType.CREEPER)
-                                     || eventTypeRep.equals(EntityType.WITHER)
-                                     || eventTypeRep.equals(EntityType.GHAST)
-                                     || eventTypeRep.equals(EntityType.FIREBALL)
-                                     || eventTypeRep.equals(EntityType.SMALL_FIREBALL))) {
+                    && !(eventTypeRep.equals(EntityType.PRIMED_TNT)
+                    || eventTypeRep.equals(EntityType.MINECART_TNT)
+                    || eventTypeRep.equals(EntityType.CREEPER)
+                    || eventTypeRep.equals(EntityType.WITHER)
+                    || eventTypeRep.equals(EntityType.GHAST)
+                    || eventTypeRep.equals(EntityType.FIREBALL)
+                    || eventTypeRep.equals(EntityType.SMALL_FIREBALL))) {
                 return;
             }
         }
@@ -335,7 +335,7 @@ public class ChunkManager {
                             if (path.size() > 0) {
                                 // the blocks protected path size is 1 or more
                                 if (!(Util.matchBlocksToLocations(path, blocksDestroyed) && !Util.matchBlocksToLocations(path, xblocksDestroyed))
-                                            || Util.matchLocationsToLocations(path, blockedBlockLocations) || Util.matchBlocksToLocations(path, blocksIgnored)) {
+                                        || Util.matchLocationsToLocations(path, blockedBlockLocations) || Util.matchBlocksToLocations(path, blocksIgnored)) {
                                     // the block is protected via its path
                                     blockedBlockLocations.add(targetLoc);
                                     blocksIgnored.add(targetLoc.getBlock());
