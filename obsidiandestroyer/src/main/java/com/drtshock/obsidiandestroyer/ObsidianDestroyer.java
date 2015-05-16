@@ -59,7 +59,7 @@ public class ObsidianDestroyer extends JavaPlugin {
         try {
             Class.forName("org.bukkit.event.block.BlockExplodeEvent");
             pm.registerEvents(new SpigotListener(), this);
-            LOG.log(Level.INFO, "Hooked into Spigot's gay block explode event!");
+            LOG.log(Level.INFO, "Hooked into Spigot's block explode event!");
         } catch (ClassNotFoundException e) {
             // Nothing, just don't register Spigot listener.
         }
