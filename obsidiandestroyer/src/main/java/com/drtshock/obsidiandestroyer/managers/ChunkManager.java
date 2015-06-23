@@ -238,7 +238,7 @@ public class ChunkManager {
                 for (int z = -radius; z <= radius; z++) {
 
                     // Target location around the detonator
-                    Location targetLoc = new Location(detonator.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
+                    Location targetLoc = new Location(detonatorLoc.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
 
                     // location corrections...
                     targetLoc.setY(targetLoc.getBlockY() + 0.5);
