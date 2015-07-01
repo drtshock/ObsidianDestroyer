@@ -97,14 +97,7 @@ public class ChunkManager {
         if (detonator != null) {
             // Check for handled explosion types, with option to ignore
             final EntityType eventTypeRep = detonator.getType();
-            if (!ConfigManager.getInstance().getIgnoreUnhandledExplosionTypes()
-                    && !(eventTypeRep.equals(EntityType.PRIMED_TNT)
-                    || eventTypeRep.equals(EntityType.MINECART_TNT)
-                    || eventTypeRep.equals(EntityType.CREEPER)
-                    || eventTypeRep.equals(EntityType.WITHER)
-                    || eventTypeRep.equals(EntityType.GHAST)
-                    || eventTypeRep.equals(EntityType.FIREBALL)
-                    || eventTypeRep.equals(EntityType.SMALL_FIREBALL))) {
+            if (!ConfigManager.getInstance().getIgnoreUnhandledExplosionTypes() && !(eventTypeRep.equals(EntityType.PRIMED_TNT) || eventTypeRep.equals(EntityType.MINECART_TNT) || eventTypeRep.equals(EntityType.CREEPER) || eventTypeRep.equals(EntityType.WITHER) || eventTypeRep.equals(EntityType.GHAST) || eventTypeRep.equals(EntityType.FIREBALL) || eventTypeRep.equals(EntityType.SMALL_FIREBALL))) {
                 return;
             }
         }
@@ -127,7 +120,7 @@ public class ChunkManager {
                 for (int x = -cannon_radius; x <= cannon_radius; x++) {
                     for (int y = -cannon_radius; y <= cannon_radius; y++) {
                         for (int z = -cannon_radius; z <= cannon_radius; z++) {
-                            Location targetLoc = new Location(detonator.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
+                            Location targetLoc = new Location(detonatorLoc.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
                             if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_ON) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_OFF)) {
                                 redstoneCount++;
                             }
@@ -141,7 +134,9 @@ public class ChunkManager {
             }
 
             // metadata for future tracking of liquid handling
-            detonator.setMetadata("ObbyLiquidEntity", new FixedMetadataValue(ObsidianDestroyer.getInstance(), new EntityData(event.getEntityType())));
+            if (detonator != null) {
+                detonator.setMetadata("ObbyLiquidEntity", new FixedMetadataValue(ObsidianDestroyer.getInstance(), new EntityData(event.getEntityType())));
+            }
 
         } else if ((detonatorLoc.getBlock().isLiquid()) && (ConfigManager.getInstance().getFluidsProtectIndustructables())) {
             // handle the liquid explosion normally
@@ -334,8 +329,7 @@ public class ChunkManager {
 
                             if (path.size() > 0) {
                                 // the blocks protected path size is 1 or more
-                                if (!(Util.matchBlocksToLocations(path, blocksDestroyed) && !Util.matchBlocksToLocations(path, xblocksDestroyed))
-                                        || Util.matchLocationsToLocations(path, blockedBlockLocations) || Util.matchBlocksToLocations(path, blocksIgnored)) {
+                                if (!(Util.matchBlocksToLocations(path, blocksDestroyed) && !Util.matchBlocksToLocations(path, xblocksDestroyed)) || Util.matchLocationsToLocations(path, blockedBlockLocations) || Util.matchBlocksToLocations(path, blocksIgnored)) {
                                     // the block is protected via its path
                                     blockedBlockLocations.add(targetLoc);
                                     blocksIgnored.add(targetLoc.getBlock());
@@ -399,12 +393,14 @@ public class ChunkManager {
             event.blockList().remove(location.getBlock());
         }
 
-        // Set metadata for run once tracking
-        detonator.setMetadata("ObbyEntity", new FixedMetadataValue(ObsidianDestroyer.getInstance(), new EntityData(event.getEntity().getType())));
+        if (detonator != null) {
+            // Set metadata for run once tracking
+            detonator.setMetadata("ObbyEntity", new FixedMetadataValue(ObsidianDestroyer.getInstance(), new EntityData(event.getEntity().getType())));
+        }
 
         // ==========================
         // Create a new explosion event from the custom block lists
-        xEntityExplodeEvent explosionEvent = new xEntityExplodeEvent(detonator, detonator.getLocation(), blocksDestroyed, bypassBlockList, blockedBlockLocations, event.getYield());
+        xEntityExplodeEvent explosionEvent = new xEntityExplodeEvent(detonator, detonatorLoc, blocksDestroyed, bypassBlockList, blockedBlockLocations, event.getYield());
         // Call the new explosion event
         ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(explosionEvent);
 
@@ -452,6 +448,7 @@ public class ChunkManager {
                 if (Math.random() < ConfigManager.getInstance().getNextLayerDamageChance() && !Util.isTargetsPathBlocked(location, explosionEvent.getLocation(), false)) {
 
                     // Apply damage to block material
+                    // Entity might be null but damageBlock handles that.
                     DamageResult result = damageBlock(location, explosionEvent.getEntity());
                     ObsidianDestroyer.vdebug("Blocking Damage passed!! " + location.toString() + "  DamageResult: " + result.name());
                     if (result == DamageResult.DESTROY) {
@@ -476,6 +473,7 @@ public class ChunkManager {
      *
      * @param at     the location of the block
      * @param entity the entity that triggered the event
+     *
      * @return DamageResult result of damageBlock attempt
      */
     public DamageResult damageBlock(final Location at, Entity entity) {
@@ -486,10 +484,7 @@ public class ChunkManager {
         // Null and Air checks
         EntityType eventTypeRep = entity.getType();
         Block block = at.getBlock();
-        if (block == null) {
-            return DamageResult.NONE;
-        }
-        if (block.getType() == Material.AIR) {
+        if (block == null || block.getType() == Material.AIR) {
             return DamageResult.NONE;
         }
 
@@ -749,6 +744,7 @@ public class ChunkManager {
      * Handles a block on an ProjectilePiercingEvent
      *
      * @param at the location of the block
+     *
      * @return DamageResult result of damageBlock attempt
      */
     public DamageResult damageBlock(final Location at) {
@@ -974,6 +970,7 @@ public class ChunkManager {
      * Check if there is an active durability reset
      *
      * @param location the location to check
+     *
      * @return the state of the durability timer object
      */
     public TimerState checkDurabilityActive(Location location) {
@@ -1022,6 +1019,7 @@ public class ChunkManager {
      * Gets the Material durability from a location
      *
      * @param block the block to the checks durability
+     *
      * @return the durability value
      */
     public Integer getMaterialDurability(Block block) {
@@ -1036,6 +1034,7 @@ public class ChunkManager {
      * Gets the Material durability from a location
      *
      * @param location the location to checks durability
+     *
      * @return the durability value
      */
     public Integer getMaterialDurability(Location location) {
@@ -1203,6 +1202,7 @@ public class ChunkManager {
      * Does the chunk contain this block
      *
      * @param block the block to check the chunk for
+     *
      * @return true if block found within chunk
      */
     public boolean contains(Block block) {
@@ -1213,6 +1213,7 @@ public class ChunkManager {
      * Does the chunk contain this location
      *
      * @param location the location to check the chunk for
+     *
      * @return true if location found within chunk
      */
     public boolean contains(Location location) {
@@ -1229,6 +1230,7 @@ public class ChunkManager {
      * Gets the chunk wrapper from a chunk
      *
      * @param chunk the chunk to get a wrapper from
+     *
      * @return the ChunkWrapper that belongs to the chunk.
      */
     public ChunkWrapper getWrapper(Chunk chunk) {
