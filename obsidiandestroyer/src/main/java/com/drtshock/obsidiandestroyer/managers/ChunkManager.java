@@ -424,7 +424,7 @@ public class ChunkManager {
             } else if (MaterialManager.getInstance().contains(block.getType().name()) && MaterialManager.getInstance().getDurability(block.getType().name()) <= 1) {
                 // destroy block and reset the durability of the location
                 destroyBlockAndDropItem(block.getLocation());
-            } else if (block.isLiquid() && event.getEntity().hasMetadata("ObbyLiquidEntity")) {
+            } else if (block.isLiquid() && (detonator != null && detonator.hasMetadata("ObbyLiquidEntity"))) {
                 // remove liquid and set to air
                 block.setType(Material.AIR);
             } else if (block.getType() == Material.TNT) {
