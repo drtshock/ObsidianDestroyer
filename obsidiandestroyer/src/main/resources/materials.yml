@@ -66,7 +66,24 @@ HandledMaterials:
       Withers: 1
       Minecarts: 1
 
+    # Special flags for the cannons plugin and changing the explosion size and damage of the cannons projectile
+    # Add this section to the material you want it applied to.
+    # Material will default to the values below when section is not present on material
+    CannonDamage:
+      # Size of explosion when a normal projectile hits
+      ProjectileHitSize: 1
+      # Damage value when hit with a projectile
+      ProjectileHitDamage: 1
+      # Size of explosion when a penetrating projectile makes impact
+      ProjectileImpactSize: 2
+      # Damage value when impacted with a penetrating projectile
+      ProjectileImpactDamage: 1
+      # Size of explosion for explosive projectiles
+      ProjectileExplodeSize: 4
+      # Damage value for explosive projectiles
+      ProjectileExplodeDamage: 1
 
+  # ======================================================
   # OBSIDIAN - Default enabled with 13 durability
   OBSIDIAN:
     BlastRadius: 2

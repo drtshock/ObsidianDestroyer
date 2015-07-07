@@ -65,16 +65,6 @@ Explosions:
   NextLevelDamageChance: 0.5
 
 
-# Special flags for the cannons plugin and changing the explosion size of the cannons projectile
-Cannons:
-  # Size of explosion when a normal projectile hits
-  ProjectileHitSize: 1
-  # Size of explosion when a penetrating projectile makes impact
-  ProjectileImpactSize: 2
-  # Size of explosion for explosive projectiles
-  ProjectileExplodeSize: 4
-
-
 # Works directly with Factions for extended event processing; adds the ability
 #  for durability multipliers based on the online status of a faction.
 # Works with most versions of Factions
