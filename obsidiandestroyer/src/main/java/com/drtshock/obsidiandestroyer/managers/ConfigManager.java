@@ -174,7 +174,7 @@ public class ConfigManager {
      * @return verbose mode enabled
      */
     public boolean getVerbose() {
-        return config.getBoolean("Verbose", false);
+        return config.getBoolean("Verbose", config.getBoolean("verbose", false));
     }
 
     /**
@@ -183,7 +183,7 @@ public class ConfigManager {
      * @return debug mode enabled
      */
     public boolean getDebug() {
-        return config == null || config.getBoolean("Debug", false);
+        return config == null || config.getBoolean("Debug", config.getBoolean("Debug", config.getBoolean("debug", false)));
     }
 
     /**

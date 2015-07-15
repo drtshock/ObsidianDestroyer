@@ -97,7 +97,7 @@ public class ChunkManager {
         if (detonator != null) {
             // Check for handled explosion types, with option to ignore
             final EntityType eventTypeRep = detonator.getType();
-            if (!ConfigManager.getInstance().getIgnoreUnhandledExplosionTypes() && !(eventTypeRep.equals(EntityType.PRIMED_TNT) || eventTypeRep.equals(EntityType.MINECART_TNT) || eventTypeRep.equals(EntityType.CREEPER) || eventTypeRep.equals(EntityType.WITHER) || eventTypeRep.equals(EntityType.GHAST) || eventTypeRep.equals(EntityType.FIREBALL) || eventTypeRep.equals(EntityType.SMALL_FIREBALL))) {
+            if (!ConfigManager.getInstance().getIgnoreUnhandledExplosionTypes() && !(eventTypeRep.equals(EntityType.PRIMED_TNT) || eventTypeRep.equals(EntityType.MINECART_TNT) || eventTypeRep.equals(EntityType.CREEPER) || eventTypeRep.equals(EntityType.WITHER) || eventTypeRep.equals(EntityType.WITHER_SKULL) || eventTypeRep.equals(EntityType.GHAST) || eventTypeRep.equals(EntityType.FIREBALL) || eventTypeRep.equals(EntityType.SMALL_FIREBALL))) {
                 return;
             }
         }
@@ -162,7 +162,7 @@ public class ChunkManager {
             final double dist = detonatorLoc.distance(blockLocation);
 
             // Damage bleeding fix
-            if (ConfigManager.getInstance().getDisableDamageBleeding()) {
+            if (ConfigManager.getInstance().getDisableDamageBleeding() && !detonator.getType().equals(EntityType.WITHER)) {
                 // Attempt to prevent bleeding of damage to materials behind blocks not destroyed
                 if (MaterialManager.getInstance().contains(block.getType().name())) {
                     // distance checks: if max ignore; if not too close check sight; else apply damage
@@ -323,7 +323,7 @@ public class ChunkManager {
                         }
 
                         // Damage bleeding fix
-                        if (ConfigManager.getInstance().getDisableDamageBleeding() && distance > 1.8) {
+                        if (ConfigManager.getInstance().getDisableDamageBleeding() && distance > 1.8 && !detonator.getType().equals(EntityType.WITHER)) {
                             // Radial hitscan check for blocking blocks, returns the blocking path
                             final List<Location> path = Util.getTargetsPathBlocked(targetLoc, detonatorLoc, false);
 
@@ -526,6 +526,8 @@ public class ChunkManager {
         if (!materials.isDestructible(blockTypeName)) {
             return DamageResult.NONE;
         }
+
+        ObsidianDestroyer.vdebug("eventTypeRep= " + eventTypeRep);
 
         // Check explosion types
         if (eventTypeRep.equals(EntityType.PRIMED_TNT) && !MaterialManager.getInstance().getTntEnabled(blockTypeName)) {
@@ -836,12 +838,14 @@ public class ChunkManager {
 
             int damageAmt = impact ? materials.getDamageTypeCannonsImpactAmount(blockTypeName) : materials.getDamageTypeCannonsPierceAmount(blockTypeName);
 
+            ObsidianDestroyer.vdebug("Current TimerState= " + state);
+
             // If timer is running or not active...
             if (state == TimerState.RUN || state == TimerState.INACTIVE) {
                 // Check if current is over the max, else increment damage to durability
                 int currentDurability = getMaterialDurability(block);
                 if (Util.checkIfOverMax(currentDurability, blockTypeName, durabilityMultiplier)) {
-                    currentDurability = (int) Math.round(materials.getDurability(blockTypeName) * 0.50);
+                    currentDurability = (int) Math.round(materials.getDurability(blockTypeName) * durabilityMultiplier);
                 } else {
                     currentDurability += damageAmt;
                 }
