@@ -19,7 +19,8 @@ public class DurabilityMaterial {
     private boolean withersEnabled;
     private boolean tntMinecartsEnabled;
     private int tntDamage;
-    private int cannonDamage;
+    private int cannonImpactDamage;
+    private int cannonPierceDamage;
     private int creeperDamage;
     private int chargedCreeperDamage;
     private int ghastDamage;
@@ -51,7 +52,8 @@ public class DurabilityMaterial {
         this.withersEnabled = section.getBoolean("EnabledFor.Withers", false);
         this.tntMinecartsEnabled = section.getBoolean("EnabledFor.Minecarts", false);
         this.tntDamage = section.getInt("Damage.TNT", 1);
-        this.cannonDamage = section.getInt("Damage.Cannons", 1);
+        this.cannonImpactDamage = section.getInt("Damage.Cannons", section.getInt("Damage.CannonsImpact", 1));
+        this.cannonPierceDamage = section.getInt("Damage.CannonsPierce", 1);
         this.creeperDamage = section.getInt("Damage.Creepers", 1);
         this.chargedCreeperDamage = section.getInt("Damage.ChargedCreepers", 1);
         this.ghastDamage = section.getInt("Damage.Ghasts", 1);
@@ -83,8 +85,11 @@ public class DurabilityMaterial {
         if (tntDamage < 1) {
             tntDamage = 1;
         }
-        if (cannonDamage < 1) {
-            cannonDamage = 1;
+        if (cannonImpactDamage < 1) {
+            cannonImpactDamage = 1;
+        }
+        if (cannonPierceDamage < 1) {
+            cannonPierceDamage = 1;
         }
         if (creeperDamage < 1) {
             creeperDamage = 1;
@@ -159,8 +164,17 @@ public class DurabilityMaterial {
         return tntDamage;
     }
 
+    public int getCannonsImpactDamage() {
+        return cannonImpactDamage;
+    }
+
+    @Deprecated
     public int getCannonsDamage() {
-        return cannonDamage;
+        return cannonImpactDamage;
+    }
+
+    public int getCannonsPierceDamage() {
+        return cannonPierceDamage;
     }
 
     public int getCreepersDamage() {

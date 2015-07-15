@@ -215,9 +215,16 @@ public class MaterialManager {
      * @param material the name of the material to lookup
      * @return amount of damage done
      */
-    public int getDamageTypeCannonsAmount(String material) {
+    public int getDamageTypeCannonsImpactAmount(String material) {
         if (durabilityMaterials.containsKey(material)) {
-            return durabilityMaterials.get(material).getCannonsDamage();
+            return durabilityMaterials.get(material).getCannonsImpactDamage();
+        }
+        return 1;
+    }
+
+    public int getDamageTypeCannonsPierceAmount(String material) {
+        if (durabilityMaterials.containsKey(material)) {
+            return durabilityMaterials.get(material).getCannonsPierceDamage();
         }
         return 1;
     }

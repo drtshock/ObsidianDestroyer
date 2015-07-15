@@ -232,15 +232,15 @@ public class ConfigManager {
     }
 
     public int getRadius() {
-        return config.getInt("Radius", 3);
+        return config.getInt("Explosions.Radius", 3);
     }
 
     public boolean getMaterialsRegenerateOverTime() {
-        return config.getBoolean("DurabilityRegeneratesOverTime", false);
+        return config.getBoolean("DurabilityGlobal.RegeneratesOverTime", false);
     }
 
     public boolean getFluidsProtectIndustructables() {
-        return config.getBoolean("FluidsProtectIndustructables", true);
+        return config.getBoolean("Explosions.FluidsProtectIndustructables", true);
     }
 
     public boolean getBypassAllFluidProtection() {
@@ -251,20 +251,12 @@ public class ConfigManager {
         return config.getBoolean("Explosions.TNTCannonsProtected", true);
     }
 
-    public boolean getCheckUpdate() {
-        return config.getBoolean("checkupdate", true);
-    }
-
-    public boolean getDownloadUpdate() {
-        return config.getBoolean("downloadupdate", false);
-    }
-
     public boolean getEffectsEnabled() {
-        return config.getBoolean("Effects.Enabled", true);
+        return config.getBoolean("DurabilityGlobal.Effects.Enabled", true);
     }
 
     public double getEffectsChance() {
-        double value = config.getDouble("Effects.Chance", 0.12);
+        double value = config.getDouble("DurabilityGlobal.Effects.Chance", 0.12);
         if (value > 0.6) {
             value = 0.6;
         }
@@ -274,16 +266,12 @@ public class ConfigManager {
         return value;
     }
 
-    public boolean getProtectBedrockBorders() {
-        return config.getBoolean("ProtectBedrockBorders", true);
-    }
-
     public boolean getIgnoreUnhandledExplosionTypes() {
         return config.getBoolean("Explosions.IgnoreUnhandledTypes", false);
     }
 
     public Material getDurabilityCheckItem() {
-        return Material.matchMaterial(config.getString("DurabilityCheckItem", "POTATO_ITEM"));
+        return Material.matchMaterial(config.getString("DurabilityGlobal.CheckItem", "POTATO_ITEM"));
     }
 
     public boolean getHandleFactions() {
@@ -314,12 +302,16 @@ public class ConfigManager {
         return config.getDouble("Factions.OnlineDurabilityMultiplier", 1.0);
     }
 
+    public boolean getProtectBedrockBorders() {
+        return config.getBoolean("WorldsEdge.ProtectBedrockBorders", true);
+    }
+
     public int getBorderToProtectNormal() {
-        return config.getInt("BorderToProtect.World", 5);
+        return config.getInt("WorldsEdge.BorderToProtect.World", 5);
     }
 
     public int getBorderToProtectNether() {
-        return config.getInt("BorderToProtect.Nether", 123);
+        return config.getInt("WorldsEdge.BorderToProtect.Nether", 123);
     }
 
     public boolean getDisableDamageBleeding() {

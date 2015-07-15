@@ -675,7 +675,7 @@ public class ChunkManager {
         while (iter.hasNext()) {
             Block block = iter.next();
             if (MaterialManager.getInstance().contains(block.getType().name()) && !block.getType().equals(Material.AIR)) {
-                DamageResult result = damageBlock(block.getLocation());
+                DamageResult result = damageBlock(block.getLocation(), false);
                 if (result != DamageResult.NONE && result != DamageResult.CANCELLED) {
                     blocksIgnored.add(block);
                 }
@@ -709,7 +709,7 @@ public class ChunkManager {
         }
 
         LinkedList<Block> blocklist = new LinkedList<Block>();
-        final int radius = 1;
+        final int radius = Math.round(event.getProjectile().getExplosionPower() + 0.1f);
         for (int x = -radius; x <= radius; x++) {
             for (int y = radius; y >= -radius; y--) {
                 for (int z = -radius; z <= radius; z++) {
@@ -721,7 +721,7 @@ public class ChunkManager {
                         continue;
                     }
                     if (location.distance(targetLoc) <= Math.min(radius, Util.getMaxDistance(targetLoc.getBlock().getType().name(), radius))) {
-                        DamageResult result = damageBlock(targetLoc.getBlock().getLocation());
+                        DamageResult result = damageBlock(targetLoc.getBlock().getLocation(), true);
                         if (result != DamageResult.NONE && result != DamageResult.CANCELLED) {
                             if (ConfigManager.getInstance().getEffectsEnabled()) {
                                 final double random = Math.random();
@@ -742,12 +742,21 @@ public class ChunkManager {
 
     /**
      * Handles a block on an ProjectilePiercingEvent
-     *
      * @param at the location of the block
-     *
      * @return DamageResult result of damageBlock attempt
      */
     public DamageResult damageBlock(final Location at) {
+        return damageBlock(at, true);
+    }
+
+    /**
+     * Handles a block on an ProjectilePiercingEvent
+     *
+     * @param at     the location of the block
+     * @param impact impact or piercing damage type
+     * @return DamageResult result of damageBlock attempt
+     */
+    public DamageResult damageBlock(final Location at, boolean impact) {
         // Null and Air checks
         if (at == null) {
             return DamageResult.NONE;
@@ -824,6 +833,9 @@ public class ChunkManager {
                     block.getWorld().playEffect(at, Effect.MOBSPAWNER_FLAMES, 0);
                 }
             }
+
+            int damageAmt = impact ? materials.getDamageTypeCannonsImpactAmount(blockTypeName) : materials.getDamageTypeCannonsPierceAmount(blockTypeName);
+
             // If timer is running or not active...
             if (state == TimerState.RUN || state == TimerState.INACTIVE) {
                 // Check if current is over the max, else increment damage to durability
@@ -831,7 +843,7 @@ public class ChunkManager {
                 if (Util.checkIfOverMax(currentDurability, blockTypeName, durabilityMultiplier)) {
                     currentDurability = (int) Math.round(materials.getDurability(blockTypeName) * 0.50);
                 } else {
-                    currentDurability += materials.getDamageTypeCannonsAmount(blockTypeName);
+                    currentDurability += damageAmt;
                 }
                 // check if at max, else setup and track the material location
                 if (Util.checkIfMax(currentDurability, blockTypeName, durabilityMultiplier)) {
@@ -851,12 +863,12 @@ public class ChunkManager {
             } else {
                 // No timers or tracked location, add a new material location
                 if (!materials.getDurabilityResetTimerEnabled(blockTypeName)) {
-                    addBlock(block, materials.getDamageTypeCannonsAmount(blockTypeName));
+                    addBlock(block, damageAmt);
                 } else {
-                    startNewTimer(block, materials.getDamageTypeCannonsAmount(blockTypeName), state);
+                    startNewTimer(block, damageAmt, state);
                 }
                 // Check if damage is at max for durability
-                if (Util.checkIfMax(materials.getDamageTypeCannonsAmount(blockTypeName), blockTypeName, durabilityMultiplier)) {
+                if (Util.checkIfMax(damageAmt, blockTypeName, durabilityMultiplier)) {
                     dropBlockAndResetDurability(at);
                     return DamageResult.DESTROY;
                 }
