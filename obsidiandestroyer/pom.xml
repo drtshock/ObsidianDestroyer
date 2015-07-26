@@ -60,7 +60,7 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <scope>provided</scope>
-            <version>1.8.3-R0.1-SNAPSHOT</version>
+            <version>1.8.7-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.turt2live.lib</groupId>
@@ -120,6 +120,14 @@
             <groupId>com.drtshock</groupId>
             <artifactId>ObsidianDestroyer-Factions-v2_7_x</artifactId>
             <version>v2_7_x</version>
+            <type>jar</type>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.drtshock</groupId>
+            <artifactId>ObsidianDestroyer-Factions-v2_8_x</artifactId>
+            <version>v2_8_x</version>
             <type>jar</type>
             <scope>compile</scope>
             <optional>true</optional>
