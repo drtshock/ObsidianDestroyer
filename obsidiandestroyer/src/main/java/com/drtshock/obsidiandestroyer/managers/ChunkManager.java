@@ -404,6 +404,10 @@ public class ChunkManager {
         // Call the new explosion event
         ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(explosionEvent);
 
+        if (detonator != null) {
+            // Remove metadata since it is no longer needed
+            detonator.removeMetadata("ObbyEntity", ObsidianDestroyer.getInstance());
+        }
         // ==========================
         // Ignore if event is cancelled and not bypassed.
         if (explosionEvent.isCancelled()) {
