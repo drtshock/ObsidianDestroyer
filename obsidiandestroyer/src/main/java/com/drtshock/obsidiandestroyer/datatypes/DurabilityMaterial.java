@@ -28,6 +28,8 @@ public class DurabilityMaterial {
     private int tntMinecartDamage;
     private double fluidDamper;
     private boolean destructible;
+    private boolean nullEnabled;
+    private int nullDamage;
 
     /**
      * Storage for a tracked material from the config
@@ -51,6 +53,7 @@ public class DurabilityMaterial {
         this.ghastsEnabled = section.getBoolean("EnabledFor.Ghasts", false);
         this.withersEnabled = section.getBoolean("EnabledFor.Withers", false);
         this.tntMinecartsEnabled = section.getBoolean("EnabledFor.Minecarts", false);
+        this.nullEnabled = section.getBoolean("EnabledFor.NullDamage", true);
         this.tntDamage = section.getInt("Damage.TNT", 1);
         this.cannonImpactDamage = section.getInt("Damage.Cannons", section.getInt("Damage.CannonsImpact", 1));
         this.cannonPierceDamage = section.getInt("Damage.CannonsPierce", 1);
@@ -59,6 +62,7 @@ public class DurabilityMaterial {
         this.ghastDamage = section.getInt("Damage.Ghasts", 1);
         this.witherDamage = section.getInt("Damage.Withers", 1);
         this.tntMinecartDamage = section.getInt("Damage.Minecarts", 1);
+        this.nullDamage = section.getInt("Damage.NullDamage", 1);
         this.tallyKittens();
     }
 
@@ -105,6 +109,9 @@ public class DurabilityMaterial {
         }
         if (tntMinecartDamage < 1) {
             tntMinecartDamage = 1;
+        }
+        if (nullDamage < 1) {
+            nullDamage = 1;
         }
     }
 
@@ -203,6 +210,14 @@ public class DurabilityMaterial {
 
     public boolean isDestructible() {
         return destructible;
+    }
+
+    public boolean isNullEnabled() {
+        return nullEnabled;
+    }
+
+    public int getNullDamage() {
+        return nullDamage;
     }
 
     @Override

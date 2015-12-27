@@ -202,6 +202,8 @@ public class MaterialManager {
                 case SMALL_FIREBALL:
                 case GHAST:
                     return durabilityMaterials.get(material).getGhastsDamage();
+                case BAT:
+                    return durabilityMaterials.get(material).getNullDamage();
                 default:
                     break;
             }
@@ -243,4 +245,10 @@ public class MaterialManager {
         return true;
     }
 
+    public boolean getNullEnabled(String material) {
+        if (durabilityMaterials.containsKey(material)) {
+            return durabilityMaterials.get(material).isNullEnabled();
+        }
+        return true;
+    }
 }

@@ -15,13 +15,6 @@ public class EntityExplodeListener implements Listener {
         }
 
         final Entity detonator = event.getEntity();
-
-        if (detonator == null) {
-            // some other plugins create new explosions passing 'null' as
-            // Entity, so we need this here to fix it
-            return;
-        }
-
         if (detonator.hasMetadata("ObbyEntity")) {
             return;
         }

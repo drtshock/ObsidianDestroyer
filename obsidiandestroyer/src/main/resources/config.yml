@@ -10,6 +10,10 @@
 Version: ${project.version}
 
 
+# Enables debug output
+Debug: false
+Verbose: false
+
 # List of worlds that the plugin will not interact with.
 # Example: DisabledOnWorlds: [world_survival, world_creative]
 DisabledOnWorlds: []
@@ -64,6 +68,8 @@ Explosions:
   # Adjust the chance of the next block to take damage on the blocking blocks destruction (0 none, 1.0 always)
   NextLevelDamageChance: 0.5
 
+  # Toggles handling of explosions that are not created by an entity. Set to true to ignore null detonators
+  IgnoreUnhandledTypes: false
 
 # Works directly with Factions for extended event processing; adds the ability
 #  for durability multipliers based on the online status of a faction.

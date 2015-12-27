@@ -53,6 +53,7 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: true
+      NullDamage: true
 
     # The amount of damage each explosion type will do
     # Only used if 'EnabledFor' above is true
@@ -67,7 +68,7 @@ HandledMaterials:
       CannonsPierce: 2
       Withers: 1
       Minecarts: 1
-
+      NullDamage: 1
 
   # ======================================================
   # OBSIDIAN - Default enabled with 13 durability

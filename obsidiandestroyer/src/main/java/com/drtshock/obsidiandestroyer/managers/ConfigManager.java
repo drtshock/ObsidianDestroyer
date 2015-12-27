@@ -105,14 +105,14 @@ public class ConfigManager {
             return;
         }
 
-        File structuresFile = new File(ObsidianDestroyer.getInstance().getDataFolder(), "materials.yml");
-        if (!structuresFile.exists()) {
+        File materialsFile = new File(ObsidianDestroyer.getInstance().getDataFolder(), "materials.yml");
+        if (!materialsFile.exists()) {
             ObsidianDestroyer.debug("Creating materials File...");
-            createFile(structuresFile, "materials.yml");
+            createFile(materialsFile, "materials.yml");
         } else {
             ObsidianDestroyer.debug("Loading materials File...");
         }
-        materials = YamlConfiguration.loadConfiguration(structuresFile);
+        materials = YamlConfiguration.loadConfiguration(materialsFile);
         loaded = true;
     }
 

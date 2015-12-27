@@ -13,6 +13,7 @@ import com.drtshock.obsidiandestroyer.util.Util;
 import org.bukkit.*;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Bat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.TNTPrimed;
@@ -91,15 +92,41 @@ public class ChunkManager {
         }
 
         // Detonator
-        final Entity detonator = event.getEntity();
-        // Detonation location of the explosion
-
+        final Entity detonator;
+        final Bat bat;
+        if (event.getEntity() == null && !ConfigManager.getInstance().getIgnoreUnhandledExplosionTypes()) {
+            detonator = event.getLocation().getWorld().spawnEntity(event.getLocation(), EntityType.BAT);
+            ObsidianDestroyer.vdebug("detonator is null, using a bat as a placeholder.");
+            bat = (Bat) detonator;
+        } else {
+            detonator = event.getEntity();
+            bat = null;
+        }
+        if (bat != null) {
+            bat.remove();
+        }
         if (detonator != null) {
             // Check for handled explosion types, with option to ignore
-            final EntityType eventTypeRep = detonator.getType();
-            if (!ConfigManager.getInstance().getIgnoreUnhandledExplosionTypes() && !(eventTypeRep.equals(EntityType.PRIMED_TNT) || eventTypeRep.equals(EntityType.MINECART_TNT) || eventTypeRep.equals(EntityType.CREEPER) || eventTypeRep.equals(EntityType.WITHER) || eventTypeRep.equals(EntityType.WITHER_SKULL) || eventTypeRep.equals(EntityType.GHAST) || eventTypeRep.equals(EntityType.FIREBALL) || eventTypeRep.equals(EntityType.SMALL_FIREBALL))) {
-                return;
+            switch (detonator.getType()) {
+                case PRIMED_TNT:
+                case MINECART_TNT:
+                case CREEPER:
+                case WITHER:
+                case WITHER_SKULL:
+                case GHAST:
+                case FIREBALL:
+                case SMALL_FIREBALL:
+                    break;
+                case BAT:
+                    if (ConfigManager.getInstance().getIgnoreUnhandledExplosionTypes()) {
+                        return;
+                    }
+                    break;
+                default:
+                    return;
             }
+        } else {
+            return;
         }
 
         // List of blocks that will be removed from the blocklist
@@ -162,7 +189,7 @@ public class ChunkManager {
             final double dist = detonatorLoc.distance(blockLocation);
 
             // Damage bleeding fix
-            if (ConfigManager.getInstance().getDisableDamageBleeding() && !detonator.getType().equals(EntityType.WITHER)) {
+            if (ConfigManager.getInstance().getDisableDamageBleeding() && (detonator == null || !detonator.getType().equals(EntityType.WITHER))) {
                 // Attempt to prevent bleeding of damage to materials behind blocks not destroyed
                 if (MaterialManager.getInstance().contains(block.getType().name())) {
                     // distance checks: if max ignore; if not too close check sight; else apply damage
@@ -323,7 +350,7 @@ public class ChunkManager {
                         }
 
                         // Damage bleeding fix
-                        if (ConfigManager.getInstance().getDisableDamageBleeding() && distance > 1.8 && !detonator.getType().equals(EntityType.WITHER)) {
+                        if (ConfigManager.getInstance().getDisableDamageBleeding() && distance > 1.8 && (detonator == null || !detonator.getType().equals(EntityType.WITHER))) {
                             // Radial hitscan check for blocking blocks, returns the blocking path
                             final List<Location> path = Util.getTargetsPathBlocked(targetLoc, detonatorLoc, false);
 
@@ -482,6 +509,9 @@ public class ChunkManager {
      */
     public DamageResult damageBlock(final Location at, Entity entity) {
         if (at == null || entity == null) {
+            if (entity == null) {
+                return damageBlock(at);
+            }
             return DamageResult.NONE;
         }
 
@@ -547,6 +577,9 @@ public class ChunkManager {
             return DamageResult.NONE;
         }
         if ((eventTypeRep.equals(EntityType.FIREBALL) || eventTypeRep.equals(EntityType.SMALL_FIREBALL) || eventTypeRep.equals(EntityType.GHAST)) && !MaterialManager.getInstance().getGhastsEnabled(blockTypeName)) {
+            return DamageResult.NONE;
+        }
+        if ((eventTypeRep.equals(EntityType.BAT)) && !MaterialManager.getInstance().getNullEnabled(blockTypeName)) {
             return DamageResult.NONE;
         }
 

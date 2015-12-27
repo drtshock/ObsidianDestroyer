@@ -5,10 +5,12 @@ import com.drtshock.obsidiandestroyer.managers.ChunkManager;
 import com.drtshock.obsidiandestroyer.managers.ConfigManager;
 import com.drtshock.obsidiandestroyer.managers.HookManager;
 import com.drtshock.obsidiandestroyer.managers.MaterialManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.logging.Level;
 
@@ -22,6 +24,10 @@ public class ODCommand implements CommandExecutor {
         } else if (args.length == 1) {
             // commands with 0 arguments
             String command = args[0];
+
+            if (command.equals("testb")) {
+                return testBoom(sender);
+            }
 
             if (command.equalsIgnoreCase("reload")) {
                 reloadPlugin(sender);
@@ -39,6 +45,22 @@ public class ODCommand implements CommandExecutor {
                 return false;
             }
         }
+
+        return true;
+    }
+
+    private boolean testBoom(CommandSender sender) {
+        if (!(sender instanceof Player)) {
+            return false;
+        }
+        Player player = (Player) sender;
+
+        if (!player.hasPermission("obsidiandestroyer.admin")) {
+            return false;
+        }
+
+        Bukkit.getWorld(player.getWorld().getName()).createExplosion(player.getLocation().add(0, 3, 0), 3);
+        player.sendMessage("Boom!");
 
         return true;
     }
