@@ -367,6 +367,9 @@ public class Util {
         }
         if (ConfigManager.getInstance().getHandleOfflineFactions()) {
             if (FactionsIntegration.get().isFactionOffline(location)) {
+                if (ConfigManager.getInstance().getProtectOfflineFactions()) {
+                    return 0;
+                }
                 value = ConfigManager.getInstance().getOfflineFactionsDurabilityMultiplier();
             }
         }
