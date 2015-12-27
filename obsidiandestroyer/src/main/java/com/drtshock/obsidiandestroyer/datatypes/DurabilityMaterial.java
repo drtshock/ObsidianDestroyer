@@ -30,6 +30,7 @@ public class DurabilityMaterial {
     private boolean destructible;
     private boolean nullEnabled;
     private int nullDamage;
+    private boolean bypassFluidProtect;
 
     /**
      * Storage for a tracked material from the config
@@ -41,6 +42,7 @@ public class DurabilityMaterial {
         this.type = type;
         this.blastRadius = section.getInt("BlastRadius", 0);
         this.destructible = section.getBoolean("Destructible", true);
+        this.bypassFluidProtect = section.getBoolean("BypassFluidProtection", false);
         this.dura = section.getInt("Durability.Amount", 5);
         this.fluidDamper = section.getDouble("Durability.FluidDamper", 0);
         this.enabled = section.getBoolean("Durability.Enabled", true);
@@ -218,6 +220,10 @@ public class DurabilityMaterial {
 
     public int getNullDamage() {
         return nullDamage;
+    }
+
+    public boolean bypassFluidProtection() {
+        return bypassFluidProtect;
     }
 
     @Override

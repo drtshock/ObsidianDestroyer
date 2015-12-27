@@ -362,6 +362,8 @@ public class Util {
         double value = 1D;
         if (FactionsIntegration.get().isExplosionsEnabled(location)) {
             value = 1D;
+        } else {
+            return 0;
         }
         if (ConfigManager.getInstance().getHandleOfflineFactions()) {
             if (FactionsIntegration.get().isFactionOffline(location)) {
@@ -373,7 +375,7 @@ public class Util {
                 value = ConfigManager.getInstance().getOnlineFactionsDurabilityMultiplier();
             }
         }
-        if (value <= 0) {
+        if (value < 0) {
             value = 1D;
         }
 

@@ -251,4 +251,11 @@ public class MaterialManager {
         }
         return true;
     }
+
+    public boolean getBypassFluidProtection(String material) {
+        if (durabilityMaterials.containsKey(material)) {
+            return durabilityMaterials.get(material).bypassFluidProtection();
+        }
+        return true;
+    }
 }

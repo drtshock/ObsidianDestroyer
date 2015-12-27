@@ -18,7 +18,7 @@ HandledMaterials:
 
     # Enable to have this specific material damageable though liquids when 'BypassAllFluidProtection: false'
     # Defaults to false if this flag is not present
-    # This flag is ignored when 'BypassAllFluidProtection: true' in config.yml
+    # This flag is overridden when 'BypassAllFluidProtection: true' in config.yml
     BypassFluidProtection: false
 
     # Material explosion resistance settings

@@ -34,8 +34,13 @@ public class PlayerListener implements Listener {
                             event.setCancelled(true);
                         }
                         int amount = ChunkManager.getInstance().getMaterialDurability(block);
-                        int max = (int) Math.round(mm.getDurability(block.getType().name()) * Util.getMultiplier(block.getLocation()));
-                        player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this block is: " + ChatColor.WHITE + (!mm.isDestructible(block.getType().name()) ? "∞" : (max - amount) + "/" + max));
+                        double mult = Util.getMultiplier(block.getLocation());
+                        if (mult == 0) {
+                            player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this block is: " + ChatColor.WHITE + "∞");
+                        } else {
+                            int max = (int) Math.round(mm.getDurability(block.getType().name()) * mult);
+                            player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this block is: " + ChatColor.WHITE + (!mm.isDestructible(block.getType().name()) ? "∞" : (max - amount) + "/" + max));
+                        }
                     }
                 }
             }

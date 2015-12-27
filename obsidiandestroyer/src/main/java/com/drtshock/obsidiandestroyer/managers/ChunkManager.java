@@ -148,8 +148,15 @@ public class ChunkManager {
                     for (int y = -cannon_radius; y <= cannon_radius; y++) {
                         for (int z = -cannon_radius; z <= cannon_radius; z++) {
                             Location targetLoc = new Location(detonatorLoc.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
-                            if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_ON) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_OFF)) {
-                                redstoneCount++;
+                            switch (targetLoc.getBlock().getType()) {
+                                case REDSTONE_WIRE:
+                                case DIODE_BLOCK_OFF:
+                                case DIODE_BLOCK_ON:
+                                case REDSTONE_TORCH_OFF:
+                                    redstoneCount++;
+                                    break;
+                                default:
+                                    break;
                             }
                         }
                     }
@@ -295,7 +302,7 @@ public class ChunkManager {
                     }
 
                     // Liquid overrides
-                    if (ConfigManager.getInstance().getBypassAllFluidProtection()) {
+                    if (ConfigManager.getInstance().getBypassAllFluidProtection() || MaterialManager.getInstance().getBypassFluidProtection(targetLoc.getBlock().getType().name())) {
                         // Special handling for fluids is enabled
                         if (distance < radiuz - 0.1 && (Util.isNearLiquid(targetLoc) || targetLoc.getBlock().isLiquid())) {
                             // if within radius and is a near or a fluid
@@ -586,15 +593,10 @@ public class ChunkManager {
         // Durability multiplier hook for Factions
         double durabilityMultiplier = 1D;
         if (FactionsIntegration.isUsing()) {
-            if (!FactionsIntegration.get().isExplosionsEnabled(at)) {
+            durabilityMultiplier = Util.getMultiplier(at);
+            if (durabilityMultiplier == 0) {
                 return DamageResult.NONE;
             }
-            if (ConfigManager.getInstance().getProtectOfflineFactions()) {
-                if (FactionsIntegration.get().isFactionOffline(block.getLocation())) {
-                    return DamageResult.NONE;
-                }
-            }
-            durabilityMultiplier = Util.getMultiplier(at);
         }
 
         // Handle block if the materials durability is greater than one, else destroy the block
@@ -850,15 +852,10 @@ public class ChunkManager {
         // Durability multiplier hook for Factions
         double durabilityMultiplier = 1D;
         if (FactionsIntegration.isUsing()) {
-            if (!FactionsIntegration.get().isExplosionsEnabled(at)) {
+            durabilityMultiplier = Util.getMultiplier(at);
+            if (durabilityMultiplier == 0) {
                 return DamageResult.NONE;
             }
-            if (ConfigManager.getInstance().getProtectOfflineFactions()) {
-                if (FactionsIntegration.get().isFactionOffline(block.getLocation())) {
-                    return DamageResult.NONE;
-                }
-            }
-            durabilityMultiplier = Util.getMultiplier(at);
         }
 
         // Handle block if the materials durability is greater than one, else destroy the block
