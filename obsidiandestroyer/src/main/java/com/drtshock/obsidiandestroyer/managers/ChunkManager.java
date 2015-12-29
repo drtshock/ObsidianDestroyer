@@ -171,10 +171,6 @@ public class ChunkManager {
             if (detonator != null) {
                 detonator.setMetadata("ObbyLiquidEntity", new FixedMetadataValue(ObsidianDestroyer.getInstance(), new EntityData(event.getEntityType())));
             }
-
-        } else if ((detonatorLoc.getBlock().isLiquid()) && (ConfigManager.getInstance().getFluidsProtectIndustructables())) {
-            // handle the liquid explosion normally
-            return;
         }
 
         // Check explosion blocks and their distance from the detonation.
@@ -194,6 +190,11 @@ public class ChunkManager {
             }
             // distance from detonator to the target block
             final double dist = detonatorLoc.distance(blockLocation);
+
+            // check for liquid overrides and continue if none
+            if (detonatorLoc.getBlock().isLiquid() && ConfigManager.getInstance().getFluidsProtectIndustructables() && !MaterialManager.getInstance().getBypassFluidProtection(block.getType().name())) {
+                continue;
+            }
 
             // Damage bleeding fix
             if (ConfigManager.getInstance().getDisableDamageBleeding() && (detonator == null || !detonator.getType().equals(EntityType.WITHER))) {
@@ -298,6 +299,15 @@ public class ChunkManager {
 
                     if (blocksDestroyed.contains(targetLoc.getBlock())) {
                         // if already tracked this block...
+                        continue;
+                    }
+
+                    // check for liquid detonator and fluid protection overrides
+                    if (detonatorLoc.getBlock().isLiquid() && ConfigManager.getInstance().getFluidsProtectIndustructables() && !MaterialManager.getInstance().getBypassFluidProtection(targetLoc.getBlock().getType().name())) {
+                        blocksIgnored.add(targetLoc.getBlock());
+                        if (blocksDestroyed.contains(targetLoc.getBlock())) {
+                            blocksDestroyed.remove(targetLoc.getBlock());
+                        }
                         continue;
                     }
 
