@@ -271,7 +271,11 @@ public class ConfigManager {
     }
 
     public Material getDurabilityCheckItem() {
-        return Material.matchMaterial(config.getString("DurabilityGlobal.CheckItem", "POTATO_ITEM"));
+        Material material = Material.matchMaterial(config.getString("DurabilityGlobal.CheckItem", "POTATO_ITEM"));
+        if (material == null) {
+            material = Material.POTATO_ITEM;
+        }
+        return material;
     }
 
     public boolean getHandleFactions() {
