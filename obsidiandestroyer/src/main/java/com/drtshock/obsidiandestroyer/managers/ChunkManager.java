@@ -517,24 +517,19 @@ public class ChunkManager {
     }
 
     /**
-     * Handles a block on an EntityExplodeEvent
+     * Handles damage of a block location
      *
      * @param at     the location of the block
-     * @param entity the entity that triggered the event
-     *
+     * @param amount amount to damage the block
      * @return DamageResult result of damageBlock attempt
      */
-    public DamageResult damageBlock(final Location at, Entity entity) {
-        if (at == null || entity == null) {
-            if (entity == null) {
-                return damageBlock(at);
-            }
-            return DamageResult.NONE;
+    public DamageResult damageBlock(final Location at, int amount) {
+        if (at == null) {
+            return DamageResult.ERROR;
         }
-
-        // Null and Air checks
-        EntityType eventTypeRep = entity.getType();
+        // get block
         Block block = at.getBlock();
+        // Null and Air checks
         if (block == null || block.getType() == Material.AIR) {
             return DamageResult.NONE;
         }
@@ -543,7 +538,159 @@ public class ChunkManager {
 
         // ==========================
         // Create a new Durability Damage Event
-        DurabilityDamageEvent durabilityDamageEvent = new DurabilityDamageEvent(blockTypeName, eventTypeRep);
+        DurabilityDamageEvent durabilityDamageEvent = new DurabilityDamageEvent(at, blockTypeName);
+        // Call event on blocks material durability damage
+        ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(durabilityDamageEvent);
+
+        // ==========================
+        if (durabilityDamageEvent.isDisposed()) {
+            // Return a new damage result if set
+            return durabilityDamageEvent.getDamageResult();
+        }
+        if (durabilityDamageEvent.isCancelled()) {
+            // Return no damage if even is cancelled.
+            return DamageResult.CANCELLED;
+        }
+
+        // Check bedrock and env
+        if (block.getType() == Material.BEDROCK && ConfigManager.getInstance().getProtectBedrockBorders()) {
+            if (block.getY() <= ConfigManager.getInstance().getBorderToProtectNormal() && block.getWorld().getEnvironment() != Environment.THE_END) {
+                return DamageResult.NONE;
+            } else if (block.getY() >= ConfigManager.getInstance().getBorderToProtectNether() && block.getWorld().getEnvironment() == Environment.NETHER) {
+                return DamageResult.NONE;
+            }
+        }
+
+        // The handled materials listing
+        MaterialManager materials = MaterialManager.getInstance();
+
+        // Just in case the material is in the list and not enabled...
+        if (!materials.getDurabilityEnabled(blockTypeName)) {
+            return DamageResult.DISABLED;
+        }
+
+        if (!materials.isDestructible(blockTypeName)) {
+            return DamageResult.NONE;
+        }
+
+        // Durability multiplier hook for Factions
+        double durabilityMultiplier = 1D;
+        if (FactionsIntegration.isUsing()) {
+            durabilityMultiplier = Util.getMultiplier(at);
+            if (durabilityMultiplier == 0) {
+                return DamageResult.NONE;
+            }
+        }
+
+        // Handle block if the materials durability is greater than one, else destroy the block
+        if ((materials.getDurability(blockTypeName) * durabilityMultiplier) >= 2) {
+            // durability is greater than one, get last state of the material location
+            TimerState state = checkDurabilityActive(block.getLocation());
+            if (ConfigManager.getInstance().getEffectsEnabled()) {
+                // display particles effects on damage
+                final double random = Math.random();
+                if (random <= ConfigManager.getInstance().getEffectsChance()) {
+                    block.getWorld().playEffect(at, Effect.MOBSPAWNER_FLAMES, 0);
+                }
+            }
+            // If timer is running or not active...
+            if (state == TimerState.RUN || state == TimerState.INACTIVE) {
+                // Check if current is over the max, else increment damage to durability
+                int currentDurability = getMaterialDurability(block);
+                if (Util.checkIfOverMax(currentDurability, blockTypeName, durabilityMultiplier)) {
+                    currentDurability = (int) Math.round(materials.getDurability(blockTypeName) * 0.50);
+                } else {
+                    currentDurability += amount;
+                }
+                // check if at max, else setup and track the material location
+                if (Util.checkIfMax(currentDurability, blockTypeName, durabilityMultiplier)) {
+                    // counter has reached max durability, remove and drop an item
+                    return DamageResult.DESTROY;
+                } else {
+                    // counter has not reached max durability damage yet
+                    if (!materials.getDurabilityResetTimerEnabled(blockTypeName)) {
+                        // adds a block to be track
+                        addBlock(block, currentDurability);
+                    } else {
+                        // adds a block to be tracked and starts a new durabilityTime with last state
+                        startNewTimer(block, currentDurability, state);
+                    }
+                }
+            } else {
+                // No timers or tracked location, add a new material location
+                if (!materials.getDurabilityResetTimerEnabled(blockTypeName)) {
+                    addBlock(block, amount);
+                } else {
+                    startNewTimer(block, amount, state);
+                }
+                // Check if damage is at max for durability
+                if (Util.checkIfMax(amount, blockTypeName, durabilityMultiplier)) {
+                    return DamageResult.DESTROY;
+                }
+            }
+        } else {
+            // durability is < 1, destroy the material location
+            return DamageResult.DESTROY;
+        }
+
+        // Return damage
+        return DamageResult.DAMAGE;
+    }
+
+    /**
+     * Handles damage of a block by an entity
+     *
+     * @param at     the location of the block
+     * @param entity the entity that triggered the event
+     * @return DamageResult result of damageBlock attempt
+     */
+    public DamageResult damageBlock(final Location at, Entity entity) {
+        return damageBlock(at, entity, null);
+    }
+
+    /**
+     * Handles damage of a block by an entity type
+     *
+     * @param at         the location of the block
+     * @param entityType the entity type that triggered the event
+     * @return DamageResult result of damageBlock attempt
+     */
+    public DamageResult damageBlock(final Location at, EntityType entityType) {
+        return damageBlock(at, null, entityType);
+    }
+
+    /**
+     * Handles a block on an EntityExplodeEvent
+     *
+     * @param at         the location of the block
+     * @param entity     the entity that triggered the event
+     * @param entityType the entity type that triggered the event
+     * @return DamageResult result of damageBlock attempt
+     */
+    private DamageResult damageBlock(final Location at, Entity entity, EntityType entityType) {
+        if (at == null || entity == null) {
+            if (entity == null && entityType == null) {
+                return damageBlock(at, 1);
+            }
+            if (entityType == null) {
+                return DamageResult.NONE;
+            }
+        }
+
+        // get entity
+        EntityType eventTypeRep = entityType == null ? entity.getType() : entityType;
+        // get block
+        Block block = at.getBlock();
+        // Null and Air checks
+        if (block == null || block.getType() == Material.AIR) {
+            return DamageResult.NONE;
+        }
+
+        String blockTypeName = block.getType().name();
+
+        // ==========================
+        // Create a new Durability Damage Event
+        DurabilityDamageEvent durabilityDamageEvent = new DurabilityDamageEvent(at, blockTypeName, eventTypeRep);
         // Call event on blocks material durability damage
         ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(durabilityDamageEvent);
 
@@ -613,13 +760,6 @@ public class ChunkManager {
         if ((materials.getDurability(blockTypeName) * durabilityMultiplier) >= 2) {
             // durability is greater than one, get last state of the material location
             TimerState state = checkDurabilityActive(block.getLocation());
-            if (ConfigManager.getInstance().getEffectsEnabled()) {
-                // display particles effects on damage
-                final double random = Math.random();
-                if (random <= ConfigManager.getInstance().getEffectsChance()) {
-                    block.getWorld().playEffect(at, Effect.MOBSPAWNER_FLAMES, 0);
-                }
-            }
             // If timer is running or not active...
             if (state == TimerState.RUN || state == TimerState.INACTIVE) {
                 // Check if current is over the max, else increment damage to durability
@@ -774,12 +914,6 @@ public class ChunkManager {
                     if (location.distance(targetLoc) <= Math.min(radius, Util.getMaxDistance(targetLoc.getBlock().getType().name(), radius))) {
                         DamageResult result = damageBlock(targetLoc.getBlock().getLocation(), true);
                         if (result != DamageResult.NONE && result != DamageResult.CANCELLED) {
-                            if (ConfigManager.getInstance().getEffectsEnabled()) {
-                                final double random = Math.random();
-                                if (random <= ConfigManager.getInstance().getEffectsChance()) {
-                                    location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
-                                }
-                            }
                             // Cancel the event
                             if (!event.isCancelled()) {
                                 event.setCancelled(true);
@@ -793,6 +927,7 @@ public class ChunkManager {
 
     /**
      * Handles a block on an ProjectilePiercingEvent
+     *
      * @param at the location of the block
      * @return DamageResult result of damageBlock attempt
      */
@@ -824,7 +959,7 @@ public class ChunkManager {
 
         // ==========================
         // Create a new Durability Damage Event
-        DurabilityDamageEvent durabilityDamageEvent = new DurabilityDamageEvent(blockTypeName);
+        DurabilityDamageEvent durabilityDamageEvent = new DurabilityDamageEvent(at, blockTypeName);
         // Call event on blocks material durability damage
         ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(durabilityDamageEvent);
 
@@ -1030,7 +1165,6 @@ public class ChunkManager {
      * Check if there is an active durability reset
      *
      * @param location the location to check
-     *
      * @return the state of the durability timer object
      */
     public TimerState checkDurabilityActive(Location location) {
@@ -1079,7 +1213,6 @@ public class ChunkManager {
      * Gets the Material durability from a location
      *
      * @param block the block to the checks durability
-     *
      * @return the durability value
      */
     public Integer getMaterialDurability(Block block) {
@@ -1094,7 +1227,6 @@ public class ChunkManager {
      * Gets the Material durability from a location
      *
      * @param location the location to checks durability
-     *
      * @return the durability value
      */
     public Integer getMaterialDurability(Location location) {
@@ -1262,7 +1394,6 @@ public class ChunkManager {
      * Does the chunk contain this block
      *
      * @param block the block to check the chunk for
-     *
      * @return true if block found within chunk
      */
     public boolean contains(Block block) {
@@ -1273,7 +1404,6 @@ public class ChunkManager {
      * Does the chunk contain this location
      *
      * @param location the location to check the chunk for
-     *
      * @return true if location found within chunk
      */
     public boolean contains(Location location) {
@@ -1290,7 +1420,6 @@ public class ChunkManager {
      * Gets the chunk wrapper from a chunk
      *
      * @param chunk the chunk to get a wrapper from
-     *
      * @return the ChunkWrapper that belongs to the chunk.
      */
     public ChunkWrapper getWrapper(Chunk chunk) {
