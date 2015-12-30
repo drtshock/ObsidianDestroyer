@@ -6,6 +6,8 @@ import org.bukkit.configuration.ConfigurationSection;
 public class DurabilityMaterial {
 
     private Material type;
+    private String name;
+    private int typeData;
     private int dura;
     private int blastRadius;
     private boolean enabled;
@@ -40,6 +42,44 @@ public class DurabilityMaterial {
      */
     public DurabilityMaterial(Material type, ConfigurationSection section) {
         this.type = type;
+        this.name = type.name();
+        this.blastRadius = section.getInt("BlastRadius", 0);
+        this.destructible = section.getBoolean("Destructible", true);
+        this.dura = section.getInt("Durability.Amount", 5);
+        this.fluidDamper = section.getDouble("Durability.FluidDamper", 0);
+        this.enabled = section.getBoolean("Durability.Enabled", true);
+        this.chanceToDrop = section.getDouble("Durability.ChanceToDrop", 0.7);
+        this.resetEnabled = section.getBoolean("Durability.ResetEnabled", false);
+        this.resetTime = section.getLong("Durability.ResetAfter", 10000L);
+        this.tntEnabled = section.getBoolean("EnabledFor.TNT", true);
+        this.cannonsEnabled = section.getBoolean("EnabledFor.Cannons", false);
+        this.creepersEnabled = section.getBoolean("EnabledFor.Creepers", false);
+        this.ghastsEnabled = section.getBoolean("EnabledFor.Ghasts", false);
+        this.withersEnabled = section.getBoolean("EnabledFor.Withers", false);
+        this.tntMinecartsEnabled = section.getBoolean("EnabledFor.Minecarts", false);
+        this.nullEnabled = section.getBoolean("EnabledFor.NullDamage", true);
+        this.tntDamage = section.getInt("Damage.TNT", 1);
+        this.cannonImpactDamage = section.getInt("Damage.Cannons", section.getInt("Damage.CannonsImpact", 1));
+        this.cannonPierceDamage = section.getInt("Damage.CannonsPierce", 1);
+        this.creeperDamage = section.getInt("Damage.Creepers", 1);
+        this.chargedCreeperDamage = section.getInt("Damage.ChargedCreepers", 1);
+        this.ghastDamage = section.getInt("Damage.Ghasts", 1);
+        this.witherDamage = section.getInt("Damage.Withers", 1);
+        this.tntMinecartDamage = section.getInt("Damage.Minecarts", 1);
+        this.nullDamage = section.getInt("Damage.NullDamage", 1);
+        this.tallyKittens();
+    }
+
+    /**
+     * Storage for a tracked material from the config
+     *
+     * @param type    the type of material
+     * @param section the configuration section to load
+     */
+    public DurabilityMaterial(Material type, int typeData, ConfigurationSection section) {
+        this.type = type;
+        this.name = type.name();
+        this.typeData = typeData;
         this.blastRadius = section.getInt("BlastRadius", 0);
         this.destructible = section.getBoolean("Destructible", true);
         this.bypassFluidProtect = section.getBoolean("BypassFluidProtection", false);
@@ -119,6 +159,14 @@ public class DurabilityMaterial {
 
     public Material getType() {
         return type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getTypeData() {
+        return typeData >= 0 ? typeData : 0;
     }
 
     public int getDurability() {
@@ -228,18 +276,38 @@ public class DurabilityMaterial {
 
     @Override
     public String toString() {
-        return getType() != null ? getType().name() : "material";
+        return getType() != null ? getType().name() + (typeData >= 0 ? ":" + getTypeData() : "") : getName() + (typeData >= 0 ? ":" + getTypeData() : "");
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof String) {
+            if (((String) obj).contains(":")) {
+                if (getType() == null) {
+                    if (((String) obj).equalsIgnoreCase(name + ":" + getTypeData())) {
+                        return true;
+                    }
+                } else if (((String) obj).equalsIgnoreCase(getType().name() + ":" + getTypeData())) {
+                    return true;
+                }
+            }
             if (((String) obj).equalsIgnoreCase(getType().name())) {
                 return true;
             }
         }
         if (obj instanceof DurabilityMaterial) {
-            if (((DurabilityMaterial) obj).getType().equals(getType())) {
+            DurabilityMaterial durabilityMaterial = (DurabilityMaterial) obj;
+            if (durabilityMaterial.getType() == null || this.getType() == null) {
+                if (durabilityMaterial.toString().equals(this.toString())) {
+                    if (durabilityMaterial.getTypeData() != getTypeData()) {
+                        return false;
+                    }
+                    return true;
+                }
+            } else if (durabilityMaterial.getType().equals(getType())) {
+                if (durabilityMaterial.getTypeData() != getTypeData()) {
+                    return false;
+                }
                 return true;
             }
         }

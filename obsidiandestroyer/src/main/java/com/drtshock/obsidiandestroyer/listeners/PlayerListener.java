@@ -29,7 +29,7 @@ public class PlayerListener implements Listener {
                 Block block = event.getClickedBlock();
                 if (itemInHand != null && ConfigManager.getInstance().getDurabilityCheckItem().equals(itemInHand)) {
                     MaterialManager mm = MaterialManager.getInstance();
-                    if (block != null && mm.getDurabilityEnabled(block.getType().name())) {
+                    if (block != null && mm.getDurabilityEnabled(block.getType().name(), block.getData())) {
                         if (player.getGameMode() == GameMode.CREATIVE) {
                             event.setCancelled(true);
                         }
@@ -38,8 +38,8 @@ public class PlayerListener implements Listener {
                         if (mult == 0) {
                             player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this block is: " + ChatColor.WHITE + "∞");
                         } else {
-                            int max = (int) Math.round(mm.getDurability(block.getType().name()) * mult);
-                            player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this block is: " + ChatColor.WHITE + (!mm.isDestructible(block.getType().name()) ? "∞" : (max - amount) + "/" + max));
+                            int max = (int) Math.round(mm.getDurability(block.getType().name(), block.getData()) * Util.getMultiplier(block.getLocation()));
+                            player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this block is: " + ChatColor.WHITE + (!mm.isDestructible(block.getType().name(), block.getData()) ? "∞" : (max - amount) + "/" + max));
                         }
                     }
                 }

@@ -227,11 +227,11 @@ public class ChunkWrapper {
     private List<Integer> expiredDurabilities() {
         List<Integer> expiredDurabilities = new ArrayList<Integer>();
         for (Key key : durabilities.values()) {
-            if (MaterialManager.getInstance().getDurabilityResetTimerEnabled(key.toLocation().getBlock().getType().name())) {
+            if (MaterialManager.getInstance().getDurabilityResetTimerEnabled(key.toLocation().getBlock().getType().name(), key.toLocation().getBlock().getData())) {
                 long currentTime = System.currentTimeMillis();
                 if (currentTime > key.durabilityTime) {
                     if (ConfigManager.getInstance().getMaterialsRegenerateOverTime()) {
-                        long regenTime = MaterialManager.getInstance().getDurabilityResetTime(key.toLocation().getBlock().getType().name());
+                        long regenTime = MaterialManager.getInstance().getDurabilityResetTime(key.toLocation().getBlock().getType().name(), key.toLocation().getBlock().getData());
                         int amount = Math.max(1, Math.round((float) (currentTime - key.durabilityTime) / regenTime));
                         int durability = key.durabilityAmount - amount;
                         if (durability <= 0) {
@@ -275,9 +275,9 @@ public class ChunkWrapper {
             Key info = null;
             while ((info = region.getNext(bWorld)) != null) {
                 long currentTime = System.currentTimeMillis();
-                if (currentTime > info.durabilityTime && MaterialManager.getInstance().getDurabilityResetTimerEnabled(info.toLocation().getBlock().getType().name())) {
+                if (currentTime > info.durabilityTime && MaterialManager.getInstance().getDurabilityResetTimerEnabled(info.toLocation().getBlock().getType().name(), info.toLocation().getBlock().getData())) {
                     if (ConfigManager.getInstance().getMaterialsRegenerateOverTime()) {
-                        long regenTime = MaterialManager.getInstance().getDurabilityResetTime(info.toLocation().getBlock().getType().name());
+                        long regenTime = MaterialManager.getInstance().getDurabilityResetTime(info.toLocation().getBlock().getType().name(), info.toLocation().getBlock().getData());
                         long result = currentTime - info.durabilityTime;
                         int amount = Math.max(1, Math.round((float) result / regenTime));
                         int durability = info.durabilityAmount - amount;

@@ -7,6 +7,9 @@ HandledMaterials:
   # The name of Material that will have a durability applied
   STONE:
 
+    # Data Types for blocks with different types and metadata
+    MetaData: 0
+
     # Individual blast radius for each material.
     # Works best if less than or equal to 'Radius' from config.yml (Experiment with it)
     # Defaults to 'Radius' from config.yml if line below is not present.
@@ -642,6 +645,56 @@ HandledMaterials:
       TNT: true
       Creepers: true
       Ghasts: false
+      Cannons: true
+      Withers: true
+      Minecarts: true
+  SKULL:
+    MetaData: 3
+    BlastRadius: 3
+    Durability:
+      Amount: 2
+      Enabled: true
+      ChanceToDrop: 0.0
+      ResetEnabled: false
+      ResetAfter: 300000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: true
+      Minecarts: true
+  STEP:
+    MetaData: 0
+    BlastRadius: 3
+    BypassFluidProtection: true
+    Durability:
+      Amount: 2
+      Enabled: false
+      ChanceToDrop: 0.20
+      ResetEnabled: false
+      ResetAfter: 300000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: true
+      Cannons: true
+      Withers: true
+      Minecarts: true
+  STEP:
+    MetaData: 5
+    BlastRadius: 3
+    BypassFluidProtection: true
+    Durability:
+      Amount: 3
+      Enabled: false
+      ChanceToDrop: 0.20
+      ResetEnabled: false
+      ResetAfter: 300000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: true
       Cannons: true
       Withers: true
       Minecarts: true
