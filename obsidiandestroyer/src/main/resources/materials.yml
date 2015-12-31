@@ -648,8 +648,9 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: true
+  # Skull
   SKULL:
-    MetaData: 3
+    MetaData: 1
     BlastRadius: 3
     Durability:
       Amount: 2
@@ -664,6 +665,7 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: true
+  # Stone Slab
   STEP:
     MetaData: 0
     BlastRadius: 3
@@ -681,12 +683,47 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: true
+  # Stone Brick Slab
   STEP:
     MetaData: 5
     BlastRadius: 3
     BypassFluidProtection: true
     Durability:
       Amount: 3
+      Enabled: false
+      ChanceToDrop: 0.20
+      ResetEnabled: false
+      ResetAfter: 300000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: true
+      Cannons: true
+      Withers: true
+      Minecarts: true
+  # Oak
+  LOG:
+    MetaData: 0
+    BlastRadius: 3
+    Durability:
+      Amount: 2
+      Enabled: false
+      ChanceToDrop: 0.20
+      ResetEnabled: false
+      ResetAfter: 300000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: true
+      Cannons: true
+      Withers: true
+      Minecarts: true
+  # Spruce
+  LOG:
+    MetaData: 1
+    BlastRadius: 3
+    Durability:
+      Amount: 2
       Enabled: false
       ChanceToDrop: 0.20
       ResetEnabled: false

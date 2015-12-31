@@ -16,8 +16,8 @@ import java.util.logging.Level;
 public class ConfigManager {
 
     private static ConfigManager instance;
-    private static YamlConfiguration tc;
-    private static YamlConfiguration tm;
+    private YamlConfiguration tc;
+    private YamlConfiguration tm;
     private YamlConfiguration config;
     private YamlConfiguration materials;
     private boolean loaded;
@@ -76,23 +76,24 @@ public class ConfigManager {
         }
         File configFile = new File(ObsidianDestroyer.getInstance().getDataFolder(), "config.yml");
         if (!configFile.exists()) {
-            ObsidianDestroyer.debug("Creating config File...");
+            ObsidianDestroyer.debug("Creating config File.");
             createFile(configFile, "config.yml");
         } else {
-            ObsidianDestroyer.debug("Loading config File...");
+            ObsidianDestroyer.debug("Loading config File.");
         }
         config = YamlConfiguration.loadConfiguration(configFile);
 
         String version = ObsidianDestroyer.getInstance().getDescription().getVersion();
         if (config != null && !config.getString("Version", version).equals(version)) {
             if (update) {
-                ObsidianDestroyer.LOG.log(Level.SEVERE, "Loading failed on update check.  Aborting...");
+                ObsidianDestroyer.LOG.log(Level.SEVERE, "Loading failed on update check.  Aborting!");
                 return;
             }
             ObsidianDestroyer.LOG.log(Level.WARNING, "Config File outdated, backing up old...");
             File configFileOld = new File(ObsidianDestroyer.getInstance().getDataFolder(), "config.yml.old-" + config.getString("Version", version).replace(".", "_"));
             try {
                 config.save(configFileOld);
+                ObsidianDestroyer.LOG.log(Level.WARNING, "Backed up old config as '" + configFileOld.getName() + "'");
             } catch (IOException e) {
                 loaded = false;
                 e.printStackTrace();
@@ -107,10 +108,10 @@ public class ConfigManager {
 
         File materialsFile = new File(ObsidianDestroyer.getInstance().getDataFolder(), "materials.yml");
         if (!materialsFile.exists()) {
-            ObsidianDestroyer.debug("Creating materials File...");
+            ObsidianDestroyer.debug("Creating materials File.");
             createFile(materialsFile, "materials.yml");
         } else {
-            ObsidianDestroyer.debug("Loading materials File...");
+            ObsidianDestroyer.debug("Loading materials File.");
         }
         materials = YamlConfiguration.loadConfiguration(materialsFile);
         loaded = true;

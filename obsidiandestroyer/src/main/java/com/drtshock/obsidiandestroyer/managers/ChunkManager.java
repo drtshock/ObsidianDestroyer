@@ -580,13 +580,6 @@ public class ChunkManager {
         if ((materials.getDurability(blockTypeName, blockData) * durabilityMultiplier) >= 2) {
             // durability is greater than one, get last state of the material location
             TimerState state = checkDurabilityActive(block.getLocation());
-            if (ConfigManager.getInstance().getEffectsEnabled()) {
-                // display particles effects on damage
-                final double random = Math.random();
-                if (random <= ConfigManager.getInstance().getEffectsChance()) {
-                    block.getWorld().playEffect(at, Effect.MOBSPAWNER_FLAMES, 0);
-                }
-            }
             // If timer is running or not active...
             if (state == TimerState.RUN || state == TimerState.INACTIVE) {
                 // Check if current is over the max, else increment damage to durability
@@ -1013,13 +1006,6 @@ public class ChunkManager {
         if ((materials.getDurability(blockTypeName, blockData) * durabilityMultiplier) >= 2) {
             // durability is greater than one, get last state of the material location
             TimerState state = checkDurabilityActive(block.getLocation());
-            if (ConfigManager.getInstance().getEffectsEnabled()) {
-                // display particles effects on damage
-                final double random = Math.random();
-                if (random <= ConfigManager.getInstance().getEffectsChance()) {
-                    block.getWorld().playEffect(at, Effect.MOBSPAWNER_FLAMES, 0);
-                }
-            }
 
             int damageAmt = impact ? materials.getDamageTypeCannonsImpactAmount(blockTypeName, blockData) : materials.getDamageTypeCannonsPierceAmount(blockTypeName, blockData);
 

@@ -25,12 +25,22 @@ public class ObsidianDestroyer extends JavaPlugin {
         return instance;
     }
 
+    /**
+     * Prints a debug message to the log
+     *
+     * @param debug message
+     */
     public static void debug(String debug) {
         if (ConfigManager.getInstance() == null || ConfigManager.getInstance().getDebug()) {
             LOG.info(debug);
         }
     }
 
+    /**
+     * Prints a verbose debug message to the log
+     *
+     * @param debug message
+     */
     public static void vdebug(String debug) {
         if (ConfigManager.getInstance() == null || (ConfigManager.getInstance().getDebug() && ConfigManager.getInstance().getVerbose())) {
             LOG.info(debug);

@@ -55,10 +55,6 @@ public class ODCommand implements CommandExecutor {
         }
         Player player = (Player) sender;
 
-        if (!player.hasPermission("obsidiandestroyer.admin")) {
-            return false;
-        }
-
         Bukkit.getWorld(player.getWorld().getName()).createExplosion(player.getLocation().add(0, 3, 0), 3);
         player.sendMessage("Boom!");
 
@@ -73,6 +69,7 @@ public class ODCommand implements CommandExecutor {
         sender.sendMessage(ChatColor.DARK_PURPLE + "/od reload - " + ChatColor.LIGHT_PURPLE + "reloads the plugin's config file.");
         sender.sendMessage(ChatColor.DARK_PURPLE + "/od reloadDB - " + ChatColor.LIGHT_PURPLE + "reloads the durability database.");
         sender.sendMessage(ChatColor.DARK_PURPLE + "/od reset - " + ChatColor.LIGHT_PURPLE + " reset all durability damage and timers.");
+        sender.sendMessage(ChatColor.DARK_PURPLE + "/od testb - " + ChatColor.LIGHT_PURPLE + " creates a test explosion above your head.");
         sender.sendMessage(ChatColor.GREEN + "" + ChatColor.STRIKETHROUGH + "                                                             ");
     }
 
@@ -101,12 +98,12 @@ public class ODCommand implements CommandExecutor {
         new HookManager();
         MaterialManager.getInstance().load();
         ChunkManager.getInstance().loadDisabledWorlds();
-        ObsidianDestroyer.LOG.log(Level.SEVERE, "The config has encountered an error on load. Recovered a backup from memory...");
+        ObsidianDestroyer.LOG.log(Level.SEVERE, "The config has encountered an error on load. Recovered a backup from memory.");
         sender.sendMessage(ChatColor.RED + "Reloading ObsidianDestroyer config failed, restored from memory. See log file.  Completed in " + (System.currentTimeMillis() - time) + " ms!");
     }
 
     private void resetDurability(CommandSender sender) {
         long time = ChunkManager.getInstance().resetAllDurabilities();
-        sender.sendMessage(ChatColor.GREEN + "Reset all Material durabilities in " + (System.currentTimeMillis() - time) + " ms.");
+        sender.sendMessage(ChatColor.GREEN + "Reset all Material durability's in " + (System.currentTimeMillis() - time) + " ms.");
     }
 }

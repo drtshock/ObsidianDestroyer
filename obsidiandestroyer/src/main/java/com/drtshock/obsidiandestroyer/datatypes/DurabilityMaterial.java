@@ -8,7 +8,7 @@ public class DurabilityMaterial {
     private Material type;
     private String name;
     private int typeData;
-    private int dura;
+    private int durability;
     private int blastRadius;
     private boolean enabled;
     private double chanceToDrop;
@@ -45,7 +45,7 @@ public class DurabilityMaterial {
         this.name = type.name();
         this.blastRadius = section.getInt("BlastRadius", 0);
         this.destructible = section.getBoolean("Destructible", true);
-        this.dura = section.getInt("Durability.Amount", 5);
+        this.durability = section.getInt("Durability.Amount", 5);
         this.fluidDamper = section.getDouble("Durability.FluidDamper", 0);
         this.enabled = section.getBoolean("Durability.Enabled", true);
         this.chanceToDrop = section.getDouble("Durability.ChanceToDrop", 0.7);
@@ -80,10 +80,10 @@ public class DurabilityMaterial {
         this.type = type;
         this.name = type.name();
         this.typeData = typeData;
-        this.blastRadius = section.getInt("BlastRadius", 0);
+        this.blastRadius = section.getInt("BlastRadius", 2);
         this.destructible = section.getBoolean("Destructible", true);
         this.bypassFluidProtect = section.getBoolean("BypassFluidProtection", false);
-        this.dura = section.getInt("Durability.Amount", 5);
+        this.durability = section.getInt("Durability.Amount", 5);
         this.fluidDamper = section.getDouble("Durability.FluidDamper", 0);
         this.enabled = section.getBoolean("Durability.Enabled", true);
         this.chanceToDrop = section.getDouble("Durability.ChanceToDrop", 0.7);
@@ -112,8 +112,8 @@ public class DurabilityMaterial {
         if (blastRadius < 0) {
             blastRadius = 1;
         }
-        if (dura <= 0) {
-            dura = 1;
+        if (durability <= 0) {
+            durability = 1;
         }
         if (fluidDamper < 0.0) {
             fluidDamper = 0;
@@ -170,7 +170,7 @@ public class DurabilityMaterial {
     }
 
     public int getDurability() {
-        return dura;
+        return durability;
     }
 
     public boolean getEnabled() {
