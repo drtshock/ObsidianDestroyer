@@ -159,7 +159,7 @@ public class Util {
             case SADDLE:
             case SEEDS:
             case SHEARS:
-                //case SKULL_ITEM:
+            case SKULL_ITEM:
             case SLIME_BALL:
             case SNOW:
             case SNOW_BALL:

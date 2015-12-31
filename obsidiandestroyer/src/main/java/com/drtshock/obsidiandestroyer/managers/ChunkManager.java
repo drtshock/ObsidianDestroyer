@@ -32,7 +32,7 @@ public class ChunkManager {
     private static ChunkManager instance;
     private final File durabilityDir;
     private ConcurrentMap<String, ChunkWrapper> chunks = new ConcurrentHashMap<String, ChunkWrapper>();
-    private boolean doneSave = false;
+    private boolean doneSave = true;
     private List<String> disabledWorlds;
 
     /**
@@ -1256,18 +1256,18 @@ public class ChunkManager {
     /**
      * Saves the chunk manager
      */
-    public void save() {
+    public boolean save() {
+        if (!doneSave) {
+            return false;
+        }
         doneSave = false;
-        Double max = ((Integer) chunks.size()).doubleValue();
-        Double done = 0.0;
         for (String key : chunks.keySet()) {
             ChunkWrapper w = chunks.get(key);
             w.save(false, true);
-            done++;
-            //this.percent = ((Double) (done / max)).intValue();
         }
         chunks.clear();
         doneSave = true;
+        return true;
     }
 
     /**
@@ -1280,8 +1280,8 @@ public class ChunkManager {
             return;
         }
 
-        String str = chunkToString(chunk);
-        ChunkWrapper wrapper = new ChunkWrapper(chunk, durabilityDir);
+        final String str = chunkToString(chunk);
+        final ChunkWrapper wrapper = new ChunkWrapper(chunk, durabilityDir);
         wrapper.load();
         chunks.put(str, wrapper);
     }
@@ -1296,8 +1296,8 @@ public class ChunkManager {
             return;
         }
 
-        String key = chunkToString(chunk);
-        ChunkWrapper wrapper = chunks.get(key);
+        final String key = chunkToString(chunk);
+        final ChunkWrapper wrapper = chunks.get(key);
         if (wrapper != null) {
             wrapper.save(false, false);
             chunks.remove(key);
@@ -1323,11 +1323,11 @@ public class ChunkManager {
             return;
         }
 
-        String c = chunkToString(block.getChunk());
+        final String c = chunkToString(block.getChunk());
         if (!chunks.containsKey(c)) {
             loadChunk(block.getChunk());
         }
-        ChunkWrapper chunk = chunks.get(c);
+        final ChunkWrapper chunk = chunks.get(c);
         chunk.addBlock(damage, block);
     }
 
@@ -1343,11 +1343,11 @@ public class ChunkManager {
             return;
         }
 
-        String c = chunkToString(block.getChunk());
+        final String c = chunkToString(block.getChunk());
         if (!chunks.containsKey(c)) {
             loadChunk(block.getChunk());
         }
-        ChunkWrapper chunk = chunks.get(c);
+        final ChunkWrapper chunk = chunks.get(c);
         time += System.currentTimeMillis();
         chunk.addBlockTimer(damage, time, block);
     }

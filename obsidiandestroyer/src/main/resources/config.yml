@@ -76,7 +76,7 @@ Explosions:
 # Works with most versions of Factions
 Factions:
   # Enable Hooking - enabling will allow obsidian destroyer to pass interactions directly to factions.
-  Enabled: true
+  Enabled: false
   # Toggles explosion features between ObsidianDestroyer and Factions.
   HandleExplosions: true
 

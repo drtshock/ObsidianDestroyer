@@ -75,7 +75,10 @@ public class ODCommand implements CommandExecutor {
 
     private void reloadDurabilites(CommandSender sender) {
         long time = System.currentTimeMillis();
-        ChunkManager.getInstance().save();
+        if (!ChunkManager.getInstance().save()) {
+            sender.sendMessage(ChatColor.RED + "Save in progress, please wait!");
+            return;
+        }
         ChunkManager.getInstance().load();
         sender.sendMessage(ChatColor.GREEN + "Reloading ObsidianDestroyer database completed in " + (System.currentTimeMillis() - time) + " ms!");
     }
