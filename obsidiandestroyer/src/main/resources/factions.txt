@@ -6,6 +6,7 @@ com.drtshock.obsidiandestroyer.managers.factions.Factions16xUU 1.6.U
 com.drtshock.obsidiandestroyer.managers.factions.Factions16x 1.6
 com.drtshock.obsidiandestroyer.managers.factions.Factions18x 1.8.U
 com.drtshock.obsidiandestroyer.managers.factions.Factions18x 1.8
+com.drtshock.obsidiandestroyer.managers.factions.Factions22x 2.2
 com.drtshock.obsidiandestroyer.managers.factions.Factions25x 2.5
 com.drtshock.obsidiandestroyer.managers.factions.Factions26x 2.6
 com.drtshock.obsidiandestroyer.managers.factions.Factions27x 2.7

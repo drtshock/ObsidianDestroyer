@@ -102,6 +102,14 @@
         </dependency>
         <dependency>
             <groupId>com.drtshock</groupId>
+            <artifactId>ObsidianDestroyer-Factions-v2_2_x</artifactId>
+            <version>v2_2_x</version>
+            <type>jar</type>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.drtshock</groupId>
             <artifactId>ObsidianDestroyer-Factions-v2_5_x</artifactId>
             <version>v2_5_x</version>
             <type>jar</type>

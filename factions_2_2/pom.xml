@@ -2,10 +2,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.drtshock</groupId>
-    <artifactId>ObsidianDestroyer-Factions-v2_5_x</artifactId>
+    <artifactId>ObsidianDestroyer-Factions-v2_2_x</artifactId>
     <packaging>jar</packaging>
-    <name>ObsidianDestroyer Factions v2_5_x</name>
-    <version>v2_5_x</version>
+    <name>ObsidianDestroyer Factions v2_2_x</name>
+    <version>v2_2_x</version>
 
     <parent>
         <groupId>com.drtshock</groupId>
@@ -28,17 +28,16 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.massivecraft</groupId>
-            <artifactId>MassiveCore</artifactId>
-            <version>7.4.0</version>
+            <groupId>com.turt2live.lib</groupId>
+            <artifactId>MCore</artifactId>
+            <version>6.8.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.massivecraft</groupId>
-            <artifactId>Factions</artifactId>
-            <version>2.5.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/Factions_2.5.0.jar</systemPath>
+            <groupId>com.turt2live.lib</groupId>
+            <artifactId>Factions-2.2.1</artifactId>
+            <scope>provided</scope>
+            <version>2.2.1</version>
         </dependency>
         <dependency>
             <groupId>com.drtshock</groupId>
