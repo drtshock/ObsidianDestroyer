@@ -6,7 +6,7 @@
 # Made with love <3
 
 # Do not touch this line. It will rewrite your config. 
-# The old config will be saved as 'config.yml.old#'
+# The old config will be saved as 'config.yml.old-VERSION'
 Version: ${project.version}
 
 

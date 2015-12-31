@@ -90,7 +90,7 @@ public class ConfigManager {
                 return;
             }
             ObsidianDestroyer.LOG.log(Level.WARNING, "Config File outdated, backing up old...");
-            File configFileOld = new File(ObsidianDestroyer.getInstance().getDataFolder(), "config.yml.old");
+            File configFileOld = new File(ObsidianDestroyer.getInstance().getDataFolder(), "config.yml.old-" + config.getString("Version", version).replace(".", "_"));
             try {
                 config.save(configFileOld);
             } catch (IOException e) {
