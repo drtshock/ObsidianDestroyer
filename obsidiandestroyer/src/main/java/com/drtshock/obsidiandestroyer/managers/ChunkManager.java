@@ -251,7 +251,7 @@ public class ChunkManager {
         }
 
         // Bedrock override bypass
-        final boolean enabledBedrock = MaterialManager.getInstance().contains(Material.BEDROCK.name(), -1);
+        final boolean enabledBedrock = MaterialManager.getInstance().contains(Material.BEDROCK.name(), 0);
 
         // =================================================
         // Material Explosion radius check for all materials
