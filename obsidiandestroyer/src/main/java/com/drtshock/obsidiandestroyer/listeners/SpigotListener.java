@@ -26,8 +26,10 @@ public class SpigotListener implements Listener {
         if (detonatorBlock == null) {
             return;
         }
-
         if (detonatorBlock.hasMetadata("ObbyEntity")) {
+            return;
+        }
+        if (event.getYield() <= 0) {
             return;
         }
 

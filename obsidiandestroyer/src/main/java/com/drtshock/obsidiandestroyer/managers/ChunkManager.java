@@ -17,6 +17,7 @@ import org.bukkit.entity.Bat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.TNTPrimed;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -805,6 +806,8 @@ public class ChunkManager {
     public void handleCannonPiercing(ProjectilePiercingEvent event) {
         ObsidianDestroyer.debug("ProjectilePiercingEvent: " + event.getProjectile().getItemName());
 
+        event.getImpactLocation().getBlock().setMetadata("ObbyEntity", new FixedMetadataValue(ObsidianDestroyer.getInstance(), null));
+
         // Display effects on impact location
         if (ConfigManager.getInstance().getEffectsEnabled()) {
             event.getImpactLocation().getWorld().playEffect(event.getImpactLocation(), Effect.MOBSPAWNER_FLAMES, 0);
@@ -834,12 +837,17 @@ public class ChunkManager {
 
         event.getBlockList().removeAll(blocklist);
 
-        EntityExplodeEvent explosionEvent = new EntityExplodeEvent(null, event.getImpactLocation(), blocklist, 0.0f);
+        BlockExplodeEvent explosionEvent = new BlockExplodeEvent(event.getImpactLocation().getBlock(), blocklist, 0.0f);
         ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(explosionEvent);
 
         // Repopulate the events blocklist with blocks through the bypass
         if (applyFactions && bypassBlockList.size() > 0) {
             explosionEvent.blockList().addAll(bypassBlockList);
+        }
+
+        if (event.getImpactLocation().getBlock() != null) {
+            // Remove metadata since it is no longer needed
+            event.getImpactLocation().getBlock().removeMetadata("ObbyEntity", ObsidianDestroyer.getInstance());
         }
 
         // Do nothing if the event is cancelled (and not bypassed...)

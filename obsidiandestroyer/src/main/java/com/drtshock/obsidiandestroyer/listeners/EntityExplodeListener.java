@@ -15,7 +15,13 @@ public class EntityExplodeListener implements Listener {
         }
 
         final Entity detonator = event.getEntity();
-        if (detonator.hasMetadata("ObbyEntity")) {
+        if (detonator == null || detonator.hasMetadata("ObbyEntity")) {
+            return;
+        }
+        if (event.getLocation().getBlock().hasMetadata("ObbyEntity")) {
+            return;
+        }
+        if (event.getYield() <= 0) {
             return;
         }
 
