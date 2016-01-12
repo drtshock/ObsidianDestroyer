@@ -43,6 +43,7 @@ public class DurabilityMaterial {
     public DurabilityMaterial(Material type, ConfigurationSection section) {
         this.type = type;
         this.name = type.name();
+        this.typeData = -1;
         this.blastRadius = section.getInt("BlastRadius", 0);
         this.destructible = section.getBoolean("Destructible", true);
         this.durability = section.getInt("Durability.Amount", 5);

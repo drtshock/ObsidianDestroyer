@@ -222,7 +222,7 @@ public class ConfigManager {
                     continue;
                 }
                 final DurabilityMaterial durablock;
-                if (materialSection.get("MetaData") != null) {
+                if (materialSection.contains("MetaData")) {
                     durablock = new DurabilityMaterial(material, materialSection.getInt("MetaData"), materialSection);
                 } else {
                     durablock = new DurabilityMaterial(material, materialSection);
