@@ -706,7 +706,7 @@ public class ChunkManager {
         MaterialManager materials = MaterialManager.getInstance();
 
         // Just in case the material is in the list and not enabled...
-        if (!materials.getDurabilityEnabled(blockTypeName, block.getData())) {
+        if (!materials.getDurabilityEnabled(blockTypeName, blockData)) {
             return DamageResult.DISABLED;
         }
 

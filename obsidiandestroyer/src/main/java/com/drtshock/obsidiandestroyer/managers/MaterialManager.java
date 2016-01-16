@@ -45,11 +45,8 @@ public class MaterialManager {
      * @return true if item equals managed block
      */
     public boolean contains(String material, int data) {
-        if (durabilityMaterials.containsKey(material + ":" + data)) {
-            return durabilityMaterials.containsKey(material + ":" + data);
-        } else {
-            return durabilityMaterials.containsKey(material);
-        }
+        material = getMaterialName(material, data);
+        return durabilityMaterials.containsKey(material);
     }
 
     /**

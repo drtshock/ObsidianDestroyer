@@ -41,34 +41,7 @@ public class DurabilityMaterial {
      * @param section the configuration section to load
      */
     public DurabilityMaterial(Material type, ConfigurationSection section) {
-        this.type = type;
-        this.name = type.name();
-        this.typeData = -1;
-        this.blastRadius = section.getInt("BlastRadius", 0);
-        this.destructible = section.getBoolean("Destructible", true);
-        this.durability = section.getInt("Durability.Amount", 5);
-        this.fluidDamper = section.getDouble("Durability.FluidDamper", 0);
-        this.enabled = section.getBoolean("Durability.Enabled", true);
-        this.chanceToDrop = section.getDouble("Durability.ChanceToDrop", 0.7);
-        this.resetEnabled = section.getBoolean("Durability.ResetEnabled", false);
-        this.resetTime = section.getLong("Durability.ResetAfter", 10000L);
-        this.tntEnabled = section.getBoolean("EnabledFor.TNT", true);
-        this.cannonsEnabled = section.getBoolean("EnabledFor.Cannons", false);
-        this.creepersEnabled = section.getBoolean("EnabledFor.Creepers", false);
-        this.ghastsEnabled = section.getBoolean("EnabledFor.Ghasts", false);
-        this.withersEnabled = section.getBoolean("EnabledFor.Withers", false);
-        this.tntMinecartsEnabled = section.getBoolean("EnabledFor.Minecarts", false);
-        this.nullEnabled = section.getBoolean("EnabledFor.NullDamage", true);
-        this.tntDamage = section.getInt("Damage.TNT", 1);
-        this.cannonImpactDamage = section.getInt("Damage.Cannons", section.getInt("Damage.CannonsImpact", 1));
-        this.cannonPierceDamage = section.getInt("Damage.CannonsPierce", 1);
-        this.creeperDamage = section.getInt("Damage.Creepers", 1);
-        this.chargedCreeperDamage = section.getInt("Damage.ChargedCreepers", 1);
-        this.ghastDamage = section.getInt("Damage.Ghasts", 1);
-        this.witherDamage = section.getInt("Damage.Withers", 1);
-        this.tntMinecartDamage = section.getInt("Damage.Minecarts", 1);
-        this.nullDamage = section.getInt("Damage.NullDamage", 1);
-        this.tallyKittens();
+        this(type, -1, section);
     }
 
     /**
