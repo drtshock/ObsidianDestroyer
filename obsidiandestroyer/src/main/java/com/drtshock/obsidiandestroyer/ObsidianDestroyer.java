@@ -148,6 +148,7 @@ public class ObsidianDestroyer extends JavaPlugin {
         }
         pm.registerEvents(new PlayerListener(), this);
         pm.registerEvents(new BlockListener(), this);
+        pm.registerEvents(new ObsidianDestroyerListener(), this);
         try {
             Class.forName("org.bukkit.event.block.BlockExplodeEvent");
             pm.registerEvents(new SpigotListener(), this);
