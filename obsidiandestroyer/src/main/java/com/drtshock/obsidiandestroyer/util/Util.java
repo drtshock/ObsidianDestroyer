@@ -359,11 +359,16 @@ public class Util {
             return 1D;
         }
 
-        double value = 1D;
+        double value;
         if (FactionsIntegration.get().isExplosionsEnabled(location)) {
             value = 1D;
         } else {
             return 0;
+        }
+        if (ConfigManager.getInstance().getUseFactionsPowerLevel() && FactionsIntegration.get().isFactionAtPower(location)) {
+            if (!MaterialManager.getInstance().getBypassFactionsProtection(location.getBlock().getType().name(), location.getBlock().getData())) {
+                return 0;
+            }
         }
         if (ConfigManager.getInstance().getHandleOfflineFactions()) {
             if (FactionsIntegration.get().isFactionOffline(location)) {

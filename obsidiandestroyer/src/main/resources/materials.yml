@@ -8,6 +8,7 @@ HandledMaterials:
   STONE:
 
     # Data Types for blocks with different types and metadata
+    # Defaults to be ignored if this flag is not present
     MetaData: 0
 
     # Individual blast radius for each material.
@@ -23,6 +24,10 @@ HandledMaterials:
     # Defaults to false if this flag is not present
     # This flag is overridden when 'BypassAllFluidProtection: true' in config.yml
     BypassFluidProtection: false
+
+    # Enable this to override the protection provided by factions when 'UseFactionPowerLevel' is enabled.
+    # Defaults to false if this flag is not present
+    BypassFactionProtection: false
 
     # Material explosion resistance settings
     Durability:

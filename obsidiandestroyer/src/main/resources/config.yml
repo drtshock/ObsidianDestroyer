@@ -80,6 +80,9 @@ Factions:
   # Toggles explosion features between ObsidianDestroyer and Factions.
   HandleExplosions: true
 
+  # Enable this to only damage blocks when Faction power is low
+  UseFactionPowerLevel: false
+
   # Toggle to manage an offline faction. (Override & Multiplier)
   # Enables an override that will allow [managed] blocks to be destroyed for a protected offline faction.
   HandleOffline: false

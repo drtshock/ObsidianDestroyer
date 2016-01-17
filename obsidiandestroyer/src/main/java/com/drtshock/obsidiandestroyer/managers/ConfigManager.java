@@ -290,7 +290,15 @@ public class ConfigManager {
     }
 
     public boolean getHandleFactions() {
+        return config.getBoolean("Factions.Enabled", false);
+    }
+
+    public boolean getHandleFactionsExplosions() {
         return config.getBoolean("Factions.HandleExplosions", true);
+    }
+
+    public boolean getUseFactionsPowerLevel() {
+        return config.getBoolean("Factions.UseFactionPowerLevel", false);
     }
 
     public boolean getHandleOfflineFactions() {
@@ -302,7 +310,7 @@ public class ConfigManager {
     }
 
     public boolean getUsingFactions() {
-        return getHandleFactions() && HookManager.getInstance().isUsingFactions();
+        return getHandleFactionsExplosions() && HookManager.getInstance().isUsingFactions();
     }
 
     public boolean getHandleOnlineFactions() {

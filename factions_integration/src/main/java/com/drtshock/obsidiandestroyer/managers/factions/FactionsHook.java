@@ -9,4 +9,6 @@ public interface FactionsHook {
     public boolean isFactionOffline(Location loc);
 
     public boolean isExplosionsEnabled(Location loc);
+
+    public boolean isFactionAtPower(Location loc);
 }

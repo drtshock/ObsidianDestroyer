@@ -29,6 +29,12 @@ public class Factions16xUU implements FactionsHook {
     }
 
     @Override
+    public boolean isFactionAtPower(Location loc) {
+        Faction faction = Board.getInstance().getFactionAt(new FLocation(loc));
+        return faction.getPower() >= faction.getLandRounded();
+    }
+
+    @Override
     public String getVersion() {
         return "1.6.9-UU";
     }

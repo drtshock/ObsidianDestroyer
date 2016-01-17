@@ -37,6 +37,12 @@ public class Factions18x implements FactionsHook {
     }
 
     @Override
+    public boolean isFactionAtPower(Location loc) {
+        Faction faction = Board.getFactionAt(new FLocation(loc));
+        return faction.getPower() >= faction.getLandRounded();
+    }
+
+    @Override
     public String getVersion() {
         return "1.8.X";
     }

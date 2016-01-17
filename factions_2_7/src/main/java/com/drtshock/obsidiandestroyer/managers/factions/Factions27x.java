@@ -30,6 +30,12 @@ public class Factions27x implements FactionsHook {
     }
 
     @Override
+    public boolean isFactionAtPower(Location loc) {
+        Faction faction = BoardColl.get().getFactionAt(PS.valueOf(loc));
+        return faction.getPower() >= faction.getLandCount();
+    }
+
+    @Override
     public String getVersion() {
         return "2.7.X";
     }

@@ -286,4 +286,12 @@ public class MaterialManager {
         }
         return false;
     }
+
+    public boolean getBypassFactionsProtection(String material, int data) {
+        material = getMaterialName(material, data);
+        if (durabilityMaterials.containsKey(material)) {
+            return durabilityMaterials.get(material).bypassFactionsProtection();
+        }
+        return false;
+    }
 }

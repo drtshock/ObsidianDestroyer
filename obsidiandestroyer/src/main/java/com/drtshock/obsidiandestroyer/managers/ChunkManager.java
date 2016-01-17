@@ -739,15 +739,10 @@ public class ChunkManager {
         // Durability multiplier hook for Factions
         double durabilityMultiplier = 1D;
         if (FactionsIntegration.isUsing()) {
-            if (!FactionsIntegration.get().isExplosionsEnabled(at)) {
+            durabilityMultiplier = Util.getMultiplier(at);
+            if (durabilityMultiplier == 0) {
                 return DamageResult.NONE;
             }
-            if (ConfigManager.getInstance().getProtectOfflineFactions()) {
-                if (FactionsIntegration.get().isFactionOffline(block.getLocation())) {
-                    return DamageResult.NONE;
-                }
-            }
-            durabilityMultiplier = Util.getMultiplier(at);
         }
 
         // Handle block if the materials durability is greater than one, else destroy the block
@@ -999,15 +994,10 @@ public class ChunkManager {
         // Durability multiplier hook for Factions
         double durabilityMultiplier = 1D;
         if (FactionsIntegration.isUsing()) {
-            if (!FactionsIntegration.get().isExplosionsEnabled(at)) {
+            durabilityMultiplier = Util.getMultiplier(at);
+            if (durabilityMultiplier == 0) {
                 return DamageResult.NONE;
             }
-            if (ConfigManager.getInstance().getProtectOfflineFactions()) {
-                if (FactionsIntegration.get().isFactionOffline(block.getLocation())) {
-                    return DamageResult.NONE;
-                }
-            }
-            durabilityMultiplier = Util.getMultiplier(at);
         }
 
         // Handle block if the materials durability is greater than one, else destroy the block
