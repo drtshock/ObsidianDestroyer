@@ -5,7 +5,7 @@
     <artifactId>ObsidianDestroyer</artifactId>
     <name>ObsidianDestroyer</name>
     <url>https://github.com/puzlinc/ObsidianDestroyer</url>
-    <version>4.4.11-SNAPSHOT</version>
+    <version>4.4.12-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -60,7 +60,7 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <scope>provided</scope>
-            <version>1.8.7-R0.1-SNAPSHOT</version>
+            <version>1.9.4-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.turt2live.lib</groupId>
