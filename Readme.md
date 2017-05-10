@@ -1,6 +1,6 @@
 ObsidianDestroyer
 ===
-By drtshock, squidicuz and a little bit from turt2live :3
+By drtshock, squidicuz and a little bit from turt2live :3 We also love IntelliJ!
 
 Usage
 ===
@@ -15,3 +15,5 @@ We like Pull Requests :)
 Development Builds
 ===
 Development builds can be acquired at http://ci.drtshock.net
+
+![intellij](https://i.imgur.com/IAGkuC9.png)

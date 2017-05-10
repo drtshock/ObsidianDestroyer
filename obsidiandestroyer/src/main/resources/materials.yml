@@ -740,23 +740,6 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: true
-  OBSIDIAN:
-    BlastRadius: 3
-    BypassFluidProtection: true
-    Durability:
-      Amount: 1
-      FluidDamper: 0.07
-      Enabled: false
-      ChanceToDrop: 0.6
-      ResetEnabled: true
-      ResetAfter: 600000
-    EnabledFor:
-      TNT: true
-      Creepers: true
-      Ghasts: true
-      Cannons: true
-      Withers: true
-      Minecarts: true
 
 # You can keep on adding more...
 # Copy paste one from above.  Just make sure the material name exists.
