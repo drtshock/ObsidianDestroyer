@@ -553,7 +553,7 @@ public class ChunkManager {
                 return DamageResult.NONE;
             } else if (block.getY() >= ConfigManager.getInstance().getBorderToProtectNether() && block.getWorld().getEnvironment() == Environment.NETHER) {
                 return DamageResult.NONE;
-            } else if (block.getWorld().getEnvironment() == Environment.END) {
+            } else if (block.getWorld().getEnvironment() == Environment.THE_END) {
                 return DamageResult.NONE;
             }
         }
