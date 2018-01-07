@@ -14,7 +14,6 @@
     <modules>
         <module>factions_integration</module>
         <module>factions_1_6_9_UU</module>
-        <module>factions_2_7</module>
         <module>factions_2_8</module>
         <module>obsidiandestroyer</module>
     </modules>
