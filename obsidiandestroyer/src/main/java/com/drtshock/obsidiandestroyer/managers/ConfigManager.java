@@ -84,23 +84,12 @@ public class ConfigManager {
         config = YamlConfiguration.loadConfiguration(configFile);
 
         String version = ObsidianDestroyer.getInstance().getDescription().getVersion();
-        if (config != null && !config.getString("Version", version).equals(version)) {
+        if (!config.getString("Version", version).equalsIgnoreCase(version)) {
             if (update) {
                 ObsidianDestroyer.LOG.log(Level.SEVERE, "Loading failed on update check.  Aborting!");
                 return;
             }
-            ObsidianDestroyer.LOG.log(Level.WARNING, "Config File outdated, backing up old...");
-            File configFileOld = new File(ObsidianDestroyer.getInstance().getDataFolder(), "config.yml.old-" + config.getString("Version", version).replace(".", "_"));
-            try {
-                config.save(configFileOld);
-                ObsidianDestroyer.LOG.log(Level.WARNING, "Backed up old config as '" + configFileOld.getName() + "'");
-            } catch (IOException e) {
-                loaded = false;
-                e.printStackTrace();
-            }
-            configFile.delete();
-            loadFiles(true);
-            return;
+            ObsidianDestroyer.LOG.log(Level.WARNING, "Config File might be outdated.");
         } else if (config != null && "null".equals(config.getString("Version", "null"))) {
             loaded = false;
             return;
