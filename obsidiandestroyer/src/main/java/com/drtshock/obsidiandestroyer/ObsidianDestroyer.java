@@ -152,9 +152,6 @@ public class ObsidianDestroyer extends JavaPlugin {
         try {
             Class.forName("org.bukkit.event.block.BlockExplodeEvent");
             pm.registerEvents(new SpigotListener(), this);
-            LOG.log(Level.INFO, "Because of Spigot's laughable design decisions, we need to provide separate code");
-            LOG.log(Level.INFO, "to hook into another one of their breaking changes they like to make. Despite Spigot's grotesqueness,");
-            LOG.log(Level.INFO, "we provide compatibility because so many of our users run Spigot; so you're good to go.");
         } catch (ClassNotFoundException e) {
             // YAY
         }
