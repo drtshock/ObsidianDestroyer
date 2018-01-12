@@ -5,7 +5,7 @@
     <artifactId>ObsidianDestroyer</artifactId>
     <name>ObsidianDestroyer</name>
     <url>https://github.com/puzlinc/ObsidianDestroyer</url>
-    <version>4.4.12-SNAPSHOT-b${build.number}</version>
+    <version>4.4.12</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
