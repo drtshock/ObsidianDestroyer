@@ -4,6 +4,7 @@ import com.drtshock.obsidiandestroyer.managers.ChunkManager;
 import com.drtshock.obsidiandestroyer.managers.ConfigManager;
 import com.drtshock.obsidiandestroyer.managers.MaterialManager;
 import com.drtshock.obsidiandestroyer.util.Util;
+import com.massivecraft.factions.Conf;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -36,10 +37,10 @@ public class PlayerListener implements Listener {
                         int amount = ChunkManager.getInstance().getMaterialDurability(block);
                         double mult = Util.getMultiplier(block.getLocation());
                         if (mult == 0) {
-                            player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this block is: " + ChatColor.WHITE + "∞");
+                            player.sendMessage(ConfigManager.getInstance().getDurabilityMessage().replace("{DURABILITY}", "∞"));
                         } else {
                             int max = (int) Math.round(mm.getDurability(block.getType().name(), block.getData()) * Util.getMultiplier(block.getLocation()));
-                            player.sendMessage(ChatColor.DARK_PURPLE + "Durability of this block is: " + ChatColor.WHITE + (!mm.isDestructible(block.getType().name(), block.getData()) ? "∞" : (max - amount) + "/" + max));
+                            player.sendMessage(ConfigManager.getInstance().getDurabilityMessage().replace("{DURABILITY}", !mm.isDestructible(block.getType().name(), block.getData()) ? "∞" : (max - amount) + "/" + max));
                         }
                     }
                 }

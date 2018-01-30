@@ -18,7 +18,6 @@ Verbose: false
 # Example: DisabledOnWorlds: [world_survival, world_creative]
 DisabledOnWorlds: []
 
-
 # INDIVIDUAL DURABILITY SETTINGS ARE IN THE MATERIALS.YML FILE
 
 DurabilityGlobal:
@@ -30,6 +29,9 @@ DurabilityGlobal:
   # The item used to check the durability of blocks
   # Permission node: 'obsidiandestroyer.check'
   CheckItem: POTATO_ITEM
+  # Message that is shown when clicking block with CheckItem
+  # Use {DURABILITY} as placeholder
+  CheckMessage: "&5Durability of this block is: &f{DURABILITY}"
 
   # Effects that are displayed when materials take damage
   Effects:

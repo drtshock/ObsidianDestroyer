@@ -3,6 +3,7 @@ package com.drtshock.obsidiandestroyer.managers;
 import com.drtshock.obsidiandestroyer.ObsidianDestroyer;
 import com.drtshock.obsidiandestroyer.datatypes.DurabilityMaterial;
 import com.drtshock.obsidiandestroyer.util.Util;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -289,6 +290,13 @@ public class ConfigManager {
             material = Material.POTATO_ITEM;
         }
         return material;
+    }
+
+    public String getDurabilityMessage() {
+        String durabilityMessage = config.getString("DurabilityGlobal.CheckMessage");
+        if (!durabilityMessage.contains("{DURABILITY}"))
+            return ChatColor.DARK_PURPLE + "Durability of this block is: " + ChatColor.WHITE + "{DURABILITY}";
+        return ChatColor.translateAlternateColorCodes('&', config.getString("DurabilityGlobal.CheckMessage"));
     }
 
     public boolean getHandleFactions() {
