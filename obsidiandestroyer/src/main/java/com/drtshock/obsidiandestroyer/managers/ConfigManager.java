@@ -293,10 +293,7 @@ public class ConfigManager {
     }
 
     public String getDurabilityMessage() {
-        String durabilityMessage = config.getString("DurabilityGlobal.CheckMessage");
-        if (!durabilityMessage.contains("{DURABILITY}"))
-            return ChatColor.DARK_PURPLE + "Durability of this block is: " + ChatColor.WHITE + "{DURABILITY}";
-        return ChatColor.translateAlternateColorCodes('&', config.getString("DurabilityGlobal.CheckMessage"));
+        return ChatColor.translateAlternateColorCodes('&', config.getString("DurabilityGlobal.CheckMessage", ChatColor.DARK_PURPLE + "Durability of this block is: " + ChatColor.WHITE + "{DURABILITY}"));
     }
 
     public boolean getHandleFactions() {
