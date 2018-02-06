@@ -2,6 +2,9 @@ ObsidianDestroyer
 ===
 By drtshock, squidicuz and a little bit from turt2live :3 We also love IntelliJ!
 
+
+[![Discord](https://imgur.com/MFRRBn4.png)](https://discord.gg/zqGS9Zj)
+
 Usage
 ===
 For complete info on how to use the plugin please visit https://github.com/drtshock/ObsidianDestroyer/wiki
