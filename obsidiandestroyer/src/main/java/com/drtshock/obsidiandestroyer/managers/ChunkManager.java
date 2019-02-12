@@ -17,7 +17,6 @@ import org.bukkit.entity.Bat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.TNTPrimed;
-import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -35,6 +34,7 @@ public class ChunkManager {
     private ConcurrentMap<String, ChunkWrapper> chunks = new ConcurrentHashMap<String, ChunkWrapper>();
     private boolean doneSave = true;
     private List<String> disabledWorlds;
+    private boolean blockExplodeEvent;
 
     /**
      * Creates wrappers around chunks and sets up the material block tracking
@@ -48,6 +48,13 @@ public class ChunkManager {
         }
 
         load();
+
+        try {
+            Class clazz = Class.forName("org.bukkit.event.block.BlockExplodeEvent");
+            blockExplodeEvent = clazz != null;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -149,7 +156,7 @@ public class ChunkManager {
                     for (int y = -cannon_radius; y <= cannon_radius; y++) {
                         for (int z = -cannon_radius; z <= cannon_radius; z++) {
                             Location targetLoc = new Location(detonatorLoc.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
-                            if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_ON) || targetLoc.getBlock().getType().equals(Material.DIODE_BLOCK_OFF)) {
+                            if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.REPEATER)) {
                                 redstoneCount++;
                             }
                         }
@@ -801,6 +808,11 @@ public class ChunkManager {
      * @param event the ProjectilePiercingEvent to handle
      */
     public void handleCannonPiercing(ProjectilePiercingEvent event) {
+        if(!blockExplodeEvent) {
+            ObsidianDestroyer.debug("ProjectilePiercingEvent not running because org.bukkit.event.block.BlockExplodeEvent not found.");
+            return;
+        }
+
         ObsidianDestroyer.debug("ProjectilePiercingEvent: " + event.getProjectile().getItemName());
 
         event.getImpactLocation().getBlock().setMetadata("ObbyEntity", new FixedMetadataValue(ObsidianDestroyer.getInstance(), null));
@@ -834,7 +846,7 @@ public class ChunkManager {
 
         event.getBlockList().removeAll(blocklist);
 
-        BlockExplodeEvent explosionEvent = new BlockExplodeEvent(event.getImpactLocation().getBlock(), blocklist, 0.0f);
+        org.bukkit.event.block.BlockExplodeEvent explosionEvent = new org.bukkit.event.block.BlockExplodeEvent(event.getImpactLocation().getBlock(), blocklist, 0.0f);
         ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(explosionEvent);
 
         // Repopulate the events blocklist with blocks through the bypass
