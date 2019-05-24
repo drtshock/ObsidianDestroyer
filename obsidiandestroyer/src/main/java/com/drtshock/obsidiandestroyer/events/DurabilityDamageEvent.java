@@ -4,9 +4,10 @@ import com.drtshock.obsidiandestroyer.enumerations.DamageResult;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class DurabilityDamageEvent extends ObsidianDestroyerEvent implements Cancellable {
+public class DurabilityDamageEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean canceled = false;
 
@@ -65,12 +66,14 @@ public class DurabilityDamageEvent extends ObsidianDestroyerEvent implements Can
         return handlers;
     }
 
-    @Override
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     public boolean isCancelled() {
         return canceled;
     }
 
-    @Override
     public void setCancelled(boolean value) {
         canceled = value;
     }

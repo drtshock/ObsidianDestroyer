@@ -156,7 +156,7 @@ public class ChunkManager {
                     for (int y = -cannon_radius; y <= cannon_radius; y++) {
                         for (int z = -cannon_radius; z <= cannon_radius; z++) {
                             Location targetLoc = new Location(detonatorLoc.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
-                            if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.REPEATER)) {
+                            if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.REDSTONE_COMPARATOR)) {
                                 redstoneCount++;
                             }
                         }
