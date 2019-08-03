@@ -285,9 +285,9 @@ public class ConfigManager {
     }
 
     public Material getDurabilityCheckItem() {
-        Material material = Material.matchMaterial(config.getString("DurabilityGlobal.CheckItem", "POTATO_ITEM"));
+        Material material = Material.matchMaterial(config.getString("DurabilityGlobal.CheckItem", "POTATO"));
         if (material == null) {
-            material = Material.POTATO_ITEM;
+            material = Material.POTATO;
         }
         return material;
     }
