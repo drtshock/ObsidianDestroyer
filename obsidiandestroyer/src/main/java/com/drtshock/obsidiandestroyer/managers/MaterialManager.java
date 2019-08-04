@@ -59,6 +59,10 @@ public class MaterialManager {
         return durabilityMaterials.containsKey(material) && durabilityMaterials.get(material).getEnabled();
     }
 
+    public boolean getDurabilityEnabled(String material) {
+        return durabilityMaterials.containsKey(material) && durabilityMaterials.get(material).getEnabled();
+    }
+
     private String getMaterialName(String material, int data) {
         if (durabilityMaterials.containsKey(material + ":" + data)) {
             return material + ":" + data;

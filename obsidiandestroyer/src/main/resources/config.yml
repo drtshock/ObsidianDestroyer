@@ -28,7 +28,8 @@ DurabilityGlobal:
 
   # The item used to check the durability of blocks
   # Permission node: 'obsidiandestroyer.check'
-  CheckItem: POTATO_ITEM
+  # Uses right clicks now.
+  CheckItem: POTATO
   # Message that is shown when clicking block with CheckItem
   # Use {DURABILITY} as placeholder
   CheckMessage: "&5Durability of this block is: &f{DURABILITY}"
