@@ -82,7 +82,9 @@ public class Util {
             BlockIterator blocksInPath = new BlockIterator(tLoc.getWorld(), dLoc.toVector(), tLoc.toVector().subtract(dLoc.toVector()).normalize(), 0, (int) dLoc.distance(tLoc));
 
             // iterate through the blocks in the path
-            while (blocksInPath.hasNext()) {
+            int over = 0; // prevents rare case of infinite loop and server crash
+            while (blocksInPath.hasNext() && over < 128) {
+                over++;
                 // the next block
                 final Block block = blocksInPath.next();
                 if (block == null) {
@@ -137,12 +139,15 @@ public class Util {
 
             // iterate through the blocks in the path
             int i = ConfigManager.getInstance().getRadius() + 1;
-            while (blocksInPath.hasNext()) {
+            int over = 0; // prevents rare case of infinite loop and server crash
+            while (blocksInPath.hasNext() && over < 128) {
                 if (i > 0) {
                     i--;
                 } else {
                     break;
                 }
+                over++;
+
                 // the next block
                 final Block block = blocksInPath.next();
                 if (block == null) {
