@@ -253,8 +253,8 @@ public class ConfigManager {
         return config.getBoolean("DurabilityGlobal.RegeneratesOverTime", false);
     }
 
-    public boolean getFluidsProtectIndustructables() {
-        return config.getBoolean("Explosions.FluidsProtectIndustructables", true);
+    public boolean getFluidsProtectIndestructibles() {
+        return config.getBoolean("Explosions.FluidsProtectIndestructibles", true);
     }
 
     public boolean getBypassAllFluidProtection() {

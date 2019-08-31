@@ -47,14 +47,14 @@ Explosions:
   # This radius is the global max. MATERIAL.BlastRadius must be equal to or lower than this number
   Radius: 3
 
-  # False means that water and lava won't protect industructable materials from explosions.
+  # False means that water and lava won't protect indestructible materials from explosions.
   # Only applies if the material is enabled in materials.yml
   # This is a fix for the handling of blocks like obsidian that are not normally destroyable,
   #  but become destroyed in water with this disabled.
-  FluidsProtectIndustructables: true
+  FluidsProtectIndestructibles: true
 
   # Enables a bypass to allow explosions to affect ALL blocks under / next to liquids.
-  # This will bypass ALL blocks and override 'FluidsProtectIndustructables' above.
+  # This will bypass ALL blocks and override 'FluidsProtectIndestructibles' above.
   # Destroys fluid blocks and other blocks within explosion radius.
   BypassAllFluidProtection: false
 
@@ -115,4 +115,4 @@ WorldsEdge:
     Nether: 123
 
 
-# Thats it :3
+# That's it :3
