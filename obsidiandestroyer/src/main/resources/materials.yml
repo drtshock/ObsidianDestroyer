@@ -74,6 +74,7 @@ HandledMaterials:
       # Add this section to the material you want the cannons damage applied to.
       CannonsImpact: 1
       CannonsPierce: 2
+      # Other damage types
       Withers: 1
       Minecarts: 1
       NullDamage: 1
@@ -96,7 +97,7 @@ HandledMaterials:
       Cannons: true
       Withers: false
       Minecarts: false
-  ENCHANTMENT_TABLE:
+  LEGACY_ENCHANTMENT_TABLE:
     BlastRadius: 3
     Durability:
       Amount: 6
@@ -141,8 +142,9 @@ HandledMaterials:
       Cannons: false
       Withers: false
       Minecarts: false
-  PORTAL:
+  LEGACY_PORTAL:
     BlastRadius: 3
+    HandleNonSolid: true
     Durability:
       Amount: 20
       Enabled: true
@@ -156,7 +158,7 @@ HandledMaterials:
       Cannons: false
       Withers: false
       Minecarts: false
-  ENDER_PORTAL_FRAME:
+  LEGACY_ENDER_PORTAL_FRAME:
     BlastRadius: 3
     Durability:
       Amount: 20
@@ -171,8 +173,9 @@ HandledMaterials:
       Cannons: false
       Withers: false
       Minecarts: false
-  ENDER_PORTAL:
+  LEGACY_ENDER_PORTAL:
     BlastRadius: 3
+    HandleNonSolid: true
     Durability:
       Amount: 20
       Enabled: true
@@ -233,7 +236,7 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: true
-  SMOOTH_BRICK:
+  LEGACY_SMOOTH_BRICK:
     BlastRadius: 3
     Durability:
       Amount: 4
@@ -248,7 +251,7 @@ HandledMaterials:
       Cannons: true
       Withers: false
       Minecarts: false
-  SMOOTH_STAIRS:
+  LEGACY_SMOOTH_STAIRS:
     BlastRadius: 3
     Durability:
       Amount: 4
@@ -265,6 +268,7 @@ HandledMaterials:
       Minecarts: false
   NETHER_BRICK:
     BlastRadius: 3
+    HandleNonSolid: true
     Durability:
       Amount: 3
       Enabled: false
@@ -458,21 +462,6 @@ HandledMaterials:
       Cannons: true
       Withers: false
       Minecarts: false
-  BURNING_FURNACE:
-    BlastRadius: 3
-    Durability:
-      Amount: 2
-      Enabled: false
-      ChanceToDrop: 0.7
-      ResetEnabled: true
-      ResetAfter: 1000000
-    EnabledFor:
-      TNT: true
-      Creepers: true
-      Ghasts: false
-      Cannons: true
-      Withers: false
-      Minecarts: false
   GLOWSTONE:
     BlastRadius: 4
     Durability:
@@ -488,22 +477,7 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: false
-  REDSTONE_LAMP_OFF:
-    BlastRadius: 3
-    Durability:
-      Amount: 3
-      Enabled: false
-      ChanceToDrop: 0.3
-      ResetEnabled: true
-      ResetAfter: 900000
-    EnabledFor:
-      TNT: true
-      Creepers: true
-      Ghasts: false
-      Cannons: true
-      Withers: true
-      Minecarts: false
-  REDSTONE_LAMP_ON:
+  REDSTONE_LAMP:
     BlastRadius: 3
     Durability:
       Amount: 3
@@ -533,7 +507,7 @@ HandledMaterials:
       Cannons: true
       Withers: false
       Minecarts: false
-  GRASS:
+  LEGACY_GRASS:
     BlastRadius: 4
     Durability:
       Amount: 1
@@ -548,7 +522,7 @@ HandledMaterials:
       Cannons: true
       Withers: false
       Minecarts: false
-  SAND:
+  LEGACY_SAND:
     BlastRadius: 4
     Durability:
       Amount: 1
@@ -563,7 +537,7 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: true
-  GLASS:
+  LEGACY_GLASS:
     BlastRadius: 4
     Durability:
       Amount: 1
@@ -578,7 +552,7 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: true
-  GRAVEL:
+  LEGACY_GRAVEL:
     BlastRadius: 4
     Durability:
       Amount: 1
@@ -595,6 +569,7 @@ HandledMaterials:
       Minecarts: true
   WATER:
     BlastRadius: 4
+    HandleNonSolid: true
     Durability:
       Amount: 1
       Enabled: false
@@ -608,8 +583,9 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: true
-  STATIONARY_WATER:
+  LEGACY_STATIONARY_WATER:
     BlastRadius: 4
+    HandleNonSolid: true
     Durability:
       Amount: 1
       Enabled: false
@@ -625,6 +601,7 @@ HandledMaterials:
       Minecarts: true
   LAVA:
     BlastRadius: 4
+    HandleNonSolid: true
     Durability:
       Amount: 1
       Enabled: false
@@ -638,8 +615,9 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: true
-  STATIONARY_LAVA:
+  LEGACY_STATIONARY_LAVA:
     BlastRadius: 4
+    HandleNonSolid: true
     Durability:
       Amount: 1
       Enabled: false
@@ -654,9 +632,9 @@ HandledMaterials:
       Withers: true
       Minecarts: true
   # Skull
-  SKULL:
-    MetaData: 1
+  SKELETON_SKULL:
     BlastRadius: 3
+    HandleNonSolid: true
     Durability:
       Amount: 2
       Enabled: true
@@ -671,8 +649,7 @@ HandledMaterials:
       Withers: true
       Minecarts: true
   # Stone Slab
-  STEP:
-    MetaData: 0
+  STONE_SLAB:
     BlastRadius: 3
     BypassFluidProtection: true
     Durability:
@@ -689,8 +666,7 @@ HandledMaterials:
       Withers: true
       Minecarts: true
   # Stone Brick Slab
-  STEP:
-    MetaData: 5
+  SMOOTH_STONE_SLAB:
     BlastRadius: 3
     BypassFluidProtection: true
     Durability:
@@ -707,8 +683,7 @@ HandledMaterials:
       Withers: true
       Minecarts: true
   # Oak
-  LOG:
-    MetaData: 0
+  OAK_LOG:
     BlastRadius: 3
     Durability:
       Amount: 2
@@ -724,8 +699,7 @@ HandledMaterials:
       Withers: true
       Minecarts: true
   # Spruce
-  LOG:
-    MetaData: 1
+  SPRUCE_LOG:
     BlastRadius: 3
     Durability:
       Amount: 2
@@ -743,5 +717,5 @@ HandledMaterials:
 
 # You can keep on adding more...
 # Copy paste one from above.  Just make sure the material name exists.
-# Get material names from http://jd.bukkit.org/rb/apidocs/org/bukkit/Material.html
+# Get material names from https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
 # Make sure they are all caps and include the underscores.
