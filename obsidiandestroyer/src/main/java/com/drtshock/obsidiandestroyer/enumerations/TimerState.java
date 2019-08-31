@@ -4,5 +4,6 @@ public enum TimerState {
     DEAD,
     END,
     INACTIVE,
-    RUN,;
+    RUN,
+    ;
 }

@@ -36,6 +36,10 @@ public class DurabilityDamageEvent extends Event implements Cancellable {
         this.entityType = null;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     public EntityType getEntityType() {
         return entityType;
     }
@@ -63,10 +67,6 @@ public class DurabilityDamageEvent extends Event implements Cancellable {
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 

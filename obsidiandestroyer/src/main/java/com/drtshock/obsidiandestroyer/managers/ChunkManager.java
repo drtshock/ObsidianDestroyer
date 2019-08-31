@@ -808,7 +808,7 @@ public class ChunkManager {
      * @param event the ProjectilePiercingEvent to handle
      */
     public void handleCannonPiercing(ProjectilePiercingEvent event) {
-        if(!blockExplodeEvent) {
+        if (!blockExplodeEvent) {
             ObsidianDestroyer.debug("ProjectilePiercingEvent not running because org.bukkit.event.block.BlockExplodeEvent not found.");
             return;
         }

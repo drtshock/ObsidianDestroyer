@@ -6,5 +6,6 @@ public enum DamageResult {
     NONE,
     DISABLED,
     CANCELLED,
-    ERROR,;
+    ERROR,
+    ;
 }
