@@ -79,7 +79,7 @@ public class Util {
         // try to iterate through blocks between dLoc and tLoc
         try {
             // Create a vector block trace from the detonator location to damaged block's location
-            BlockIterator blocksInPath = new BlockIterator(tLoc.getWorld(), dLoc.toVector(), tLoc.toVector().subtract(dLoc.toVector()).normalize(), 0, (int) dLoc.distance(tLoc));
+            final BlockIterator blocksInPath = new BlockIterator(tLoc.getWorld(), dLoc.toVector(), tLoc.toVector().subtract(dLoc.toVector()).normalize(), 0.5, (int) dLoc.distance(tLoc));
 
             // iterate through the blocks in the path
             int over = 0; // prevents rare case of infinite loop and server crash
@@ -120,7 +120,11 @@ public class Util {
     }
 
     public static List<Location> getTargetsPathBlocked(Location tLoc, Location dLoc, boolean useOnlyMaterialListing) {
-        ArrayList<Location> tagetsInPath = new ArrayList<Location>();
+        return getTargetsPathBlocked(tLoc, dLoc, useOnlyMaterialListing, false);
+    }
+
+    public static List<Location> getTargetsPathBlocked(Location tLoc, Location dLoc, boolean useOnlyMaterialListing, boolean ignoreFirstZone) {
+        final ArrayList<Location> tagetsInPath = new ArrayList<Location>();
 
         // check world
         if (!dLoc.getWorld().getName().equalsIgnoreCase(tLoc.getWorld().getName())) {
@@ -135,7 +139,7 @@ public class Util {
         // try to iterate through blocks between dLoc and tLoc
         try {
             // Create a vector block trace from the detonator location to damaged block's location
-            BlockIterator blocksInPath = new BlockIterator(tLoc.getWorld(), dLoc.toVector(), tLoc.toVector().subtract(dLoc.toVector()).normalize(), 0, (int) dLoc.distance(tLoc));
+            final BlockIterator blocksInPath = new BlockIterator(tLoc.getWorld(), dLoc.toVector(), tLoc.toVector().subtract(dLoc.toVector()).normalize(), 0.5, (int) dLoc.distance(tLoc));
 
             // iterate through the blocks in the path
             int i = ConfigManager.getInstance().getRadius() + 1;
@@ -151,6 +155,13 @@ public class Util {
                 // the next block
                 final Block block = blocksInPath.next();
                 if (block == null) {
+                    continue;
+                }
+                // Ignore first blocks next to explosion
+                if (ignoreFirstZone && ((i >= ConfigManager.getInstance().getRadius() - 1) || (dLoc.distance(tLoc) <= 1.5))) {
+                    if (i >= ConfigManager.getInstance().getRadius() - 1 && MaterialManager.getInstance().contains(block.getType().name(), block.getData())) {
+                        tagetsInPath.add(block.getLocation());
+                    }
                     continue;
                 }
                 // check if next block is the target block
@@ -258,6 +269,24 @@ public class Util {
         }
         for (Location location : list2) {
             if (list1.contains(location)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isSand(Block block) {
+        for (String material : ConfigManager.getInstance().getSandMaterials()) {
+            if (block.getType().name().equals(material)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isRedstoneMaterial(Block block) {
+        for (String material : ConfigManager.getInstance().getRedstoneMaterials()) {
+            if (block.getType().name().equals(material)) {
                 return true;
             }
         }
