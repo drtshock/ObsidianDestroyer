@@ -409,12 +409,17 @@ public class ChunkManager {
                             continue;
                         }
 
+                        if (!MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name(), targetLoc.getBlock().getData()) && !blockedBlockLocations.contains(targetLoc)) {
+                            // ignore material if not being handled
+                            continue;
+                        }
+
                         // Damage bleeding fix
                         if (ConfigManager.getInstance().getDisableDamageBleeding() && distance > 1.5 && (detonator == null || !detonator.getType().equals(EntityType.WITHER))) {
                             // Radial hitscan check for blocking blocks, returns the blocking path
                             final List<Location> path = Util.getTargetsPathBlocked(targetLoc, detonatorLoc, true, true);
 
-                            if (path.size() > 0) {
+                            if (path.size() > 1) {
                                 // the blocks protected path size is 1 or more
                                 if (!(Util.matchBlocksToLocations(path, blocksDestroyed) && !Util.matchBlocksToLocations(path, xblocksDestroyed)) || Util.matchLocationsToLocations(path, blockedBlockLocations) || Util.matchBlocksToLocations(path, blocksIgnored)) {
                                     // the block is protected via its path
@@ -430,12 +435,27 @@ public class ChunkManager {
                                     ObsidianDestroyer.vdebug("[L] Blocked Bleeding Path Damage!! Over: " + targetLoc.toString() + " - dist " + distance + " -size " + path.size());
                                     continue;
                                 }
+                            } else if (path.size() > 0) {
+                                if (MaterialManager.getInstance().contains(path.get(0).getBlock().getType().name(), path.get(0).getBlock().getData())) {
+                                    blocksIgnored.add(targetLoc.getBlock());
+                                    ObsidianDestroyer.vdebug("[L] Blocked Bleeding Path Damage!! Tracked: " + targetLoc.toString() + " - dist " + distance + " -size " + path.size());
+                                    continue;
+                                } else if (!MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name(), targetLoc.getBlock().getData())) {
+                                    if (!targetLoc.getBlock().isLiquid()) {
+                                        blocksDestroyed.add(targetLoc.getBlock());
+                                        //ObsidianDestroyer.vdebug("[L] Bleeding Block Damage!! " + targetLoc.toString() + " - dist " + distance);
+                                        continue;
+                                    }
+                                }
+                            } else {
+                                if (!MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name(), targetLoc.getBlock().getData())) {
+                                    if (!targetLoc.getBlock().isLiquid()) {
+                                        blocksDestroyed.add(targetLoc.getBlock());
+                                        //ObsidianDestroyer.vdebug("[L] Block Damage!! " + targetLoc.toString() + " - dist " + distance);
+                                        continue;
+                                    }
+                                }
                             }
-                        }
-
-                        if (!MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name(), targetLoc.getBlock().getData()) && !blockedBlockLocations.contains(targetLoc)) {
-                            // ignore material if not being handled
-                            continue;
                         }
 
                         // Apply damage to block material
@@ -452,8 +472,10 @@ public class ChunkManager {
                         }
                         ObsidianDestroyer.vdebug("Block Damage!! " + targetLoc.toString() + " - dist " + distance);
                     } else if (event.blockList().contains(targetLoc.getBlock())) {
-                        // Ignore blocks outside of radius
-                        blocksIgnored.add(targetLoc.getBlock());
+                        if (MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name(), targetLoc.getBlock().getData())) {
+                            // Ignore blocks outside of radius
+                            blocksIgnored.add(targetLoc.getBlock());
+                        }
                     }
                 }
             }
