@@ -17,6 +17,6 @@ We like Pull Requests :)
 
 Development Builds
 ===
-Development builds can be acquired at http://ci.drtshock.net
+Development builds can be acquired at https://ci.ender.zone/job/ObsidianDestroyer/
 
 ![intellij](https://i.imgur.com/IAGkuC9.png)
