@@ -13,10 +13,7 @@ public class BlockListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-        Block block = event.getBlock();
-        if (block == null) {
-            return;
-        }
+        final Block block = event.getBlock();
         if (ChunkManager.getInstance().contains(block)) {
             ChunkManager.getInstance().removeBlock(block);
         }

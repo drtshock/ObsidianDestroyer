@@ -220,7 +220,7 @@ public class ConfigManager {
                         ObsidianDestroyer.LOG.log(Level.SEVERE, "Semi-Valid Material Type: Loaded as ''{0}''", material.name());
                     }
                 }
-                if (!Util.isSolid(material)) {
+                if (!Util.isSolid(material) && !materialSection.contains("HandleNonSolid") && !materialSection.getBoolean("HandleNonSolid")) {
                     ObsidianDestroyer.LOG.log(Level.WARNING, "Non-Solid Material Type: Did not load ''{0}''", durabilityMaterial);
                     continue;
                 }
@@ -350,5 +350,17 @@ public class ConfigManager {
 
     public double getNextLayerDamageChance() {
         return config.getDouble("Explosions.NextLevelDamageChance", 0.5);
+    }
+
+    public boolean getDetectLiquidSandDamage() {
+        return config.getBoolean("Explosions.DetectLiquidSandDamage", false);
+    }
+
+    public List<String> getSandMaterials() {
+        return config.getStringList("Explosions.DetectedSandsMaterials");
+    }
+
+    public List<String> getRedstoneMaterials() {
+        return config.getStringList("Explosions.RedstoneCannonMaterials");
     }
 }

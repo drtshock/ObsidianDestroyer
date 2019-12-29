@@ -138,33 +138,51 @@ public class ChunkManager {
         }
 
         // List of blocks that will be removed from the blocklist
-        List<Block> blocksIgnored = new ArrayList<Block>();
+        final List<Block> blocksIgnored = new ArrayList<Block>();
         // List of blocks handled by this event
-        LinkedList<Block> blocksDestroyed = new LinkedList<Block>();
+        final LinkedList<Block> blocksDestroyed = new LinkedList<Block>();
 
-        LinkedList<Block> xblocksDestroyed = new LinkedList<Block>();
+        final LinkedList<Block> xblocksDestroyed = new LinkedList<Block>();
         // Bleeding Damage blocked blocks
-        List<Location> blockedBlockLocations = new ArrayList<Location>();
+        final List<Location> blockedBlockLocations = new ArrayList<Location>();
+
+        boolean detectedSand = false;
 
         // Liquid overrides
-        if (ConfigManager.getInstance().getBypassAllFluidProtection()) {
+        if (ConfigManager.getInstance().getBypassAllFluidProtection() || (ConfigManager.getInstance().getDetectLiquidSandDamage() && detonatorLoc.getBlock().isLiquid())) {
             // Protects TNT cannons from exploding themselves
-            if (ConfigManager.getInstance().getProtectTNTCannons()) {
+            if (ConfigManager.getInstance().getProtectTNTCannons() || ConfigManager.getInstance().getDetectLiquidSandDamage()) {
                 int redstoneCount = 0;
-                final int cannon_radius = 2;
-                for (int x = -cannon_radius; x <= cannon_radius; x++) {
-                    for (int y = -cannon_radius; y <= cannon_radius; y++) {
-                        for (int z = -cannon_radius; z <= cannon_radius; z++) {
-                            Location targetLoc = new Location(detonatorLoc.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
-                            if (targetLoc.getBlock().getType().equals(Material.REDSTONE_WIRE) || targetLoc.getBlock().getType().equals(Material.LEGACY_REDSTONE_COMPARATOR)) {
-                                redstoneCount++;
+                int sandCount = 0;
+                final int radiuz = 3;
+                for (int x = -radiuz; x <= radiuz; x++) {
+                    for (int y = -radiuz; y <= radiuz; y++) {
+                        for (int z = -radiuz; z <= radiuz; z++) {
+                            final Location targetLoc = new Location(detonatorLoc.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
+                            /*final double distance = detonatorLoc.distanceSquared(targetLoc);
+                            if (distance > 2) {
+                                continue;
+                            }*/
+                            if (ConfigManager.getInstance().getProtectTNTCannons()) {
+                                if (Util.isRedstoneMaterial(targetLoc.getBlock())) {
+                                    redstoneCount++;
+                                }
+                            }
+                            if (ConfigManager.getInstance().getDetectLiquidSandDamage()) {
+                                if (Util.isSand(targetLoc.getBlock())) {
+                                    sandCount++;
+                                }
                             }
                         }
                     }
                 }
-                if (redstoneCount >= 6) {
+                if (redstoneCount >= 7) {
                     // Explode normal, with explosion dampened via the fluid
                     return;
+                }
+                if (sandCount >= 1) {
+                    // There is sand nearby
+                    detectedSand = true;
                 }
             }
 
@@ -177,23 +195,26 @@ public class ChunkManager {
         // Check explosion blocks and their distance from the detonation.
         for (Block block : event.blockList()) {
             // location corrections...
-            Location blockLocation = block.getLocation();
+            final Location blockLocation = block.getLocation().clone();
             blockLocation.setY(blockLocation.getBlockY() + 0.5);
             if (blockLocation.getBlockX() > 0) {
                 blockLocation.setX(blockLocation.getBlockX() + 0.5);
-            } else {
+            } else if (blockLocation.getBlockX() < 0) {
                 blockLocation.setX(blockLocation.getBlockX() + -0.5);
             }
             if (blockLocation.getBlockZ() > 0) {
                 blockLocation.setZ(blockLocation.getBlockZ() + 0.5);
-            } else {
+            } else if (blockLocation.getBlockZ() < 0) {
                 blockLocation.setZ(blockLocation.getBlockZ() + -0.5);
             }
             // distance from detonator to the target block
             final double dist = detonatorLoc.distance(blockLocation);
 
             // check for liquid overrides and continue if none
-            if (detonatorLoc.getBlock().isLiquid() && ConfigManager.getInstance().getFluidsProtectIndestructibles() && !MaterialManager.getInstance().getBypassFluidProtection(block.getType().name(), block.getData())) {
+            if (detonatorLoc.getBlock().isLiquid()
+                    && ConfigManager.getInstance().getFluidsProtectIndestructibles()
+                    && (!MaterialManager.getInstance().getBypassFluidProtection(block.getType().name(), block.getData())
+                    || !detectedSand)) {
                 continue;
             }
 
@@ -215,27 +236,27 @@ public class ChunkManager {
                             // Add to blocked locations and ignore damage
                             blockedBlockLocations.add(blockLocation);
                             blocksIgnored.add(block);
-                            ObsidianDestroyer.vdebug("[E] Blocked Bleeding Damage!! " + blockLocation.toString() + " -dist " + dist);
+                            ObsidianDestroyer.vdebug("[E] Blocked Bleeding Damage!! " + blockLocation.toString() + " - dist " + dist);
                             continue;
                         }
                     }
 
                     // Apply damage to block material
-                    DamageResult result = damageBlock(blockLocation, detonator);
+                    final DamageResult result = damageBlock(blockLocation, detonator);
                     if (result == DamageResult.DESTROY) {
                         blocksDestroyed.add(block);
                     } else if (result == DamageResult.DAMAGE || result == DamageResult.CANCELLED) {
                         blocksIgnored.add(block);
                     }
-                    ObsidianDestroyer.vdebug("Event Block Damage!! " + blockLocation.toString() + " -dist " + dist);
+                    ObsidianDestroyer.vdebug("Event Block Damage!! " + blockLocation.toString() + " - dist " + dist);
                 } else {
                     // handle non tracked materials blocked and ignore non solids
-                    final List<Location> path = Util.getTargetsPathBlocked(blockLocation, detonatorLoc, true);
+                    final List<Location> path = Util.getTargetsPathBlocked(blockLocation, detonatorLoc, true, true);
                     if (path.size() > 0) {
                         // Add to blocked locations and ignore damage
                         blockedBlockLocations.add(blockLocation);
                         blocksIgnored.add(block);
-                        ObsidianDestroyer.vdebug("[E] Blocked Bleeding Damage!!! " + blockLocation.toString() + " -dist " + dist);
+                        ObsidianDestroyer.vdebug("[E] Blocked Bleeding Damage!!! " + blockLocation.toString() + " - dist " + dist);
                     } else {
                         xblocksDestroyed.add(block);
                     }
@@ -269,23 +290,26 @@ public class ChunkManager {
                 for (int z = -radius; z <= radius; z++) {
 
                     // Target location around the detonator
-                    Location targetLoc = new Location(detonatorLoc.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
+                    final Location targetLoc = new Location(detonatorLoc.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
 
                     // location corrections...
                     targetLoc.setY(targetLoc.getBlockY() + 0.5);
                     if (targetLoc.getBlockX() > 0) {
                         targetLoc.setX(targetLoc.getBlockX() + 0.5);
-                    } else {
+                    } else if (targetLoc.getBlockX() < 0) {
                         targetLoc.setX(targetLoc.getBlockX() + -0.5);
                     }
                     if (targetLoc.getBlockZ() > 0) {
                         targetLoc.setZ(targetLoc.getBlockZ() + 0.5);
-                    } else {
+                    } else if (targetLoc.getBlockZ() < 0) {
                         targetLoc.setZ(targetLoc.getBlockZ() + -0.5);
                     }
 
                     // ignore if air or ignored
-                    if ((blocksIgnored.contains(targetLoc.getBlock())) || targetLoc.getBlock().getType() == Material.AIR) {
+                    if (targetLoc.getBlock().getType() == Material.AIR) {
+                        continue;
+                    }
+                    if (blocksIgnored.contains(targetLoc.getBlock()) && !detectedSand) {
                         continue;
                     }
                     // Bedrock check
@@ -304,7 +328,10 @@ public class ChunkManager {
                     }
 
                     // check for liquid detonator and fluid protection overrides
-                    if (detonatorLoc.getBlock().isLiquid() && ConfigManager.getInstance().getFluidsProtectIndestructibles() && !MaterialManager.getInstance().getBypassFluidProtection(targetLoc.getBlock().getType().name(), targetLoc.getBlock().getData())) {
+                    if (detonatorLoc.getBlock().isLiquid()
+                            && ConfigManager.getInstance().getFluidsProtectIndestructibles()
+                            && !MaterialManager.getInstance().getBypassFluidProtection(targetLoc.getBlock().getType().name(), targetLoc.getBlock().getData())
+                            && !detectedSand) {
                         blocksIgnored.add(targetLoc.getBlock());
                         if (blocksDestroyed.contains(targetLoc.getBlock())) {
                             blocksDestroyed.remove(targetLoc.getBlock());
@@ -312,8 +339,29 @@ public class ChunkManager {
                         continue;
                     }
 
+                    if (ConfigManager.getInstance().getFluidsProtectIndestructibles() && !detonatorLoc.getBlock().isLiquid()
+                            && MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name(), targetLoc.getBlock().getData())) {
+                        if (Util.isNearLiquid(targetLoc) && distance > 1) {
+                            blocksIgnored.add(targetLoc.getBlock());
+                            if (blocksDestroyed.contains(targetLoc.getBlock())) {
+                                blocksDestroyed.remove(targetLoc.getBlock());
+                            }
+                            continue;
+                        }
+                    }
+
                     // Liquid overrides
-                    if (ConfigManager.getInstance().getBypassAllFluidProtection()) {
+                    if (ConfigManager.getInstance().getBypassAllFluidProtection() || detectedSand) {
+                        // check for liquid detonator and if damage is from within a fluid
+                        if (distance < radiuz - 0.1 && detonatorLoc.getBlock().isLiquid() && detectedSand) {
+                            if (Util.isSand(targetLoc.getBlock())) {
+                                // Apply damage to block material
+                                blocksDestroyed.add(targetLoc.getBlock());
+                                ObsidianDestroyer.vdebug("Explosion From Fluid Damage to Untracked Block! " + targetLoc.toString());
+                                //continue;
+                            }
+                        }
+
                         // Special handling for fluids is enabled
                         if (distance < radiuz - 0.1 && (Util.isNearLiquid(targetLoc) || targetLoc.getBlock().isLiquid())) {
                             // if within radius and is a near or a fluid
@@ -344,18 +392,12 @@ public class ChunkManager {
                                     blocksIgnored.add(targetLoc.getBlock());
                                     continue;
                                 }
-                            } else {
+                            } else if (!detectedSand) {
                                 // add block or fluid to list to destroy
                                 blocksDestroyed.add(targetLoc.getBlock());
                                 continue;
                             }
                         }
-                    }
-
-                    // Check if handling
-                    if (!MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name(), targetLoc.getBlock().getData()) && !blockedBlockLocations.contains(targetLoc)) {
-                        // ignore material if not being handled
-                        continue;
                     }
 
                     // Radius
@@ -367,30 +409,57 @@ public class ChunkManager {
                             continue;
                         }
 
-                        // Damage bleeding fix
-                        if (ConfigManager.getInstance().getDisableDamageBleeding() && distance > 1.8 && (detonator == null || !detonator.getType().equals(EntityType.WITHER))) {
-                            // Radial hitscan check for blocking blocks, returns the blocking path
-                            final List<Location> path = Util.getTargetsPathBlocked(targetLoc, detonatorLoc, false);
+                        if (!MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name(), targetLoc.getBlock().getData()) && !blockedBlockLocations.contains(targetLoc)) {
+                            // ignore material if not being handled
+                            continue;
+                        }
 
-                            if (path.size() > 0) {
+                        // Damage bleeding fix
+                        if (ConfigManager.getInstance().getDisableDamageBleeding() && distance > 1.5 && (detonator == null || !detonator.getType().equals(EntityType.WITHER))) {
+                            // Radial hitscan check for blocking blocks, returns the blocking path
+                            final List<Location> path = Util.getTargetsPathBlocked(targetLoc, detonatorLoc, true, true);
+
+                            if (path.size() > 1) {
                                 // the blocks protected path size is 1 or more
                                 if (!(Util.matchBlocksToLocations(path, blocksDestroyed) && !Util.matchBlocksToLocations(path, xblocksDestroyed)) || Util.matchLocationsToLocations(path, blockedBlockLocations) || Util.matchBlocksToLocations(path, blocksIgnored)) {
                                     // the block is protected via its path
                                     blockedBlockLocations.add(targetLoc);
                                     blocksIgnored.add(targetLoc.getBlock());
-                                    ObsidianDestroyer.vdebug("[L] Blocked Bleeding Path Damage!! Blocked: " + targetLoc.toString() + " -dist " + distance + " -size " + path.size());
+                                    ObsidianDestroyer.vdebug("[L] Blocked Bleeding Path Damage!! Blocked: " + targetLoc.toString() + " - dist " + distance + " -size " + path.size());
                                     continue;
-                                } else if (path.size() > 2 || distance >= 3) {
+                                }
+                                // If just over limits..
+                                else if (path.size() > 2 || distance >= 3.5) {
                                     // the block is too far away and or its protected path is too long
                                     blocksIgnored.add(targetLoc.getBlock());
-                                    ObsidianDestroyer.vdebug("[L] Blocked Bleeding Path Damage!! Over: " + targetLoc.toString() + " -dist " + distance + " -size " + path.size());
+                                    ObsidianDestroyer.vdebug("[L] Blocked Bleeding Path Damage!! Over: " + targetLoc.toString() + " - dist " + distance + " -size " + path.size());
                                     continue;
+                                }
+                            } else if (path.size() > 0) {
+                                if (MaterialManager.getInstance().contains(path.get(0).getBlock().getType().name(), path.get(0).getBlock().getData())) {
+                                    blocksIgnored.add(targetLoc.getBlock());
+                                    ObsidianDestroyer.vdebug("[L] Blocked Bleeding Path Damage!! Tracked: " + targetLoc.toString() + " - dist " + distance + " -size " + path.size());
+                                    continue;
+                                } else if (!MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name(), targetLoc.getBlock().getData())) {
+                                    if (!targetLoc.getBlock().isLiquid()) {
+                                        blocksDestroyed.add(targetLoc.getBlock());
+                                        //ObsidianDestroyer.vdebug("[L] Bleeding Block Damage!! " + targetLoc.toString() + " - dist " + distance);
+                                        continue;
+                                    }
+                                }
+                            } else {
+                                if (!MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name(), targetLoc.getBlock().getData())) {
+                                    if (!targetLoc.getBlock().isLiquid()) {
+                                        blocksDestroyed.add(targetLoc.getBlock());
+                                        //ObsidianDestroyer.vdebug("[L] Block Damage!! " + targetLoc.toString() + " - dist " + distance);
+                                        continue;
+                                    }
                                 }
                             }
                         }
 
                         // Apply damage to block material
-                        DamageResult result = damageBlock(targetLoc, detonator);
+                        final DamageResult result = damageBlock(targetLoc, detonator);
                         if (result == DamageResult.DESTROY) {
                             // Add block to list to destroy
                             blocksDestroyed.add(targetLoc.getBlock());
@@ -401,10 +470,12 @@ public class ChunkManager {
                             // This shouldn't really happen...
                             blocksDestroyed.add(targetLoc.getBlock());
                         }
-                        ObsidianDestroyer.vdebug("Block Damage!! " + targetLoc.toString() + " -dist " + distance);
+                        ObsidianDestroyer.vdebug("Block Damage!! " + targetLoc.toString() + " - dist " + distance);
                     } else if (event.blockList().contains(targetLoc.getBlock())) {
-                        // Ignore blocks outside of radius
-                        blocksIgnored.add(targetLoc.getBlock());
+                        if (MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name(), targetLoc.getBlock().getData())) {
+                            // Ignore blocks outside of radius
+                            blocksIgnored.add(targetLoc.getBlock());
+                        }
                     }
                 }
             }
@@ -445,7 +516,7 @@ public class ChunkManager {
 
         // ==========================
         // Create a new explosion event from the custom block lists
-        xEntityExplodeEvent explosionEvent = new xEntityExplodeEvent(detonator, detonatorLoc, blocksDestroyed, bypassBlockList, blockedBlockLocations, event.getYield());
+        final xEntityExplodeEvent explosionEvent = new xEntityExplodeEvent(detonator, detonatorLoc, blocksDestroyed, bypassBlockList, blockedBlockLocations, event.getYield());
         // Call the new explosion event
         ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(explosionEvent);
 
@@ -529,7 +600,7 @@ public class ChunkManager {
             return DamageResult.ERROR;
         }
         // get block
-        Block block = at.getBlock();
+        final Block block = at.getBlock();
         // Null and Air checks
         if (block == null || block.getType() == Material.AIR) {
             return DamageResult.NONE;
@@ -566,7 +637,7 @@ public class ChunkManager {
         }
 
         // The handled materials listing
-        MaterialManager materials = MaterialManager.getInstance();
+        final MaterialManager materials = MaterialManager.getInstance();
 
         // Just in case the material is in the list and not enabled...
         if (!materials.getDurabilityEnabled(blockTypeName, blockData)) {
@@ -672,12 +743,15 @@ public class ChunkManager {
             if (entityType == null) {
                 return DamageResult.NONE;
             }
+            if (at == null) {
+                return DamageResult.NONE;
+            }
         }
 
         // get entity
-        EntityType eventTypeRep = entityType == null ? entity.getType() : entityType;
+        final EntityType eventTypeRep = entityType == null ? entity.getType() : entityType;
         // get block
-        Block block = at.getBlock();
+        final Block block = at.getBlock();
         // Null and Air checks
         if (block == null || block.getType() == Material.AIR) {
             return DamageResult.NONE;
@@ -688,7 +762,7 @@ public class ChunkManager {
 
         // ==========================
         // Create a new Durability Damage Event
-        DurabilityDamageEvent durabilityDamageEvent = new DurabilityDamageEvent(at, blockTypeName, eventTypeRep);
+        final DurabilityDamageEvent durabilityDamageEvent = new DurabilityDamageEvent(at, blockTypeName, eventTypeRep);
         // Call event on blocks material durability damage
         ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(durabilityDamageEvent);
 
@@ -712,7 +786,7 @@ public class ChunkManager {
         }
 
         // The handled materials listing
-        MaterialManager materials = MaterialManager.getInstance();
+        final MaterialManager materials = MaterialManager.getInstance();
 
         // Just in case the material is in the list and not enabled...
         if (!materials.getDurabilityEnabled(blockTypeName, blockData)) {
@@ -823,7 +897,7 @@ public class ChunkManager {
         }
 
         // List of blocks being handled
-        LinkedList<Block> blocklist = new LinkedList<Block>();
+        final LinkedList<Block> blocklist = new LinkedList<Block>();
         // Bypass list for special handlings
         final List<Block> bypassBlockList = new ArrayList<Block>();
         final boolean useFactions = FactionsIntegration.isUsing();
@@ -831,7 +905,7 @@ public class ChunkManager {
         // Iterator through the events blocks
         Iterator<Block> iter = event.getBlockList().iterator();
         while (iter.hasNext()) {
-            Block block = iter.next();
+            final Block block = iter.next();
             // Check if handled and not already checked
             if (MaterialManager.getInstance().contains(block.getType().name(), block.getData()) && !blocklist.contains(block)) {
                 blocklist.add(block);
@@ -903,13 +977,13 @@ public class ChunkManager {
             return;
         }
 
-        Location location = event.getImpactLocation();
+        final Location location = event.getImpactLocation();
         // Display effects on impact location
         if (ConfigManager.getInstance().getEffectsEnabled()) {
             event.getImpactLocation().getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
         }
 
-        LinkedList<Block> blocklist = new LinkedList<Block>();
+        final LinkedList<Block> blocklist = new LinkedList<Block>();
         final int radius = Math.round(event.getProjectile().getExplosionPower() + 0.1f);
         for (int x = -radius; x <= radius; x++) {
             for (int y = radius; y >= -radius; y--) {
@@ -965,12 +1039,12 @@ public class ChunkManager {
             return DamageResult.NONE;
         }
 
-        String blockTypeName = block.getType().name();
-        int blockData = block.getData();
+        final String blockTypeName = block.getType().name();
+        final int blockData = block.getData();
 
         // ==========================
         // Create a new Durability Damage Event
-        DurabilityDamageEvent durabilityDamageEvent = new DurabilityDamageEvent(at, blockTypeName);
+        final DurabilityDamageEvent durabilityDamageEvent = new DurabilityDamageEvent(at, blockTypeName);
         // Call event on blocks material durability damage
         ObsidianDestroyer.getInstance().getServer().getPluginManager().callEvent(durabilityDamageEvent);
 
@@ -993,7 +1067,7 @@ public class ChunkManager {
             }
         }
 
-        MaterialManager materials = MaterialManager.getInstance();
+        final MaterialManager materials = MaterialManager.getInstance();
         // Just in case the material is in the list and not enabled...
         if (!materials.getDurabilityEnabled(blockTypeName, block.getData())) {
             return DamageResult.DISABLED;
@@ -1017,9 +1091,9 @@ public class ChunkManager {
         // Handle block if the materials durability is greater than one, else destroy the block
         if ((materials.getDurability(blockTypeName, blockData) * durabilityMultiplier) >= 2) {
             // durability is greater than one, get last state of the material location
-            TimerState state = checkDurabilityActive(block.getLocation());
+            final TimerState state = checkDurabilityActive(block.getLocation());
 
-            int damageAmt = impact ? materials.getDamageTypeCannonsImpactAmount(blockTypeName, blockData) : materials.getDamageTypeCannonsPierceAmount(blockTypeName, blockData);
+            final int damageAmt = impact ? materials.getDamageTypeCannonsImpactAmount(blockTypeName, blockData) : materials.getDamageTypeCannonsPierceAmount(blockTypeName, blockData);
 
             ObsidianDestroyer.vdebug("Current TimerState= " + state);
 

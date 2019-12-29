@@ -28,7 +28,7 @@ DurabilityGlobal:
 
   # The item used to check the durability of blocks
   # Permission node: 'obsidiandestroyer.check'
-  # Uses right clicks now.
+  # Uses right clicks now. Use 'POTATO_ITEM' for legacy server builds
   CheckItem: POTATO
   # Message that is shown when clicking block with CheckItem
   # Use {DURABILITY} as placeholder
@@ -64,6 +64,8 @@ Explosions:
   # Protects "TNT cannons" from being destroyed when used. 
   # This doesn't do anything unless the 'BypassAllFluidProtection' option is true.
   TNTCannonsProtected: true
+  # Materials list that make up parts of a cannon.  Generally detected via nearby redstone
+  RedstoneCannonMaterials: [REDSTONE_WIRE]
 
   # Fixes explosion interactions between layered blocks of various strength
   # Blocks the damage to the blocks behind a block damaged
@@ -73,6 +75,11 @@ Explosions:
 
   # Toggles handling of explosions that are not created by an entity. Set to true to ignore null detonators
   IgnoreUnhandledTypes: false
+
+  # Allow explosions from within liquids when there is nearby sand
+  DetectLiquidSandDamage: false
+  # Set the 'sand' materials to detect near liquids. Must be a MATERIAL
+  DetectedSandsMaterials: [SAND]
 
 # Works directly with Factions for extended event processing; adds the ability
 #  for durability multipliers based on the online status of a faction.
