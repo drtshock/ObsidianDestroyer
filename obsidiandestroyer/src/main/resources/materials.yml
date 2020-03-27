@@ -62,6 +62,7 @@ HandledMaterials:
       Withers: true
       Minecarts: true
       NullDamage: true
+      EnderCrystal: false
 
     # The amount of damage each explosion type will do
     # Only used if 'EnabledFor' above is true
@@ -78,6 +79,7 @@ HandledMaterials:
       Withers: 1
       Minecarts: 1
       NullDamage: 1
+      EnderCrystal: 2
 
   # ======================================================
   # OBSIDIAN - Default enabled with 13 durability
@@ -97,7 +99,10 @@ HandledMaterials:
       Cannons: true
       Withers: false
       Minecarts: false
-  LEGACY_ENCHANTMENT_TABLE:
+      EnderCrystal: false
+    Damage:
+      EnderCrystal: 2
+  ENCHANTING_TABLE:
     BlastRadius: 3
     Durability:
       Amount: 6
@@ -112,6 +117,9 @@ HandledMaterials:
       Cannons: false
       Withers: false
       Minecarts: false
+      EnderCrystal: false
+    Damage:
+      EnderCrystal: 2
   ENDER_CHEST:
     BlastRadius: 3
     Durability:
@@ -127,6 +135,9 @@ HandledMaterials:
       Cannons: false
       Withers: false
       Minecarts: false
+      EnderCrystal: false
+    Damage:
+      EnderCrystal: 2
   ANVIL:
     BlastRadius: 3
     Durability:
@@ -142,7 +153,10 @@ HandledMaterials:
       Cannons: false
       Withers: false
       Minecarts: false
-  LEGACY_PORTAL:
+      EnderCrystal: false
+    Damage:
+      EnderCrystal: 2
+  NETHER_PORTAL:
     BlastRadius: 3
     HandleNonSolid: true
     Durability:
@@ -158,22 +172,10 @@ HandledMaterials:
       Cannons: false
       Withers: false
       Minecarts: false
-  LEGACY_ENDER_PORTAL_FRAME:
-    BlastRadius: 3
-    Durability:
-      Amount: 20
-      Enabled: true
-      ChanceToDrop: 0.0
-      ResetEnabled: true
-      ResetAfter: 600000
-    EnabledFor:
-      TNT: true
-      Creepers: false
-      Ghasts: false
-      Cannons: false
-      Withers: false
-      Minecarts: false
-  LEGACY_ENDER_PORTAL:
+      EnderCrystal: false
+    Damage:
+      EnderCrystal: 2
+  END_PORTAL:
     BlastRadius: 3
     HandleNonSolid: true
     Durability:
@@ -185,10 +187,31 @@ HandledMaterials:
     EnabledFor:
       TNT: true
       Creepers: false
+      Ghasts: true
+      Cannons: false
+      Withers: false
+      Minecarts: false
+      EnderCrystal: false
+    Damage:
+      EnderCrystal: 2
+  END_PORTAL_FRAME:
+    BlastRadius: 3
+    Durability:
+      Amount: 20
+      Enabled: true
+      ChanceToDrop: 0.0
+      ResetEnabled: true
+      ResetAfter: 600000
+    EnabledFor:
+      TNT: true
+      Creepers: false
       Ghasts: false
       Cannons: false
       Withers: false
       Minecarts: false
+      EnderCrystal: false
+    Damage:
+      EnderCrystal: 2
   BEDROCK:
     BlastRadius: 2
     Durability:
@@ -204,6 +227,9 @@ HandledMaterials:
       Cannons: true
       Withers: false
       Minecarts: false
+      EnderCrystal: false
+    Damage:
+      EnderCrystal: 2
 
   # MOAR MATERIALS!!  set 'Enabled: true', to activate...
   COBBLESTONE:
@@ -236,7 +262,7 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: true
-  LEGACY_SMOOTH_BRICK:
+  END_STONE_BRICKS:
     BlastRadius: 3
     Durability:
       Amount: 4
@@ -251,7 +277,52 @@ HandledMaterials:
       Cannons: true
       Withers: false
       Minecarts: false
-  LEGACY_SMOOTH_STAIRS:
+  SMOOTH_STONE:
+    BlastRadius: 3
+    Durability:
+      Amount: 4
+      Enabled: false
+      ChanceToDrop: 0.7
+      ResetEnabled: true
+      ResetAfter: 1800000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  STONE_BRICK_STAIRS:
+    BlastRadius: 3
+    Durability:
+      Amount: 4
+      Enabled: false
+      ChanceToDrop: 0.7
+      ResetEnabled: true
+      ResetAfter: 1800000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  STONE_BRICK:
+    BlastRadius: 3
+    Durability:
+      Amount: 4
+      Enabled: false
+      ChanceToDrop: 0.7
+      ResetEnabled: true
+      ResetAfter: 1800000
+    EnabledFor:
+      TNT: true
+      Creepers: true
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+  STONE_BRICK_SLAB:
     BlastRadius: 3
     Durability:
       Amount: 4
@@ -507,7 +578,7 @@ HandledMaterials:
       Cannons: true
       Withers: false
       Minecarts: false
-  LEGACY_GRASS:
+  GRASS_BLOCK:
     BlastRadius: 4
     Durability:
       Amount: 1
@@ -522,7 +593,7 @@ HandledMaterials:
       Cannons: true
       Withers: false
       Minecarts: false
-  LEGACY_SAND:
+  SAND:
     BlastRadius: 4
     Durability:
       Amount: 1
@@ -537,7 +608,7 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: true
-  LEGACY_GLASS:
+  GLASS:
     BlastRadius: 4
     Durability:
       Amount: 1
@@ -552,7 +623,7 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: true
-  LEGACY_GRAVEL:
+  GRAVEL:
     BlastRadius: 4
     Durability:
       Amount: 1
@@ -583,39 +654,7 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: true
-  LEGACY_STATIONARY_WATER:
-    BlastRadius: 4
-    HandleNonSolid: true
-    Durability:
-      Amount: 1
-      Enabled: false
-      ChanceToDrop: 0.0
-      ResetEnabled: false
-      ResetAfter: 300000
-    EnabledFor:
-      TNT: true
-      Creepers: true
-      Ghasts: true
-      Cannons: true
-      Withers: true
-      Minecarts: true
   LAVA:
-    BlastRadius: 4
-    HandleNonSolid: true
-    Durability:
-      Amount: 1
-      Enabled: false
-      ChanceToDrop: 0.0
-      ResetEnabled: false
-      ResetAfter: 300000
-    EnabledFor:
-      TNT: true
-      Creepers: true
-      Ghasts: false
-      Cannons: true
-      Withers: true
-      Minecarts: true
-  LEGACY_STATIONARY_LAVA:
     BlastRadius: 4
     HandleNonSolid: true
     Durability:
@@ -665,7 +704,7 @@ HandledMaterials:
       Cannons: true
       Withers: true
       Minecarts: true
-  # Stone Brick Slab
+  # Smooth Stone Slab
   SMOOTH_STONE_SLAB:
     BlastRadius: 3
     BypassFluidProtection: true

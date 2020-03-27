@@ -124,6 +124,7 @@ public class ChunkManager {
                 case GHAST:
                 case FIREBALL:
                 case SMALL_FIREBALL:
+                case ENDER_CRYSTAL:
                     break;
                 case BAT:
                     if (ConfigManager.getInstance().getIgnoreUnhandledExplosionTypes()) {
@@ -813,6 +814,9 @@ public class ChunkManager {
             return DamageResult.NONE;
         }
         if ((eventTypeRep.equals(EntityType.FIREBALL) || eventTypeRep.equals(EntityType.SMALL_FIREBALL) || eventTypeRep.equals(EntityType.GHAST)) && !MaterialManager.getInstance().getGhastsEnabled(blockTypeName, blockData)) {
+            return DamageResult.NONE;
+        }
+        if ((eventTypeRep.equals(EntityType.ENDER_CRYSTAL)) && !MaterialManager.getInstance().getEnderCrystalEnabled(blockTypeName, blockData)) {
             return DamageResult.NONE;
         }
         if ((eventTypeRep.equals(EntityType.BAT)) && !MaterialManager.getInstance().getNullEnabled(blockTypeName, blockData)) {

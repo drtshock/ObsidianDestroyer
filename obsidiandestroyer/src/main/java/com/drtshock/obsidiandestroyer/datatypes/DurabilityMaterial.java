@@ -20,6 +20,7 @@ public class DurabilityMaterial {
     private boolean ghastsEnabled;
     private boolean withersEnabled;
     private boolean tntMinecartsEnabled;
+    private boolean enderCrystalEnabled;
     private int tntDamage;
     private int cannonImpactDamage;
     private int cannonPierceDamage;
@@ -28,6 +29,7 @@ public class DurabilityMaterial {
     private int ghastDamage;
     private int witherDamage;
     private int tntMinecartDamage;
+    private int enderCrystalDamage;
     private double fluidDamper;
     private boolean destructible;
     private boolean nullEnabled;
@@ -81,6 +83,8 @@ public class DurabilityMaterial {
         this.witherDamage = section.getInt("Damage.Withers", 1);
         this.tntMinecartDamage = section.getInt("Damage.Minecarts", 1);
         this.nullDamage = section.getInt("Damage.NullDamage", 1);
+        this.enderCrystalEnabled = section.getBoolean("EnabledFor.EnderCrystal", false);
+        this.enderCrystalDamage = section.getInt("Damage.EnderCrystal", 1);
         this.tallyKittens();
     }
 
@@ -131,6 +135,9 @@ public class DurabilityMaterial {
         if (nullDamage < 1) {
             nullDamage = 1;
         }
+        if (enderCrystalDamage < 1) {
+            enderCrystalDamage = 1;
+        }
     }
 
     public Material getType() {
@@ -141,6 +148,7 @@ public class DurabilityMaterial {
         return name;
     }
 
+    @Deprecated
     public int getTypeData() {
         return typeData >= 0 ? typeData : 0;
     }
@@ -189,6 +197,10 @@ public class DurabilityMaterial {
         return this.tntMinecartsEnabled;
     }
 
+    public boolean getEnderCrystalEnabled() {
+        return enderCrystalEnabled;
+    }
+
     public int getRadius() {
         return this.blastRadius;
     }
@@ -228,6 +240,10 @@ public class DurabilityMaterial {
 
     public int getTntMinecartsDamage() {
         return tntMinecartDamage;
+    }
+
+    public int getEnderCrystalDamage() {
+        return enderCrystalDamage;
     }
 
     public double getFluidDamper() {
