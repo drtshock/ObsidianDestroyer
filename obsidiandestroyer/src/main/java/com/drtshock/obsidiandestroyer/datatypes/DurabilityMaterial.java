@@ -295,16 +295,10 @@ public class DurabilityMaterial {
             DurabilityMaterial durabilityMaterial = (DurabilityMaterial) obj;
             if (durabilityMaterial.getType() == null || this.getType() == null) {
                 if (durabilityMaterial.toString().equals(this.toString())) {
-                    if (durabilityMaterial.getTypeData() != getTypeData()) {
-                        return false;
-                    }
-                    return true;
+                    return durabilityMaterial.getTypeData() == getTypeData();
                 }
             } else if (durabilityMaterial.getType().equals(getType())) {
-                if (durabilityMaterial.getTypeData() != getTypeData()) {
-                    return false;
-                }
-                return true;
+                return durabilityMaterial.getTypeData() == getTypeData();
             }
         }
         return false;
