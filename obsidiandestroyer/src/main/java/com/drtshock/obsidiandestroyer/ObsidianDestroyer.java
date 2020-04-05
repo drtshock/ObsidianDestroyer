@@ -8,6 +8,7 @@ import com.drtshock.obsidiandestroyer.managers.ConfigManager;
 import com.drtshock.obsidiandestroyer.managers.HookManager;
 import com.drtshock.obsidiandestroyer.managers.MaterialManager;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.PluginManager;
@@ -59,8 +60,24 @@ public class ObsidianDestroyer extends JavaPlugin {
         if (!instance.isEnabled()) {
             return 0;
         }
-
         return ChunkManager.getInstance().getMaterialDurability(location);
+    }
+
+    /**
+     * Gets the durability of a material type
+     *
+     * @param material the material to check
+     * @param data     optional byte data for legacy material support.
+     * @return the durability amount
+     */
+    public static int getDurability(Material material, byte data) {
+        if (instance == null || MaterialManager.getInstance() == null) {
+            return 0;
+        }
+        if (!instance.isEnabled()) {
+            return 0;
+        }
+        return MaterialManager.getInstance().getDurability(material.name(), data);
     }
 
     /**
@@ -80,7 +97,6 @@ public class ObsidianDestroyer extends JavaPlugin {
         if (damageAmount <= 0) {
             return DamageResult.NONE;
         }
-
         return ChunkManager.getInstance().damageBlock(location, damageAmount);
     }
 
@@ -98,7 +114,6 @@ public class ObsidianDestroyer extends JavaPlugin {
         if (!instance.isEnabled()) {
             return DamageResult.ERROR;
         }
-
         return ChunkManager.getInstance().damageBlock(location, entityType);
     }
 
@@ -116,11 +131,9 @@ public class ObsidianDestroyer extends JavaPlugin {
         if (!instance.isEnabled()) {
             return DamageResult.ERROR;
         }
-
         if (entity == null) {
             return DamageResult.ERROR;
         }
-
         return ChunkManager.getInstance().damageBlock(location, entity);
     }
 
