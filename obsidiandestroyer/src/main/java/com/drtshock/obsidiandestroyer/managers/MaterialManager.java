@@ -193,6 +193,18 @@ public class MaterialManager {
     }
 
     /**
+     * Returns if Ender Crystal damage is enabled for block
+     *
+     * @param material key
+     * @param data
+     * @return Ender Crystal damage is enabled for block
+     */
+    public boolean getEnderCrystalEnabled(String material, int data) {
+        material = getMaterialName(material, data);
+        return durabilityMaterials.containsKey(material) && durabilityMaterials.get(material).getEnderCrystalEnabled();
+    }
+
+    /**
      * Returns the blast radius for a specific material
      *
      * @param material the name of the material to lookup
@@ -238,6 +250,8 @@ public class MaterialManager {
                     return durabilityMaterials.get(material).getGhastsDamage();
                 case BAT:
                     return durabilityMaterials.get(material).getNullDamage();
+                case ENDER_CRYSTAL:
+                    return durabilityMaterials.get(material).getEnderCrystalDamage();
                 default:
                     break;
             }

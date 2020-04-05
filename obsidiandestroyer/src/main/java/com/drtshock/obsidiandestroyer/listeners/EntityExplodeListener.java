@@ -21,7 +21,7 @@ public class EntityExplodeListener implements Listener {
         if (event.getLocation().getBlock().hasMetadata("ObbyEntity")) {
             return;
         }
-        if (event.getYield() <= 0) {
+        if (event.getYield() <= 0.51) {
             return;
         }
 
