@@ -252,7 +252,7 @@ public class ConfigManager {
                 errorDuraCount++;
             }
         }
-        ObsidianDestroyer.LOG.log(Level.INFO, "Loaded and enabled ''{0}'' material durability's from config in ''{1}'' ms.", new Object[]{durabilityMaterials.size(), System.currentTimeMillis() - time});
+        ObsidianDestroyer.LOG.log(Level.INFO, "Loaded and enabled ''{0}'' material durabilities from config in ''{1}'' ms.", new Object[]{durabilityMaterials.size(), (System.currentTimeMillis() - time)});
         ObsidianDestroyer.LOG.log(Level.INFO, "Material in Error: ''{0}''  Invalid: ''{1}''  Disabled: ''{2}''", new Object[]{errorDuraCount, invalidDuraCount, disabledDuraCount});
         return durabilityMaterials;
     }
