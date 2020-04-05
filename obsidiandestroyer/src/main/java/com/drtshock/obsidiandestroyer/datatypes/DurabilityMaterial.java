@@ -88,6 +88,15 @@ public class DurabilityMaterial {
         this.tallyKittens();
     }
 
+    public static boolean isEnabled(ConfigurationSection section) {
+        if (section.contains("Durability")) {
+            if (section.contains("Durability.Enabled") && section.contains("Durability.Amount")) {
+                return section.getBoolean("Durability.Enabled") && section.getInt("Durability.Amount") > 0;
+            }
+        }
+        return false;
+    }
+
     private void tallyKittens() {
         if (blastRadius < 0) {
             blastRadius = 1;

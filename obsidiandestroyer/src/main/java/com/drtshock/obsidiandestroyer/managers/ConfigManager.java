@@ -205,23 +205,31 @@ public class ConfigManager {
      * @return map of materials keys and material durability data
      */
     public Map<String, DurabilityMaterial> getDurabilityMaterials() {
-        ConfigurationSection section = materials.getConfigurationSection("HandledMaterials");
-        Map<String, DurabilityMaterial> durabilityMaterials = new HashMap<String, DurabilityMaterial>();
+        final long time = System.currentTimeMillis();
+        final ConfigurationSection section = materials.getConfigurationSection("HandledMaterials");
+        int errorDuraCount = 0;
+        int invalidDuraCount = 0;
+        int disabledDuraCount = 0;
+        Map<String, DurabilityMaterial> durabilityMaterials = new HashMap<>();
         for (String durabilityMaterial : section.getKeys(false)) {
             try {
-                ConfigurationSection materialSection = section.getConfigurationSection(durabilityMaterial);
+                final ConfigurationSection materialSection = section.getConfigurationSection(durabilityMaterial);
                 Material material = Material.matchMaterial(durabilityMaterial);
                 if (material == null) {
-                    if (Material.getMaterial(durabilityMaterial) == null) {
-                        ObsidianDestroyer.LOG.log(Level.SEVERE, "Invalid Material Type: Unable to load ''{0}''", durabilityMaterial);
+                    material = Material.matchMaterial(durabilityMaterial, true);
+                    if (material == null) {
+                        if (DurabilityMaterial.isEnabled(materialSection)) {
+                            ObsidianDestroyer.LOG.log(Level.WARNING, "Invalid Material Type: Unable to load ''{0}''", durabilityMaterial);
+                        }
+                        invalidDuraCount++;
                         continue;
                     } else {
-                        material = Material.getMaterial(durabilityMaterial);
-                        ObsidianDestroyer.LOG.log(Level.SEVERE, "Semi-Valid Material Type: Loaded as ''{0}''", material.name());
+                        ObsidianDestroyer.LOG.log(Level.WARNING, "Semi-Valid Material Type: Loaded as ''{0}''", material.name());
                     }
                 }
                 if (!Util.isSolid(material) && !materialSection.contains("HandleNonSolid") && !materialSection.getBoolean("HandleNonSolid")) {
                     ObsidianDestroyer.LOG.log(Level.WARNING, "Non-Solid Material Type: Did not load ''{0}''", durabilityMaterial);
+                    invalidDuraCount++;
                     continue;
                 }
                 final DurabilityMaterial durablock;
@@ -237,11 +245,15 @@ public class ConfigManager {
                     durabilityMaterials.put(durablock.toString(), durablock);
                 } else if (getDebug()) {
                     ObsidianDestroyer.debug("Disabled durability of '" + durablock.getDurability() + "' for '" + durablock.toString() + "'");
+                    disabledDuraCount++;
                 }
             } catch (Exception e) {
                 ObsidianDestroyer.LOG.log(Level.SEVERE, "Failed loading material ''{0}''", durabilityMaterial);
+                errorDuraCount++;
             }
         }
+        ObsidianDestroyer.LOG.log(Level.INFO, "Loaded and enabled '{0}' material durability's from config in {1} ms.", new Object[]{durabilityMaterials.size(), System.currentTimeMillis() - time});
+        ObsidianDestroyer.LOG.log(Level.INFO, "Material in Error: '{0}'  Invalid: '{1}'  Disabled: '{2}'", new Object[]{errorDuraCount, invalidDuraCount, disabledDuraCount});
         return durabilityMaterials;
     }
 
