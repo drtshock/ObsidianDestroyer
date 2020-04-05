@@ -3,7 +3,7 @@ main: com.drtshock.obsidiandestroyer.ObsidianDestroyer
 version: ${project.version}
 authors: [drtshock, squidicuz]
 softdepend: [mcore, MassiveCore, Factions]
-api-version: "1.13"
+api-version: "1.14"
 
 commands:
   od:
