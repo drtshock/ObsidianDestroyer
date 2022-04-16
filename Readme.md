@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/drtshock/ObsidianDestroyer.svg)](https://jitpack.io/#drtshock/ObsidianDestroyer)
+
 ObsidianDestroyer
 ===
 By drtshock, squidicuz and a little bit from turt2live :3 We also love IntelliJ!
