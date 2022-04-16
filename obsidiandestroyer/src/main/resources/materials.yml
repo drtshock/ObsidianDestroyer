@@ -102,6 +102,25 @@ HandledMaterials:
       EnderCrystal: false
     Damage:
       EnderCrystal: 2
+  CRYING_OBSIDIAN:
+    BlastRadius: 2
+    Durability:
+      Amount: 11
+      FluidDamper: 0.07
+      Enabled: true
+      ChanceToDrop: 0.6
+      ResetEnabled: true
+      ResetAfter: 600000
+    EnabledFor:
+      TNT: true
+      Creepers: false
+      Ghasts: false
+      Cannons: true
+      Withers: false
+      Minecarts: false
+      EnderCrystal: false
+    Damage:
+      EnderCrystal: 2
   ENCHANTING_TABLE:
     BlastRadius: 3
     Durability:
