@@ -334,9 +334,7 @@ public class ChunkManager {
                             && !MaterialManager.getInstance().getBypassFluidProtection(targetLoc.getBlock().getType().name(), targetLoc.getBlock().getData())
                             && !detectedSand) {
                         blocksIgnored.add(targetLoc.getBlock());
-                        if (blocksDestroyed.contains(targetLoc.getBlock())) {
-                            blocksDestroyed.remove(targetLoc.getBlock());
-                        }
+                        blocksDestroyed.remove(targetLoc.getBlock());
                         continue;
                     }
 
@@ -344,9 +342,7 @@ public class ChunkManager {
                             && MaterialManager.getInstance().contains(targetLoc.getBlock().getType().name(), targetLoc.getBlock().getData())) {
                         if (Util.isNearLiquid(targetLoc) && distance > 1) {
                             blocksIgnored.add(targetLoc.getBlock());
-                            if (blocksDestroyed.contains(targetLoc.getBlock())) {
-                                blocksDestroyed.remove(targetLoc.getBlock());
-                            }
+                            blocksDestroyed.remove(targetLoc.getBlock());
                             continue;
                         }
                     }
