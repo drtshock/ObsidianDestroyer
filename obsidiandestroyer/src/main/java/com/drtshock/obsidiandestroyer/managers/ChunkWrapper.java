@@ -37,6 +37,10 @@ public class ChunkWrapper {
         this.durabilitiesDir = durabilitiesDir;
     }
 
+    public boolean valid() {
+        return Bukkit.getWorld(getWorldName()) != null;
+    }
+
     /**
      * Gets the world name
      *

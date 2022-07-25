@@ -1348,8 +1348,10 @@ public class ChunkManager {
         }
         doneSave = false;
         for (String key : chunks.keySet()) {
-            ChunkWrapper w = chunks.get(key);
-            w.save(false, true);
+            final ChunkWrapper w = chunks.get(key);
+            if (w.valid()) {
+                w.save(false, true);
+            }
         }
         chunks.clear();
         doneSave = true;
