@@ -2,8 +2,8 @@ name: ObsidianDestroyer
 main: com.drtshock.obsidiandestroyer.ObsidianDestroyer
 version: ${project.version}
 authors: [drtshock, squidicuz]
-softdepend: [mcore, MassiveCore, Factions]
-api-version: "1.18"
+softdepend: [mcore, MassiveCore, Factions, Cannons]
+api-version: 1.16
 
 commands:
   od:

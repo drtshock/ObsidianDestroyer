@@ -326,7 +326,7 @@ HandledMaterials:
       Cannons: true
       Withers: false
       Minecarts: false
-  STONE_BRICK:
+  STONE_BRICKS:
     BlastRadius: 3
     Durability:
       Amount: 4
